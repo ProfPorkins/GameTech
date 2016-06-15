@@ -59,7 +59,7 @@ QuadTreeDemo.model = (function(components) {
 	// their new direction vectors.
 	//
 	// ------------------------------------------------------------------
-	function bounce(c1, c2) {
+	function bounce(c1, c2, elapsedTime) {
 		var v1 = { x: 0, y: 0 },
 			v2 = { x: 0, y: 0 };
 
@@ -71,6 +71,13 @@ QuadTreeDemo.model = (function(components) {
 
 		c1.direction = v1;
 		c2.direction = v2;
+
+		//
+		// Move them along their new direction vectors until they no longer intersect.
+		while (c1.intersects(c2)) {
+			c1.update(elapsedTime);
+			c2.update(elapsedTime);
+		}
 	}
 
 	// ------------------------------------------------------------------
@@ -96,11 +103,9 @@ QuadTreeDemo.model = (function(components) {
 				if (circle !== test) {
 					if (circles[circle].intersects(circles[test])) {
 						//
-						// Bounce the circles, then do an update to move them away
-						// from each other, so they don't get stuck overlapping.
-						bounce(circles[circle], circles[test]);
-						circles[circle].update(elapsedTime);
-						circles[test].update(elapsedTime);
+						// Bounce the circles...this also moves them so they
+						// no longer intersect.
+						bounce(circles[circle], circles[test], elapsedTime);
 					}
 				}
 			}
