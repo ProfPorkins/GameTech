@@ -1,4 +1,4 @@
-/* global QuadTreeDemo, Random */
+/* global QuadTreeDemo, Random, QuadTree */
 // ------------------------------------------------------------------
 //
 // This namespace holds the quad-tree demo model.
@@ -87,13 +87,19 @@ QuadTreeDemo.model = (function(components) {
 	// ------------------------------------------------------------------
 	that.update = function(elapsedTime) {
 		var circle = 0,
-			test = 0;
+			test = 0,
+			quadTree = QuadTree(6);
 		//
 		// Have all the circles update their positions
 		for (circle = 0; circle < circles.length; circle += 1) {
 			circles[circle].update(elapsedTime);
 		}
 
+		//
+		// Build a quad tree for collision detection
+		for (circle = 0; circle < circles.length; circle += 1) {
+			quadTree.insert(circles[circle]);
+		}
 		//
 		// Check for collisions with other circles
 		for (circle = 0; circle < circles.length; circle += 1) {

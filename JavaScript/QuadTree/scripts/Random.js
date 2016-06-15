@@ -10,7 +10,7 @@ var Random = (function() {
 	//
 	// This is used to give a small performance optimization in generating gaussian random numbers.
 	var usePrevious = false,
-		y2;
+		y2 = 0;
 
 	// ------------------------------------------------------------------
 	//

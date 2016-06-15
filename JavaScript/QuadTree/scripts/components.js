@@ -27,6 +27,15 @@ QuadTreeDemo.components = (function() {
 			get radius() { return spec.radius; }
 		};
 
+		// ------------------------------------------------------------------
+		//
+		// We are going to use this for our circle-square intersection testing.
+		//
+		// ------------------------------------------------------------------
+		Math.clamp = function(value, min, max) {
+			return Math.max(min, Math.min(max, value));
+		};
+
 		//------------------------------------------------------------------
 		//
 		// Checks to see if the two circles intersect each other.  Returns
@@ -37,6 +46,25 @@ QuadTreeDemo.components = (function() {
 			var distance = Math.pow((spec.center.x - other.center.x), 2) + Math.pow((spec.center.y - other.center.y), 2);
 
 			return (distance < Math.pow(spec.radius + other.radius, 2));
+		};
+
+		//------------------------------------------------------------------
+		//
+		// This function is required by the QuadTree.  It checks to see if
+		// any part of the circle is inside of the square.  If it is, true is
+		// returned, false otherwise.
+		//
+		// This code adapted from: http://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection
+		//
+		//------------------------------------------------------------------
+		that.insideSquare = function(square) {
+			var closestX = Math.clamp(that.center.x, square.left, square.left + square.width),
+				closestY = Math.clamp(that.center.y, square.top, square.top + square.height),
+				distanceX = that.center.x - closestX,
+				distanceY = that.center.y - closestY,
+				distanceSquared = (distanceX * distanceX) + (distanceY * distanceY);
+
+			return distanceSquared < (that.radius * that.radius);
 		};
 
 		//------------------------------------------------------------------
