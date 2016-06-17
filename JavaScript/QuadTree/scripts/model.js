@@ -8,7 +8,8 @@ QuadTreeDemo.model = (function(components) {
 	'use strict';
 
 	var that = {},
-		circles = [];
+		circles = [],
+		quadTree = null;
 
 	// ------------------------------------------------------------------
 	//
@@ -25,7 +26,8 @@ QuadTreeDemo.model = (function(components) {
 			addCircle = components.Circle( {
 				center: { x: Random.nextDouble(), y: Random.nextDouble() },
 				direction: Random.nextCircleVector(0.2),
-				radius: Math.max(0.005, Math.abs(Random.nextGaussian(0.025, 0.015)))
+				//radius: Math.max(0.005, Math.abs(Random.nextGaussian(0.025, 0.015)))
+				radius: Math.max(0.005, Math.abs(Random.nextGaussian(0.015, 0.005)))
 			} );
 			//
 			// Don't allow the circle to start overlapped with the edges of the world
@@ -45,10 +47,10 @@ QuadTreeDemo.model = (function(components) {
 			if (intersectsAny === false) {
 				circles.push(addCircle);
 
-				console.log('x: ' + addCircle.center.x);
-				console.log('y: ' + addCircle.center.y);
-				console.log('direction: ' + addCircle.direction.x + ', ' + addCircle.direction.y);
-				console.log('radius: ' + addCircle.radius);
+				// console.log('x: ' + addCircle.center.x);
+				// console.log('y: ' + addCircle.center.y);
+				// console.log('direction: ' + addCircle.direction.x + ', ' + addCircle.direction.y);
+				// console.log('radius: ' + addCircle.radius);
 			}
 		}
 	};
@@ -82,13 +84,37 @@ QuadTreeDemo.model = (function(components) {
 
 	// ------------------------------------------------------------------
 	//
+	//
+	//
+	// ------------------------------------------------------------------
+	function renderQuadTree(renderer, node) {
+		var child = 0,
+			childNode = null;
+		//
+		// Recursively (post-order) work through the nodes and draw their bounds on
+		// the way down.
+		for (child = 0; child < node.children.length; child += 1) {
+			childNode = node.children[child];
+			renderer.drawRectangle(
+				childNode.left,
+				childNode.top,
+				childNode.size,
+				childNode.size);
+
+			renderQuadTree(renderer, childNode);
+		}
+	}
+
+	// ------------------------------------------------------------------
+	//
 	// This function is used to update the state of the demo model.
 	//
 	// ------------------------------------------------------------------
 	that.update = function(elapsedTime) {
 		var circle = 0,
 			test = 0,
-			quadTree = QuadTree(6);
+			other = null;
+
 		//
 		// Have all the circles update their positions
 		for (circle = 0; circle < circles.length; circle += 1) {
@@ -97,25 +123,36 @@ QuadTreeDemo.model = (function(components) {
 
 		//
 		// Build a quad tree for collision detection
+		quadTree = QuadTree(4);
 		for (circle = 0; circle < circles.length; circle += 1) {
 			quadTree.insert(circles[circle]);
 		}
+
 		//
 		// Check for collisions with other circles
+		// for (circle = 0; circle < circles.length; circle += 1) {
+		// 	for (test = circle; test < circles.length; test += 1) {
+		// 		//
+		// 		// Don't test against ourselves
+		// 		if (circle !== test) {
+		// 			if (circles[circle].intersects(circles[test])) {
+		// 				//
+		// 				// Bounce the circles...this also moves them so they
+		// 				// no longer intersect.
+		// 				bounce(circles[circle], circles[test], elapsedTime);
+		// 			}
+		// 		}
+		// 	}
+		// }
+
 		for (circle = 0; circle < circles.length; circle += 1) {
-			for (test = circle; test < circles.length; test += 1) {
-				//
-				// Don't test against ourselves
-				if (circle !== test) {
-					if (circles[circle].intersects(circles[test])) {
-						//
-						// Bounce the circles...this also moves them so they
-						// no longer intersect.
-						bounce(circles[circle], circles[test], elapsedTime);
-					}
-				}
+			other = quadTree.intersects(circles[circle]);
+			if (other) {
+				bounce(circles[circle], other, elapsedTime);
 			}
 		}
+
+		console.log(quadTree.collisionTests);
 	};
 
 	// ------------------------------------------------------------------
@@ -133,6 +170,9 @@ QuadTreeDemo.model = (function(components) {
 		for (circle = 0; circle < circles.length; circle += 1) {
 			renderer.drawCircle(circles[circle].center, circles[circle].radius);
 		}
+
+		renderQuadTree(renderer, quadTree.root);
+		//quadTree.report();
 	};
 
 	return that;

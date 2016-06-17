@@ -58,8 +58,8 @@ QuadTreeDemo.components = (function() {
 		//
 		//------------------------------------------------------------------
 		that.insideSquare = function(square) {
-			var closestX = Math.clamp(that.center.x, square.left, square.left + square.width),
-				closestY = Math.clamp(that.center.y, square.top, square.top + square.height),
+			var closestX = Math.clamp(that.center.x, square.left, square.left + square.size),
+				closestY = Math.clamp(that.center.y, square.top, square.top + square.size),
 				distanceX = that.center.x - closestX,
 				distanceY = that.center.y - closestY,
 				distanceSquared = (distanceX * distanceX) + (distanceY * distanceY);
