@@ -7,7 +7,8 @@ function QuadTree(maxMembership) {
 	var root = null,
 		that = {
 			get root() { return root; },
-			get collisionTests() { return collisionTests; }
+			get collisionTests() { return collisionTests; },
+			get depth() { return findDepth(root); }
 		},
 		collisionTests = 0;
 
@@ -129,6 +130,13 @@ function QuadTree(maxMembership) {
 		insert(root, item);
 	};
 
+	// ------------------------------------------------------------------
+	//
+	// Determines if 'item' intersects with any other item contained within
+	// the QuadTree.  If it does, the other item is return, otherwise null
+	// is returned.
+	//
+	// ------------------------------------------------------------------
 	function intersects(node, item) {
 		var child = 0,
 			member = 0,
@@ -141,6 +149,9 @@ function QuadTree(maxMembership) {
 				// Not a leaf node, recurse into its children
 				for (child = 0; child < node.children.length; child += 1) {
 					hitMe = hitMe || intersects(node.children[child], item);
+					if (hitMe) {
+						break;
+					}
 				}
 			} else {
 				//
@@ -164,9 +175,8 @@ function QuadTree(maxMembership) {
 
 	// ------------------------------------------------------------------
 	//
-	// Determines if 'item' intersects with any other item contained within
-	// the QuadTree.  If it does, the other item is return, otherwise null
-	// is returned.
+	// Public member to allow client code to test if 'item' intersects any
+	// other object in the QuadTree.
 	//
 	// ------------------------------------------------------------------
 	that.intersects = function(item) {
@@ -185,37 +195,23 @@ function QuadTree(maxMembership) {
 	// Computes the max depth of the QuadTree.
 	//
 	// ------------------------------------------------------------------
-	function depth(node) {
+	function findDepth(node) {
 		var depth0 = 0,
 			depth1 = 0,
 			depth2 = 0,
 			depth3 = 0;
 
 		if (node.hasChildren) {
-			depth0 = 1 + depth(node.children[0]);
-			depth1 = 1 + depth(node.children[1]);
-			depth2 = 1 + depth(node.children[2]);
-			depth3 = 1 + depth(node.children[3]);
+			depth0 = findDepth(node.children[0]);
+			depth1 = findDepth(node.children[1]);
+			depth2 = findDepth(node.children[2]);
+			depth3 = findDepth(node.children[3]);
 
 			return 1 + Math.max(Math.max(depth0, depth1), Math.max(depth2, depth3));
 		}
 
 		return 1;
 	}
-
-	that.resetCollisionTests = function() {
-		collisionTests = 0;
-	};
-
-	// ------------------------------------------------------------------
-	//
-	// Report some details about the QuadTree for debugging purposes.
-	//
-	// ------------------------------------------------------------------
-	that.report = function() {
-
-		console.log('depth: ' + depth(root));
-	};
 
 	//
 	// Initialize the QuadTree with a root node that has no children and covers

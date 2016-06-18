@@ -26,7 +26,6 @@ QuadTreeDemo.model = (function(components) {
 			addCircle = components.Circle( {
 				center: { x: Random.nextDouble(), y: Random.nextDouble() },
 				direction: Random.nextCircleVector(0.2),
-				//radius: Math.max(0.005, Math.abs(Random.nextGaussian(0.025, 0.015)))
 				radius: Math.max(0.005, Math.abs(Random.nextGaussian(0.015, 0.005)))
 			} );
 			//
@@ -84,24 +83,29 @@ QuadTreeDemo.model = (function(components) {
 
 	// ------------------------------------------------------------------
 	//
-	//
+	// Overlays a rendering of the QuadTree on top of the world.  This is
+	// written as a recursive function that performs a pre-order traversal
+	// and rendering.
 	//
 	// ------------------------------------------------------------------
 	function renderQuadTree(renderer, node) {
-		var child = 0,
-			childNode = null;
+		var child = 0;
 		//
 		// Recursively (post-order) work through the nodes and draw their bounds on
 		// the way down.
 		for (child = 0; child < node.children.length; child += 1) {
-			childNode = node.children[child];
-			renderer.drawRectangle(
-				childNode.left,
-				childNode.top,
-				childNode.size,
-				childNode.size);
+			renderQuadTree(renderer, node.children[child]);
+		}
 
-			renderQuadTree(renderer, childNode);
+		//
+		// Only necessary to render the leaf nodes, this provides a small rendering
+		// optimization.
+		if (!node.hasChildren) {
+			renderer.drawRectangle(
+				node.left,
+				node.top,
+				node.size,
+				node.size);
 		}
 	}
 
@@ -123,7 +127,7 @@ QuadTreeDemo.model = (function(components) {
 
 		//
 		// Build a quad tree for collision detection
-		quadTree = QuadTree(4);
+		quadTree = QuadTree(10);
 		for (circle = 0; circle < circles.length; circle += 1) {
 			quadTree.insert(circles[circle]);
 		}
@@ -151,8 +155,6 @@ QuadTreeDemo.model = (function(components) {
 				bounce(circles[circle], other, elapsedTime);
 			}
 		}
-
-		console.log(quadTree.collisionTests);
 	};
 
 	// ------------------------------------------------------------------
@@ -172,7 +174,8 @@ QuadTreeDemo.model = (function(components) {
 		}
 
 		renderQuadTree(renderer, quadTree.root);
-		//quadTree.report();
+		//console.log(quadTree.collisionTests);
+		//console.log('depth: ' + quadTree.depth);
 	};
 
 	return that;
