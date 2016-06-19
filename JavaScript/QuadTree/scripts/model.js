@@ -9,7 +9,20 @@ QuadTreeDemo.model = (function(components) {
 
 	var that = {},
 		circles = [],
-		quadTree = null;
+		quadTree = null,
+		showQuadTree = true,
+		textTests = {
+			text : '',
+			font : '20px Arial, sans-serif',
+			fill : 'rgba(255, 255, 255, 1)',
+			pos : { x : 1.05, y : 0.15 }
+		},
+		textObjects = {
+			text : '',
+			font : '20px Arial, sans-serif',
+			fill : 'rgba(255, 255, 255, 1)',
+			pos : { x : 1.05, y : 0.10 }
+		};
 
 	// ------------------------------------------------------------------
 	//
@@ -26,7 +39,7 @@ QuadTreeDemo.model = (function(components) {
 			addCircle = components.Circle( {
 				center: { x: Random.nextDouble(), y: Random.nextDouble() },
 				direction: Random.nextCircleVector(0.2),
-				radius: Math.max(0.005, Math.abs(Random.nextGaussian(0.015, 0.005)))
+				radius: Math.max(0.0025, Math.abs(Random.nextGaussian(0.01, 0.005)))
 			} );
 			//
 			// Don't allow the circle to start overlapped with the edges of the world
@@ -45,13 +58,17 @@ QuadTreeDemo.model = (function(components) {
 			}
 			if (intersectsAny === false) {
 				circles.push(addCircle);
-
-				// console.log('x: ' + addCircle.center.x);
-				// console.log('y: ' + addCircle.center.y);
-				// console.log('direction: ' + addCircle.direction.x + ', ' + addCircle.direction.y);
-				// console.log('radius: ' + addCircle.radius);
 			}
 		}
+	};
+
+	// ------------------------------------------------------------------
+	//
+	// Toggles the rendering of the quad-tree.
+	//
+	// ------------------------------------------------------------------
+	that.toggleQuadTreeRendering = function() {
+		showQuadTree = !showQuadTree;
 	};
 
 	// ------------------------------------------------------------------
@@ -102,6 +119,7 @@ QuadTreeDemo.model = (function(components) {
 		// optimization.
 		if (!node.hasChildren) {
 			renderer.drawRectangle(
+				'rgba(100, 100, 100, 1)',
 				node.left,
 				node.top,
 				node.size,
@@ -127,7 +145,7 @@ QuadTreeDemo.model = (function(components) {
 
 		//
 		// Build a quad tree for collision detection
-		quadTree = QuadTree(10);
+		quadTree = QuadTree(6);
 		for (circle = 0; circle < circles.length; circle += 1) {
 			quadTree.insert(circles[circle]);
 		}
@@ -165,17 +183,26 @@ QuadTreeDemo.model = (function(components) {
 	that.render = function(renderer) {
 		var circle = 0;
 
-		//
-		// Draw a border around the unit world
-		renderer.drawRectangle(0, 0, 1, 1);
-
 		for (circle = 0; circle < circles.length; circle += 1) {
-			renderer.drawCircle(circles[circle].center, circles[circle].radius);
+			renderer.drawCircle('rgba(150, 0, 255, 1)', circles[circle].center, circles[circle].radius);
 		}
 
-		renderQuadTree(renderer, quadTree.root);
-		//console.log(quadTree.collisionTests);
-		//console.log('depth: ' + quadTree.depth);
+		if (showQuadTree) {
+			renderQuadTree(renderer, quadTree.root);
+		}
+
+		//
+		// Draw a border around the unit world.  Draw this after rendering
+		// the QuadTree so that it will draw over the border that happens
+		// automatically by the QuadTree...we want this color to show.
+		renderer.drawRectangle('rgba(255, 255, 255, 1)', 0, 0, 1, 1);
+
+		//
+		// Show some stats about the demo
+		textObjects.text = 'objects: ' + circles.length;
+		renderer.drawText(textObjects);
+		textTests.text = 'tests: ' + quadTree.collisionTests;
+		renderer.drawText(textTests);
 	};
 
 	return that;

@@ -4,9 +4,26 @@
 // This namespace provides the simulation loop for the quad-tree demo.
 //
 // ------------------------------------------------------------------
-QuadTreeDemo.main = (function(renderer, model) {
+QuadTreeDemo.main = (function(renderer, input, model) {
 	'use strict';
-	var lastTimeStamp = performance.now();
+	var lastTimeStamp = performance.now(),
+		frameTimes = [],
+		textFPS = {
+			text : 'fps',
+			font : '20px Arial, sans-serif',
+			fill : 'rgba(255, 255, 255, 1)',
+			pos : { x : 1.05, y : 0.05 }
+		},
+		myKeyboard = input.Keyboard();
+
+	//------------------------------------------------------------------
+	//
+	// Process any captured input.
+	//
+	//------------------------------------------------------------------
+	function processInput(elapsedTime) {
+		myKeyboard.update(elapsedTime);
+	}
 
 	//------------------------------------------------------------------
 	//
@@ -22,9 +39,27 @@ QuadTreeDemo.main = (function(renderer, model) {
 	// Render the simulation.
 	//
 	//------------------------------------------------------------------
-	function render() {
+	function render(elapsedTime) {
+		var averageTime = 0,
+			fps = 0;
+
 		renderer.clearCanvas();
 		model.render(QuadTreeDemo.renderer);
+
+		//
+		// Show FPS over last several frames
+		frameTimes.push(elapsedTime);
+		if (frameTimes.length > 1) {
+			frameTimes = frameTimes.slice(1);
+			averageTime = frameTimes.reduce(function(a, b) { return a + b; }) / frameTimes.length;
+			//
+			// averageTime is in milliseconds, need to convert to seconds for frames per SECOND
+			// But also want to preserve 1 digit past the decimal, so multiplying by 10000 first, then
+			// truncating, then dividing by 10 to get back to seconds.
+			fps = Math.trunc((1 / averageTime) * 10000) / 10;
+			textFPS.text = 'fps: ' + fps;
+			renderer.drawText(textFPS);
+		}
 	}
 
 	//------------------------------------------------------------------
@@ -36,8 +71,9 @@ QuadTreeDemo.main = (function(renderer, model) {
 		var elapsedTime = (time - lastTimeStamp);
 		lastTimeStamp = time;
 
+		processInput(elapsedTime);
 		update(elapsedTime);
-		render();
+		render(elapsedTime);
 
 		requestAnimationFrame(gameLoop);
 	}
@@ -52,6 +88,11 @@ QuadTreeDemo.main = (function(renderer, model) {
 	function initialize() {
 		renderer.initialize();
 		model.initialize();
+
+		//
+		// Let's listen to a few keyboard inputs to control the simulation
+		myKeyboard.registerCommand(KeyEvent.DOM_VK_Q, model.toggleQuadTreeRendering);
+
 		//
 		// Get the gameloop started
 		requestAnimationFrame(gameLoop);
@@ -64,4 +105,4 @@ QuadTreeDemo.main = (function(renderer, model) {
 		initialize: initialize
 	};
 
-}(QuadTreeDemo.renderer, QuadTreeDemo.model));
+}(QuadTreeDemo.renderer, QuadTreeDemo.input, QuadTreeDemo.model));

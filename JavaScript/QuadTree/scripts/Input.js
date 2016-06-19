@@ -1,10 +1,10 @@
-/* global Input */
+/* global QuadTreeDemo */
 // ------------------------------------------------------------------
 //
 // Input handling support
 //
 // ------------------------------------------------------------------
-var Input = (function() {
+QuadTreeDemo.input = (function() {
 	'use strict';
 
 	function Mouse() {
@@ -77,17 +77,17 @@ var Input = (function() {
 	}
 
 	function Keyboard() {
-		var that = {
-				keys : {},
-				handlers : []
-		};
+		var keys = {},
+			previousKeys = {},
+			handlers = [],
+			that = {};
 
 		function keyPress(event) {
-			that.keys[event.keyCode] = event.timeStamp;
+			keys[event.keyCode] = event.timeStamp;
 		}
 
 		function keyRelease(event) {
-			delete that.keys[event.keyCode];
+			delete previousKeys[event.keyCode];
 		}
 
 		// ------------------------------------------------------------------
@@ -96,22 +96,29 @@ var Input = (function() {
 		//
 		// ------------------------------------------------------------------
 		that.registerCommand = function(key, handler) {
-			that.handlers.push({ key : key, handler : handler });
+			handlers.push({ key : key, handler : handler });
 		};
 
 		// ------------------------------------------------------------------
 		//
 		// Allows the client to invoke all the handlers for the registered key/handlers.
+		// I've modified this function for the quad-tree demo to only fire the
+		// first time the 'keydown' event occurs.  It the key gets reset after
+		// the 'keyup' event happens.
 		//
 		// ------------------------------------------------------------------
 		that.update = function(elapsedTime) {
 			var key = 0;
 
-			for (key = 0; key < that.handlers.length; key += 1) {
-				if (typeof that.keys[that.handlers[key].key] !== 'undefined') {
-					that.handlers[key].handler(elapsedTime);
+			for (key = 0; key < handlers.length; key += 1) {
+				if (typeof keys[handlers[key].key] !== 'undefined') {
+					if (typeof previousKeys[handlers[key].key] === 'undefined') {
+						previousKeys[handlers[key].key] = true;
+						handlers[key].handler(elapsedTime);
+					}
 				}
 			}
+			keys = {};
 		};
 
 		//

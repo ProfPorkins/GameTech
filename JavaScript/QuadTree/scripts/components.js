@@ -10,7 +10,7 @@ QuadTreeDemo.components = (function() {
 	//
 	// Various constants; as best as we can do them in ECMAScript 5
 	var Constants = {
-		get NumberOfCircles() { return 50; }
+		get NumberOfCircles() { return 200; }
 	};
 
 	//------------------------------------------------------------------

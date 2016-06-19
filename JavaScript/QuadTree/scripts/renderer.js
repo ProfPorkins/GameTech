@@ -83,7 +83,52 @@ QuadTreeDemo.renderer = (function() {
 		resizeCanvas();
 	}
 
-	function drawCircle(center, radius) {
+	//------------------------------------------------------------------
+	//
+	// Renders the text based on the provided spec.
+	//
+	//------------------------------------------------------------------
+	function drawText(spec) {
+		var smallestSize,
+			squareSize,
+			cornerTop,
+			cornerLeft;
+
+		context.save();
+
+		context.font = spec.font;
+		context.fillStyle = spec.fill;
+		context.textBaseline = 'top';
+
+		//
+		// Have to figure out where the upper left corner of the unit world is
+		// based on whether the width or height is the largest dimension.
+		if (canvas.width < canvas.height) {
+			smallestSize = canvas.width;
+			squareSize = smallestSize * 0.9;
+			cornerLeft = Math.floor(canvas.width * 0.05);
+			cornerTop = (canvas.height - squareSize) / 2;
+		} else {
+			smallestSize = canvas.height;
+			squareSize = smallestSize * 0.9;
+			cornerTop = Math.floor(canvas.height * 0.05);
+			cornerLeft = (canvas.width - squareSize) / 2;
+		}
+
+		context.fillText(
+			spec.text,
+			cornerLeft + spec.pos.x * squareSize,
+			cornerTop + spec.pos.y * squareSize);
+
+		context.restore();
+	}
+
+	//------------------------------------------------------------------
+	//
+	// Draw a circle within the unit world.
+	//
+	//------------------------------------------------------------------
+	function drawCircle(style, center, radius) {
 		var smallestSize,
 			squareSize,
 			cornerTop,
@@ -106,7 +151,7 @@ QuadTreeDemo.renderer = (function() {
 
 		//
 		// 0.5, 0.5 is to ensure an actual 1 pixel line is drawn.
-		context.strokeStyle = 'rgba(255, 255, 255, 1)';
+		context.strokeStyle = style;
 		context.beginPath();
 		context.arc(
 			0.5 + cornerLeft + (center.x * squareSize),
@@ -114,10 +159,6 @@ QuadTreeDemo.renderer = (function() {
 			radius * squareSize,
 			0, 2 * Math.PI);
 		context.stroke();
-
-		// console.log('x: ' + (0.5 + cornerLeft + (center.x * squareSize)));
-		// console.log('y: ' + (0.5 + cornerTop + (center.y * squareSize)));
-		// console.log('radius: ' + radius * squareSize);
 	}
 
 	//------------------------------------------------------------------
@@ -125,7 +166,7 @@ QuadTreeDemo.renderer = (function() {
 	// Draws a rectangle relative to the 'unit world'.
 	//
 	//------------------------------------------------------------------
-	function drawRectangle(left, top, width, height) {
+	function drawRectangle(style, left, top, width, height) {
 		var smallestSize,
 			squareSize,
 			cornerTop,
@@ -148,7 +189,7 @@ QuadTreeDemo.renderer = (function() {
 
 		//
 		// 0.5, 0.5 is to ensure an actual 1 pixel line is drawn.
-		context.strokeStyle = 'rgba(255, 255, 255, 1)';
+		context.strokeStyle = style;
 		context.strokeRect(
 			0.5 + cornerLeft + (left * squareSize),
 			0.5 + cornerTop + (top * squareSize),
@@ -162,6 +203,7 @@ QuadTreeDemo.renderer = (function() {
 		initialize: initialize,
 		clearCanvas: clearCanvas,
 		toggleFullScreen: toggleFullScreen,
+		drawText: drawText,
 		drawRectangle: drawRectangle,
 		drawCircle: drawCircle
 	};
