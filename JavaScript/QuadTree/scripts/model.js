@@ -7,35 +7,61 @@
 QuadTreeDemo.model = (function(components) {
 	'use strict';
 
-	var that = {},
-		circles = [],
+	var circles = [],
 		quadTree = null,
+		useQuadTree = true,
 		showQuadTree = true,
-		textTests = {
-			text : '',
-			font : '20px Arial, sans-serif',
-			fill : 'rgba(255, 255, 255, 1)',
-			pos : { x : 1.05, y : 0.15 }
-		},
+		quadTreeCriteria = 6,
 		textObjects = {
 			text : '',
-			font : '20px Arial, sans-serif',
+			font : '16px Arial, sans-serif',
 			fill : 'rgba(255, 255, 255, 1)',
-			pos : { x : 1.05, y : 0.10 }
+			pos : { x : 1.05, y : 0.08 }
+		},
+		textTests = {
+			text : '',
+			font : '16px Arial, sans-serif',
+			fill : 'rgba(255, 255, 255, 1)',
+			pos : { x : 1.05, y : 0.11 }
+		},
+		textCriteria = {
+			text : '',
+			font : '16px Arial, sans-serif',
+			fill : 'rgba(255, 255, 255, 1)',
+			pos : { x : 1.05, y : 0.14 }
+		},
+		that = {
+			get quadTreeCriteria() { return quadTreeCriteria; },
+			set quadTreeCriteria(value) {
+				if (value >= 3) {
+					quadTreeCriteria = value;
+				}
+			}
 		};
 
 	// ------------------------------------------------------------------
 	//
-	// This function initializes the quad-tree demo model.
+	// This function initializes the quad-tree demo model.  Only thing it
+	// does right now is to add the circles to the model.
 	//
 	// ------------------------------------------------------------------
-	that.initialize = function() {
+	that.initialize = function(howManyCircles) {
+		that.addMoreCircles(howManyCircles);
+	};
+
+	// ------------------------------------------------------------------
+	//
+	// Public member that allows a number circles to be added to the model.
+	//
+	// ------------------------------------------------------------------
+	that.addMoreCircles = function(howManyCircles) {
 		var circle = 0,
 			addCircle = {},
-			intersectsAny = false;
+			intersectsAny = false,
+			addedCircles = 0;
 		//
 		// Randomly generate a bunch of randomly sized circles.
-		while (circles.length < components.Constants.NumberOfCircles) {
+		while (addedCircles < howManyCircles) {
 			addCircle = components.Circle( {
 				center: { x: Random.nextDouble(), y: Random.nextDouble() },
 				direction: Random.nextCircleVector(0.2),
@@ -58,17 +84,39 @@ QuadTreeDemo.model = (function(components) {
 			}
 			if (intersectsAny === false) {
 				circles.push(addCircle);
+				addedCircles += 1;
 			}
 		}
 	};
 
 	// ------------------------------------------------------------------
 	//
-	// Toggles the rendering of the quad-tree.
+	// Public member that allows a number of circles to be removed.
+	//
+	// ------------------------------------------------------------------
+	that.removeCircles = function(howManyCircles) {
+		//
+		// Just change the length of the circles array to remove the
+		// requested circles...easiest way to do this.
+		circles.length = Math.max(0, circles.length - howManyCircles);
+	};
+
+	// ------------------------------------------------------------------
+	//
+	// Toggles the rendering of the QuadTree.
 	//
 	// ------------------------------------------------------------------
 	that.toggleQuadTreeRendering = function() {
 		showQuadTree = !showQuadTree;
+	};
+
+	// ------------------------------------------------------------------
+	//
+	// Toggles the use of the QuadTree or n x n collision detection.
+	//
+	// ------------------------------------------------------------------
+	that.toggleUseQuadTree = function() {
+		useQuadTree = !useQuadTree;
 	};
 
 	// ------------------------------------------------------------------
@@ -144,33 +192,35 @@ QuadTreeDemo.model = (function(components) {
 		}
 
 		//
-		// Build a quad tree for collision detection
-		quadTree = QuadTree(6);
-		for (circle = 0; circle < circles.length; circle += 1) {
-			quadTree.insert(circles[circle]);
-		}
+		// Only build and use the QuadTree if it is enabled.
+		if (useQuadTree) {
+			quadTree = QuadTree(quadTreeCriteria);
+			for (circle = 0; circle < circles.length; circle += 1) {
+				quadTree.insert(circles[circle]);
+			}
 
-		//
-		// Check for collisions with other circles
-		// for (circle = 0; circle < circles.length; circle += 1) {
-		// 	for (test = circle; test < circles.length; test += 1) {
-		// 		//
-		// 		// Don't test against ourselves
-		// 		if (circle !== test) {
-		// 			if (circles[circle].intersects(circles[test])) {
-		// 				//
-		// 				// Bounce the circles...this also moves them so they
-		// 				// no longer intersect.
-		// 				bounce(circles[circle], circles[test], elapsedTime);
-		// 			}
-		// 		}
-		// 	}
-		// }
-
-		for (circle = 0; circle < circles.length; circle += 1) {
-			other = quadTree.intersects(circles[circle]);
-			if (other) {
-				bounce(circles[circle], other, elapsedTime);
+			for (circle = 0; circle < circles.length; circle += 1) {
+				other = quadTree.intersects(circles[circle]);
+				if (other) {
+					bounce(circles[circle], other, elapsedTime);
+				}
+			}
+		} else {
+			//
+			// Check for collisions with other circles
+			for (circle = 0; circle < circles.length; circle += 1) {
+				for (test = circle; test < circles.length; test += 1) {
+					//
+					// Don't test against ourselves
+					if (circle !== test) {
+						if (circles[circle].intersects(circles[test])) {
+							//
+							// Bounce the circles...this also moves them so they
+							// no longer intersect.
+							bounce(circles[circle], circles[test], elapsedTime);
+						}
+					}
+				}
 			}
 		}
 	};
@@ -187,7 +237,7 @@ QuadTreeDemo.model = (function(components) {
 			renderer.drawCircle('rgba(150, 0, 255, 1)', circles[circle].center, circles[circle].radius);
 		}
 
-		if (showQuadTree) {
+		if (useQuadTree && showQuadTree) {
 			renderQuadTree(renderer, quadTree.root);
 		}
 
@@ -201,8 +251,14 @@ QuadTreeDemo.model = (function(components) {
 		// Show some stats about the demo
 		textObjects.text = 'objects: ' + circles.length;
 		renderer.drawText(textObjects);
-		textTests.text = 'tests: ' + quadTree.collisionTests;
+		if (useQuadTree) {
+			textTests.text = 'tests: ' + quadTree.collisionTests;
+		} else {
+			textTests.text = 'tests: ' + (circles.length * circles.length - circles.length);
+		}
 		renderer.drawText(textTests);
+		textCriteria.text = 'criteria: ' + quadTreeCriteria;
+		renderer.drawText(textCriteria);
 	};
 
 	return that;

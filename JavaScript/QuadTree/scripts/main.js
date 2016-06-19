@@ -10,7 +10,7 @@ QuadTreeDemo.main = (function(renderer, input, model) {
 		frameTimes = [],
 		textFPS = {
 			text : 'fps',
-			font : '20px Arial, sans-serif',
+			font : '16px Arial, sans-serif',
 			fill : 'rgba(255, 255, 255, 1)',
 			pos : { x : 1.05, y : 0.05 }
 		},
@@ -49,7 +49,7 @@ QuadTreeDemo.main = (function(renderer, input, model) {
 		//
 		// Show FPS over last several frames
 		frameTimes.push(elapsedTime);
-		if (frameTimes.length > 1) {
+		if (frameTimes.length > 50) {
 			frameTimes = frameTimes.slice(1);
 			averageTime = frameTimes.reduce(function(a, b) { return a + b; }) / frameTimes.length;
 			//
@@ -87,11 +87,26 @@ QuadTreeDemo.main = (function(renderer, input, model) {
 	//------------------------------------------------------------------
 	function initialize() {
 		renderer.initialize();
-		model.initialize();
+		model.initialize(100);	// Start off with 200 circles
 
 		//
 		// Let's listen to a few keyboard inputs to control the simulation
 		myKeyboard.registerCommand(KeyEvent.DOM_VK_Q, model.toggleQuadTreeRendering);
+		myKeyboard.registerCommand(KeyEvent.DOM_VK_UP, function() {
+			model.quadTreeCriteria = model.quadTreeCriteria + 1;
+		});
+		myKeyboard.registerCommand(KeyEvent.DOM_VK_DOWN, function() {
+			model.quadTreeCriteria = model.quadTreeCriteria - 1;
+		});
+		myKeyboard.registerCommand(KeyEvent.DOM_VK_PAGE_UP, function() {
+			model.addMoreCircles(10);
+		});
+		myKeyboard.registerCommand(KeyEvent.DOM_VK_PAGE_DOWN, function() {
+			model.removeCircles(10);
+		});
+		myKeyboard.registerCommand(KeyEvent.DOM_VK_U, function() {
+			model.toggleUseQuadTree();
+		});
 
 		//
 		// Get the gameloop started

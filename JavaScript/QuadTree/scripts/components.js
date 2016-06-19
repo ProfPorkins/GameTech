@@ -7,11 +7,6 @@
 //------------------------------------------------------------------
 QuadTreeDemo.components = (function() {
 	'use strict';
-	//
-	// Various constants; as best as we can do them in ECMAScript 5
-	var Constants = {
-		get NumberOfCircles() { return 200; }
-	};
 
 	//------------------------------------------------------------------
 	//
@@ -58,13 +53,22 @@ QuadTreeDemo.components = (function() {
 		//
 		//------------------------------------------------------------------
 		that.insideSquare = function(square) {
-			var closestX = Math.clamp(that.center.x, square.left, square.left + square.size),
-				closestY = Math.clamp(that.center.y, square.top, square.top + square.size),
-				distanceX = that.center.x - closestX,
-				distanceY = that.center.y - closestY,
-				distanceSquared = (distanceX * distanceX) + (distanceY * distanceY);
+			var squareX = square.left + square.size / 2,
+				squareY = square.top + square.size / 2,
+				circleDistanceX = Math.abs(that.center.x - squareX),
+				circleDistanceY = Math.abs(that.center.y - squareY),
+				cornerDistanceSq = 0;
 
-			return distanceSquared < (that.radius * that.radius);
+			if (circleDistanceX > (square.size / 2 + that.radius)) { return false; }
+			if (circleDistanceY > (square.size / 2 + that.radius)) { return false; }
+
+			if (circleDistanceX <= (square.size / 2)) { return true; }
+			if (circleDistanceY <= (square.size / 2)) { return true; }
+
+			cornerDistanceSq = 	Math.pow((circleDistanceX - square.size / 2), 2) +
+								Math.pow((circleDistanceY - square.size / 2), 2);
+
+			return (cornerDistanceSq <= that.radius * that.radius);
 		};
 
 		//------------------------------------------------------------------
@@ -104,7 +108,6 @@ QuadTreeDemo.components = (function() {
 	}
 
 	return {
-		Constants: Constants,
 		Circle: Circle
 	};
 
