@@ -56,7 +56,7 @@ QuadTreeDemo.main = (function(renderer, input, model) {
 			// averageTime is in milliseconds, need to convert to seconds for frames per SECOND
 			// But also want to preserve 1 digit past the decimal, so multiplying by 10000 first, then
 			// truncating, then dividing by 10 to get back to seconds.
-			fps = Math.trunc((1 / averageTime) * 10000) / 10;
+			fps = Math.floor((1 / averageTime) * 10000) / 10;
 			textFPS.text = 'fps: ' + fps;
 			renderer.drawText(textFPS);
 		}
