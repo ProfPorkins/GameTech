@@ -18,13 +18,13 @@ QuadTreeDemo.model = (function(components) {
 			fill : 'rgba(255, 255, 255, 1)',
 			pos : { x : 1.05, y : 0.08 }
 		},
-		textTests = {
+		textCriteria = {
 			text : '',
 			font : '16px Arial, sans-serif',
 			fill : 'rgba(255, 255, 255, 1)',
 			pos : { x : 1.05, y : 0.11 }
 		},
-		textCriteria = {
+		textTests = {
 			text : '',
 			font : '16px Arial, sans-serif',
 			fill : 'rgba(255, 255, 255, 1)',
