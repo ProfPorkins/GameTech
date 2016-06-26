@@ -1,10 +1,10 @@
-/* global QuadTreeDemo */
+/* global Demo */
 // ------------------------------------------------------------------
 //
 // Input handling support
 //
 // ------------------------------------------------------------------
-QuadTreeDemo.input = (function() {
+Demo.input = (function() {
 	'use strict';
 
 	function Mouse() {

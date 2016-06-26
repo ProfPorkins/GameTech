@@ -1,9 +1,11 @@
+/* global Demo */
+
 // ------------------------------------------------------------------
 //
 // This is a creator function used to generate a new and empty QuadTree.
 //
 // ------------------------------------------------------------------
-function QuadTree(maxMembership) {
+Demo.components.QuadTree = function(maxMembership) {
 	'use strict';
 
 	var root = null,
@@ -225,4 +227,4 @@ function QuadTree(maxMembership) {
 	});
 
 	return that;
-}
+};

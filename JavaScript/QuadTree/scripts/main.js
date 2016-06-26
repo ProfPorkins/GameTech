@@ -1,10 +1,10 @@
-/* global QuadTreeDemo, KeyEvent */
+/* global Demo, KeyEvent */
 // ------------------------------------------------------------------
 //
 // This namespace provides the simulation loop for the quad-tree demo.
 //
 // ------------------------------------------------------------------
-QuadTreeDemo.main = (function(renderer, input, model) {
+Demo.main = (function(renderer, input, model) {
 	'use strict';
 	var lastTimeStamp = performance.now(),
 		frameTimes = [],
@@ -44,7 +44,7 @@ QuadTreeDemo.main = (function(renderer, input, model) {
 			fps = 0;
 
 		renderer.clearCanvas();
-		model.render(QuadTreeDemo.renderer);
+		model.render(Demo.renderer);
 
 		//
 		// Show FPS over last several frames
@@ -122,4 +122,4 @@ QuadTreeDemo.main = (function(renderer, input, model) {
 		initialize: initialize
 	};
 
-}(QuadTreeDemo.renderer, QuadTreeDemo.input, QuadTreeDemo.model));
+}(Demo.renderer, Demo.input, Demo.model));

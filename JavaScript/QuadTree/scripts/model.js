@@ -1,10 +1,10 @@
-/* global QuadTreeDemo, Random, QuadTree */
+/* global Demo, Random */
 // ------------------------------------------------------------------
 //
 // This namespace holds the quad-tree demo model.
 //
 // ------------------------------------------------------------------
-QuadTreeDemo.model = (function(components) {
+Demo.model = (function(components) {
 	'use strict';
 
 	var circles = [],
@@ -194,7 +194,7 @@ QuadTreeDemo.model = (function(components) {
 		//
 		// Only build and use the QuadTree if it is enabled.
 		if (useQuadTree) {
-			quadTree = QuadTree(quadTreeCriteria);
+			quadTree = components.QuadTree(quadTreeCriteria);
 			for (circle = 0; circle < circles.length; circle += 1) {
 				quadTree.insert(circles[circle]);
 			}
@@ -263,4 +263,4 @@ QuadTreeDemo.model = (function(components) {
 
 	return that;
 
-}(QuadTreeDemo.components));
+}(Demo.components));
