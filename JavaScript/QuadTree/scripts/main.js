@@ -1,4 +1,4 @@
-/* global QuadTreeDemo */
+/* global QuadTreeDemo, KeyEvent */
 // ------------------------------------------------------------------
 //
 // This namespace provides the simulation loop for the quad-tree demo.
@@ -87,11 +87,13 @@ QuadTreeDemo.main = (function(renderer, input, model) {
 	//------------------------------------------------------------------
 	function initialize() {
 		renderer.initialize();
-		model.initialize(100);	// Start off with 200 circles
+		model.initialize(100);	// Start off with some number of circles
 
 		//
 		// Let's listen to a few keyboard inputs to control the simulation
-		myKeyboard.registerCommand(KeyEvent.DOM_VK_Q, model.toggleQuadTreeRendering);
+		myKeyboard.registerCommand(KeyEvent.DOM_VK_Q, function() {
+			model.toggleQuadTreeRendering();
+		});
 		myKeyboard.registerCommand(KeyEvent.DOM_VK_UP, function() {
 			model.quadTreeCriteria = model.quadTreeCriteria + 1;
 		});

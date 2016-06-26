@@ -22,15 +22,6 @@ QuadTreeDemo.components = (function() {
 			get radius() { return spec.radius; }
 		};
 
-		// ------------------------------------------------------------------
-		//
-		// We are going to use this for our circle-square intersection testing.
-		//
-		// ------------------------------------------------------------------
-		Math.clamp = function(value, min, max) {
-			return Math.max(min, Math.min(max, value));
-		};
-
 		//------------------------------------------------------------------
 		//
 		// Checks to see if the two circles intersect each other.  Returns

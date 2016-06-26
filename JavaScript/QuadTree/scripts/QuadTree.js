@@ -4,6 +4,8 @@
 //
 // ------------------------------------------------------------------
 function QuadTree(maxMembership) {
+	'use strict';
+
 	var root = null,
 		that = {
 			get root() { return root; },
