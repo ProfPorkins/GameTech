@@ -1,10 +1,10 @@
-/* global QuadTreeDemo */
+/* global Demo */
 // ------------------------------------------------------------------
 //
 // This namespace provides the rendering code for the demo.
 //
 // ------------------------------------------------------------------
-QuadTreeDemo.renderer = (function() {
+Demo.renderer = (function() {
 	'use strict';
 	var canvas = null,
 		context = null;
