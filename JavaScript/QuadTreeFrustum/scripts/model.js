@@ -1,4 +1,4 @@
-/* global Demo, Random, QuadTree */
+/* global Demo, Random */
 // ------------------------------------------------------------------
 //
 // This namespace holds the quad-tree demo model.
@@ -43,7 +43,7 @@ Demo.model = (function(components) {
 	function buildQuadTree() {
 		var circle = 0;
 
-		quadTree = QuadTree(quadTreeCriteria);
+		quadTree = components.QuadTree(quadTreeCriteria);
 		for (circle = 0; circle < circles.length; circle += 1) {
 			quadTree.insert(circles[circle]);
 		}

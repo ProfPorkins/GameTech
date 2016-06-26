@@ -1,18 +1,18 @@
+/* global Demo */
+
 // ------------------------------------------------------------------
 //
 // This is a creator function used to generate a new and empty QuadTree.
 //
 // ------------------------------------------------------------------
-function QuadTree(maxMembership) {
+Demo.components.QuadTree = function(maxMembership) {
 	'use strict';
 
 	var root = null,
 		that = {
 			get root() { return root; },
-			get collisionTests() { return collisionTests; },
 			get depth() { return findDepth(root); }
-		},
-		collisionTests = 0;
+		};
 
 	// ------------------------------------------------------------------
 	//
@@ -144,7 +144,6 @@ function QuadTree(maxMembership) {
 			member = 0,
 			hitMe = null;
 
-		collisionTests += 1;
 		if (item.insideSquare(node)) {
 			if (node.hasChildren) {
 				//
@@ -160,7 +159,6 @@ function QuadTree(maxMembership) {
 				// This is a leaf node, test against all members of this node.
 				for (member = 0; member < node.members.length; member += 1) {
 					if (item !== node.members[member]) {
-						collisionTests += 1;
 						if (node.members[member].intersects(item)) {
 							hitMe = node.members[member];
 							break;	// Go ahead and stop at the first one found
@@ -225,4 +223,4 @@ function QuadTree(maxMembership) {
 	});
 
 	return that;
-}
+};
