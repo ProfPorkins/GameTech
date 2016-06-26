@@ -2,7 +2,12 @@
 
 //------------------------------------------------------------------
 //
-// A circle has a center, direction, speed, and size.
+// Defines a 2D circle.  'spec' is defined as:
+//	{
+//		center: {x, y},
+//		direction:  {x, y},
+//		radius:
+//	}
 //
 //------------------------------------------------------------------
 Demo.components.Circle = function(spec) {
@@ -11,7 +16,6 @@ Demo.components.Circle = function(spec) {
 		get center() { return spec.center; },
 		get direction() { return spec.direction; },
 		set direction(value) { spec.direction = value; },
-		get speed() { return spec.speed; },
 		get radius() { return spec.radius; }
 	};
 
@@ -57,7 +61,7 @@ Demo.components.Circle = function(spec) {
 
 	//------------------------------------------------------------------
 	//
-	// Move the circle based upon its current speed, elapsed time and
+	// Move the circle based upon its current direction, elapsed time and
 	// direction vector.  When the circle goes outside of the unit world,
 	// have it enter at the appropriate side of the world based on its
 	// position.
