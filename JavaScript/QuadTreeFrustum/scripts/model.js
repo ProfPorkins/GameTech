@@ -23,6 +23,18 @@ Demo.model = (function(components) {
 			fill : 'rgba(255, 255, 255, 1)',
 			pos : { x : 1.05, y : 0.11 }
 		},
+		frustum = components.Frustum({
+			position:  {
+				x: 0.5,
+				y: 0.5
+			},
+			direction: {
+				x: 0.0,
+				y: -1.0
+			},
+			fieldOfView: 90,
+			viewDistance: 0.2
+		}),
 		that = {
 			get quadTreeCriteria() { return quadTreeCriteria; },
 			set quadTreeCriteria(value) {
