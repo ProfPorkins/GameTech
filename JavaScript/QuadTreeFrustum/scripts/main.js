@@ -43,7 +43,7 @@ Demo.main = (function(renderer, input, model) {
 		var averageTime = 0,
 			fps = 0;
 
-		renderer.clearCanvas();
+		renderer.core.clearCanvas();
 		model.render(Demo.renderer);
 
 		//
@@ -58,7 +58,7 @@ Demo.main = (function(renderer, input, model) {
 			// truncating, then dividing by 10 to get back to seconds.
 			fps = Math.floor((1 / averageTime) * 10000) / 10;
 			textFPS.text = 'fps: ' + fps;
-			renderer.drawText(textFPS);
+			renderer.core.drawText(textFPS);
 		}
 	}
 
@@ -86,7 +86,7 @@ Demo.main = (function(renderer, input, model) {
 	//
 	//------------------------------------------------------------------
 	function initialize() {
-		renderer.initialize();
+		renderer.core.initialize();
 		model.initialize(200);	// Start the demo with a bunch of randomly placed circles.
 
 		//

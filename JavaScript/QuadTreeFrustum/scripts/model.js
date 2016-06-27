@@ -23,18 +23,7 @@ Demo.model = (function(components) {
 			fill : 'rgba(255, 255, 255, 1)',
 			pos : { x : 1.05, y : 0.11 }
 		},
-		frustum = components.Frustum({
-			position:  {
-				x: 0.5,
-				y: 0.5
-			},
-			direction: {
-				x: 0.0,
-				y: -1.0
-			},
-			fieldOfView: 90,
-			viewDistance: 0.2
-		}),
+		camera = null,
 		that = {
 			get quadTreeCriteria() { return quadTreeCriteria; },
 			set quadTreeCriteria(value) {
@@ -113,6 +102,22 @@ Demo.model = (function(components) {
 		//
 		// With the circles created, build the quad-tree.
 		buildQuadTree();
+
+		//
+		// Define the initial camera position.  Place it in the center of the
+		// area, looking towards the top.
+		camera = components.Camera({
+			position:  {
+				x: 0.5,
+				y: 0.5
+			},
+			direction: {
+				x: 0.0,
+				y: -1.0
+			},
+			fieldOfView: Math.PI / 2,
+			viewDistance: 0.2
+		});
 	};
 
 	// ------------------------------------------------------------------
@@ -173,7 +178,7 @@ Demo.model = (function(components) {
 		// Only necessary to render the leaf nodes, this provides a small rendering
 		// optimization.
 		if (!node.hasChildren) {
-			renderer.drawRectangle(
+			renderer.core.drawRectangle(
 				'rgba(100, 100, 100, 1)',
 				node.left,
 				node.top,
@@ -200,25 +205,27 @@ Demo.model = (function(components) {
 		var circle = 0;
 
 		for (circle = 0; circle < circles.length; circle += 1) {
-			renderer.drawCircle('rgba(150, 0, 255, 1)', circles[circle].center, circles[circle].radius);
+			renderer.core.drawCircle('rgba(150, 0, 255, 1)', circles[circle].center, circles[circle].radius);
 		}
 
 		if (showQuadTree) {
 			renderQuadTree(renderer, quadTree.root);
 		}
 
+		renderer.Camera.render(camera);
+
 		//
 		// Draw a border around the unit world.  Draw this after rendering
 		// the QuadTree so that it will draw over the border that happens
 		// automatically by the QuadTree...we want this color to show.
-		renderer.drawRectangle('rgba(255, 255, 255, 1)', 0, 0, 1, 1);
+		renderer.core.drawRectangle('rgba(255, 255, 255, 1)', 0, 0, 1, 1);
 
 		//
 		// Show some stats about the demo
 		textObjects.text = 'objects: ' + circles.length;
-		renderer.drawText(textObjects);
+		renderer.core.drawText(textObjects);
 		textCriteria.text = 'criteria: ' + quadTreeCriteria;
-		renderer.drawText(textCriteria);
+		renderer.core.drawText(textCriteria);
 	};
 
 	return that;

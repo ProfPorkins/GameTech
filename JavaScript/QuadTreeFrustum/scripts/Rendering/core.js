@@ -4,7 +4,8 @@
 // This namespace provides the rendering code for the demo.
 //
 // ------------------------------------------------------------------
-Demo.renderer = (function() {
+Demo.renderer = {};
+Demo.renderer.core = (function() {
 	'use strict';
 	var canvas = null,
 		context = null;
@@ -125,6 +126,43 @@ Demo.renderer = (function() {
 
 	//------------------------------------------------------------------
 	//
+	// Draw a line segment within the unit world.
+	//
+	//------------------------------------------------------------------
+	function drawLine(style, pt1, pt2) {
+		var smallestSize,
+			squareSize,
+			cornerTop,
+			cornerLeft;
+
+		//
+		// Have to figure out where the upper left corner of the unit world is
+		// based on whether the width or height is the largest dimension.
+		if (canvas.width < canvas.height) {
+			smallestSize = canvas.width;
+			squareSize = smallestSize * 0.9;
+			cornerLeft = Math.floor(canvas.width * 0.05);
+			cornerTop = (canvas.height - squareSize) / 2;
+		} else {
+			smallestSize = canvas.height;
+			squareSize = smallestSize * 0.9;
+			cornerTop = Math.floor(canvas.height * 0.05);
+			cornerLeft = (canvas.width - squareSize) / 2;
+		}
+
+		context.strokeStyle = style;
+		context.beginPath();
+		context.moveTo(
+			0.5 + cornerLeft + (pt1.x * squareSize), 
+			0.5 + cornerTop + (pt1.y * squareSize));
+		context.lineTo(
+			0.5 + cornerLeft + (pt2.x * squareSize), 
+			0.5 + cornerTop + (pt2.y * squareSize));
+		context.stroke();
+	}
+
+	//------------------------------------------------------------------
+	//
 	// Draw a circle within the unit world.
 	//
 	//------------------------------------------------------------------
@@ -204,6 +242,7 @@ Demo.renderer = (function() {
 		clearCanvas: clearCanvas,
 		toggleFullScreen: toggleFullScreen,
 		drawText: drawText,
+		drawLine: drawLine,
 		drawRectangle: drawRectangle,
 		drawCircle: drawCircle
 	};
