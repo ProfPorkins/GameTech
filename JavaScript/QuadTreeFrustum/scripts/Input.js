@@ -78,7 +78,6 @@ Demo.input = (function() {
 
 	function Keyboard() {
 		var keys = {},
-			previousKeys = {},
 			handlers = [],
 			that = {};
 
@@ -87,7 +86,7 @@ Demo.input = (function() {
 		}
 
 		function keyRelease(event) {
-			delete previousKeys[event.keyCode];
+			delete keys[event.keyCode];
 		}
 
 		// ------------------------------------------------------------------
@@ -111,14 +110,10 @@ Demo.input = (function() {
 			var key = 0;
 
 			for (key = 0; key < handlers.length; key += 1) {
-				if (typeof keys[handlers[key].key] !== 'undefined') {
-					if (typeof previousKeys[handlers[key].key] === 'undefined') {
-						previousKeys[handlers[key].key] = true;
-						handlers[key].handler(elapsedTime);
-					}
+				if (keys.hasOwnProperty(handlers[key].key)) {
+					handlers[key].handler(elapsedTime);
 				}
 			}
-			keys = {};
 		};
 
 		//

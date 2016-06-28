@@ -107,6 +107,19 @@ Demo.main = (function(renderer, input, model) {
 			model.removeCircles(10);
 		});
 
+		myKeyboard.registerCommand(KeyEvent.DOM_VK_W, function(elapsedTime) {
+			model.cameraMoveForward(elapsedTime);
+		});
+		myKeyboard.registerCommand(KeyEvent.DOM_VK_S, function(elapsedTime) {
+			model.cameraMoveBackward(elapsedTime);
+		});
+		myKeyboard.registerCommand(KeyEvent.DOM_VK_A, function(elapsedTime) {
+			model.cameraRotateLeft(elapsedTime);
+		});
+		myKeyboard.registerCommand(KeyEvent.DOM_VK_D, function(elapsedTime) {
+			model.cameraRotateRight(elapsedTime);
+		});
+
 		//
 		// Get the gameloop started
 		requestAnimationFrame(gameLoop);

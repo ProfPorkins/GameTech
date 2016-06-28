@@ -111,12 +111,9 @@ Demo.model = (function(components) {
 				x: 0.5,
 				y: 0.5
 			},
-			direction: {
-				x: 0.0,
-				y: -1.0
-			},
-			fieldOfView: Math.PI / 2,
-			viewDistance: 0.2
+			direction: (Math.PI / 2) * 3,
+			fieldOfView: Math.PI / 3,
+			viewDistance: 0.4
 		});
 	};
 
@@ -156,6 +153,22 @@ Demo.model = (function(components) {
 	// ------------------------------------------------------------------
 	that.toggleQuadTreeRendering = function() {
 		showQuadTree = !showQuadTree;
+	};
+
+	that.cameraMoveForward = function(elapsedTime) {
+		camera.moveForward(elapsedTime);
+	};
+
+	that.cameraMoveBackward = function(elapsedTime) {
+		camera.moveBackward(elapsedTime);
+	};
+
+	that.cameraRotateLeft = function(elapsedTime) {
+		camera.rotateLeft(elapsedTime);
+	};
+
+	that.cameraRotateRight = function(elapsedTime) {
+		camera.rotateRight(elapsedTime);
 	};
 
 	// ------------------------------------------------------------------
