@@ -19,11 +19,6 @@ Demo.components.Camera = function(spec) {
 			get frustum() { return frustum; }
 		};
 
-	//
-	// Add a movement and rotation rate into the spec
-	spec.speed = 0.1;	// World units per second
-	spec.rotateRate = Math.PI / 2;	// Radians per second
-
 	//------------------------------------------------------------------
 	//
 	// Compute the far, left, and right line segments based upon the
@@ -97,6 +92,11 @@ Demo.components.Camera = function(spec) {
 
 		computeFrustum();
 	};
+
+	//
+	// Add a movement and rotation rate into the spec
+	spec.speed = 0.15;	// World units per second
+	spec.rotateRate = Math.PI / 2;	// Radians per second
 
 	//
 	// During initialization, compute the viewing frustum based upon
