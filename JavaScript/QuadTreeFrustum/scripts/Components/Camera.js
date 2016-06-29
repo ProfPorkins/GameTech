@@ -24,15 +24,21 @@ Demo.components.Camera = function(spec) {
 	// Compute the far, left, and right line segments based upon the
 	// camera parameters.
 	//
+	// The length of the vector we are interested in is the hypotenuse
+	// of a right triangle.  The formulate to compute the length of
+	// the hypotenuse given the angle A and length of the adjacent side
+	// is: h = adjacent / cos A
+	//
 	//------------------------------------------------------------------
 	function computeFrustum() {
 		var leftAngle = spec.direction - spec.fieldOfView / 2,
-			rightAngle = spec.direction + spec.fieldOfView / 2;
+			rightAngle = spec.direction + spec.fieldOfView / 2,
+			hypotenuse = spec.viewDistance / Math.cos(spec.fieldOfView / 2);
 
-		frustum.leftPoint.x = spec.position.x + spec.viewDistance * Math.cos(leftAngle);
-		frustum.leftPoint.y = spec.position.y + spec.viewDistance * Math.sin(leftAngle);
-		frustum.rightPoint.x = spec.position.x + spec.viewDistance * Math.cos(rightAngle);
-		frustum.rightPoint.y = spec.position.y + spec.viewDistance * Math.sin(rightAngle);
+		frustum.leftPoint.x = spec.position.x + hypotenuse * Math.cos(leftAngle);
+		frustum.leftPoint.y = spec.position.y + hypotenuse * Math.sin(leftAngle);
+		frustum.rightPoint.x = spec.position.x + hypotenuse * Math.cos(rightAngle);
+		frustum.rightPoint.y = spec.position.y + hypotenuse * Math.sin(rightAngle);
 	}
 
 	//------------------------------------------------------------------

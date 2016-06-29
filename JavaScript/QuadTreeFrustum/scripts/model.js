@@ -155,50 +155,41 @@ Demo.model = (function(components) {
 		showQuadTree = !showQuadTree;
 	};
 
+	// ------------------------------------------------------------------
+	//
+	// Move the camera forward.
+	//
+	// ------------------------------------------------------------------
 	that.cameraMoveForward = function(elapsedTime) {
 		camera.moveForward(elapsedTime);
 	};
 
+	// ------------------------------------------------------------------
+	//
+	// Move the camera backward.
+	//
+	// ------------------------------------------------------------------
 	that.cameraMoveBackward = function(elapsedTime) {
 		camera.moveBackward(elapsedTime);
 	};
 
+	// ------------------------------------------------------------------
+	//
+	// Rotate the camera left.
+	//
+	// ------------------------------------------------------------------
 	that.cameraRotateLeft = function(elapsedTime) {
 		camera.rotateLeft(elapsedTime);
 	};
 
+	// ------------------------------------------------------------------
+	//
+	// Rotate the camera right.
+	//
+	// ------------------------------------------------------------------
 	that.cameraRotateRight = function(elapsedTime) {
 		camera.rotateRight(elapsedTime);
 	};
-
-	// ------------------------------------------------------------------
-	//
-	// Overlays a rendering of the QuadTree on top of the world.  This is
-	// written as a recursive function that performs a pre-order traversal
-	// and rendering.
-	//
-	// ------------------------------------------------------------------
-	function renderQuadTree(renderer, node) {
-		var child = 0;
-		//
-		// Recursively (post-order) work through the nodes and draw their bounds on
-		// the way down.
-		for (child = 0; child < node.children.length; child += 1) {
-			renderQuadTree(renderer, node.children[child]);
-		}
-
-		//
-		// Only necessary to render the leaf nodes, this provides a small rendering
-		// optimization.
-		if (!node.hasChildren) {
-			renderer.core.drawRectangle(
-				'rgba(100, 100, 100, 1)',
-				node.left,
-				node.top,
-				node.size,
-				node.size);
-		}
-	}
 
 	// ------------------------------------------------------------------
 	//
@@ -222,7 +213,7 @@ Demo.model = (function(components) {
 		}
 
 		if (showQuadTree) {
-			renderQuadTree(renderer, quadTree.root);
+			renderer.QuadTree.render(quadTree);
 		}
 
 		renderer.Camera.render(camera);
