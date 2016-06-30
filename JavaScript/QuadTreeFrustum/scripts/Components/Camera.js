@@ -11,12 +11,7 @@ Demo.components.Camera = function(spec) {
 			leftPoint: { x: 0, y: 0 },
 			rightPoint: { x: 0, y: 0 }
 		},
-		boundingCircle = {
-			x: 0,
-			y: 0,
-			radius: 0,
-			radiusSq: 0
-		},
+		boundingCircle = {},
 		that = {
 			get position() { return spec.position; },
 			get direction() { return spec.direction; },
@@ -34,7 +29,7 @@ Demo.components.Camera = function(spec) {
 	// The length of the vector we are interested in is the hypotenuse
 	// of a right triangle.  The formulate to compute the length of
 	// the hypotenuse given the angle A and length of the adjacent side
-	// is: h = adjacent / cos A
+	// is: hypotenuse = adjacent / cos A
 	//
 	//------------------------------------------------------------------
 	function computeFrustum() {
@@ -47,56 +42,7 @@ Demo.components.Camera = function(spec) {
 		frustum.rightPoint.x = spec.position.x + hypotenuse * Math.cos(rightAngle);
 		frustum.rightPoint.y = spec.position.y + hypotenuse * Math.sin(rightAngle);
 
-		//
-		// Compute the circle that bounds the frustum
-		// Reference used: http://formulas.tutorvista.com/math/circumcenter-formula.html#
-		// Other references I also looked at (not claiming how useful they were, but I considered them):
-		//		https://en.wikipedia.org/wiki/Circumscribed_circle
-		//		http://www.ics.uci.edu/~eppstein/junkyard/circumcenter.html
-		//		http://cppgm.blogspot.com/2008/03/circle-through-three-points.html
-		//		http://stackoverflow.com/questions/13977354/build-circle-from-3-points-in-3d-space-implementation-in-c-or-c
-		var midPointAB = {
-				x: (spec.position.x + frustum.rightPoint.x) / 2,
-				y: (spec.position.y + frustum.rightPoint.y) / 2
-			},
-			midPointAC = {
-				x: (spec.position.x + frustum.leftPoint.x) / 2,
-				y: (spec.position.y + frustum.leftPoint.y) / 2
-			},
-			slopeAB = (frustum.rightPoint.y - spec.position.y) / (frustum.rightPoint.x - spec.position.x),
-			slopeAC = (frustum.leftPoint.y - spec.position.y) / (frustum.leftPoint.x - spec.position.x);
-		slopeAB = -(1 / slopeAB);
-		slopeAC = -(1 / slopeAC);
-
-		boundingCircle.x = (midPointAC.y - midPointAB.y + slopeAB * midPointAB.x - slopeAC * midPointAC.x) / (slopeAB - slopeAC);
-		boundingCircle.y = slopeAC * (boundingCircle.x - midPointAC.x) + midPointAC.y;
-
-		//
-		// Radius is distance from the center to any of the points
-		boundingCircle.radius2 = Math.pow(boundingCircle.x - spec.position.x, 2) + Math.pow(boundingCircle.y - spec.position.y, 2);
-		boundingCircle.radius =Math.sqrt(boundingCircle.radius2);
-
-		//
-		// Yes, I actually derived these equations all by my lonesome!
-		//
-
-		// y - midPointAB.y = slopeAB * (x -  midPointAB.x)
-		// y = midPointAB.y + slopeAB * (x - midPointAB.x)
-		// y - midPointAB.y = slopeAB * x - slopeAB * midPointAB.x
-		// slopeAB * x = y - midPointAB.y + slopeAB * midPointAB.x
-		// x = (y - midPointAB.y + slopeAB * midPointAB.x) / slopeAB
-
-		// y - midPointAC.y = slopeAC(x - midPointAC.x)
-		// y = slopeAC * (x - midPointAC.x) + midPointAC.y
-
-		//
-		// Solve for x
-		// midPointAB.y + slopeAB * (x - midPointAB.x) = midPointAC.y + slopeAC * (x - midPointAC.x)
-		// midPointAB.y + slopeAB * x - slopeAB * midPointAB.x = midPointAC.y + slopeAC * x - slopeAC * midPointAC.x
-		// slopeAB * x - slopeAC * x = midPointAC.y - midPointAB.y + slopeAB * midPointAB.x - slopeAC * midPointAC.x
-		// x * (slopeAB - slopeAC) = midPointAC.y - midPointAB.y + slopeAB * midPointAB.x - slopeAC * midPointAC.x
-		// x = (midPointAC.y - midPointAB.y + slopeAB * midPointAB.x - slopeAC * midPointAC.x) / (slopeAB - slopeAC)
-
+		boundingCircle = Demo.utilities.math.circleFromTriangle(spec.position, frustum.rightPoint, frustum.leftPoint);
 	}
 
 	//------------------------------------------------------------------

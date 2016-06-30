@@ -1,10 +1,10 @@
 /* global Demo */
+
 // ------------------------------------------------------------------
 //
-// This namespace provides the rendering code for the demo.
+// This namespace provides the core rendering code for the demo.
 //
 // ------------------------------------------------------------------
-Demo.renderer = {};
 Demo.renderer.core = (function() {
 	'use strict';
 	var canvas = null,
