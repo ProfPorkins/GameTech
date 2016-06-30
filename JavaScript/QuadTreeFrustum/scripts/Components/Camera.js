@@ -14,7 +14,8 @@ Demo.components.Camera = function(spec) {
 		boundingCircle = {
 			x: 0,
 			y: 0,
-			radius: 0
+			radius: 0,
+			radiusSq: 0
 		},
 		that = {
 			get position() { return spec.position; },
@@ -72,7 +73,8 @@ Demo.components.Camera = function(spec) {
 
 		//
 		// Radius is distance from the center to any of the points
-		boundingCircle.radius = Math.sqrt(Math.pow(boundingCircle.x - spec.position.x, 2) + Math.pow(boundingCircle.y - spec.position.y, 2));
+		boundingCircle.radius2 = Math.pow(boundingCircle.x - spec.position.x, 2) + Math.pow(boundingCircle.y - spec.position.y, 2);
+		boundingCircle.radius =Math.sqrt(boundingCircle.radius2);
 
 		//
 		// Yes, I actually derived these equations all by my lonesome!

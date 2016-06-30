@@ -24,6 +24,12 @@ Demo.components.QuadTree = function(maxMembership) {
 	function Node(bounds) {
 		var children = [],	// Child nodes of this node
 			members = [],	// List of items contained within this node
+			boundingCircle = {
+				x: 0,
+				y: 0,
+				radius: 0,
+				radiusSq: 0
+			},
 			node = {
 				get left() { return bounds.left; },
 				get top() { return bounds.top; },
@@ -33,6 +39,15 @@ Demo.components.QuadTree = function(maxMembership) {
 				get children() { return children; },
 				get members() { return members; }
 			};
+
+		//
+		// When creating a node, define a bounding circle that we can use for
+		// quick intersection tests with other circles before dropping down to
+		// do the slower test against the square.
+		boundingCircle.x = bounds.left + bounds.size / 2;
+		boundingCircle.y = bounds.top + bounds.size / 2;
+		boundingCircle.radiusSq = Math.pow(boundingCircle.x - bounds.left, 2) + Math.pow(boundingCircle.y - bounds.top);
+		boundingCircle.radius = Math.sqrt(boundingCircle.radiusSq);
 
 		// ------------------------------------------------------------------
 		//
