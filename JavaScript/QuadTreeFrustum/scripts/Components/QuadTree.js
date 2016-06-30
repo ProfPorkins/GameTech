@@ -37,7 +37,8 @@ Demo.components.QuadTree = function(maxMembership) {
 				get isFull() { return members.length >= maxMembership; },
 				get hasChildren() { return children.length > 0; },
 				get children() { return children; },
-				get members() { return members; }
+				get members() { return members; },
+				get boundingCircle() { return boundingCircle; }
 			};
 
 		//
@@ -46,7 +47,7 @@ Demo.components.QuadTree = function(maxMembership) {
 		// do the slower test against the square.
 		boundingCircle.x = bounds.left + bounds.size / 2;
 		boundingCircle.y = bounds.top + bounds.size / 2;
-		boundingCircle.radiusSq = Math.pow(boundingCircle.x - bounds.left, 2) + Math.pow(boundingCircle.y - bounds.top);
+		boundingCircle.radiusSq = Math.pow(boundingCircle.x - bounds.left, 2) + Math.pow(boundingCircle.y - bounds.top, 2);
 		boundingCircle.radius = Math.sqrt(boundingCircle.radiusSq);
 
 		// ------------------------------------------------------------------
