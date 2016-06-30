@@ -49,6 +49,11 @@ Demo.components.Camera = function(spec) {
 		//
 		// Compute the circle that bounds the frustum
 		// Reference used: http://formulas.tutorvista.com/math/circumcenter-formula.html#
+		// Other references I also looked at (not claiming how useful they were, but I considered them):
+		//		https://en.wikipedia.org/wiki/Circumscribed_circle
+		//		http://www.ics.uci.edu/~eppstein/junkyard/circumcenter.html
+		//		http://cppgm.blogspot.com/2008/03/circle-through-three-points.html
+		//		http://stackoverflow.com/questions/13977354/build-circle-from-3-points-in-3d-space-implementation-in-c-or-c
 		var midPointAB = {
 				x: (spec.position.x + frustum.rightPoint.x) / 2,
 				y: (spec.position.y + frustum.rightPoint.y) / 2
