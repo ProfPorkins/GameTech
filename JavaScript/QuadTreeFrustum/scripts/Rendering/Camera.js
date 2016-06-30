@@ -18,6 +18,19 @@ Demo.renderer.Camera = (function(core) {
 		core.drawLine('rgba(255, 255, 0, 1)', camera.position, camera.frustum.leftPoint);
 		core.drawLine('rgba(255, 255, 0, 1)', camera.position, camera.frustum.rightPoint);
 		core.drawLine('rgba(255, 255, 0, 1)', camera.frustum.leftPoint, camera.frustum.rightPoint);
+
+		//
+		// Draw the bounding circle
+		core.drawCircle(
+			'rgba(255, 255, 0, 1)',
+			camera.boundingCircle,
+			camera.boundingCircle.radius);
+		//
+		// Draw a tiny circle to show the bounding circle center
+		core.drawCircle(
+			'rgba(255, 255, 0, 1)',
+			camera.boundingCircle,
+			0.005);
 	};
 
 	return that;
