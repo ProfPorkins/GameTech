@@ -64,6 +64,25 @@ Demo.utilities.math = (function() {
 
 	// ------------------------------------------------------------------
 	//
+	// Determines if a point is inside of a triangle or not.
+	// Reference: http://stackoverflow.com/questions/2049582/how-to-determine-a-point-in-a-2d-triangle
+	// Reference: http://www.gamedev.net/topic/295943-is-this-a-better-point-in-triangle-test-2d/
+	// Another good reference: http://totologic.blogspot.fr/2014/01/accurate-point-in-triangle-test.html
+	//
+	// ------------------------------------------------------------------
+	function sign(pt1, pt2, pt3) {
+		return (pt1.x - pt3.x) * (pt2.y - pt3.y) - (pt2.x - pt3.x) * (pt1.y - pt3.y);
+	}
+	function pointInTriangle2(pt, triangle) {
+		var b1 = sign(pt, triangle.pt1, triangle.pt2) < 0,
+			b2 = sign(pt, triangle.pt2, triangle.pt3) < 0,
+			b3 = sign(pt, triangle.pt3, triangle.pt1) < 0;
+
+		return ((b1 === b2) && (b2 === b3));
+	}
+
+	// ------------------------------------------------------------------
+	//
 	// Determines if a point is inside of a circle.
 	//
 	// ------------------------------------------------------------------
@@ -98,10 +117,13 @@ Demo.utilities.math = (function() {
 	// ------------------------------------------------------------------
 	//
 	// Determines if a circle and triangle intersect at any point.
+	// TODO: Could improve performance by first testing for the point
+	// 		 inside the triangle bounding box first, then test for point
+	//		 inside the triangle.
 	//
 	// ------------------------------------------------------------------
 	that.circleTouchTriangle = function(circle, triangle) {
-		if (pointInTriangle(circle.center, triangle)) {
+		if (pointInTriangle2(circle.center, triangle)) {
 			return true;
 		}
 		if (circleTouchLine(circle, triangle.pt1, triangle.pt2)) {
