@@ -35,6 +35,10 @@ Demo.renderer.QuadTree = (function(core) {
 				node.top,
 				node.size,
 				node.size);
+			// core.drawCircle(
+			// 	'rgba(100, 100, 100, 1)',
+			// 	node.boundingCircle.center,
+			// 	node.boundingCircle.radius);
 		}
 	}
 

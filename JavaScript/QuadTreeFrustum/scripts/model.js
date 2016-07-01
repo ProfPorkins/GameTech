@@ -65,7 +65,6 @@ Demo.model = (function(components) {
 		while (addedCircles < howManyCircles) {
 			addCircle = components.Circle( {
 				center: { x: Random.nextDouble(), y: Random.nextDouble() },
-				direction: Random.nextCircleVector(0.2),
 				radius: Math.max(0.0025, Math.abs(Random.nextGaussian(0.01, 0.005)))
 			} );
 			//
