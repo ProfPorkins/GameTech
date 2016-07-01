@@ -8,15 +8,24 @@
 Demo.input.Keyboard = function() {
 	'use strict';
 	var keys = {},
+		keyRepeat = {},
 		handlers = [],
 		that = {};
 
-	function keyPress(event) {
+	function keyDown(event) {
 		keys[event.keyCode] = event.timeStamp;
+		//
+		// Because we can continuously receive the keyDown event, check to
+		// see if we already have this property.  If we do, we don't want to
+		// overwrite the value that already exists.
+		if (keyRepeat.hasOwnProperty(event.keyCode) === false) {
+			keyRepeat[event.keyCode] = false;
+		}
 	}
 
 	function keyRelease(event) {
 		delete keys[event.keyCode];
+		delete keyRepeat[event.keyCode];
 	}
 
 	// ------------------------------------------------------------------
@@ -24,8 +33,12 @@ Demo.input.Keyboard = function() {
 	// Allows the client code to register a keyboard handler
 	//
 	// ------------------------------------------------------------------
-	that.registerCommand = function(key, handler) {
-		handlers.push({ key : key, handler : handler });
+	that.registerCommand = function(key, repeat, handler) {
+		handlers.push({
+			key: key,
+			repeat: repeat,
+			handler: handler
+		});
 	};
 
 	// ------------------------------------------------------------------
@@ -41,14 +54,18 @@ Demo.input.Keyboard = function() {
 
 		for (key = 0; key < handlers.length; key += 1) {
 			if (keys.hasOwnProperty(handlers[key].key)) {
-				handlers[key].handler(elapsedTime);
+				if (handlers[key].repeat === true ||
+					(handlers[key].repeat === false && keyRepeat[handlers[key].key] === false)) {
+					handlers[key].handler(elapsedTime);
+					keyRepeat[handlers[key].key] = true;
+				}
 			}
 		}
 	};
 
 	//
 	// These are used to keep track of which keys are currently pressed
-	window.addEventListener('keydown', keyPress);
+	window.addEventListener('keydown', keyDown);
 	window.addEventListener('keyup', keyRelease);
 
 	return that;
