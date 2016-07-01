@@ -87,7 +87,7 @@ Demo.main = (function(renderer, input, model) {
 	//------------------------------------------------------------------
 	function initialize() {
 		renderer.core.initialize();
-		model.initialize(1000);	// Start the demo with a bunch of randomly placed circles.
+		model.initialize(200);	// Start the demo with a bunch of randomly placed circles.
 
 		//
 		// Let's listen to a few keyboard inputs to control the simulation

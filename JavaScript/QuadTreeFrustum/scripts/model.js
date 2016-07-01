@@ -75,9 +75,10 @@ Demo.model = (function(components) {
 		//
 		// Randomly generate a bunch of randomly sized circles.
 		while (addedCircles < howManyCircles) {
-			addCircle = components.Circle( {
+			addCircle = components.Entity( {
 				center: { x: Random.nextDouble(), y: Random.nextDouble() },
-				radius: Math.max(0.0015, Math.abs(Random.nextGaussian(0.005, 0.0025)))
+				radius: Math.max(0.0015, Math.abs(Random.nextGaussian(0.005, 0.0025))),
+				direction: Random.nextCircleVector(0.1)
 			} );
 			//
 			// Don't allow the circle to start overlapped with the edges of the world
@@ -103,6 +104,35 @@ Demo.model = (function(components) {
 
 	// ------------------------------------------------------------------
 	//
+	// Perform an elastic collision between the two circles to determine
+	// their new direction vectors.
+	//
+	// ------------------------------------------------------------------
+	function bounce(c1, c2, elapsedTime) {
+		var v1 = { x: 0, y: 0 },
+			v2 = { x: 0, y: 0 };
+
+		v1.x = (c1.direction.x * (c1.radius - c2.radius) + 2 * c2.radius * c2.direction.x) / (c1.radius + c2.radius);
+		v1.y = (c1.direction.y * (c1.radius - c2.radius) + 2 * c2.radius * c2.direction.y) / (c1.radius + c2.radius);
+
+		v2.x = (c2.direction.x * (c2.radius - c1.radius) + 2 * c1.radius * c1.direction.x) / (c1.radius + c2.radius);
+		v2.y = (c2.direction.y * (c2.radius - c1.radius) + 2 * c1.radius * c1.direction.y) / (c1.radius + c2.radius);
+
+		c1.direction.x = v1.x;
+		c1.direction.y = v1.y;
+		c2.direction.x = v2.x;
+		c2.direction.y = v2.y;
+
+		//
+		// Move them along their new direction vectors until they no longer intersect.
+		while (c1.intersects(c2)) {
+			c1.update(elapsedTime);
+			c2.update(elapsedTime);
+		}
+	}
+
+	// ------------------------------------------------------------------
+	//
 	// This function initializes the quad-tree demo model.  Only thing it
 	// does right now is to add the circles to the model.
 	//
@@ -110,8 +140,6 @@ Demo.model = (function(components) {
 	that.initialize = function(howManyCircles) {
 		addMoreCircles(howManyCircles);
 
-		//
-		// With the circles created, build the quad-tree.
 		buildQuadTree();
 
 		//
@@ -244,7 +272,23 @@ Demo.model = (function(components) {
 	//
 	// ------------------------------------------------------------------
 	that.update = function(elapsedTime) {
+		var circle = 0,
+			other = null;
 
+		//
+		// Have all the circles update their positions
+		for (circle = 0; circle < circles.length; circle += 1) {
+			circles[circle].update(elapsedTime);
+		}
+
+		buildQuadTree();
+
+		for (circle = 0; circle < circles.length; circle += 1) {
+			other = quadTree.intersects(circles[circle]);
+			if (other) {
+				bounce(circles[circle], other, elapsedTime);
+			}
+		}
 	};
 
 	// ------------------------------------------------------------------

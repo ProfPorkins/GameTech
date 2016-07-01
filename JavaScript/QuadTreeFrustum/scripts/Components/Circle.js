@@ -6,13 +6,12 @@
 //	{
 //		center: {x, y},
 //		radius:
-//		radiusSq: // Square of the radius
 //	}
 //
 //------------------------------------------------------------------
 Demo.components.Circle = function(spec) {
 	'use strict';
-	var radiusSq = spec.radius * spec.radius,
+	var radiusSq = spec.radius * spec.radius,	// This gets used by various mathematical operations to avoid a sqrt
 		that = {
 			get center() { return spec.center; },
 			get radius() { return spec.radius; },
