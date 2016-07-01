@@ -17,11 +17,23 @@ Demo.model = (function(components) {
 			fill : 'rgba(255, 255, 255, 1)',
 			pos : { x : 1.05, y : 0.08 }
 		},
-		textCriteria = {
+		textTested = {
 			text : '',
 			font : '16px Arial, sans-serif',
 			fill : 'rgba(255, 255, 255, 1)',
 			pos : { x : 1.05, y : 0.11 }
+		},
+		textVisible = {
+			text : '',
+			font : '16px Arial, sans-serif',
+			fill : 'rgba(255, 255, 255, 1)',
+			pos : { x : 1.05, y : 0.14 }
+		},
+		textCriteria = {
+			text : '',
+			font : '16px Arial, sans-serif',
+			fill : 'rgba(255, 255, 255, 1)',
+			pos : { x : 1.05, y : 0.17 }
 		},
 		camera = null,
 		that = {
@@ -111,7 +123,7 @@ Demo.model = (function(components) {
 				y: 0.5
 			},
 			direction: (Math.PI / 2) * 3,
-			fieldOfView: Math.PI / 3,
+			fieldOfView: Math.PI / 5,
 			viewDistance: 0.4
 		});
 	};
@@ -190,6 +202,14 @@ Demo.model = (function(components) {
 		camera.rotateRight(elapsedTime);
 	};
 
+	that.cameraDecreaseFOV = function(elapsedTime) {
+		camera.decreaseFOV(elapsedTime);
+	};
+
+	that.cameraIncreaseFOV = function(elapsedTime) {
+		camera.increaseFOV(elapsedTime);
+	};
+
 	// ------------------------------------------------------------------
 	//
 	// This function is used to update the state of the demo model.
@@ -235,6 +255,10 @@ Demo.model = (function(components) {
 		// Show some stats about the demo
 		textObjects.text = 'objects: ' + circles.length;
 		renderer.core.drawText(textObjects);
+		textTested.text = 'objects tested: ' + quadTree.objectsTested;
+		renderer.core.drawText(textTested);
+		textVisible.text = 'objects visible: ' + visible.length;
+		renderer.core.drawText(textVisible);
 		textCriteria.text = 'criteria: ' + quadTreeCriteria;
 		renderer.core.drawText(textCriteria);
 	};

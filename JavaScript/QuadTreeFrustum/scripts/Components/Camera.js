@@ -103,10 +103,23 @@ Demo.components.Camera = function(spec) {
 		computeFrustum();
 	};
 
+	that.decreaseFOV = function(elapsedTime) {
+		spec.fieldOfView -= spec.fovRate * (elapsedTime / 1000);
+
+		computeFrustum();
+	};
+
+	that.increaseFOV = function(elapsedTime) {
+		spec.fieldOfView += spec.fovRate * (elapsedTime / 1000);
+
+		computeFrustum();
+	};
+
 	//
 	// Add a movement and rotation rate into the spec
 	spec.speed = 0.20;	// World units per second
 	spec.rotateRate = Math.PI / 2;	// Radians per second
+	spec.fovRate = Math.PI / 4;		// Radians per second
 
 	//
 	// During initialization, compute the viewing frustum based upon

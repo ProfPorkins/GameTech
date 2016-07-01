@@ -9,9 +9,12 @@ Demo.components.QuadTree = function(maxMembership) {
 	'use strict';
 
 	var root = null,
+		nextItemId = 0,
+		testedSet = {},
 		that = {
 			get root() { return root; },
-			get depth() { return findDepth(root); }
+			get depth() { return findDepth(root); },
+			get objectsTested() { return Object.keys(testedSet).length; }
 		};
 
 	// ------------------------------------------------------------------
@@ -22,7 +25,7 @@ Demo.components.QuadTree = function(maxMembership) {
 	//
 	// ------------------------------------------------------------------
 	function Node(bounds) {
-		var children = [],	// Child nodes of this node
+		var	children = [],	// Child nodes of this node
 			members = [],	// List of items contained within this node
 			boundingCircle = {},
 			circleSpec = {},
@@ -141,6 +144,12 @@ Demo.components.QuadTree = function(maxMembership) {
 	// ------------------------------------------------------------------
 	that.insert = function(item) {
 		//
+		// We give each new item a unique id because they can have membership in
+		// more than one leaf node.  When we are doing frustum visibility testing, this
+		// id can be used to see if we've already looked at the item or not.
+		item.id = nextItemId;
+		nextItemId += 1;
+		//
 		// Call the recursive 'insert' to perform the work of actually
 		// adding the new item to the QuadTree.
 		insert(root, item);
@@ -212,7 +221,8 @@ Demo.components.QuadTree = function(maxMembership) {
 	// ------------------------------------------------------------------
 	function queryVisible(node, camera, triangle, visible) {
 		var child = 0,
-			member = 0;
+			member = 0,
+			item = null;
 		//
 		// Do the simple circle-circle test first, if that passes, then
 		// do the more complex circle-square test.
@@ -222,15 +232,22 @@ Demo.components.QuadTree = function(maxMembership) {
 				// If this is a leaf node check all of its members to see if they
 				// are visible.  Otherwise, if it isn't a leave node recurse into
 				// its children.
-				if (node.hasChildren) {
+				if (node.hasChildren) {	// Not a leaf node
 					for (child = 0; child < node.children.length; child += 1) {
 						queryVisible(node.children[child], camera, triangle, visible);
 					}
-				} else {
+				} else {	// Is a leaf node
 					for (member = 0; member < node.members.length; member += 1) {
-						if (node.members[member].intersects(camera.boundingCircle)) {
-							if (Demo.utilities.math.circleTouchTriangle(node.members[member], triangle)) {
-								visible.push(node.members[member]);
+						item = node.members[member];
+						//
+						// Check to see if we have already tested the object.  If we have, no need
+						// to check it again.
+						if ((item.id in testedSet) === false) {
+							testedSet[item.id] = true;
+							if (item.intersects(camera.boundingCircle)) {
+								if (Demo.utilities.math.circleTouchTriangle(item, triangle)) {
+									visible.push(item);
+								}
 							}
 						}
 					}
@@ -253,6 +270,7 @@ Demo.components.QuadTree = function(maxMembership) {
 				pt3: camera.frustum.rightPoint
 			};
 
+		testedSet = {};
 		queryVisible(root, camera, triangle, visible);
 
 		return visible;

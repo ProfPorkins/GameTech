@@ -119,6 +119,12 @@ Demo.main = (function(renderer, input, model) {
 		myKeyboard.registerCommand(KeyEvent.DOM_VK_D, function(elapsedTime) {
 			model.cameraRotateRight(elapsedTime);
 		});
+		myKeyboard.registerCommand(KeyEvent.DOM_VK_J, function(elapsedTime) {
+			model.cameraDecreaseFOV(elapsedTime);
+		});
+		myKeyboard.registerCommand(KeyEvent.DOM_VK_L, function(elapsedTime) {
+			model.cameraIncreaseFOV(elapsedTime);
+		});
 
 		//
 		// Get the gameloop started
