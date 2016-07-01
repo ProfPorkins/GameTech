@@ -158,7 +158,6 @@ Demo.components.QuadTree = function(maxMembership) {
 			member = 0,
 			hitMe = null;
 
-		//if (item.insideSquare(node)) {
 		if (Demo.utilities.math.circleTouchSquare(item, node)) {
 			if (node.hasChildren) {
 				//
@@ -203,6 +202,60 @@ Demo.components.QuadTree = function(maxMembership) {
 		other = intersects(root, item);
 
 		return other;
+	};
+
+	// ------------------------------------------------------------------
+	//
+	// Recursive function that does the work of finding out which objects
+	// are visible to the viewing frustum.
+	//
+	// ------------------------------------------------------------------
+	function queryVisible(node, camera, triangle, visible) {
+		var child = 0,
+			member = 0;
+		//
+		// Do the simple circle-circle test first, if that passes, then
+		// do the more complex circle-square test.
+		if (node.boundingCircle.intersects(camera.boundingCircle)) {
+			if (Demo.utilities.math.circleTouchSquare(camera.boundingCircle, node)) {
+				//
+				// If this is a leaf node check all of its members to see if they
+				// are visible.  Otherwise, if it isn't a leave node recurse into
+				// its children.
+				if (node.hasChildren) {
+					for (child = 0; child < node.children.length; child += 1) {
+						queryVisible(node.children[child], camera, triangle, visible);
+					}
+				} else {
+					for (member = 0; member < node.members.length; member += 1) {
+						if (node.members[member].intersects(camera.boundingCircle)) {
+							if (Demo.utilities.math.circleTouchTriangle(node.members[member], triangle)) {
+								visible.push(node.members[member]);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	// ------------------------------------------------------------------
+	//
+	// Public member that returns a set of the objects visible within
+	// the viewing frustum.
+	//
+	// ------------------------------------------------------------------
+	that.visibleObjects = function(camera) {
+		var visible = [],
+			triangle = {
+				pt1: camera.position,
+				pt2: camera.frustum.leftPoint,
+				pt3: camera.frustum.rightPoint
+			};
+
+		queryVisible(root, camera, triangle, visible);
+
+		return visible;
 	};
 
 	// ------------------------------------------------------------------

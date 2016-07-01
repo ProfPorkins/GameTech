@@ -205,7 +205,8 @@ Demo.model = (function(components) {
 	//
 	// ------------------------------------------------------------------
 	that.render = function(renderer) {
-		var circle = 0;
+		var circle = 0,
+			visible = [];
 
 		for (circle = 0; circle < circles.length; circle += 1) {
 			renderer.core.drawCircle('rgba(150, 0, 255, 1)', circles[circle].center, circles[circle].radius);
@@ -216,6 +217,13 @@ Demo.model = (function(components) {
 		}
 
 		renderer.Camera.render(camera);
+
+		//
+		// Find the objects contained with the frustum view and render them!
+		visible = quadTree.visibleObjects(camera);
+		for (circle = 0; circle < visible.length; circle += 1) {
+			renderer.core.drawCircle('rgba(0, 255, 0, 1)', visible[circle].center, visible[circle].radius);
+		}
 
 		//
 		// Draw a border around the unit world.  Draw this after rendering

@@ -11,7 +11,7 @@ Demo.utilities.math = (function() {
 
 	//------------------------------------------------------------------
 	//
-	// This method checks to see if any part of the circle is inside of 
+	// This method checks to see if any part of the circle is inside of
 	// the square.  If it is, true is returned, false otherwise.
 	//
 	// This code adapted from: http://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection
@@ -34,6 +34,87 @@ Demo.utilities.math = (function() {
 							Math.pow((circleDistanceY - square.size / 2), 2);
 
 		return (cornerDistanceSq <= circle.radiusSq);
+	};
+
+	// ------------------------------------------------------------------
+	//
+	// Determines if a point is inside of a triangle or not.
+	// Reference: http://www.blackpawn.com/texts/pointinpoly/
+	//
+	// ------------------------------------------------------------------
+	function pointInTriangle(pt, triangle) {
+		var v0x = triangle.pt3.x - triangle.pt1.x,
+			v0y = triangle.pt3.y - triangle.pt1.y,
+			v1x = triangle.pt2.x - triangle.pt1.x,
+			v1y = triangle.pt2.y - triangle.pt1.y,
+			v2x = pt.x - triangle.pt1.x,
+			v2y = pt.y - triangle.pt1.y,
+			dot00 = v0x * v0x + v0y * v0y,
+			dot01 = v0x * v1x + v0y * v1y,
+			dot02 = v0x * v2x + v0y * v2y,
+			dot11 = v1x * v1x + v1y * v1y,
+			dot12 = v1x * v2x + v1y * v2y,
+			b = (dot00 * dot11 - dot01 * dot01),
+			inv = b === 0 ? 0 : (1 / b),
+			u = (dot11 * dot02 - dot01 * dot12) * inv,
+			v = (dot00 * dot12 - dot01 * dot02) * inv;
+
+		return u >= 0 && v >= 0 && (u+v < 1);
+	}
+
+	// ------------------------------------------------------------------
+	//
+	// Determines if a point is inside of a circle.
+	//
+	// ------------------------------------------------------------------
+	function pointInCircle(pt, circle) {
+		var distance = Math.pow(pt.x - circle.center.x, 2) + Math.pow(pt.y - circle.center.y, 2);
+
+		return distance < circle.radiusSq;
+	}
+
+	// ------------------------------------------------------------------
+	//
+	// Determines if a circle intersects with a line segment.
+	// Reference: http://stackoverflow.com/questions/6091728/line-segment-circle-intersection
+	// Reference: http://mathworld.wolfram.com/Circle-LineIntersection.html
+	//
+	// ------------------------------------------------------------------
+	function circleTouchLine(circle, pt1, pt2) {
+		var dx = pt2.x - pt1.x,
+			dy = pt2.y - pt1.y,
+			a = dx * dx + dy * dy,
+			b = 2 * (dx * (pt1.x - circle.center.x) + dy * (pt1.y - circle.center.y)),
+			c = circle.center.x * circle.center.x + circle.center.y * circle.center.y;
+
+		c += (pt1.x * pt1.x + pt1.y * pt1.y);
+		c -= (2 * (circle.center.x * pt1.x + circle.center.y * pt1.y));
+		c -= (circle.radius * circle.radius);
+		var bb4ac = b * b - 4 * a * c;
+
+		return bb4ac >= 0;
+	}
+
+	// ------------------------------------------------------------------
+	//
+	// Determines if a circle and triangle intersect at any point.
+	//
+	// ------------------------------------------------------------------
+	that.circleTouchTriangle = function(circle, triangle) {
+		if (pointInTriangle(circle.center, triangle)) {
+			return true;
+		}
+		if (circleTouchLine(circle, triangle.pt1, triangle.pt2)) {
+			return true;
+		}
+		if (circleTouchLine(circle, triangle.pt2, triangle.pt3)) {
+			return true;
+		}
+		if (circleTouchLine(circle, triangle.pt3, triangle.pt1)) {
+			return true;
+		}
+
+		return false;
 	};
 
 	// ------------------------------------------------------------------
