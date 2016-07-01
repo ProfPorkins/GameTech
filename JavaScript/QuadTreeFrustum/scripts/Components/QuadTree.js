@@ -10,11 +10,12 @@ Demo.components.QuadTree = function(maxMembership) {
 
 	var root = null,
 		nextItemId = 0,
-		testedSet = {},
+		testedSet = [],	// Using this as a hash table to remember which objects have already been tested
+		testedCount = 0,
 		that = {
 			get root() { return root; },
 			get depth() { return findDepth(root); },
-			get objectsTested() { return Object.keys(testedSet).length; }
+			get objectsTested() { return testedCount; }
 		};
 
 	// ------------------------------------------------------------------
@@ -242,8 +243,9 @@ Demo.components.QuadTree = function(maxMembership) {
 						//
 						// Check to see if we have already tested the object.  If we have, no need
 						// to check it again.
-						if ((item.id in testedSet) === false) {
+						if (testedSet[item.id] === undefined) {
 							testedSet[item.id] = true;
+							testedCount += 1;
 							if (item.intersects(camera.boundingCircle)) {
 								if (Demo.utilities.math.circleTouchTriangle(item, triangle)) {
 									visible.push(item);
@@ -270,7 +272,9 @@ Demo.components.QuadTree = function(maxMembership) {
 				pt3: camera.frustum.rightPoint
 			};
 
-		testedSet = {};
+		testedCount = 0;
+		testedSet.length = 0;
+		testedSet.length = nextItemId;
 		queryVisible(root, camera, triangle, visible);
 
 		return visible;
