@@ -118,8 +118,8 @@ Demo.components.QuadTree = function(maxMembership) {
 	function insert(node, item) {
 		var child = 0;
 		//
-		// See if the item is inside of this node, if it isn't then nothing to do.
-		if (item.insideSquare(node)) {
+		// See if the item (a circle) is inside of this node (a square), if it isn't then nothing to do.
+		if (Demo.utilities.math.circleTouchSquare(item, node)) {
 			//
 			// If this node has children, then crawl through them to see which of them
 			// the new item belongs; keeping in mind, it may have membership in more
@@ -149,7 +149,7 @@ Demo.components.QuadTree = function(maxMembership) {
 	// ------------------------------------------------------------------
 	//
 	// Determines if 'item' intersects with any other item contained within
-	// the QuadTree.  If it does, the other item is return, otherwise null
+	// the QuadTree.  If it does, the other item is returned, otherwise null
 	// is returned.
 	//
 	// ------------------------------------------------------------------
@@ -158,7 +158,8 @@ Demo.components.QuadTree = function(maxMembership) {
 			member = 0,
 			hitMe = null;
 
-		if (item.insideSquare(node)) {
+		//if (item.insideSquare(node)) {
+		if (Demo.utilities.math.circleTouchSquare(item, node)) {
 			if (node.hasChildren) {
 				//
 				// Not a leaf node, recurse into its children
