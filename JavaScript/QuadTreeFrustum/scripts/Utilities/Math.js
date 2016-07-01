@@ -21,7 +21,7 @@ Demo.utilities.math = (function() {
 	//
 	// ------------------------------------------------------------------
 	that.circleFromTriangle = function(ptA, ptB, ptC) {
-		var boundingCircle = {
+		var circleSpec = {
 				center: {},
 				radius: 0
 			},
@@ -38,13 +38,13 @@ Demo.utilities.math = (function() {
 		slopeAB = -(1 / slopeAB);
 		slopeAC = -(1 / slopeAC);
 
-		boundingCircle.center.x = (midPointAC.y - midPointAB.y + slopeAB * midPointAB.x - slopeAC * midPointAC.x) / (slopeAB - slopeAC);
-		boundingCircle.center.y = slopeAC * (boundingCircle.center.x - midPointAC.x) + midPointAC.y;
+		circleSpec.center.x = (midPointAC.y - midPointAB.y + slopeAB * midPointAB.x - slopeAC * midPointAC.x) / (slopeAB - slopeAC);
+		circleSpec.center.y = slopeAC * (circleSpec.center.x - midPointAC.x) + midPointAC.y;
 		//
 		// Radius is distance from the center to any of the points
-		boundingCircle.radius = Math.sqrt(Math.pow(boundingCircle.center.x - ptA.x, 2) + Math.pow(boundingCircle.center.y - ptA.y, 2));
+		circleSpec.radius = Math.sqrt(Math.pow(circleSpec.center.x - ptA.x, 2) + Math.pow(circleSpec.center.y - ptA.y, 2));
 
-		return Demo.components.Circle(boundingCircle);
+		return Demo.components.Circle(circleSpec);
 
 		//
 		// Yes, I actually derived these equations all by my lonesome!
