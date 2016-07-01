@@ -115,11 +115,24 @@ Demo.components.Camera = function(spec) {
 		computeFrustum();
 	};
 
+	that.increaseDepth = function(elapsedTime) {
+		spec.viewDistance += spec.viewDistanceRate * (elapsedTime / 1000);
+
+		computeFrustum();
+	};
+
+	that.decreaseDepth = function(elapsedTime) {
+		spec.viewDistance -= spec.viewDistanceRate * (elapsedTime / 1000);
+
+		computeFrustum();
+	};
+
 	//
 	// Add a movement and rotation rate into the spec
 	spec.speed = 0.20;	// World units per second
 	spec.rotateRate = Math.PI / 2;	// Radians per second
 	spec.fovRate = Math.PI / 4;		// Radians per second
+	spec.viewDistanceRate = 0.1;	// World units per second
 
 	//
 	// During initialization, compute the viewing frustum based upon

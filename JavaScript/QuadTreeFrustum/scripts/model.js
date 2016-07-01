@@ -77,7 +77,7 @@ Demo.model = (function(components) {
 		while (addedCircles < howManyCircles) {
 			addCircle = components.Circle( {
 				center: { x: Random.nextDouble(), y: Random.nextDouble() },
-				radius: Math.max(0.0025, Math.abs(Random.nextGaussian(0.01, 0.005)))
+				radius: Math.max(0.0015, Math.abs(Random.nextGaussian(0.005, 0.0025)))
 			} );
 			//
 			// Don't allow the circle to start overlapped with the edges of the world
@@ -123,8 +123,8 @@ Demo.model = (function(components) {
 				y: 0.5
 			},
 			direction: (Math.PI / 2) * 3,
-			fieldOfView: Math.PI / 5,
-			viewDistance: 0.4
+			fieldOfView: Math.PI / 4,
+			viewDistance: 0.2
 		});
 	};
 
@@ -202,12 +202,40 @@ Demo.model = (function(components) {
 		camera.rotateRight(elapsedTime);
 	};
 
+	// ------------------------------------------------------------------
+	//
+	// Decrease the camera Field of View.
+	//
+	// ------------------------------------------------------------------
 	that.cameraDecreaseFOV = function(elapsedTime) {
 		camera.decreaseFOV(elapsedTime);
 	};
 
+	// ------------------------------------------------------------------
+	//
+	// Increase the camera Field of View.
+	//
+	// ------------------------------------------------------------------
 	that.cameraIncreaseFOV = function(elapsedTime) {
 		camera.increaseFOV(elapsedTime);
+	};
+
+	// ------------------------------------------------------------------
+	//
+	// Increase the view distance.
+	//
+	// ------------------------------------------------------------------
+	that.cameraIncreaseDepth = function(elapsedTime) {
+		camera.increaseDepth(elapsedTime);
+	};
+
+	// ------------------------------------------------------------------
+	//
+	// Decrease the view distance.
+	//
+	// ------------------------------------------------------------------
+	that.cameraDecreaseDepth = function(elapsedTime) {
+		camera.decreaseDepth(elapsedTime);
 	};
 
 	// ------------------------------------------------------------------

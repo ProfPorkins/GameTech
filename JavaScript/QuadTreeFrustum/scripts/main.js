@@ -87,7 +87,7 @@ Demo.main = (function(renderer, input, model) {
 	//------------------------------------------------------------------
 	function initialize() {
 		renderer.core.initialize();
-		model.initialize(200);	// Start the demo with a bunch of randomly placed circles.
+		model.initialize(1000);	// Start the demo with a bunch of randomly placed circles.
 
 		//
 		// Let's listen to a few keyboard inputs to control the simulation
@@ -124,6 +124,12 @@ Demo.main = (function(renderer, input, model) {
 		});
 		myKeyboard.registerCommand(KeyEvent.DOM_VK_L, function(elapsedTime) {
 			model.cameraIncreaseFOV(elapsedTime);
+		});
+		myKeyboard.registerCommand(KeyEvent.DOM_VK_I, function(elapsedTime) {
+			model.cameraIncreaseDepth(elapsedTime);
+		});
+		myKeyboard.registerCommand(KeyEvent.DOM_VK_K, function(elapsedTime) {
+			model.cameraDecreaseDepth(elapsedTime);
 		});
 
 		//
