@@ -23,8 +23,8 @@ Demo.components.Entity = function(spec) {
 
 	//------------------------------------------------------------------
 	//
-	// Move the circle based upon its current direction, elapsed time and
-	// direction vector.  When the circle goes outside of the unit world,
+	// Move the entity based upon its current direction, elapsed time and
+	// direction vector.  When the entity goes outside of the unit world,
 	// have it enter at the appropriate side of the world based on its
 	// position.
 	//

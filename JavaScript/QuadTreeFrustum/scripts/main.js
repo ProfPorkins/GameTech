@@ -91,44 +91,44 @@ Demo.main = (function(renderer, input, model) {
 
 		//
 		// Let's listen to a few keyboard inputs to control the simulation
-		myKeyboard.registerCommand(KeyEvent.DOM_VK_Q, function() {
+		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_Q, function() {
 			model.toggleQuadTreeRendering();
 		});
-		myKeyboard.registerCommand(KeyEvent.DOM_VK_UP, function() {
+		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_UP, function() {
 			model.quadTreeCriteria = model.quadTreeCriteria + 1;
 		});
-		myKeyboard.registerCommand(KeyEvent.DOM_VK_DOWN, function() {
+		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_DOWN, function() {
 			model.quadTreeCriteria = model.quadTreeCriteria - 1;
 		});
-		myKeyboard.registerCommand(KeyEvent.DOM_VK_PAGE_UP, function() {
+		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_PAGE_UP, function() {
 			model.addCircles(10);
 		});
-		myKeyboard.registerCommand(KeyEvent.DOM_VK_PAGE_DOWN, function() {
+		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_PAGE_DOWN, function() {
 			model.removeCircles(10);
 		});
 
-		myKeyboard.registerCommand(KeyEvent.DOM_VK_W, function(elapsedTime) {
+		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_W, function(elapsedTime) {
 			model.cameraMoveForward(elapsedTime);
 		});
-		myKeyboard.registerCommand(KeyEvent.DOM_VK_S, function(elapsedTime) {
+		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_S, function(elapsedTime) {
 			model.cameraMoveBackward(elapsedTime);
 		});
-		myKeyboard.registerCommand(KeyEvent.DOM_VK_A, function(elapsedTime) {
+		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_A, function(elapsedTime) {
 			model.cameraRotateLeft(elapsedTime);
 		});
-		myKeyboard.registerCommand(KeyEvent.DOM_VK_D, function(elapsedTime) {
+		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_D, function(elapsedTime) {
 			model.cameraRotateRight(elapsedTime);
 		});
-		myKeyboard.registerCommand(KeyEvent.DOM_VK_J, function(elapsedTime) {
+		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_J, function(elapsedTime) {
 			model.cameraDecreaseFOV(elapsedTime);
 		});
-		myKeyboard.registerCommand(KeyEvent.DOM_VK_L, function(elapsedTime) {
+		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_L, function(elapsedTime) {
 			model.cameraIncreaseFOV(elapsedTime);
 		});
-		myKeyboard.registerCommand(KeyEvent.DOM_VK_I, function(elapsedTime) {
+		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_I, function(elapsedTime) {
 			model.cameraIncreaseDepth(elapsedTime);
 		});
-		myKeyboard.registerCommand(KeyEvent.DOM_VK_K, function(elapsedTime) {
+		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_K, function(elapsedTime) {
 			model.cameraDecreaseDepth(elapsedTime);
 		});
 
