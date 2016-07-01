@@ -9,8 +9,10 @@ Demo.model = (function(components) {
 
 	var circles = [],
 		quadTree = null,
-		showQuadTree = true,
 		quadTreeCriteria = 6,
+		showQuadTree = true,
+		showEntities = true,
+		moveEntities = true,
 		textObjects = {
 			text : '',
 			font : '16px Arial, sans-serif',
@@ -196,6 +198,24 @@ Demo.model = (function(components) {
 
 	// ------------------------------------------------------------------
 	//
+	// Toggles the rendering of the Entities.
+	//
+	// ------------------------------------------------------------------
+	that.toggleEntityRendering = function() {
+		showEntities = !showEntities;
+	};
+
+	// ------------------------------------------------------------------
+	//
+	// Toggles the movement of the Entities.
+	//
+	// ------------------------------------------------------------------
+	that.toggleEntityMovement = function() {
+		moveEntities = !moveEntities;
+	};
+
+	// ------------------------------------------------------------------
+	//
 	// Move the camera forward.
 	//
 	// ------------------------------------------------------------------
@@ -275,18 +295,20 @@ Demo.model = (function(components) {
 		var circle = 0,
 			other = null;
 
-		//
-		// Have all the circles update their positions
-		for (circle = 0; circle < circles.length; circle += 1) {
-			circles[circle].update(elapsedTime);
-		}
+		if (moveEntities) {
+			//
+			// Have all the circles update their positions
+			for (circle = 0; circle < circles.length; circle += 1) {
+				circles[circle].update(elapsedTime);
+			}
 
-		buildQuadTree();
+			buildQuadTree();
 
-		for (circle = 0; circle < circles.length; circle += 1) {
-			other = quadTree.intersects(circles[circle]);
-			if (other) {
-				bounce(circles[circle], other, elapsedTime);
+			for (circle = 0; circle < circles.length; circle += 1) {
+				other = quadTree.intersects(circles[circle]);
+				if (other) {
+					bounce(circles[circle], other, elapsedTime);
+				}
 			}
 		}
 	};
@@ -300,8 +322,10 @@ Demo.model = (function(components) {
 		var circle = 0,
 			visible = [];
 
-		for (circle = 0; circle < circles.length; circle += 1) {
-			renderer.core.drawCircle('rgba(150, 0, 255, 1)', circles[circle].center, circles[circle].radius);
+		if (showEntities) {
+			for (circle = 0; circle < circles.length; circle += 1) {
+				renderer.core.drawCircle('rgba(150, 0, 255, 1)', circles[circle].center, circles[circle].radius);
+			}
 		}
 
 		if (showQuadTree) {

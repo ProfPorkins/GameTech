@@ -94,6 +94,14 @@ Demo.main = (function(renderer, input, model) {
 		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_Q, false, function() {
 			model.toggleQuadTreeRendering();
 		});
+		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_E, false, function() {
+			model.toggleEntityRendering();
+		});
+		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_M, false, function() {
+			model.toggleEntityMovement();
+		});
+
+
 		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_UP, false, function() {
 			model.quadTreeCriteria = model.quadTreeCriteria + 1;
 		});
