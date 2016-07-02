@@ -124,6 +124,44 @@ Demo.renderer.core = (function() {
 
 	//------------------------------------------------------------------
 	//
+	// This returns the height of the specified font, in world units.
+	//
+	//------------------------------------------------------------------
+	function measureTextHeight(spec) {
+		var height = 0;
+		context.save();
+
+		context.font = spec.font;
+		context.fillStyle = spec.fill;
+
+		height = context.measureText('m').width / world.size;
+
+		context.restore();
+
+		return height;
+	}
+
+	//------------------------------------------------------------------
+	//
+	// This returns the width of the specified font, in world units.
+	//
+	//------------------------------------------------------------------
+	function measureTextWidth(spec) {
+		var width = 0;
+		context.save();
+
+		context.font = spec.font;
+		context.fillStyle = spec.fill;
+
+		width = context.measureText(spec.text).width / world.size;
+
+		context.restore();
+
+		return width;
+	}
+
+	//------------------------------------------------------------------
+	//
 	// Draw a line segment within the unit world.
 	//
 	//------------------------------------------------------------------
@@ -180,6 +218,8 @@ Demo.renderer.core = (function() {
 		clearCanvas: clearCanvas,
 		toggleFullScreen: toggleFullScreen,
 		drawText: drawText,
+		measureTextHeight: measureTextHeight,
+		measureTextWidth: measureTextWidth,
 		drawLine: drawLine,
 		drawRectangle: drawRectangle,
 		drawCircle: drawCircle

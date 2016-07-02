@@ -1,4 +1,4 @@
-/* global Demo, KeyEvent */
+/* global Demo */
 // ------------------------------------------------------------------
 //
 // This namespace provides the simulation loop for the quad-tree demo.
@@ -12,7 +12,7 @@ Demo.main = (function(renderer, input, model) {
 			text : 'fps',
 			font : '16px Arial, sans-serif',
 			fill : 'rgba(255, 255, 255, 1)',
-			pos : { x : 1.05, y : 0.05 }
+			pos : { x : 1.025, y : 0.00 }
 		},
 		myKeyboard = input.Keyboard();
 
@@ -87,6 +87,10 @@ Demo.main = (function(renderer, input, model) {
 	//------------------------------------------------------------------
 	function initialize() {
 		renderer.core.initialize();
+
+		textFPS.height = renderer.core.measureTextHeight(textFPS);
+		textFPS.width = renderer.core.measureTextWidth(textFPS);
+
 		model.initialize(200);	// Start the demo with a bunch of randomly placed circles.
 
 		//
@@ -100,7 +104,6 @@ Demo.main = (function(renderer, input, model) {
 		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_M, false, function() {
 			model.toggleEntityMovement();
 		});
-
 
 		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_UP, false, function() {
 			model.quadTreeCriteria = model.quadTreeCriteria + 1;

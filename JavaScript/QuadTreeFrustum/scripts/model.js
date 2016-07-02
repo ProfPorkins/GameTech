@@ -16,26 +16,26 @@ Demo.model = (function(components) {
 		textObjects = {
 			text : '',
 			font : '16px Arial, sans-serif',
-			fill : 'rgba(255, 255, 255, 1)',
-			pos : { x : 1.05, y : 0.08 }
+			fill : 'rgba(200, 200, 255, 1)',
+			pos : { x : 1.025, y : 0.10 }
 		},
 		textTested = {
 			text : '',
 			font : '16px Arial, sans-serif',
-			fill : 'rgba(255, 255, 255, 1)',
-			pos : { x : 1.05, y : 0.11 }
+			fill : 'rgba(200, 200, 255, 1)',
+			pos : { x : 1.025, y : 0.11 }
 		},
 		textVisible = {
 			text : '',
 			font : '16px Arial, sans-serif',
-			fill : 'rgba(255, 255, 255, 1)',
-			pos : { x : 1.05, y : 0.14 }
+			fill : 'rgba(200, 200, 255, 1)',
+			pos : { x : 1.025, y : 0.14 }
 		},
 		textCriteria = {
 			text : '',
 			font : '16px Arial, sans-serif',
-			fill : 'rgba(255, 255, 255, 1)',
-			pos : { x : 1.05, y : 0.17 }
+			fill : 'rgba(200, 200, 255, 1)',
+			pos : { x : 1.025, y : 0.17 }
 		},
 		camera = null,
 		that = {
@@ -140,6 +140,17 @@ Demo.model = (function(components) {
 	//
 	// ------------------------------------------------------------------
 	that.initialize = function(howManyCircles) {
+		//
+		// Figure out the positioning of the text elements
+		textObjects.height = Demo.renderer.core.measureTextHeight(textObjects);
+		textTested.height = Demo.renderer.core.measureTextHeight(textTested);
+		textVisible.height = Demo.renderer.core.measureTextHeight(textVisible);
+		textCriteria.height = Demo.renderer.core.measureTextHeight(textCriteria);
+
+		textTested.pos.y = textObjects.pos.y + textObjects.height + 0.01;
+		textVisible.pos.y = textTested.pos.y + textTested.height + 0.01;
+		textCriteria.pos.y = textVisible.pos.y + textVisible.height + 0.01;
+
 		addMoreCircles(howManyCircles);
 
 		buildQuadTree();
@@ -355,7 +366,7 @@ Demo.model = (function(components) {
 		renderer.core.drawText(textTested);
 		textVisible.text = 'objects visible: ' + visible.length;
 		renderer.core.drawText(textVisible);
-		textCriteria.text = 'criteria: ' + quadTreeCriteria;
+		textCriteria.text = 'quad-tree criteria: ' + quadTreeCriteria;
 		renderer.core.drawText(textCriteria);
 	};
 
