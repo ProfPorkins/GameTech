@@ -2,5 +2,5 @@
 This is a test
 
 Frustum Culling Snapshot
-![alt text](https://github.com/ProfPorkins/GameTech/JavaScript/QuadTreeFrustum/QuadTree-FrustumCulling.png "Frustum Culling Sample")
+![Frustum Culling Sample](https://github.com/ProfPorkins/GameTech/blob/QuadTreeFrustum/JavaScript/QuadTreeFrustum/QuadTree-FrustumCulling.png "")
 
