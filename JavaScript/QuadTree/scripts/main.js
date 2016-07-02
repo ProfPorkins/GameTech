@@ -1,4 +1,4 @@
-/* global Demo, KeyEvent */
+/* global Demo */
 // ------------------------------------------------------------------
 //
 // This namespace provides the simulation loop for the quad-tree demo.
@@ -12,7 +12,7 @@ Demo.main = (function(renderer, input, model) {
 			text : 'fps',
 			font : '16px Arial, sans-serif',
 			fill : 'rgba(255, 255, 255, 1)',
-			pos : { x : 1.05, y : 0.05 }
+			pos : { x : 1.025, y : 0.00 }
 		},
 		myKeyboard = input.Keyboard();
 
@@ -43,7 +43,7 @@ Demo.main = (function(renderer, input, model) {
 		var averageTime = 0,
 			fps = 0;
 
-		renderer.clearCanvas();
+		renderer.core.clearCanvas();
 		model.render(Demo.renderer);
 
 		//
@@ -58,7 +58,7 @@ Demo.main = (function(renderer, input, model) {
 			// truncating, then dividing by 10 to get back to seconds.
 			fps = Math.floor((1 / averageTime) * 10000) / 10;
 			textFPS.text = 'fps: ' + fps;
-			renderer.drawText(textFPS);
+			renderer.core.drawText(textFPS);
 		}
 	}
 
@@ -86,28 +86,39 @@ Demo.main = (function(renderer, input, model) {
 	//
 	//------------------------------------------------------------------
 	function initialize() {
-		renderer.initialize();
-		model.initialize(100);	// Start off with some number of circles
+		renderer.core.initialize();
+
+		textFPS.height = renderer.core.measureTextHeight(textFPS);
+		textFPS.width = renderer.core.measureTextWidth(textFPS);
+
+		model.initialize(200);	// Start the demo with a bunch of randomly placed circles.
 
 		//
 		// Let's listen to a few keyboard inputs to control the simulation
-		myKeyboard.registerCommand(KeyEvent.DOM_VK_Q, function() {
+		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_Q, false, function() {
 			model.toggleQuadTreeRendering();
 		});
-		myKeyboard.registerCommand(KeyEvent.DOM_VK_UP, function() {
+		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_E, false, function() {
+			model.toggleEntityRendering();
+		});
+		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_M, false, function() {
+			model.toggleEntityMovement();
+		});
+		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_U, false, function() {
+			model.toggleUseQuadTree();
+		});
+
+		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_UP, false, function() {
 			model.quadTreeCriteria = model.quadTreeCriteria + 1;
 		});
-		myKeyboard.registerCommand(KeyEvent.DOM_VK_DOWN, function() {
+		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_DOWN, false, function() {
 			model.quadTreeCriteria = model.quadTreeCriteria - 1;
 		});
-		myKeyboard.registerCommand(KeyEvent.DOM_VK_PAGE_UP, function() {
-			model.addMoreCircles(10);
+		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_PAGE_UP, true, function() {
+			model.addCircles(10);
 		});
-		myKeyboard.registerCommand(KeyEvent.DOM_VK_PAGE_DOWN, function() {
+		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_PAGE_DOWN, true, function() {
 			model.removeCircles(10);
-		});
-		myKeyboard.registerCommand(KeyEvent.DOM_VK_U, function() {
-			model.toggleUseQuadTree();
 		});
 
 		//

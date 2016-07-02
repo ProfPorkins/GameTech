@@ -9,12 +9,12 @@ Demo.components.QuadTree = function(maxMembership) {
 	'use strict';
 
 	var root = null,
+		intersectionTests = 0,
 		that = {
 			get root() { return root; },
-			get collisionTests() { return collisionTests; },
-			get depth() { return findDepth(root); }
-		},
-		collisionTests = 0;
+			get depth() { return findDepth(root); },
+			get intersectionTests() { return intersectionTests; }
+		};
 
 	// ------------------------------------------------------------------
 	//
@@ -24,8 +24,10 @@ Demo.components.QuadTree = function(maxMembership) {
 	//
 	// ------------------------------------------------------------------
 	function Node(bounds) {
-		var children = [],	// Child nodes of this node
+		var	children = [],	// Child nodes of this node
 			members = [],	// List of items contained within this node
+			boundingCircle = {},
+			circleSpec = {},
 			node = {
 				get left() { return bounds.left; },
 				get top() { return bounds.top; },
@@ -33,8 +35,20 @@ Demo.components.QuadTree = function(maxMembership) {
 				get isFull() { return members.length >= maxMembership; },
 				get hasChildren() { return children.length > 0; },
 				get children() { return children; },
-				get members() { return members; }
+				get members() { return members; },
+				get boundingCircle() { return boundingCircle; }
 			};
+
+		//
+		// When creating a node, define a bounding circle that we can use for
+		// quick intersection tests with other circles before dropping down to
+		// do the slower test against the square.
+		circleSpec.center = {
+			x: bounds.left + bounds.size / 2,
+			y: bounds.top + bounds.size / 2
+		};
+		circleSpec.radius = Math.sqrt(Math.pow(circleSpec.center.x - bounds.left, 2) + Math.pow(circleSpec.center.y - bounds.top, 2));
+		boundingCircle = Demo.components.Circle(circleSpec);
 
 		// ------------------------------------------------------------------
 		//
@@ -106,8 +120,8 @@ Demo.components.QuadTree = function(maxMembership) {
 	function insert(node, item) {
 		var child = 0;
 		//
-		// See if the item is inside of this node, if it isn't then nothing to do.
-		if (item.insideSquare(node)) {
+		// See if the item (a circle) is inside of this node (a square), if it isn't then nothing to do.
+		if (Demo.utilities.math.circleTouchSquare(item, node)) {
 			//
 			// If this node has children, then crawl through them to see which of them
 			// the new item belongs; keeping in mind, it may have membership in more
@@ -137,7 +151,7 @@ Demo.components.QuadTree = function(maxMembership) {
 	// ------------------------------------------------------------------
 	//
 	// Determines if 'item' intersects with any other item contained within
-	// the QuadTree.  If it does, the other item is return, otherwise null
+	// the QuadTree.  If it does, the other item is returned, otherwise null
 	// is returned.
 	//
 	// ------------------------------------------------------------------
@@ -146,8 +160,7 @@ Demo.components.QuadTree = function(maxMembership) {
 			member = 0,
 			hitMe = null;
 
-		collisionTests += 1;
-		if (item.insideSquare(node)) {
+		if (Demo.utilities.math.circleTouchSquare(item, node)) {
 			if (node.hasChildren) {
 				//
 				// Not a leaf node, recurse into its children
@@ -162,7 +175,7 @@ Demo.components.QuadTree = function(maxMembership) {
 				// This is a leaf node, test against all members of this node.
 				for (member = 0; member < node.members.length; member += 1) {
 					if (item !== node.members[member]) {
-						collisionTests += 1;
+						intersectionTests += 1;
 						if (node.members[member].intersects(item)) {
 							hitMe = node.members[member];
 							break;	// Go ahead and stop at the first one found
