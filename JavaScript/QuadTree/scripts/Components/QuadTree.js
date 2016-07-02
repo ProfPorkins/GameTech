@@ -151,9 +151,9 @@ Demo.components.QuadTree = function(maxMembership) {
 				//
 				// Not a leaf node, recurse into its children
 				for (child = 0; child < node.children.length; child += 1) {
-					hitMe = hitMe || intersects(node.children[child], item);
+					hitMe = intersects(node.children[child], item);
 					if (hitMe) {
-						break;
+						return hitMe;
 					}
 				}
 			} else {
@@ -163,8 +163,7 @@ Demo.components.QuadTree = function(maxMembership) {
 					if (item !== node.members[member]) {
 						intersectionTests += 1;
 						if (node.members[member].intersects(item)) {
-							hitMe = node.members[member];
-							break;	// Go ahead and stop at the first one found
+							return node.members[member];
 						}
 					}
 				}
@@ -173,7 +172,7 @@ Demo.components.QuadTree = function(maxMembership) {
 
 		//
 		// If we get this far, then we didn't intersect with anything.
-		return hitMe;
+		return null;
 	}
 
 	// ------------------------------------------------------------------
