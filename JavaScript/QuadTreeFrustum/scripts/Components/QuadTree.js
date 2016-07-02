@@ -28,29 +28,19 @@ Demo.components.QuadTree = function(maxMembership) {
 	function Node(bounds) {
 		var	children = [],	// Child nodes of this node
 			members = [],	// List of items contained within this node
+			center = { x: bounds.left + bounds.size / 2, y: bounds.top + bounds.size / 2 },
 			boundingCircle = {},
 			circleSpec = {},
 			node = {
 				get left() { return bounds.left; },
 				get top() { return bounds.top; },
+				get center() { return center; },
 				get size() { return bounds.size; },
 				get isFull() { return members.length >= maxMembership; },
 				get hasChildren() { return children.length > 0; },
 				get children() { return children; },
-				get members() { return members; },
-				get boundingCircle() { return boundingCircle; }
+				get members() { return members; }
 			};
-
-		//
-		// When creating a node, define a bounding circle that we can use for
-		// quick intersection tests with other circles before dropping down to
-		// do the slower test against the square.
-		circleSpec.center = {
-			x: bounds.left + bounds.size / 2,
-			y: bounds.top + bounds.size / 2
-		};
-		circleSpec.radius = Math.sqrt(Math.pow(circleSpec.center.x - bounds.left, 2) + Math.pow(circleSpec.center.y - bounds.top, 2));
-		boundingCircle = Demo.components.Circle(circleSpec);
 
 		// ------------------------------------------------------------------
 		//
@@ -63,7 +53,8 @@ Demo.components.QuadTree = function(maxMembership) {
 				child2 = null,
 				child3 = null,
 				child4 = null,
-				member = 0;
+				member = 0,
+				sizeBy2 = bounds.size / 2;
 			//
 			// If the node is already full, then have to split and distribute
 			// all of the items in the node to the newly created child nodes.
@@ -74,27 +65,24 @@ Demo.components.QuadTree = function(maxMembership) {
 				child1 = Node({		// Top, left
 					left: bounds.left,
 					top: bounds.top,
-					size: bounds.size / 2
+					size: sizeBy2
 				});
 				child2 = Node({		// Top, right
-					left: bounds.left + bounds.size / 2,
+					left: bounds.left + sizeBy2,
 					top: bounds.top,
-					size: bounds.size / 2
+					size: sizeBy2
 				});
 				child3 = Node({		// Bottom, left
 					left: bounds.left,
-					top: bounds.top + bounds.size / 2,
-					size: bounds.size / 2
+					top: bounds.top + sizeBy2,
+					size: sizeBy2
 				});
 				child4 = Node({		// Bottom right
-					left: bounds.left + bounds.size / 2,
-					top: bounds.top + bounds.size / 2,
-					size: bounds.size / 2
+					left: bounds.left + sizeBy2,
+					top: bounds.top + sizeBy2,
+					size: sizeBy2
 				});
-				children.push(child1);
-				children.push(child2);
-				children.push(child3);
-				children.push(child4);
+				children = [child1, child2, child3, child4];
 				//
 				// With the new child nodes in place, distribute the members contained within
 				// this node over the children.
@@ -224,32 +212,28 @@ Demo.components.QuadTree = function(maxMembership) {
 		var child = 0,
 			member = 0,
 			item = null;
-		//
-		// Do the simple circle-circle test first, if that passes, then
-		// do the more complex circle-square test.
-		if (node.boundingCircle.intersects(camera.boundingCircle)) {
-			if (Demo.utilities.math.circleTouchSquare(camera.boundingCircle, node)) {
-				//
-				// If this is a leaf node check all of its members to see if they
-				// are visible.  Otherwise, if it isn't a leave node recurse into
-				// its children.
-				if (node.hasChildren) {	// Not a leaf node
-					for (child = 0; child < node.children.length; child += 1) {
-						queryVisible(node.children[child], camera, triangle, visible);
-					}
-				} else {	// Is a leaf node
-					for (member = 0; member < node.members.length; member += 1) {
-						item = node.members[member];
-						//
-						// Check to see if we have already tested the object.  If we have, no need
-						// to check it again.
-						if (testedSet[item.id] === undefined) {
-							testedSet[item.id] = true;
-							testedCount += 1;
-							if (item.intersects(camera.boundingCircle)) {
-								if (Demo.utilities.math.circleTouchTriangle(item, triangle)) {
-									visible.push(item);
-								}
+
+		if (Demo.utilities.math.circleTouchSquare(camera.boundingCircle, node)) {
+			//
+			// If this is a leaf node check all of its members to see if they
+			// are visible.  Otherwise, if it isn't a leave node recurse into
+			// its children.
+			if (node.hasChildren) {	// Not a leaf node
+				for (child = 0; child < node.children.length; child += 1) {
+					queryVisible(node.children[child], camera, triangle, visible);
+				}
+			} else {	// Is a leaf node
+				for (member = 0; member < node.members.length; member += 1) {
+					item = node.members[member];
+					//
+					// Check to see if we have already tested the object.  If we have, no need
+					// to check it again.
+					if (testedSet[item.id] === undefined) {
+						testedSet[item.id] = true;
+						testedCount += 1;
+						if (item.intersects(camera.boundingCircle)) {
+							if (Demo.utilities.math.circleTouchTriangle(item, triangle)) {
+								visible.push(item);
 							}
 						}
 					}

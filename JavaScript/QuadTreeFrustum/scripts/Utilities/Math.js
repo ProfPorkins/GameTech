@@ -18,20 +18,27 @@ Demo.utilities.math = (function() {
 	//
 	//------------------------------------------------------------------
 	that.circleTouchSquare = function(circle, square) {
-		var squareX = square.left + square.size / 2,
-			squareY = square.top + square.size / 2,
-			circleDistanceX = Math.abs(circle.center.x - squareX),
-			circleDistanceY = Math.abs(circle.center.y - squareY),
-			cornerDistanceSq = 0;
+		var squareSizeby2 = square.size / 2,
+			circleDistanceX,
+			circleDistanceY,
+			distanceX,
+			distanceY,
+			cornerDistanceSq;
 
-		if (circleDistanceX > (square.size / 2 + circle.radius)) { return false; }
-		if (circleDistanceY > (square.size / 2 + circle.radius)) { return false; }
+		circleDistanceX = Math.abs(circle.center.x - square.center.x);
+		if (circleDistanceX > (squareSizeby2 + circle.radius)) { return false; }
+		circleDistanceY = Math.abs(circle.center.y - square.center.y);
+		if (circleDistanceY > (squareSizeby2 + circle.radius)) { return false; }
 
-		if (circleDistanceX <= (square.size / 2)) { return true; }
-		if (circleDistanceY <= (square.size / 2)) { return true; }
+		if (circleDistanceX <= squareSizeby2) { return true; }
+		if (circleDistanceY <= squareSizeby2) { return true; }
 
-		cornerDistanceSq = 	Math.pow((circleDistanceX - square.size / 2), 2) +
-							Math.pow((circleDistanceY - square.size / 2), 2);
+		distanceX = (circleDistanceX - squareSizeby2);
+		distanceY = (circleDistanceY - squareSizeby2);
+		distanceX *= distanceX;
+		distanceY *= distanceY;
+
+		cornerDistanceSq = distanceX + distanceY;
 
 		return (cornerDistanceSq <= circle.radiusSq);
 	};
