@@ -135,11 +135,10 @@ Demo.model = (function(components) {
 
 	// ------------------------------------------------------------------
 	//
-	// This function initializes the quad-tree demo model.  Only thing it
-	// does right now is to add the circles to the model.
+	// When a resize event occurs, remeasure where things should go.
 	//
 	// ------------------------------------------------------------------
-	that.initialize = function(howManyCircles) {
+	function notifyResize() {
 		//
 		// Figure out the positioning of the text elements
 		textObjects.height = Demo.renderer.core.measureTextHeight(textObjects);
@@ -150,7 +149,17 @@ Demo.model = (function(components) {
 		textTested.pos.y = textObjects.pos.y + textObjects.height + 0.01;
 		textVisible.pos.y = textTested.pos.y + textTested.height + 0.01;
 		textCriteria.pos.y = textVisible.pos.y + textVisible.height + 0.01;
+	}
 
+	// ------------------------------------------------------------------
+	//
+	// This function initializes the quad-tree demo model.  Only thing it
+	// does right now is to add the circles to the model.
+	//
+	// ------------------------------------------------------------------
+	that.initialize = function(howManyCircles) {
+
+		Demo.renderer.core.notifyResize(notifyResize);
 		addMoreCircles(howManyCircles);
 
 		buildQuadTree();

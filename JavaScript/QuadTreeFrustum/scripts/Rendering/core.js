@@ -13,7 +13,8 @@ Demo.renderer.core = (function() {
 			size: 0,
 			top: 0,
 			left: 0
-		};
+		},
+		resizeHandlers = [];
 
 	//------------------------------------------------------------------
 	//
@@ -22,7 +23,8 @@ Demo.renderer.core = (function() {
 	//
 	//------------------------------------------------------------------
 	function resizeCanvas() {
-		var smallestSize = 0;
+		var smallestSize = 0,
+			handler = null;
 
 		canvas.width = window.innerWidth;
 		canvas.height = window.innerHeight;
@@ -41,6 +43,21 @@ Demo.renderer.core = (function() {
 			world.top = Math.floor(canvas.height * 0.05);
 			world.left = (canvas.width - world.size) / 2;
 		}
+
+		//
+		// Notify interested parties of the canvas resize event.
+		for (handler in resizeHandlers) {
+			resizeHandlers[handler]();
+		}
+	}
+
+	//------------------------------------------------------------------
+	//
+	// Quick to allow other code to be notified when a resize event occurs.
+	//
+	//------------------------------------------------------------------
+	function notifyResize(handler) {
+		resizeHandlers.push(handler);
 	}
 
 	//------------------------------------------------------------------
@@ -92,7 +109,9 @@ Demo.renderer.core = (function() {
 		canvas = document.getElementById('canvas-main');
 		context = canvas.getContext('2d');
 
-		window.addEventListener('resize', resizeCanvas, false);
+		window.addEventListener('resize', function() {
+			resizeCanvas();
+		}, false);
 		window.addEventListener('orientationchange', function() {
 			resizeCanvas();
 		}, false);
@@ -222,7 +241,8 @@ Demo.renderer.core = (function() {
 		measureTextWidth: measureTextWidth,
 		drawLine: drawLine,
 		drawRectangle: drawRectangle,
-		drawCircle: drawCircle
+		drawCircle: drawCircle,
+		notifyResize: notifyResize
 	};
 
 }());
