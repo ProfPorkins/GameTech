@@ -1,0 +1,25 @@
+<!DOCTYPE HTML>
+<html lang = "en-US">
+<head>
+	<meta charset = "UTF-8">
+	<title>Input Demo</title>
+
+	<link rel = "stylesheet" type = "text/css" href = "styles/canvas.css">
+</head>
+<body onload = "Demo.main.initialize();">
+	<canvas id = "canvas-main" onclick = "Demo.renderer.core.toggleFullScreen(document.body);"></canvas>
+
+	<script>
+		var Demo = {
+			input: {},
+			components: {},
+			renderer: {}
+		};
+	</script>
+	<script src = "scripts/Input/Mouse.js"></script>
+	<script src = "scripts/Input/Keyboard.js"></script>
+	<script src = "scripts/Rendering/core.js"></script>
+	<script src = "scripts/model.js"></script>
+	<script src = "scripts/main.js"></script>
+</body>
+</html>
