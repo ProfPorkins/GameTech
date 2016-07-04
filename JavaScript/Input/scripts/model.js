@@ -7,13 +7,25 @@
 Demo.model = (function(components) {
 	'use strict';
 
-	var textObjects = {
-			text : '',
-			font : '16px Arial, sans-serif',
-			fill : 'rgba(200, 200, 255, 1)',
-			pos : { x : 1.025, y : 0.10 }
-		},
-		that = { };
+	var textSingle = components.Text({
+			text: 'Single',
+			font: '16px Arial, sans-serif',
+			fill: 'rgba(255, 0, 0, 1)',
+			position: { x: 0.05, y: 0.10 }
+		}),
+		textRepeat = components.Text({
+			text: 'Repeating',
+			font: '16px Arial, sans-serif',
+			fill: 'rgba(0, 255, 0, 1)',
+			position: { x: 0, y: 0.10 }
+		}),
+		textRepeatTimed = components.Text({
+			text: 'Timed Repeat',
+			font: '16px Arial, sans-serif',
+			fill: 'rgba(0, 0, 255, 1)',
+			position: { x: 0, y: 0.10 }
+		}),
+		that = {};
 
 	// ------------------------------------------------------------------
 	//
@@ -21,9 +33,24 @@ Demo.model = (function(components) {
 	//
 	// ------------------------------------------------------------------
 	function notifyResize() {
+		var textSpacing = {
+			text: '     ',
+			font: textSingle.font
+		};
 		//
 		// Figure out the positioning of the text elements
-		textObjects.height = Demo.renderer.core.measureTextHeight(textObjects);
+		textSpacing.width = Demo.renderer.core.measureTextWidth(textSpacing);
+
+		textSingle.height = Demo.renderer.core.measureTextHeight(textSingle);
+		textRepeat.height = Demo.renderer.core.measureTextHeight(textRepeat);
+		textRepeatTimed.height = Demo.renderer.core.measureTextHeight(textRepeatTimed);
+
+		textSingle.width = Demo.renderer.core.measureTextWidth(textSingle);
+		textRepeat.width = Demo.renderer.core.measureTextWidth(textRepeat);
+		textRepeatTimed.width = Demo.renderer.core.measureTextWidth(textRepeatTimed);
+
+		textRepeat.position.x = textSingle.position.x + textSingle.width + textSpacing.width;
+		textRepeatTimed.position.x = textRepeat.position.x + textRepeat.width + textSpacing.width;
 	}
 
 	// ------------------------------------------------------------------
@@ -35,6 +62,27 @@ Demo.model = (function(components) {
 	that.initialize = function() {
 
 		Demo.renderer.core.notifyResize(notifyResize);
+	};
+
+	that.moveSingleDown = function() {
+		textSingle.position.y += textSingle.height;	// height world units per keypress
+	};
+	that.moveSingleUp = function() {
+		textSingle.position.y -= textSingle.height;	// height world units per keypress
+	};
+
+	that.moveRepeatDown = function(elapsedTime) {
+		textRepeat.position.y += (0.2 / 1000) * elapsedTime; // 0.2 world units per second
+	};
+	that.moveRepeatUp = function(elapsedTime) {
+		textRepeat.position.y -= (0.2 / 1000) * elapsedTime; // 0.2 world units per second
+	};
+
+	that.moveRepeatTimedDown = function() {
+		textRepeatTimed.position.y += textRepeatTimed.height;	// height world units per notification
+	};
+	that.moveRepeatTimedUp = function() {
+		textRepeatTimed.position.y -= textRepeatTimed.height;	// height world units per notification
 	};
 
 	// ------------------------------------------------------------------
@@ -58,9 +106,10 @@ Demo.model = (function(components) {
 		renderer.core.drawRectangle('rgba(255, 255, 255, 1)', 0, 0, 1, 1);
 
 		//
-		// Show some stats about the demo
-		textObjects.text = 'objects: ' + 0;
-		renderer.core.drawText(textObjects);
+		// Render the incredibly interesting text objects
+		renderer.Text.render(textSingle);
+		renderer.Text.render(textRepeat);
+		renderer.Text.render(textRepeatTimed);
 	};
 
 	return that;

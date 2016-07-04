@@ -137,8 +137,8 @@ Demo.renderer.core = (function() {
 
 		context.fillText(
 			spec.text,
-			world.left + spec.pos.x * world.size,
-			world.top + spec.pos.y * world.size);
+			world.left + spec.position.x * world.size,
+			world.top + spec.position.y * world.size);
 	}
 
 	//------------------------------------------------------------------

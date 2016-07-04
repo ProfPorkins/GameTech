@@ -33,10 +33,19 @@ Demo.input.Keyboard = function() {
 	// Allows the client code to register a keyboard handler
 	//
 	// ------------------------------------------------------------------
-	that.registerCommand = function(key, repeat, handler) {
+	that.registerCommand = function(handler, key, repeat, rate) {
+		//
+		// If no repeat rate was passed in, use a value of 0 so that no delay between
+		// repeated keydown events occurs.
+		if (rate === undefined) {
+			rate = 0;
+		}
+
 		handlers.push({
 			key: key,
 			repeat: repeat,
+			rate: rate,
+			elapsedTime: rate,	// Initialize an initial elapsed time so the very first keypress will be valid
 			handler: handler
 		});
 	};
@@ -54,8 +63,19 @@ Demo.input.Keyboard = function() {
 
 		for (key = 0; key < handlers.length; key += 1) {
 			if (keys.hasOwnProperty(handlers[key].key)) {
-				if (handlers[key].repeat === true ||
-					(handlers[key].repeat === false && keyRepeat[handlers[key].key] === false)) {
+				handlers[key].elapsedTime += elapsedTime;
+				if (handlers[key].repeat === true) {
+					//
+					// Check the rate vs elapsed time for this key before invoking the handler
+					if (handlers[key].elapsedTime >= handlers[key].rate) {
+						handlers[key].handler(elapsedTime);
+						keyRepeat[handlers[key].key] = true;
+						//
+						// Reset the elapsed time, adding in any extra time beyond the repeat
+						// rate that may have accumulated.
+						handlers[key].elapsedTime = (handlers[key].elapsedTime - handlers[key].rate);
+					}
+				} else if (handlers[key].repeat === false && keyRepeat[handlers[key].key] === false) {
 					handlers[key].handler(elapsedTime);
 					keyRepeat[handlers[key].key] = true;
 				}

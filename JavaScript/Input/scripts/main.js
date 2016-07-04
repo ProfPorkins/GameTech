@@ -4,16 +4,16 @@
 // This namespace provides the simulation loop for the quad-tree demo.
 //
 // ------------------------------------------------------------------
-Demo.main = (function(renderer, input, model) {
+Demo.main = (function(renderer, components, input, model) {
 	'use strict';
 	var lastTimeStamp = performance.now(),
 		frameTimes = [],
-		textFPS = {
+		textFPS = components.Text({
 			text : 'fps',
 			font : '16px Arial, sans-serif',
 			fill : 'rgba(255, 255, 255, 1)',
-			pos : { x : 1.025, y : 0.00 }
-		},
+			position : { x : 1.025, y : 0.00 }
+		}),
 		myKeyboard = input.Keyboard();
 
 	//------------------------------------------------------------------
@@ -58,7 +58,7 @@ Demo.main = (function(renderer, input, model) {
 			// truncating, then dividing by 10 to get back to seconds.
 			fps = Math.floor((1 / averageTime) * 10000) / 10;
 			textFPS.text = 'fps: ' + fps;
-			renderer.core.drawText(textFPS);
+			renderer.Text.render(textFPS);
 		}
 	}
 
@@ -94,10 +94,40 @@ Demo.main = (function(renderer, input, model) {
 		model.initialize();
 
 		//
-		// Let's listen to a few keyboard inputs to control the simulation
-		//myKeyboard.registerCommand(input.KeyEvent.DOM_VK_Q, false, function() {
-		//	model.toggleQuadTreeRendering();
-		//});
+		// Let's listen to a few keyboard inputs to demonstrate the different
+		// input events.
+		myKeyboard.registerCommand(function() {
+				model.moveSingleDown();
+			},
+			input.KeyEvent.DOM_VK_A, false
+		);
+		myKeyboard.registerCommand(function() {
+				model.moveSingleUp();
+			},
+			input.KeyEvent.DOM_VK_Q, false
+		);
+
+		myKeyboard.registerCommand(function(elapsedTime) {
+				model.moveRepeatDown(elapsedTime);
+			},
+			input.KeyEvent.DOM_VK_S, true
+		);
+		myKeyboard.registerCommand(function(elapsedTime) {
+				model.moveRepeatUp(elapsedTime);
+			},
+			input.KeyEvent.DOM_VK_W, true
+		);
+
+		myKeyboard.registerCommand(function() {
+				model.moveRepeatTimedDown();
+			},
+			input.KeyEvent.DOM_VK_D, true, 250
+		);
+		myKeyboard.registerCommand(function() {
+				model.moveRepeatTimedUp();
+			},
+			input.KeyEvent.DOM_VK_E, true, 250
+		);
 
 		//
 		// Get the gameloop started
@@ -111,4 +141,4 @@ Demo.main = (function(renderer, input, model) {
 		initialize: initialize
 	};
 
-}(Demo.renderer, Demo.input, Demo.model));
+}(Demo.renderer, Demo.components, Demo.input, Demo.model));
