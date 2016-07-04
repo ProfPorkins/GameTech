@@ -14,7 +14,10 @@ Demo.main = (function(renderer, components, input, model) {
 			fill : 'rgba(255, 255, 255, 1)',
 			position : { x : 1.025, y : 0.00 }
 		}),
-		myKeyboard = input.Keyboard();
+		myKeyboard = input.Keyboard(),
+		inputLeftIds = {},
+		inputRightIds = {},
+		inputsLeft = true;	// We start with the left inputs
 
 	//------------------------------------------------------------------
 	//
@@ -80,6 +83,120 @@ Demo.main = (function(renderer, components, input, model) {
 
 	//------------------------------------------------------------------
 	//
+	// Toggle which set of inputs are being used, left or right.
+	//
+	//------------------------------------------------------------------
+	function toggleInput() {
+		inputsLeft = !inputsLeft;
+		if (inputsLeft) {
+			unregisterInputsRight();
+			registerInputsLeft();
+		} else {
+			unregisterInputsLeft();
+			registerInputsRight();
+		}
+	}
+
+	function unregisterInputsRight() {
+		myKeyboard.unregisterCommand(input.KeyEvent.DOM_VK_J, inputRightIds[input.KeyEvent.DOM_VK_J]);
+		myKeyboard.unregisterCommand(input.KeyEvent.DOM_VK_U, inputRightIds[input.KeyEvent.DOM_VK_U]);
+		myKeyboard.unregisterCommand(input.KeyEvent.DOM_VK_K, inputRightIds[input.KeyEvent.DOM_VK_K]);
+		myKeyboard.unregisterCommand(input.KeyEvent.DOM_VK_I, inputRightIds[input.KeyEvent.DOM_VK_I]);
+		myKeyboard.unregisterCommand(input.KeyEvent.DOM_VK_L, inputRightIds[input.KeyEvent.DOM_VK_L]);
+		myKeyboard.unregisterCommand(input.KeyEvent.DOM_VK_O, inputRightIds[input.KeyEvent.DOM_VK_O]);
+	}
+
+	function unregisterInputsLeft() {
+		myKeyboard.unregisterCommand(input.KeyEvent.DOM_VK_A, inputLeftIds[input.KeyEvent.DOM_VK_A]);
+		myKeyboard.unregisterCommand(input.KeyEvent.DOM_VK_Q, inputLeftIds[input.KeyEvent.DOM_VK_Q]);
+		myKeyboard.unregisterCommand(input.KeyEvent.DOM_VK_S, inputLeftIds[input.KeyEvent.DOM_VK_S]);
+		myKeyboard.unregisterCommand(input.KeyEvent.DOM_VK_W, inputLeftIds[input.KeyEvent.DOM_VK_W]);
+		myKeyboard.unregisterCommand(input.KeyEvent.DOM_VK_D, inputLeftIds[input.KeyEvent.DOM_VK_D]);
+		myKeyboard.unregisterCommand(input.KeyEvent.DOM_VK_E, inputLeftIds[input.KeyEvent.DOM_VK_E]);
+	}
+
+	//------------------------------------------------------------------
+	//
+	// Register the left side keyboard inputs.
+	//
+	//------------------------------------------------------------------
+	function registerInputsLeft() {
+		inputLeftIds[input.KeyEvent.DOM_VK_A] = myKeyboard.registerCommand(function() {
+				model.moveSingleDown();
+			},
+			input.KeyEvent.DOM_VK_A, false
+		);
+		inputLeftIds[input.KeyEvent.DOM_VK_Q] = myKeyboard.registerCommand(function() {
+				model.moveSingleUp();
+			},
+			input.KeyEvent.DOM_VK_Q, false
+		);
+
+		inputLeftIds[input.KeyEvent.DOM_VK_S] = myKeyboard.registerCommand(function(elapsedTime) {
+				model.moveRepeatDown(elapsedTime);
+			},
+			input.KeyEvent.DOM_VK_S, true
+		);
+		inputLeftIds[input.KeyEvent.DOM_VK_W] = myKeyboard.registerCommand(function(elapsedTime) {
+				model.moveRepeatUp(elapsedTime);
+			},
+			input.KeyEvent.DOM_VK_W, true
+		);
+
+		inputLeftIds[input.KeyEvent.DOM_VK_D] = myKeyboard.registerCommand(function() {
+				model.moveRepeatTimedDown();
+			},
+			input.KeyEvent.DOM_VK_D, true, 250
+		);
+		inputLeftIds[input.KeyEvent.DOM_VK_E] = myKeyboard.registerCommand(function() {
+				model.moveRepeatTimedUp();
+			},
+			input.KeyEvent.DOM_VK_E, true, 250
+		);
+	}
+
+	//------------------------------------------------------------------
+	//
+	// Register the right side keyboard inputs.
+	//
+	//------------------------------------------------------------------
+	function registerInputsRight() {
+		inputRightIds[input.KeyEvent.DOM_VK_J] = myKeyboard.registerCommand(function() {
+				model.moveSingleDown();
+			},
+			input.KeyEvent.DOM_VK_J, false
+		);
+		inputRightIds[input.KeyEvent.DOM_VK_U] = myKeyboard.registerCommand(function() {
+				model.moveSingleUp();
+			},
+			input.KeyEvent.DOM_VK_U, false
+		);
+
+		inputRightIds[input.KeyEvent.DOM_VK_K] = myKeyboard.registerCommand(function(elapsedTime) {
+				model.moveRepeatDown(elapsedTime);
+			},
+			input.KeyEvent.DOM_VK_K, true
+		);
+		inputRightIds[input.KeyEvent.DOM_VK_I] = myKeyboard.registerCommand(function(elapsedTime) {
+				model.moveRepeatUp(elapsedTime);
+			},
+			input.KeyEvent.DOM_VK_I, true
+		);
+
+		inputRightIds[input.KeyEvent.DOM_VK_L] = myKeyboard.registerCommand(function() {
+				model.moveRepeatTimedDown();
+			},
+			input.KeyEvent.DOM_VK_L, true, 250
+		);
+		inputRightIds[input.KeyEvent.DOM_VK_O] = myKeyboard.registerCommand(function() {
+				model.moveRepeatTimedUp();
+			},
+			input.KeyEvent.DOM_VK_O, true, 250
+		);
+	}
+
+	//------------------------------------------------------------------
+	//
 	// This is the entry point for the demo.  From here the various event
 	// listeners we care about are prepared, along with setting up the
 	// canvas for rendering, finally starting the animation loop.
@@ -94,40 +211,11 @@ Demo.main = (function(renderer, components, input, model) {
 		model.initialize();
 
 		//
-		// Let's listen to a few keyboard inputs to demonstrate the different
-		// input events.
-		myKeyboard.registerCommand(function() {
-				model.moveSingleDown();
-			},
-			input.KeyEvent.DOM_VK_A, false
-		);
-		myKeyboard.registerCommand(function() {
-				model.moveSingleUp();
-			},
-			input.KeyEvent.DOM_VK_Q, false
-		);
-
-		myKeyboard.registerCommand(function(elapsedTime) {
-				model.moveRepeatDown(elapsedTime);
-			},
-			input.KeyEvent.DOM_VK_S, true
-		);
-		myKeyboard.registerCommand(function(elapsedTime) {
-				model.moveRepeatUp(elapsedTime);
-			},
-			input.KeyEvent.DOM_VK_W, true
-		);
-
-		myKeyboard.registerCommand(function() {
-				model.moveRepeatTimedDown();
-			},
-			input.KeyEvent.DOM_VK_D, true, 250
-		);
-		myKeyboard.registerCommand(function() {
-				model.moveRepeatTimedUp();
-			},
-			input.KeyEvent.DOM_VK_E, true, 250
-		);
+		// Start out by listening to the left keyboard inputs.
+		registerInputsLeft();
+		//
+		// Allow the controls to be changed during runtime.
+		myKeyboard.registerCommand(toggleInput, input.KeyEvent.DOM_VK_T, false);
 
 		//
 		// Get the gameloop started

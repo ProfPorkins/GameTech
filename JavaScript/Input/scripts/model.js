@@ -13,14 +13,14 @@ Demo.model = (function(components) {
 			fill: 'rgba(255, 0, 0, 1)',
 			position: { x: 0.05, y: 0.10 }
 		}),
-		textRepeat = components.Text({
-			text: 'Repeating',
+		textContinuous = components.Text({
+			text: 'Continuous',
 			font: '16px Arial, sans-serif',
 			fill: 'rgba(0, 255, 0, 1)',
 			position: { x: 0, y: 0.10 }
 		}),
-		textRepeatTimed = components.Text({
-			text: 'Timed Repeat',
+		textRepeatInterval = components.Text({
+			text: 'Repeat Interval',
 			font: '16px Arial, sans-serif',
 			fill: 'rgba(0, 0, 255, 1)',
 			position: { x: 0, y: 0.10 }
@@ -40,17 +40,22 @@ Demo.model = (function(components) {
 		//
 		// Figure out the positioning of the text elements
 		textSpacing.width = Demo.renderer.core.measureTextWidth(textSpacing);
+		textSpacing.height = Demo.renderer.core.measureTextHeight(textSpacing);
+
+		textSingle.position.y = textSpacing.height * 2;
+		textContinuous.position.y = textSpacing.height * 2;
+		textRepeatInterval.position.y = textSpacing.height * 2;
 
 		textSingle.height = Demo.renderer.core.measureTextHeight(textSingle);
-		textRepeat.height = Demo.renderer.core.measureTextHeight(textRepeat);
-		textRepeatTimed.height = Demo.renderer.core.measureTextHeight(textRepeatTimed);
+		textContinuous.height = Demo.renderer.core.measureTextHeight(textContinuous);
+		textRepeatInterval.height = Demo.renderer.core.measureTextHeight(textRepeatInterval);
 
 		textSingle.width = Demo.renderer.core.measureTextWidth(textSingle);
-		textRepeat.width = Demo.renderer.core.measureTextWidth(textRepeat);
-		textRepeatTimed.width = Demo.renderer.core.measureTextWidth(textRepeatTimed);
+		textContinuous.width = Demo.renderer.core.measureTextWidth(textContinuous);
+		textRepeatInterval.width = Demo.renderer.core.measureTextWidth(textRepeatInterval);
 
-		textRepeat.position.x = textSingle.position.x + textSingle.width + textSpacing.width;
-		textRepeatTimed.position.x = textRepeat.position.x + textRepeat.width + textSpacing.width;
+		textContinuous.position.x = textSingle.position.x + textSingle.width + textSpacing.width;
+		textRepeatInterval.position.x = textContinuous.position.x + textContinuous.width + textSpacing.width;
 	}
 
 	// ------------------------------------------------------------------
@@ -66,23 +71,29 @@ Demo.model = (function(components) {
 
 	that.moveSingleDown = function() {
 		textSingle.position.y += textSingle.height;	// height world units per keypress
+		textSingle.position.y = Math.min(textSingle.position.y, 1.0 - textSingle.height * 2);
 	};
 	that.moveSingleUp = function() {
 		textSingle.position.y -= textSingle.height;	// height world units per keypress
+		textSingle.position.y = Math.max(textSingle.position.y, textSingle.height * 2);
 	};
 
 	that.moveRepeatDown = function(elapsedTime) {
-		textRepeat.position.y += (0.2 / 1000) * elapsedTime; // 0.2 world units per second
+		textContinuous.position.y += (0.2 / 1000) * elapsedTime; // 0.2 world units per second
+		textContinuous.position.y = Math.min(textContinuous.position.y, 1.0 - textContinuous.height * 2);
 	};
 	that.moveRepeatUp = function(elapsedTime) {
-		textRepeat.position.y -= (0.2 / 1000) * elapsedTime; // 0.2 world units per second
+		textContinuous.position.y -= (0.2 / 1000) * elapsedTime; // 0.2 world units per second
+		textContinuous.position.y = Math.max(textContinuous.position.y, textContinuous.height * 2);
 	};
 
 	that.moveRepeatTimedDown = function() {
-		textRepeatTimed.position.y += textRepeatTimed.height;	// height world units per notification
+		textRepeatInterval.position.y += textRepeatInterval.height;	// height world units per notification
+		textRepeatInterval.position.y = Math.min(textRepeatInterval.position.y, 1.0 - textRepeatInterval.height * 2);
 	};
 	that.moveRepeatTimedUp = function() {
-		textRepeatTimed.position.y -= textRepeatTimed.height;	// height world units per notification
+		textRepeatInterval.position.y -= textRepeatInterval.height;	// height world units per notification
+		textRepeatInterval.position.y = Math.max(textRepeatInterval.position.y, textRepeatInterval.height * 2);
 	};
 
 	// ------------------------------------------------------------------
@@ -108,8 +119,8 @@ Demo.model = (function(components) {
 		//
 		// Render the incredibly interesting text objects
 		renderer.Text.render(textSingle);
-		renderer.Text.render(textRepeat);
-		renderer.Text.render(textRepeatTimed);
+		renderer.Text.render(textContinuous);
+		renderer.Text.render(textRepeatInterval);
 	};
 
 	return that;

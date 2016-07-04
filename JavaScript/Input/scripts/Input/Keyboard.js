@@ -9,8 +9,9 @@ Demo.input.Keyboard = function() {
 	'use strict';
 	var keys = {},
 		keyRepeat = {},
-		handlers = [],
-		that = {};
+		handlers = {},
+		that = {},
+		nextHandlerId = 0;
 
 	function keyDown(event) {
 		keys[event.keyCode] = event.timeStamp;
@@ -30,7 +31,7 @@ Demo.input.Keyboard = function() {
 
 	// ------------------------------------------------------------------
 	//
-	// Allows the client code to register a keyboard handler
+	// Allows the client code to register a keyboard handler.
 	//
 	// ------------------------------------------------------------------
 	that.registerCommand = function(handler, key, repeat, rate) {
@@ -41,43 +42,72 @@ Demo.input.Keyboard = function() {
 			rate = 0;
 		}
 
-		handlers.push({
+		//
+		// Each entry is an array of handlers to allow multiple handlers per keyboard input
+		if (!handlers.hasOwnProperty(key)) {
+			handlers[key] = [];
+		}
+		handlers[key].push({
+			id: nextHandlerId,
 			key: key,
 			repeat: repeat,
 			rate: rate,
 			elapsedTime: rate,	// Initialize an initial elapsed time so the very first keypress will be valid
 			handler: handler
 		});
+
+		nextHandlerId += 1;
+		return handlers[key][handlers[key].length - 1].id;
+	};
+
+	// ------------------------------------------------------------------
+	//
+	// Allows the client code to unregister a keyboard handler.
+	//
+	// ------------------------------------------------------------------
+	that.unregisterCommand = function(key, id) {
+		var entry = 0;
+
+		if (handlers.hasOwnProperty(key)) {
+			for (entry = 0; entry < handlers[key].length; entry += 1) {
+				if (handlers[key][entry].id === id) {
+					handlers[key].splice(entry, 1);
+					break;
+				}
+			}
+		}
 	};
 
 	// ------------------------------------------------------------------
 	//
 	// Allows the client to invoke all the handlers for the registered key/handlers.
-	// I've modified this function for the quad-tree demo to only fire the
-	// first time the 'keydown' event occurs.  It the key gets reset after
-	// the 'keyup' event happens.
 	//
 	// ------------------------------------------------------------------
 	that.update = function(elapsedTime) {
-		var key = 0;
+		var key = 0,
+			entry = null,
+			event = null;
 
-		for (key = 0; key < handlers.length; key += 1) {
-			if (keys.hasOwnProperty(handlers[key].key)) {
-				handlers[key].elapsedTime += elapsedTime;
-				if (handlers[key].repeat === true) {
-					//
-					// Check the rate vs elapsed time for this key before invoking the handler
-					if (handlers[key].elapsedTime >= handlers[key].rate) {
-						handlers[key].handler(elapsedTime);
-						keyRepeat[handlers[key].key] = true;
+		for (key in keys) {
+			if (handlers.hasOwnProperty(key)) {
+				for (entry = 0; entry < handlers[key].length; entry += 1) {
+					event = handlers[key][entry];
+					event.elapsedTime += elapsedTime;
+					if (event.repeat === true) {
 						//
-						// Reset the elapsed time, adding in any extra time beyond the repeat
-						// rate that may have accumulated.
-						handlers[key].elapsedTime = (handlers[key].elapsedTime - handlers[key].rate);
+						// Check the rate vs elapsed time for this key before invoking the handler
+						if (event.elapsedTime >= event.rate) {
+							event.handler(elapsedTime);
+							keyRepeat[key] = true;
+							//
+							// Reset the elapsed time, adding in any extra time beyond the repeat
+							// rate that may have accumulated.
+							event.elapsedTime = (event.elapsedTime - event.rate);
+						}
+					} else if (event.repeat === false && keyRepeat[key] === false) {
+						event.handler(elapsedTime);
+						keyRepeat[key] = true;
 					}
-				} else if (handlers[key].repeat === false && keyRepeat[handlers[key].key] === false) {
-					handlers[key].handler(elapsedTime);
-					keyRepeat[handlers[key].key] = true;
 				}
 			}
 		}
