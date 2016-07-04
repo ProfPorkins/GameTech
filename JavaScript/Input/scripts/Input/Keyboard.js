@@ -13,22 +13,6 @@ Demo.input.Keyboard = function() {
 		that = {},
 		nextHandlerId = 0;
 
-	function keyDown(event) {
-		keys[event.keyCode] = event.timeStamp;
-		//
-		// Because we can continuously receive the keyDown event, check to
-		// see if we already have this property.  If we do, we don't want to
-		// overwrite the value that already exists.
-		if (keyRepeat.hasOwnProperty(event.keyCode) === false) {
-			keyRepeat[event.keyCode] = false;
-		}
-	}
-
-	function keyRelease(event) {
-		delete keys[event.keyCode];
-		delete keyRepeat[event.keyCode];
-	}
-
 	// ------------------------------------------------------------------
 	//
 	// Allows the client code to register a keyboard handler.
@@ -57,6 +41,10 @@ Demo.input.Keyboard = function() {
 		});
 
 		nextHandlerId += 1;
+
+		//
+		// We return an handler id that client code must track if it is desired
+		// to unregister the handler in the future.
 		return handlers[key][handlers[key].length - 1].id;
 	};
 
@@ -77,6 +65,35 @@ Demo.input.Keyboard = function() {
 			}
 		}
 	};
+
+	// ------------------------------------------------------------------
+	//
+	// Called when the 'keydown' event is fired from the browser.  During
+	// this handler we record which key caused the event.
+	//
+	// ------------------------------------------------------------------
+	function keyDown(event) {
+		keys[event.keyCode] = event.timeStamp;
+		//
+		// Because we can continuously receive the keyDown event, check to
+		// see if we already have this property.  If we do, we don't want to
+		// overwrite the value that already exists.
+		if (keyRepeat.hasOwnProperty(event.keyCode) === false) {
+			keyRepeat[event.keyCode] = false;
+		}
+	}
+
+	// ------------------------------------------------------------------
+	//
+	// Called when the 'keyrelease' event is fired from the browser.  When
+	// a key is released, we want to remove it from the set of keys currently
+	// indicated as down.
+	//
+	// ------------------------------------------------------------------
+	function keyRelease(event) {
+		delete keys[event.keyCode];
+		delete keyRepeat[event.keyCode];
+	}
 
 	// ------------------------------------------------------------------
 	//
