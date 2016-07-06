@@ -95,53 +95,83 @@ Demo.main = (function(renderer, input, model) {
 
 		//
 		// Let's listen to a few keyboard inputs to control the simulation
-		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_Q, false, function() {
-			model.toggleQuadTreeRendering();
-		});
-		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_E, false, function() {
-			model.toggleEntityRendering();
-		});
-		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_M, false, function() {
-			model.toggleEntityMovement();
-		});
+		myKeyboard.registerHandler(function() {
+				model.toggleQuadTreeRendering();
+			},
+			input.KeyEvent.DOM_VK_Q, false
+		);
+		myKeyboard.registerHandler(function() {
+				model.toggleEntityRendering();
+			},
+			input.KeyEvent.DOM_VK_E, false
+		);
+		myKeyboard.registerHandler(function() {
+				model.toggleEntityMovement();
+			},
+			input.KeyEvent.DOM_VK_M, false
+		);
 
-		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_UP, false, function() {
-			model.quadTreeCriteria = model.quadTreeCriteria + 1;
-		});
-		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_DOWN, false, function() {
-			model.quadTreeCriteria = model.quadTreeCriteria - 1;
-		});
-		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_PAGE_UP, true, function() {
-			model.addCircles(10);
-		});
-		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_PAGE_DOWN, true, function() {
-			model.removeCircles(10);
-		});
+		myKeyboard.registerHandler(function() {
+				model.quadTreeCriteria = model.quadTreeCriteria + 1;
+			},
+			input.KeyEvent.DOM_VK_UP, false
+		);
+		myKeyboard.registerHandler(function() {
+				model.quadTreeCriteria = model.quadTreeCriteria - 1;
+			},
+			input.KeyEvent.DOM_VK_DOWN, false
+		);
+		myKeyboard.registerHandler(function() {
+				model.addCircles(10);
+			},
+			input.KeyEvent.DOM_VK_PAGE_UP, true
+		);
+		myKeyboard.registerHandler(function() {
+				model.removeCircles(10);
+			},
+			input.KeyEvent.DOM_VK_PAGE_DOWN, true
+		);
 
-		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_W, true, function(elapsedTime) {
-			model.cameraMoveForward(elapsedTime);
-		});
-		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_S, true, function(elapsedTime) {
-			model.cameraMoveBackward(elapsedTime);
-		});
-		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_A, true, function(elapsedTime) {
-			model.cameraRotateLeft(elapsedTime);
-		});
-		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_D, true, function(elapsedTime) {
-			model.cameraRotateRight(elapsedTime);
-		});
-		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_J, true, function(elapsedTime) {
-			model.cameraDecreaseFOV(elapsedTime);
-		});
-		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_L, true, function(elapsedTime) {
-			model.cameraIncreaseFOV(elapsedTime);
-		});
-		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_I, true, function(elapsedTime) {
-			model.cameraIncreaseDepth(elapsedTime);
-		});
-		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_K, true, function(elapsedTime) {
-			model.cameraDecreaseDepth(elapsedTime);
-		});
+		myKeyboard.registerHandler(function(elapsedTime) {
+				model.cameraMoveForward(elapsedTime);
+			},
+			input.KeyEvent.DOM_VK_W, true
+		);
+		myKeyboard.registerHandler(function(elapsedTime) {
+				model.cameraMoveBackward(elapsedTime);
+			},
+			input.KeyEvent.DOM_VK_S, true
+		);
+		myKeyboard.registerHandler(function(elapsedTime) {
+				model.cameraRotateLeft(elapsedTime);
+			},
+			input.KeyEvent.DOM_VK_A, true
+		);
+		myKeyboard.registerHandler(function(elapsedTime) {
+				model.cameraRotateRight(elapsedTime);
+			},
+			input.KeyEvent.DOM_VK_D, true
+		);
+		myKeyboard.registerHandler(function(elapsedTime) {
+				model.cameraDecreaseFOV(elapsedTime);
+			},
+			input.KeyEvent.DOM_VK_J, true
+		);
+		myKeyboard.registerHandler(function(elapsedTime) {
+				model.cameraIncreaseFOV(elapsedTime);
+			},
+			input.KeyEvent.DOM_VK_L, true
+		);
+		myKeyboard.registerHandler(function(elapsedTime) {
+				model.cameraIncreaseDepth(elapsedTime);
+			},
+			input.KeyEvent.DOM_VK_I, true
+		);
+		myKeyboard.registerHandler(function(elapsedTime) {
+				model.cameraDecreaseDepth(elapsedTime);
+			},
+			input.KeyEvent.DOM_VK_K, true
+		);
 
 		//
 		// Get the gameloop started

@@ -95,31 +95,47 @@ Demo.main = (function(renderer, input, model) {
 
 		//
 		// Let's listen to a few keyboard inputs to control the simulation
-		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_Q, false, function() {
-			model.toggleQuadTreeRendering();
-		});
-		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_E, false, function() {
-			model.toggleEntityRendering();
-		});
-		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_M, false, function() {
-			model.toggleEntityMovement();
-		});
-		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_U, false, function() {
-			model.toggleUseQuadTree();
-		});
+		myKeyboard.registerHandler(function() {
+				model.toggleQuadTreeRendering();
+			},
+			input.KeyEvent.DOM_VK_Q, false
+		);
+		myKeyboard.registerHandler(function() {
+				model.toggleEntityRendering();
+			},
+			input.KeyEvent.DOM_VK_E, false
+		);
+		myKeyboard.registerHandler(function() {
+				model.toggleEntityMovement();
+			},
+			input.KeyEvent.DOM_VK_M, false
+		);
+		myKeyboard.registerHandler(function() {
+				model.toggleUseQuadTree();
+			},
+			input.KeyEvent.DOM_VK_U, false
+		);
 
-		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_UP, false, function() {
-			model.quadTreeCriteria = model.quadTreeCriteria + 1;
-		});
-		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_DOWN, false, function() {
-			model.quadTreeCriteria = model.quadTreeCriteria - 1;
-		});
-		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_PAGE_UP, true, function() {
-			model.addCircles(10);
-		});
-		myKeyboard.registerCommand(input.KeyEvent.DOM_VK_PAGE_DOWN, true, function() {
-			model.removeCircles(10);
-		});
+		myKeyboard.registerHandler(function() {
+				model.quadTreeCriteria = model.quadTreeCriteria + 1;
+			},
+			input.KeyEvent.DOM_VK_UP, false
+		);
+		myKeyboard.registerHandler(function() {
+				model.quadTreeCriteria = model.quadTreeCriteria - 1;
+			},
+			input.KeyEvent.DOM_VK_DOWN, false
+		);
+		myKeyboard.registerHandler(function() {
+				model.addCircles(10);
+			},
+			input.KeyEvent.DOM_VK_PAGE_UP, true
+		);
+		myKeyboard.registerHandler(function() {
+				model.removeCircles(10);
+			},
+			input.KeyEvent.DOM_VK_PAGE_DOWN, true
+		);
 
 		//
 		// Get the gameloop started

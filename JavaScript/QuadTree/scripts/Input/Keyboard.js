@@ -9,9 +9,69 @@ Demo.input.Keyboard = function() {
 	'use strict';
 	var keys = {},
 		keyRepeat = {},
-		handlers = [],
+		handlers = {},
+		nextHandlerId = 0,
 		that = {};
 
+	// ------------------------------------------------------------------
+	//
+	// Allows the client code to register a keyboard handler.
+	//
+	// ------------------------------------------------------------------
+	that.registerHandler = function(handler, key, repeat, rate) {
+		//
+		// If no repeat rate was passed in, use a value of 0 so that no delay between
+		// repeated keydown events occurs.
+		if (rate === undefined) {
+			rate = 0;
+		}
+
+		//
+		// Each entry is an array of handlers to allow multiple handlers per keyboard input
+		if (!handlers.hasOwnProperty(key)) {
+			handlers[key] = [];
+		}
+		handlers[key].push({
+			id: nextHandlerId,
+			key: key,
+			repeat: repeat,
+			rate: rate,
+			elapsedTime: rate,	// Initialize an initial elapsed time so the very first keypress will be valid
+			handler: handler
+		});
+
+		nextHandlerId += 1;
+
+		//
+		// We return an handler id that client code must track if it is desired
+		// to unregister the handler in the future.
+		return handlers[key][handlers[key].length - 1].id;
+	};
+
+	// ------------------------------------------------------------------
+	//
+	// Allows the client code to unregister a keyboard handler.
+	//
+	// ------------------------------------------------------------------
+	that.unregisterHandler = function(key, id) {
+		var entry = 0;
+
+		if (handlers.hasOwnProperty(key)) {
+			for (entry = 0; entry < handlers[key].length; entry += 1) {
+				if (handlers[key][entry].id === id) {
+					handlers[key].splice(entry, 1);
+					break;
+				}
+			}
+		}
+	};
+
+	// ------------------------------------------------------------------
+	//
+	// Called when the 'keydown' event is fired from the browser.  During
+	// this handler we record which key caused the event.
+	//
+	// ------------------------------------------------------------------
 	function keyDown(event) {
 		keys[event.keyCode] = event.timeStamp;
 		//
@@ -23,6 +83,13 @@ Demo.input.Keyboard = function() {
 		}
 	}
 
+	// ------------------------------------------------------------------
+	//
+	// Called when the 'keyrelease' event is fired from the browser.  When
+	// a key is released, we want to remove it from the set of keys currently
+	// indicated as down.
+	//
+	// ------------------------------------------------------------------
 	function keyRelease(event) {
 		delete keys[event.keyCode];
 		delete keyRepeat[event.keyCode];
@@ -30,41 +97,41 @@ Demo.input.Keyboard = function() {
 
 	// ------------------------------------------------------------------
 	//
-	// Allows the client code to register a keyboard handler
-	//
-	// ------------------------------------------------------------------
-	that.registerCommand = function(key, repeat, handler) {
-		handlers.push({
-			key: key,
-			repeat: repeat,
-			handler: handler
-		});
-	};
-
-	// ------------------------------------------------------------------
-	//
 	// Allows the client to invoke all the handlers for the registered key/handlers.
-	// I've modified this function for the quad-tree demo to only fire the
-	// first time the 'keydown' event occurs.  It the key gets reset after
-	// the 'keyup' event happens.
 	//
 	// ------------------------------------------------------------------
 	that.update = function(elapsedTime) {
-		var key = 0;
+		var key = 0,
+			entry = null,
+			event = null;
 
-		for (key = 0; key < handlers.length; key += 1) {
-			if (keys.hasOwnProperty(handlers[key].key)) {
-				if (handlers[key].repeat === true ||
-					(handlers[key].repeat === false && keyRepeat[handlers[key].key] === false)) {
-					handlers[key].handler(elapsedTime);
-					keyRepeat[handlers[key].key] = true;
+		for (key in keys) {
+			if (handlers.hasOwnProperty(key)) {
+				for (entry = 0; entry < handlers[key].length; entry += 1) {
+					event = handlers[key][entry];
+					event.elapsedTime += elapsedTime;
+					if (event.repeat === true) {
+						//
+						// Check the rate vs elapsed time for this key before invoking the handler
+						if (event.elapsedTime >= event.rate) {
+							event.handler(elapsedTime);
+							keyRepeat[key] = true;
+							//
+							// Reset the elapsed time, adding in any extra time beyond the repeat
+							// rate that may have accumulated.
+							event.elapsedTime = (event.elapsedTime - event.rate);
+						}
+					} else if (event.repeat === false && keyRepeat[key] === false) {
+						event.handler(elapsedTime);
+						keyRepeat[key] = true;
+					}
 				}
 			}
 		}
 	};
 
 	//
-	// These are used to keep track of which keys are currently pressed
+	// This is how we receive notification of keyboard events.
 	window.addEventListener('keydown', keyDown);
 	window.addEventListener('keyup', keyRelease);
 
