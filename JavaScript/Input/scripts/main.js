@@ -95,6 +95,11 @@ Demo.main = (function(renderer, components, input, model) {
 			unregisterInputsLeft();
 			registerInputsRight();
 		}
+
+		//
+		// Need to let the model know of the change so it can update the
+		// text displayed for the user.
+		model.notifyCommandToggle(inputsLeft);
 	}
 
 	function unregisterInputsRight() {
@@ -209,6 +214,7 @@ Demo.main = (function(renderer, components, input, model) {
 		textFPS.width = renderer.core.measureTextWidth(textFPS);
 
 		model.initialize();
+		model.notifyCommandToggle(inputsLeft);
 
 		//
 		// Start out by listening to the left keyboard inputs.

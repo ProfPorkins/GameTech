@@ -47,7 +47,7 @@ Demo.renderer.core = (function() {
 		//
 		// Notify interested parties of the canvas resize event.
 		for (handler in resizeHandlers) {
-			resizeHandlers[handler]();
+			resizeHandlers[handler](true);
 		}
 	}
 

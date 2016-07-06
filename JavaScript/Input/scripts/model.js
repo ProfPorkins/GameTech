@@ -1,4 +1,4 @@
-/* global Demo, Random */
+/* global Demo */
 // ------------------------------------------------------------------
 //
 // This namespace holds the input demo model.
@@ -7,23 +7,30 @@
 Demo.model = (function(components) {
 	'use strict';
 
-	var textSingle = components.Text({
+	var font = '14px Arial, sans-serif',
+		textSingle = components.Text({
 			text: 'Single',
-			font: '16px Arial, sans-serif',
+			font: font,
 			fill: 'rgba(255, 0, 0, 1)',
 			position: { x: 0.05, y: 0.10 }
 		}),
 		textContinuous = components.Text({
 			text: 'Continuous',
-			font: '16px Arial, sans-serif',
+			font: font,
 			fill: 'rgba(0, 255, 0, 1)',
 			position: { x: 0, y: 0.10 }
 		}),
 		textRepeatInterval = components.Text({
 			text: 'Repeat Interval',
-			font: '16px Arial, sans-serif',
-			fill: 'rgba(0, 0, 255, 1)',
+			font: font,
+			fill: 'rgba(100, 100, 255, 1)',
 			position: { x: 0, y: 0.10 }
+		}),
+		textToggle = components.Text({
+			text: 'Toggle commands (t) ',
+			font: font,
+			fill: 'rgba(255, 255, 255, 1)',
+			position: { x: 0, y: 0.05 }
 		}),
 		that = {};
 
@@ -32,7 +39,7 @@ Demo.model = (function(components) {
 	// When a resize event occurs, remeasure where things should go.
 	//
 	// ------------------------------------------------------------------
-	function notifyResize() {
+	function notifyResize(updateY) {
 		var textSpacing = {
 			text: '     ',
 			font: textSingle.font
@@ -42,21 +49,50 @@ Demo.model = (function(components) {
 		textSpacing.width = Demo.renderer.core.measureTextWidth(textSpacing);
 		textSpacing.height = Demo.renderer.core.measureTextHeight(textSpacing);
 
-		textSingle.position.y = textSpacing.height * 2;
-		textContinuous.position.y = textSpacing.height * 2;
-		textRepeatInterval.position.y = textSpacing.height * 2;
+		if (updateY) {
+			textSingle.position.y = textSpacing.height * 2;
+			textContinuous.position.y = textSpacing.height * 2;
+			textRepeatInterval.position.y = textSpacing.height * 2;
+			textToggle.position.y = textSpacing.height * 2;
+		}
 
 		textSingle.height = Demo.renderer.core.measureTextHeight(textSingle);
 		textContinuous.height = Demo.renderer.core.measureTextHeight(textContinuous);
 		textRepeatInterval.height = Demo.renderer.core.measureTextHeight(textRepeatInterval);
+		textToggle.height = Demo.renderer.core.measureTextHeight(textToggle);
 
 		textSingle.width = Demo.renderer.core.measureTextWidth(textSingle);
 		textContinuous.width = Demo.renderer.core.measureTextWidth(textContinuous);
 		textRepeatInterval.width = Demo.renderer.core.measureTextWidth(textRepeatInterval);
+		textToggle.width = Demo.renderer.core.measureTextWidth(textToggle);
+
 
 		textContinuous.position.x = textSingle.position.x + textSingle.width + textSpacing.width;
 		textRepeatInterval.position.x = textContinuous.position.x + textContinuous.width + textSpacing.width;
+		textToggle.position.x = 1.0 - textToggle.width;
 	}
+
+	// ------------------------------------------------------------------
+	//
+	// When the command set changes, this function is called to update
+	// the text to show the new keyboard commands.
+	//
+	// ------------------------------------------------------------------
+	that.notifyCommandToggle = function(isLeft) {
+		if (isLeft) {
+			textSingle.text = 'Single (Q/A)';
+			textContinuous.text = 'Continuous (W/S)';
+			textRepeatInterval.text = 'Repeat Interval (E/D)';
+		} else {
+			textSingle.text = 'Single (U/J)';
+			textContinuous.text = 'Continuous (I/K)';
+			textRepeatInterval.text = 'Repeat Interval (O/L)';
+		}
+
+		//
+		// Call the resize event to get the positions re-computed.
+		notifyResize(false);
+	};
 
 	// ------------------------------------------------------------------
 	//
@@ -101,8 +137,9 @@ Demo.model = (function(components) {
 	// This function is used to update the state of the demo model.
 	//
 	// ------------------------------------------------------------------
-	that.update = function(elapsedTime) {
-
+	that.update = function() {
+		//
+		// We don't have anything to do!
 	};
 
 	// ------------------------------------------------------------------
@@ -121,6 +158,7 @@ Demo.model = (function(components) {
 		renderer.Text.render(textSingle);
 		renderer.Text.render(textContinuous);
 		renderer.Text.render(textRepeatInterval);
+		renderer.Text.render(textToggle);
 	};
 
 	return that;
