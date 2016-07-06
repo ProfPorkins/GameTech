@@ -96,13 +96,14 @@ Demo.model = (function(components) {
 
 	// ------------------------------------------------------------------
 	//
-	// This function initializes the quad-tree demo model.  Only thing it
-	// does right now is to add the circles to the model.
+	// This function initializes the input demo model.  Only thing it
+	// does right now is to register the resize event with the renderer.
 	//
 	// ------------------------------------------------------------------
 	that.initialize = function() {
 
 		Demo.renderer.core.notifyResize(notifyResize);
+		notifyResize(true);
 	};
 
 	that.moveSingleDown = function() {
