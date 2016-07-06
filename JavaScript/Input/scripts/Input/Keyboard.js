@@ -10,8 +10,8 @@ Demo.input.Keyboard = function() {
 	var keys = {},
 		keyRepeat = {},
 		handlers = {},
-		that = {},
-		nextHandlerId = 0;
+		nextHandlerId = 0,
+		that = {};
 
 	// ------------------------------------------------------------------
 	//
@@ -131,7 +131,7 @@ Demo.input.Keyboard = function() {
 	};
 
 	//
-	// These are used to keep track of which keys are currently pressed
+	// This is how we receive notification of keyboard events.
 	window.addEventListener('keydown', keyDown);
 	window.addEventListener('keyup', keyRelease);
 

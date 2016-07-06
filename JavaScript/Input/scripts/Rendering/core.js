@@ -230,6 +230,18 @@ Demo.renderer.core = (function() {
 			height * world.size);
 	}
 
+	//------------------------------------------------------------------
+	//
+	// This converts from client (pixel) coordinates to the unit world coordinates.
+	//
+	//------------------------------------------------------------------
+	function clientToWorld(clientX, clientY) {
+		return {
+			x: (clientX - world.left) / world.size,
+			y: (clientY - world.top) / world.size
+		};
+	}
+
 	//
 	// Expose only the ability to initialize and toggle the full screen
 	return {
@@ -242,7 +254,8 @@ Demo.renderer.core = (function() {
 		drawLine: drawLine,
 		drawRectangle: drawRectangle,
 		drawCircle: drawCircle,
-		notifyResize: notifyResize
+		notifyResize: notifyResize,
+		clientToWorld: clientToWorld
 	};
 
 }());

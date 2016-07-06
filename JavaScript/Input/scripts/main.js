@@ -15,8 +15,10 @@ Demo.main = (function(renderer, components, input, model) {
 			position : { x : 1.025, y : 0.00 }
 		}),
 		myKeyboard = input.Keyboard(),
+		myMouse = input.Mouse(),
 		inputLeftIds = {},
 		inputRightIds = {},
+		mouseMoveId = 0,
 		inputsLeft = true;	// We start with the left inputs
 
 	//------------------------------------------------------------------
@@ -26,6 +28,7 @@ Demo.main = (function(renderer, components, input, model) {
 	//------------------------------------------------------------------
 	function processInput(elapsedTime) {
 		myKeyboard.update(elapsedTime);
+		myMouse.update(elapsedTime);
 	}
 
 	//------------------------------------------------------------------
@@ -118,6 +121,8 @@ Demo.main = (function(renderer, components, input, model) {
 		myKeyboard.unregisterCommand(input.KeyEvent.DOM_VK_W, inputLeftIds[input.KeyEvent.DOM_VK_W]);
 		myKeyboard.unregisterCommand(input.KeyEvent.DOM_VK_D, inputLeftIds[input.KeyEvent.DOM_VK_D]);
 		myKeyboard.unregisterCommand(input.KeyEvent.DOM_VK_E, inputLeftIds[input.KeyEvent.DOM_VK_E]);
+
+		myMouse.unregisterCommand(myMouse.EventMouseMove, mouseMoveId);
 	}
 
 	//------------------------------------------------------------------
@@ -157,6 +162,12 @@ Demo.main = (function(renderer, components, input, model) {
 				model.moveRepeatTimedUp();
 			},
 			input.KeyEvent.DOM_VK_E, true, 250
+		);
+
+		mouseMoveId = myMouse.registerCommand(function(event) {
+				model.moveCircleTo(renderer.core.clientToWorld(event.clientX, event.clientY));
+			},
+			myMouse.EventMouseMove, true
 		);
 	}
 
@@ -222,6 +233,17 @@ Demo.main = (function(renderer, components, input, model) {
 		//
 		// Allow the controls to be changed during runtime.
 		myKeyboard.registerCommand(toggleInput, input.KeyEvent.DOM_VK_T, false);
+		//
+		// Register the mouse events
+		myMouse.registerCommand(function(event) {
+				//
+				// The coordinates recieved from the event are in pixel coordinates,
+				// we need them in world coordinates to be useful by the rest of
+				// the code.
+				model.moveCircleTo(renderer.core.clientToWorld(event.clientX, event.clientY));
+			},
+			myMouse.EventMouseDown
+		);
 
 		//
 		// Get the gameloop started

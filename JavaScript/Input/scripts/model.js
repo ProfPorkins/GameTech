@@ -32,6 +32,10 @@ Demo.model = (function(components) {
 			fill: 'rgba(255, 255, 255, 1)',
 			position: { x: 0, y: 0.05 }
 		}),
+		mouseObject = components.Circle({
+			center: { x: 0.5, y: 0.5 },
+			radius: 0.05
+		}),
 		that = {};
 
 	// ------------------------------------------------------------------
@@ -133,6 +137,11 @@ Demo.model = (function(components) {
 		textRepeatInterval.position.y = Math.max(textRepeatInterval.position.y, textRepeatInterval.height * 2);
 	};
 
+	that.moveCircleTo = function(event) {
+		mouseObject.center.x = event.x;
+		mouseObject.center.y = event.y;
+	};
+
 	// ------------------------------------------------------------------
 	//
 	// This function is used to update the state of the demo model.
@@ -160,6 +169,8 @@ Demo.model = (function(components) {
 		renderer.Text.render(textContinuous);
 		renderer.Text.render(textRepeatInterval);
 		renderer.Text.render(textToggle);
+
+		renderer.core.drawCircle('rgba(255, 255, 255, 1)', mouseObject.center, mouseObject.radius);
 	};
 
 	return that;
