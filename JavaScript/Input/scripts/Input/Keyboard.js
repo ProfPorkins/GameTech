@@ -18,7 +18,7 @@ Demo.input.Keyboard = function() {
 	// Allows the client code to register a keyboard handler.
 	//
 	// ------------------------------------------------------------------
-	that.registerCommand = function(handler, key, repeat, rate) {
+	that.registerHandler = function(handler, key, repeat, rate) {
 		//
 		// If no repeat rate was passed in, use a value of 0 so that no delay between
 		// repeated keydown events occurs.
@@ -53,7 +53,7 @@ Demo.input.Keyboard = function() {
 	// Allows the client code to unregister a keyboard handler.
 	//
 	// ------------------------------------------------------------------
-	that.unregisterCommand = function(key, id) {
+	that.unregisterHandler = function(key, id) {
 		var entry = 0;
 
 		if (handlers.hasOwnProperty(key)) {

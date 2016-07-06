@@ -28,7 +28,7 @@ Demo.input.Mouse = function() {
 	// Allows the client code to register a mouse handler.
 	//
 	// ------------------------------------------------------------------
-	that.registerCommand = function(handler, type, requireCapture) {
+	that.registerHandler = function(handler, type, requireCapture) {
 		var handlerId = nextHandlerId;
 
 		nextHandlerId += 1;
@@ -58,7 +58,7 @@ Demo.input.Mouse = function() {
 	// Allows the client code to unregister a mouse handler.
 	//
 	// ------------------------------------------------------------------
-	that.unregisterCommand = function(type, id) {
+	that.unregisterHandler = function(type, id) {
 		if (type === that.EventMouseDown) {
 			if (handlersDown.hasOwnProperty(id)) {
 				delete handlersDown[id];
