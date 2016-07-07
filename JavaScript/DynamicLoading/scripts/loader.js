@@ -12,7 +12,8 @@ Demo.loader = (function() {
 
 	function loadScripts(sources, onComplete, message) {
 		require(sources, function() {
-			onComplete(message);
+			console.log(message);
+			onComplete();
 		});
 	}
 
@@ -21,7 +22,11 @@ Demo.loader = (function() {
 	}
 
 	function componentsComplete() {
-		loadScripts(['Rendering/core', 'Rendering/Text'], renderingComplete, 'Rendering loaded');
+		loadScripts(['Rendering/core'], coreRenderingComplete, 'Rendering core loaded');
+	}
+
+	function coreRenderingComplete() {
+		loadScripts(['Rendering/Text'], renderingComplete, 'Rendering loaded');
 	}
 
 	function renderingComplete() {
@@ -40,5 +45,5 @@ Demo.loader = (function() {
 	//
 	// Start with the input scripts, the cascade from there
 	console.log('Starting to dynamically load project scripts');
-	loadScripts(['Input/Mouse', 'Input/Keyboard'], inputsComplete, 'Inputs loaded');
+	loadScripts(['Input/Keyboard'], inputsComplete, 'Inputs loaded');
 }());
