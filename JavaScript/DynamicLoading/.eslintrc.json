@@ -14,7 +14,9 @@
 		"prefer-arrow-callback": 0,
 		"complexity": 0,
 		"max-depth": 0,
-		"prefer-reflect": 0
+		"prefer-reflect": 0,
+		"no-lonely-if": 0,
+		"max-params": 0
 	},
 	"env": {
 		"browser": true

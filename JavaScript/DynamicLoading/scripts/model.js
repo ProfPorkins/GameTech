@@ -10,28 +10,22 @@ Demo.model = (function(components) {
 
 	var font = '14px Arial, sans-serif',
 		textSingle = components.Text({
-			text: 'Single',
+			text: 'Single (q/a)',
 			font: font,
 			fill: 'rgba(255, 0, 0, 1)',
 			position: { x: 0.05, y: 0.10 }
 		}),
 		textContinuous = components.Text({
-			text: 'Continuous',
+			text: 'Continuous (w/s)',
 			font: font,
 			fill: 'rgba(0, 255, 0, 1)',
 			position: { x: 0, y: 0.10 }
 		}),
 		textRepeatInterval = components.Text({
-			text: 'Repeat Interval',
+			text: 'Repeat Interval (e/d)',
 			font: font,
 			fill: 'rgba(100, 100, 255, 1)',
 			position: { x: 0, y: 0.10 }
-		}),
-		textToggle = components.Text({
-			text: 'Toggle commands (t) ',
-			font: font,
-			fill: 'rgba(255, 255, 255, 1)',
-			position: { x: 0, y: 0.05 }
 		}),
 		that = {};
 
@@ -54,46 +48,19 @@ Demo.model = (function(components) {
 			textSingle.position.y = textSpacing.height * 2;
 			textContinuous.position.y = textSpacing.height * 2;
 			textRepeatInterval.position.y = textSpacing.height * 2;
-			textToggle.position.y = textSpacing.height * 2;
 		}
 
 		textSingle.height = Demo.renderer.core.measureTextHeight(textSingle);
 		textContinuous.height = Demo.renderer.core.measureTextHeight(textContinuous);
 		textRepeatInterval.height = Demo.renderer.core.measureTextHeight(textRepeatInterval);
-		textToggle.height = Demo.renderer.core.measureTextHeight(textToggle);
 
 		textSingle.width = Demo.renderer.core.measureTextWidth(textSingle);
 		textContinuous.width = Demo.renderer.core.measureTextWidth(textContinuous);
 		textRepeatInterval.width = Demo.renderer.core.measureTextWidth(textRepeatInterval);
-		textToggle.width = Demo.renderer.core.measureTextWidth(textToggle);
-
 
 		textContinuous.position.x = textSingle.position.x + textSingle.width + textSpacing.width;
 		textRepeatInterval.position.x = textContinuous.position.x + textContinuous.width + textSpacing.width;
-		textToggle.position.x = 1.0 - textToggle.width;
 	}
-
-	// ------------------------------------------------------------------
-	//
-	// When the command set changes, this function is called to update
-	// the text to show the new keyboard commands.
-	//
-	// ------------------------------------------------------------------
-	that.notifyCommandToggle = function(isLeft) {
-		if (isLeft) {
-			textSingle.text = 'Single (Q/A)';
-			textContinuous.text = 'Continuous (W/S)';
-			textRepeatInterval.text = 'Repeat Interval (E/D)';
-		} else {
-			textSingle.text = 'Single (U/J)';
-			textContinuous.text = 'Continuous (I/K)';
-			textRepeatInterval.text = 'Repeat Interval (O/L)';
-		}
-
-		//
-		// Call the resize event to get the positions re-computed.
-		notifyResize(false);
-	};
 
 	// ------------------------------------------------------------------
 	//
@@ -107,29 +74,35 @@ Demo.model = (function(components) {
 		notifyResize(true);
 	};
 
-	that.moveSingleDown = function() {
+	that.moveSingleDown = function(effect) {
+		effect.play();
 		textSingle.position.y += textSingle.height;	// height world units per keypress
 		textSingle.position.y = Math.min(textSingle.position.y, 1.0 - textSingle.height * 2);
 	};
-	that.moveSingleUp = function() {
+	that.moveSingleUp = function(effect) {
+		effect.play();
 		textSingle.position.y -= textSingle.height;	// height world units per keypress
 		textSingle.position.y = Math.max(textSingle.position.y, textSingle.height * 2);
 	};
 
-	that.moveRepeatDown = function(elapsedTime) {
+	that.moveRepeatDown = function(effect, elapsedTime) {
+		effect.play();
 		textContinuous.position.y += (0.2 / 1000) * elapsedTime; // 0.2 world units per second
 		textContinuous.position.y = Math.min(textContinuous.position.y, 1.0 - textContinuous.height * 2);
 	};
-	that.moveRepeatUp = function(elapsedTime) {
+	that.moveRepeatUp = function(effect, elapsedTime) {
+		effect.play();
 		textContinuous.position.y -= (0.2 / 1000) * elapsedTime; // 0.2 world units per second
 		textContinuous.position.y = Math.max(textContinuous.position.y, textContinuous.height * 2);
 	};
 
-	that.moveRepeatTimedDown = function() {
+	that.moveRepeatTimedDown = function(effect) {
+		effect.play();
 		textRepeatInterval.position.y += textRepeatInterval.height;	// height world units per notification
 		textRepeatInterval.position.y = Math.min(textRepeatInterval.position.y, 1.0 - textRepeatInterval.height * 2);
 	};
-	that.moveRepeatTimedUp = function() {
+	that.moveRepeatTimedUp = function(effect) {
+		effect.play();
 		textRepeatInterval.position.y -= textRepeatInterval.height;	// height world units per notification
 		textRepeatInterval.position.y = Math.max(textRepeatInterval.position.y, textRepeatInterval.height * 2);
 	};
@@ -160,7 +133,6 @@ Demo.model = (function(components) {
 		renderer.Text.render(textSingle);
 		renderer.Text.render(textContinuous);
 		renderer.Text.render(textRepeatInterval);
-		renderer.Text.render(textToggle);
 	};
 
 	return that;
