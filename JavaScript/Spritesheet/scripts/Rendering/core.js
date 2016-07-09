@@ -261,6 +261,20 @@ Demo.renderer.core = (function() {
 		return value / world.size;
 	}
 
+	function saveContext() {
+		context.save();
+	}
+
+	function restoreContext() {
+		context.restore();
+	}
+
+	function rotateCanvas(center, rotation) {
+		context.translate(center.x * world.size + world.left, center.y * world.size + world.top);
+		context.rotate(rotation);
+		context.translate(-(center.x * world.size + world.left), -(center.y * world.size + world.top));
+	}
+
 	//
 	// Expose only the ability to initialize and toggle the full screen
 	return {
@@ -274,6 +288,9 @@ Demo.renderer.core = (function() {
 		drawRectangle: drawRectangle,
 		drawCircle: drawCircle,
 		drawImage: drawImage,
+		saveContext: saveContext,
+		restoreContext: restoreContext,
+		rotateCanvas: rotateCanvas,
 		notifyResize: notifyResize,
 		clientToWorld: clientToWorld,
 		pixelToWorld: pixelToWorld

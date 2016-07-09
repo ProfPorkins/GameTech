@@ -5,9 +5,10 @@
 // This namespace holds the input demo model.
 //
 // ------------------------------------------------------------------
-Demo.model = (function(components, assets) {
+Demo.model = (function(input, components) {
 	'use strict';
-	var birdSprite = null,
+	var bird = null,
+		myKeyboard = input.Keyboard(),
 		that = {};
 
 	// ------------------------------------------------------------------
@@ -20,13 +21,32 @@ Demo.model = (function(components, assets) {
 
 		//
 		// Get our animated bird model and renderer created
-		birdSprite = components.AnimatedSprite({
-			spriteSheet: assets['animated-bird'],
-			spriteSize: { width: 0.1, height: 0.1 },
-			spriteCenter: { x: 0.05, y: 0.05 },
-			spriteCount: 14,
-			spriteTime: [25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25],
+		bird = components.Bird({
+			size: { width: 0.1, height: 0.1 },
+			center: { x: 0.05, y: 0.05 }
 		});
+
+		myKeyboard.registerHandler(function(elapsedTime) {
+				bird.moveForward(elapsedTime);
+			},
+			input.KeyEvent.DOM_VK_W, true);
+		myKeyboard.registerHandler(function(elapsedTime) {
+				bird.rotateRight(elapsedTime);
+			},
+			input.KeyEvent.DOM_VK_D, true);
+		myKeyboard.registerHandler(function(elapsedTime) {
+				bird.rotateLeft(elapsedTime);
+			},
+			input.KeyEvent.DOM_VK_A, true);
+	};
+
+	// ------------------------------------------------------------------
+	//
+	// Process all input for the model here.
+	//
+	// ------------------------------------------------------------------
+	that.processInput = function(elapsedTime) {
+		myKeyboard.update(elapsedTime);
 	};
 
 	// ------------------------------------------------------------------
@@ -35,7 +55,7 @@ Demo.model = (function(components, assets) {
 	//
 	// ------------------------------------------------------------------
 	that.update = function(elapsedTime) {
-		birdSprite.update(elapsedTime);
+		bird.update(elapsedTime);
 	};
 
 	// ------------------------------------------------------------------
@@ -49,9 +69,9 @@ Demo.model = (function(components, assets) {
 		// Draw a border around the unit world.
 		renderer.core.drawRectangle('rgba(255, 255, 255, 1)', 0, 0, 1, 1);
 
-		renderer.AnimatedSprite.render(birdSprite, true);
+		renderer.Bird.render(bird);
 	};
 
 	return that;
 
-}(Demo.components, Demo.assets));
+}(Demo.input, Demo.components, Demo.assets));

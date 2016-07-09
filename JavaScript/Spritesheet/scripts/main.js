@@ -1,6 +1,6 @@
 /* globals Demo */
 
-Demo.main = (function(renderer, components, input, model) {
+Demo.main = (function(renderer, components, model) {
 	'use strict';
 	var lastTimeStamp = performance.now(),
 		frameTimes = [],
@@ -9,8 +9,7 @@ Demo.main = (function(renderer, components, input, model) {
 			font : '16px Arial, sans-serif',
 			fill : 'rgba(255, 255, 255, 1)',
 			position : { x : 1.025, y : 0.00 }
-		}),
-		myKeyboard = input.Keyboard();
+		});
 
 	//------------------------------------------------------------------
 	//
@@ -18,7 +17,7 @@ Demo.main = (function(renderer, components, input, model) {
 	//
 	//------------------------------------------------------------------
 	function processInput(elapsedTime) {
-		myKeyboard.update(elapsedTime);
+		model.processInput(elapsedTime);
 	}
 
 	//------------------------------------------------------------------
@@ -139,4 +138,4 @@ Demo.main = (function(renderer, components, input, model) {
 		initialize: initialize
 	};
 
-}(Demo.renderer, Demo.components, Demo.input, Demo.model));
+}(Demo.renderer, Demo.components, Demo.model));

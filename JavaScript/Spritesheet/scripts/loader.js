@@ -23,7 +23,7 @@ Demo.loader = (function() {
 			message: 'Inputs loaded',
 			onComplete: null
 		}, {
-			scripts: ['Components/Text', 'Components/AnimatedSprite'],
+			scripts: ['Components/Text', 'Components/AnimatedSprite', 'Components/Bird'],
 			message: 'Components loaded',
 			onComplete: null
 		}, {
@@ -35,6 +35,10 @@ Demo.loader = (function() {
 			message: 'Rendering loaded',
 			onComplete: null
 		}, {
+			scripts: ['Rendering/Bird'],
+			message: 'Rendering loaded',
+			onComplete: null
+		},  {
 			scripts: ['model'],
 			message: 'Model loaded',
 			onComplete: null
