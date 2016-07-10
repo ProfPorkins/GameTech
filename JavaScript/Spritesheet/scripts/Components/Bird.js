@@ -7,6 +7,10 @@
 //	{
 //		size: { width: , height: },	// In world coordinates
 //		center: { x: , y: }			// In world coordinates
+//		rotation: 					// In Radians
+//		moveRate: 					// World units per second
+//		rotateRate:					// Radians per second
+//		animationScale:				// (optional) Scaling factor for the frame animation times
 //	}
 //
 //------------------------------------------------------------------
@@ -84,14 +88,12 @@ Demo.components.Bird = function(spec) {
 		spriteSheet: Demo.assets['animated-bird'],
 		spriteCount: 14,
 		spriteTime: [25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25, 25],
+		animationScale: spec.animationScale,
 		spriteSize: spec.size,			// Maintain the size on the sprite
 		spriteCenter: spec.center		// Maintain the center on the sprite
 	});
 
 	spec.orientation = 0;
-	spec.rotation = 0;
-	spec.moveRate = 0.2 / 1000;			// World units per second
-	spec.rotateRate = 3.14159 / 1000;	// Radians per second
 
 	return that;
 };
