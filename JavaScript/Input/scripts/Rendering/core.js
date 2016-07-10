@@ -242,8 +242,6 @@ Demo.renderer.core = (function() {
 		};
 	}
 
-	//
-	// Expose only the ability to initialize and toggle the full screen
 	return {
 		initialize: initialize,
 		clearCanvas: clearCanvas,

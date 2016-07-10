@@ -230,8 +230,6 @@ Demo.renderer.core = (function() {
 			height * world.size);
 	}
 
-	//
-	// Expose only the ability to initialize and toggle the full screen
 	return {
 		initialize: initialize,
 		clearCanvas: clearCanvas,
