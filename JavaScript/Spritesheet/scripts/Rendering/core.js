@@ -238,45 +238,44 @@ Demo.renderer.core = (function() {
 	function drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) {
 		//
 		// Convert from pixel to world coordinates on a few items
-		dx = dx * world.size + world.left;
-		dy = dy * world.size + world.top;
-		dWidth *= world.size;
-		dHeight *= world.size;
-		context.drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight);
+		context.drawImage(
+			image,
+			sx, sy,
+			sWidth, sHeight,
+			dx * world.size + world.left, dy * world.size + world.top,
+			dWidth * world.size, dHeight * world.size);
 	}
 
 	//------------------------------------------------------------------
 	//
-	// This converts from client (pixel) coordinates to the unit world coordinates.
+	// Simple pass-through to save the canvas context.
 	//
 	//------------------------------------------------------------------
-	function clientToWorld(clientX, clientY) {
-		return {
-			x: (clientX - world.left) / world.size,
-			y: (clientY - world.top) / world.size
-		};
-	}
-
-	function pixelToWorld(value) {
-		return value / world.size;
-	}
-
 	function saveContext() {
 		context.save();
 	}
 
+	//------------------------------------------------------------------
+	//
+	// Simple pass-through the restore the canvas context.
+	//
+	//------------------------------------------------------------------
 	function restoreContext() {
 		context.restore();
 	}
 
+	//------------------------------------------------------------------
+	//
+	// Perform a rotation of the canvas so that the next things rendered
+	// will appear as rotated (after the canvas rotation is undone).
+	//
+	//------------------------------------------------------------------
 	function rotateCanvas(center, rotation) {
 		context.translate(center.x * world.size + world.left, center.y * world.size + world.top);
 		context.rotate(rotation);
 		context.translate(-(center.x * world.size + world.left), -(center.y * world.size + world.top));
 	}
 
-	//
-	// Expose only the ability to initialize and toggle the full screen
 	return {
 		initialize: initialize,
 		toggleFullScreen: toggleFullScreen,
@@ -291,9 +290,7 @@ Demo.renderer.core = (function() {
 		saveContext: saveContext,
 		restoreContext: restoreContext,
 		rotateCanvas: rotateCanvas,
-		notifyResize: notifyResize,
-		clientToWorld: clientToWorld,
-		pixelToWorld: pixelToWorld
+		notifyResize: notifyResize
 	};
 
 }());

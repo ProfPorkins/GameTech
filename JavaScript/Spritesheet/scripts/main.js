@@ -75,46 +75,6 @@ Demo.main = (function(renderer, components, model) {
 
 	//------------------------------------------------------------------
 	//
-	// Register the keyboard inputs.
-	//
-	//------------------------------------------------------------------
-	function registerInputs() {
-		// inputLeftIds[input.KeyEvent.DOM_VK_A] = myKeyboard.registerHandler(function() {
-		// 		model.moveSingleDown(Demo.assets['effect-1']);
-		// 	},
-		// 	input.KeyEvent.DOM_VK_A, false
-		// );
-		// inputLeftIds[input.KeyEvent.DOM_VK_Q] = myKeyboard.registerHandler(function() {
-		// 		model.moveSingleUp(Demo.assets['effect-1']);
-		// 	},
-		// 	input.KeyEvent.DOM_VK_Q, false
-		// );
-
-		// inputLeftIds[input.KeyEvent.DOM_VK_S] = myKeyboard.registerHandler(function(elapsedTime) {
-		// 		model.moveRepeatDown(Demo.assets['effect-2'], elapsedTime);
-		// 	},
-		// 	input.KeyEvent.DOM_VK_S, true
-		// );
-		// inputLeftIds[input.KeyEvent.DOM_VK_W] = myKeyboard.registerHandler(function(elapsedTime) {
-		// 		model.moveRepeatUp(Demo.assets['effect-2'], elapsedTime);
-		// 	},
-		// 	input.KeyEvent.DOM_VK_W, true
-		// );
-
-		// inputLeftIds[input.KeyEvent.DOM_VK_D] = myKeyboard.registerHandler(function() {
-		// 		model.moveRepeatTimedDown(Demo.assets['effect-3']);
-		// 	},
-		// 	input.KeyEvent.DOM_VK_D, true, 250
-		// );
-		// inputLeftIds[input.KeyEvent.DOM_VK_E] = myKeyboard.registerHandler(function() {
-		// 		model.moveRepeatTimedUp(Demo.assets['effect-3']);
-		// 	},
-		// 	input.KeyEvent.DOM_VK_E, true, 250
-		// );
-	}
-
-	//------------------------------------------------------------------
-	//
 	// This is the entry point for the demo.  From here the various event
 	// listeners we care about are prepared, along with setting up the
 	// canvas for rendering, finally starting the animation loop.
@@ -127,7 +87,6 @@ Demo.main = (function(renderer, components, model) {
 		textFPS.width = renderer.core.measureTextWidth(textFPS);
 
 		model.initialize();
-		registerInputs();
 
 		//
 		// Get the gameloop started
