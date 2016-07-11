@@ -16,9 +16,13 @@ Demo.model = (function(input, components) {
 	//
 	// ------------------------------------------------------------------
 	that.initialize = function() {
+		components.ParticleSystem.createEffectExplosion({
+			center: { x: 0.5, y: 0.5 },
+			howMany: 300
+		});
 		components.ParticleSystem.createEffectFire({
 			center: { x: 0.5, y: 0.5 },
-			lifetime: 5000
+			lifetime: 2000
 		});
 	};
 

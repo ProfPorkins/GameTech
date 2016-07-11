@@ -49,6 +49,44 @@ Demo.components.ParticleSystem = (function(assets) {
 
 	//------------------------------------------------------------------
 	//
+	// Creates an explostion effect; all particles are emitted at one time.
+	// The spec is defined as:
+	// {
+	//		center: { x: , y: },
+	//		howMany: Number of particles to emit
+	// }
+	//
+	//------------------------------------------------------------------
+	that.createEffectExplosion = function(spec) {
+		var effect = {
+				get center() { return spec.center; },
+				get emitRate() { return 0; }
+			},
+			particle = 0;
+
+		effect.update = function() {
+			for (particle = 0; particle < spec.howMany; particle += 1) {
+				//
+				// Create a new fire particle
+				createParticle({
+					image: assets['fire'],
+					center: { x: spec.center.x, y: spec.center.y },
+					size: Random.nextGaussian(0.015, 0.005),
+					direction: Random.nextCircleVector(),
+					speed: Random.nextGaussian(0.0003, 0.0001),
+					rateRotation: (2 * Math.PI) / 1000,	// Radians per millisecond
+					lifetime: Random.nextGaussian(1500, 250)
+				});
+			}
+
+			return false;	// One time emit!
+		};
+
+		effects.push(effect);
+	};
+
+	//------------------------------------------------------------------
+	//
 	// Creates a fire effect that burns for a specified amount of time.
 	// The spec is defined as:
 	// {
@@ -133,7 +171,7 @@ Demo.components.ParticleSystem = (function(assets) {
 		//
 		// First step, update all the active effects
 		for (effect in effects) {
-			if (effect.hasOwnProperty(effect)) {
+			if (effects.hasOwnProperty(effect)) {
 				if (effects[effect].update(elapsedTime) === true) {
 					keepMe.push(effects[effect]);
 				}
@@ -163,6 +201,11 @@ Demo.components.ParticleSystem = (function(assets) {
 				//
 				// If the lifetime has expired, identify it for removal
 				if (particle.alive > particle.lifetime) {
+					removeMe.push(value);
+				}
+				//
+				// If the particle goes outside the unit world, kill it.
+				if (particle.center.x < 0 || particle.center.x > 1 || particle.center.y < 0 || particle.center.y > 1) {
 					removeMe.push(value);
 				}
 			}

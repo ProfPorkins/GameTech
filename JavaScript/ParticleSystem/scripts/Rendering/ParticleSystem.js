@@ -9,6 +9,11 @@ Demo.renderer.ParticleSystem = (function(core) {
 	'use strict';
 	var that = {};
 
+	// ------------------------------------------------------------------
+	//
+	// Work through all of the known particles and draw them.
+	//
+	// ------------------------------------------------------------------
 	that.render = function(system) {
 		var value = 0,
 			particle = null;
@@ -22,8 +27,6 @@ Demo.renderer.ParticleSystem = (function(core) {
 
 				core.drawImage(
 					particle.image,
-					0, 0,	// Which sprite to pick out
-					particle.image.width, particle.image.height,	// The size of the sprite in the sprite sheet
 					particle.center.x - particle.size / 2,		// Where to draw the sprite
 					particle.center.y - particle.size / 2,
 					particle.size, particle.size);
