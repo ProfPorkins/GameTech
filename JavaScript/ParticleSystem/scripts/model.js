@@ -5,9 +5,10 @@
 // This namespace holds the input demo model.
 //
 // ------------------------------------------------------------------
-Demo.model = (function(input, components) {
+Demo.model = (function(input, components, renderer) {
 	'use strict';
 	var myKeyboard = input.Keyboard(),
+		myMouse = input.Mouse(),
 		that = {};
 
 	// ------------------------------------------------------------------
@@ -24,6 +25,16 @@ Demo.model = (function(input, components) {
 			center: { x: 0.5, y: 0.5 },
 			lifetime: 2000
 		});
+
+		//
+		// Register the mouse click to cause a new effect to be created
+		myMouse.registerHandler(function(event) {
+			components.ParticleSystem.createEffectExplosion({
+				center: renderer.core.clientToWorld(event.clientX, event.clientY),
+				howMany: 300
+				});
+			},
+			myMouse.EventMouseDown, false);
 	};
 
 	// ------------------------------------------------------------------
@@ -33,6 +44,7 @@ Demo.model = (function(input, components) {
 	// ------------------------------------------------------------------
 	that.processInput = function(elapsedTime) {
 		myKeyboard.update(elapsedTime);
+		myMouse.update(elapsedTime);
 	};
 
 	// ------------------------------------------------------------------
@@ -49,7 +61,7 @@ Demo.model = (function(input, components) {
 	// This function renders the demo model.
 	//
 	// ------------------------------------------------------------------
-	that.render = function(renderer) {
+	that.render = function(/* renderer */) {
 
 		//
 		// Draw a border around the unit world.
@@ -59,4 +71,4 @@ Demo.model = (function(input, components) {
 
 	return that;
 
-}(Demo.input, Demo.components));
+}(Demo.input, Demo.components, Demo.renderer));

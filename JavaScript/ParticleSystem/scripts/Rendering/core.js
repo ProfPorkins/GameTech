@@ -302,6 +302,18 @@ Demo.renderer.core = (function() {
 		context.translate(-(center.x * world.size + world.left), -(center.y * world.size + world.top));
 	}
 
+	//------------------------------------------------------------------
+	//
+	// This converts from client (pixel) coordinates to the unit world coordinates.
+	//
+	//------------------------------------------------------------------
+	function clientToWorld(clientX, clientY) {
+		return {
+			x: (clientX - world.left) / world.size,
+			y: (clientY - world.top) / world.size
+		};
+	}
+
 	return {
 		initialize: initialize,
 		toggleFullScreen: toggleFullScreen,
@@ -316,7 +328,8 @@ Demo.renderer.core = (function() {
 		saveContext: saveContext,
 		restoreContext: restoreContext,
 		rotateCanvas: rotateCanvas,
-		notifyResize: notifyResize
+		notifyResize: notifyResize,
+		clientToWorld: clientToWorld
 	};
 
 }());
