@@ -32,6 +32,10 @@ Demo.loader = (function() {
 			message: 'Components loaded',
 			onComplete: null
 		}, {
+			scripts: ['Components/EffectExplosion', 'Components/EffectFire'],
+			message: 'Particle Effects loaded',
+			onComplete: null
+		}, {
 			scripts: ['Rendering/core'],
 			message: 'Rendering core loaded',
 			onComplete: null

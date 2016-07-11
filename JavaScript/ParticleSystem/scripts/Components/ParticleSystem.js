@@ -7,11 +7,12 @@
 // ------------------------------------------------------------------
 Demo.components.ParticleSystem = (function(assets) {
 	'use strict';
-	var effects = [],	// Set of active effects
+	var emitters = [],	// Set of active effects
 		nextName = 1,	// unique identifier for the next particle
 		particles = {},	// Set of all active particles
 		that = {
-			get particles() { return particles; }
+			get particles() { return particles; },
+			get emitters() { return emitters; }
 		};
 
 	//------------------------------------------------------------------
@@ -28,7 +29,7 @@ Demo.components.ParticleSystem = (function(assets) {
 	// }
 	//
 	//------------------------------------------------------------------
-	function createParticle(spec) {
+	that.createParticle = function(spec) {
 		//
 		// Have to add these into the particle.
 		spec.rotation = 0;
@@ -44,114 +45,6 @@ Demo.components.ParticleSystem = (function(assets) {
 		// Assign a unique name to each particle
 		particles[nextName] = spec;
 		nextName += 1;
-	}
-
-	//------------------------------------------------------------------
-	//
-	// Creates an explostion effect; all particles are emitted at one time.
-	// The spec is defined as:
-	// {
-	//		center: { x: , y: },
-	//		howMany: Number of particles to emit
-	// }
-	//
-	//------------------------------------------------------------------
-	that.createEffectExplosion = function(spec) {
-		var effect = {
-				get center() { return spec.center; },
-				get emitRate() { return 0; }
-			},
-			particle = 0;
-
-		effect.update = function() {
-			for (particle = 0; particle < spec.howMany; particle += 1) {
-				//
-				// Create a new fire particle
-				createParticle({
-					image: assets['fire'],
-					center: { x: spec.center.x, y: spec.center.y },
-					size: Random.nextGaussian(0.015, 0.005),
-					direction: Random.nextCircleVector(),
-					speed: Random.nextGaussian(0.0003, 0.0001),
-					rateRotation: (2 * Math.PI) / 1000,	// Radians per millisecond
-					lifetime: Random.nextGaussian(1500, 250)
-				});
-			}
-
-			return false;	// One time emit!
-		};
-
-		effects.push(effect);
-	};
-
-	//------------------------------------------------------------------
-	//
-	// Creates a fire effect that burns for a specified amount of time.
-	// The spec is defined as:
-	// {
-	//		center: { x: , y: },
-	//		lifetime: how long the effect should last (in milliseconds)
-	// }
-	//
-	//------------------------------------------------------------------
-	that.createEffectFire = function(spec) {
-		var effect = {
-				get center() { return spec.center; },
-				get emitRate() { return spec.emitRate; }
-			},
-			createFireDelta = 10,	// Time between creating particles (in milliseconds)
-			lastFireElapsed = createFireDelta,	// How long since the last particle was created
-			createSmokeDelta = 20,
-			lastSmokeElapsed = createSmokeDelta,
-			lived = 0;	// How long the effect has been alive
-
-		effect.update = function(elapsedTime) {
-			lived += elapsedTime;
-			lastFireElapsed += elapsedTime;
-			lastSmokeElapsed += elapsedTime;
-
-			while (lastFireElapsed >= createFireDelta) {
-				//
-				// Create a new fire particle
-				createParticle({
-					image: assets['fire'],
-					center: { x: spec.center.x, y: spec.center.y },
-					size: Random.nextGaussian(0.015, 0.005),
-					direction: Random.nextCircleVector(),
-					speed: Random.nextGaussian(0.0001, 0.00005),
-					rateRotation: (2 * Math.PI) / 1000,	// Radians per millisecond
-					lifetime: Random.nextGaussian(4000, 1000)
-				});
-				//
-				// Subtract out the create particle delta so we still have any extra elapsed
-				// time accounted for.
-				lastFireElapsed -= createFireDelta;
-			}
-
-			while (lastSmokeElapsed >= createSmokeDelta) {
-				//
-				// Create a new fire particle
-				createParticle({
-					image: assets['smoke'],
-					center: { x: spec.center.x, y: spec.center.y },
-					size: Random.nextGaussian(0.02, 0.005),
-					direction: Random.nextCircleVector(),
-					speed: Random.nextGaussian(0.0001, 0.00005),
-					rateRotation: (2 * Math.PI) / 1000,	// Radians per millisecond
-					lifetime: Random.nextGaussian(4000, 1000)
-				});
-				//
-				// Subtract out the create particle delta so we still have any extra elapsed
-				// time accounted for.
-				lastSmokeElapsed -= createSmokeDelta;
-			}
-
-			//
-			// Return true if the effect is still emmitting particles, false otherwise
-			return lived < spec.lifetime;
-		};
-
-		effects.push(effect);
 	};
 
 	//------------------------------------------------------------------
@@ -169,17 +62,17 @@ Demo.components.ParticleSystem = (function(assets) {
 
 		//
 		// First step, update all the active effects
-		for (effect in effects) {
-			if (effects.hasOwnProperty(effect)) {
-				if (effects[effect].update(elapsedTime) === true) {
-					keepMe.push(effects[effect]);
+		for (effect in emitters) {
+			if (emitters.hasOwnProperty(effect)) {
+				if (emitters[effect].update(elapsedTime) === true) {
+					keepMe.push(emitters[effect]);
 				}
 			}
 		}
 
 		//
 		// Re-assign the active effects array
-		effects = keepMe;
+		emitters = keepMe;
 
 		for (value in particles) {
 			if (particles.hasOwnProperty(value)) {

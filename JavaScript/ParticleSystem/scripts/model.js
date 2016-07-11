@@ -32,8 +32,8 @@ Demo.model = (function(input, components, renderer) {
 			components.ParticleSystem.createEffectExplosion({
 				center: renderer.core.clientToWorld(event.clientX, event.clientY),
 				howMany: 300
-				});
-			},
+			});
+		},
 			myMouse.EventMouseDown, false);
 	};
 
