@@ -16,27 +16,26 @@ Demo.components.ParticleSystem = (function(assets) {
 
 	//------------------------------------------------------------------
 	//
-	// This creates one new particle
+	// This creates one new particle.  The spec is defined as:
+	// {
+	//		image: ,				// Image to use for the particle
+	//		center: { x: , y: },	// In world coordinates
+	//		size: ,					// In world coordinates
+	//		direction: { x: , y: },	// 2D vector
+	//		speed: ,				// World units per millisecond
+	//		rateRotation: ,			// Radians per millisecond
+	//		lifetime: 				// Milliseonds
+	// }
 	//
 	//------------------------------------------------------------------
 	function createParticle(spec) {
-		// var p = {
-		// 	image: spec.image,
-		// 	size: Random.nextGaussian(10, 4),
-		// 	center: {x: spec.center.x, y: spec.center.y},
-		// 	direction: Random.nextCircleVector(),
-		// 	speed: Random.nextGaussian(spec.speed.mean, spec.speed.stdev), // pixels per second
-		// 	rotation: 0,
-		// 	lifetime: Random.nextGaussian(spec.lifetime.mean, spec.lifetime.stdev),	// How long the particle should live, in seconds
-		// 	alive: 0	// How long the particle has been alive, in seconds
-		// };
 		//
 		// Have to add these into the particle.
 		spec.rotation = 0;
-		spec.alive = 0;
+		spec.alive = 0;		// How long the particle has been alive
 
 		//
-		// Ensure we have a valid size - gaussian numbers can be negative
+		// Ensure we have a valid size
 		spec.size = Math.max(0, spec.size);
 		//
 		// Same thing with lifetime
@@ -157,7 +156,7 @@ Demo.components.ParticleSystem = (function(assets) {
 
 	//------------------------------------------------------------------
 	//
-	// Update the state of all particles.  This includes remove any that
+	// Update the state of all particles.  This includes removing any that
 	// have exceeded their lifetime.
 	//
 	//------------------------------------------------------------------
