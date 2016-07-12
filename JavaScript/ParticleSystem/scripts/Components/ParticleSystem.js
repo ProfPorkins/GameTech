@@ -1,11 +1,11 @@
-/* global Demo, Random */
+/* global Demo  */
 
 // ------------------------------------------------------------------
 //
 // This namespace holds the particle system component.
 //
 // ------------------------------------------------------------------
-Demo.components.ParticleSystem = (function(assets) {
+Demo.components.ParticleSystem = (function() {
 	'use strict';
 	var emitters = [],	// Set of active effects
 		nextName = 1,	// unique identifier for the next particle
@@ -112,4 +112,4 @@ Demo.components.ParticleSystem = (function(assets) {
 	};
 
 	return that;
-}(Demo.assets));
+}());

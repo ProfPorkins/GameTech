@@ -29,8 +29,10 @@ Demo.model = (function(input, components, renderer) {
 		//
 		// Register the mouse click to cause a new effect to be created
 		myMouse.registerHandler(function(event) {
+			var point = renderer.core.clientToWorld(event.clientX, event.clientY);
+
 			components.ParticleSystem.createEffectExplosion({
-				center: renderer.core.clientToWorld(event.clientX, event.clientY),
+				center: point,
 				howMany: 300
 			});
 		},
