@@ -90,12 +90,11 @@ Demo.renderer.core = (function() {
 
 	//------------------------------------------------------------------
 	//
-	// Clear the whole canvas to black
+	// Clear the whole canvas
 	//
 	//------------------------------------------------------------------
 	function clearCanvas() {
-		context.fillStyle = '#000000';
-		context.fillRect(0, 0, canvas.width, canvas.height);
+		context.clearRect(0, 0, canvas.width, canvas.height);
 	}
 
 	//------------------------------------------------------------------
