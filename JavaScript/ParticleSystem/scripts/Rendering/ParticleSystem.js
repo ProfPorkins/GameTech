@@ -18,21 +18,19 @@ Demo.renderer.ParticleSystem = (function(core) {
 		var value = 0,
 			particle = null;
 
-		for (value in system.particles) {
-			if (system.particles.hasOwnProperty(value)) {
-				particle = system.particles[value];
+		for (value = 0; value < system.particleCount; value += 1) {
+			particle = system.particles[value];
 
-				core.saveContext();
-				core.rotateCanvas(particle.center, particle.rotation);
+			core.saveContext();
+			core.rotateCanvas(particle.center, particle.rotation);
 
-				core.drawImage(
-					particle.image,
-					particle.center.x - particle.size / 2,		// Where to draw the sprite
-					particle.center.y - particle.size / 2,
-					particle.size, particle.size);
+			core.drawImage(
+				particle.image,
+				particle.center.x - particle.size / 2,		// Where to draw the sprite
+				particle.center.y - particle.size / 2,
+				particle.size, particle.size);
 
-				core.restoreContext();
-			}
+			core.restoreContext();
 		}
 	};
 

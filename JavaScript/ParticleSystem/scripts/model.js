@@ -23,7 +23,7 @@ Demo.model = (function(input, components, renderer) {
 		});
 		components.ParticleSystem.createEffectFire({
 			center: { x: 0.5, y: 0.5 },
-			lifetime: 2000
+			lifetime: 6000
 		});
 
 		//

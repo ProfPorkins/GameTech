@@ -8,12 +8,43 @@
 Demo.components.ParticleSystem = (function() {
 	'use strict';
 	var emitters = [],	// Set of active effects
-		nextName = 1,	// unique identifier for the next particle
-		particles = {},	// Set of all active particles
+		MAX_PARTICLES = 5000,
+		particlesStorage1 = preAllocateParticleArray(MAX_PARTICLES),
+		particlesStorage2 = preAllocateParticleArray(MAX_PARTICLES),
+		particlesCurrent = particlesStorage1,
+		particleCount = 0,
 		that = {
-			get particles() { return particles; },
+			get particles() { return particlesCurrent; },
+			get particleCount() { return particleCount; },
 			get emitters() { return emitters; }
 		};
+
+	//------------------------------------------------------------------
+	//
+	// Pre-allocate the particle buffer arrays.  We want to reuse memory and no
+	// be allocating lot's of stuff all the time.
+	//
+	//------------------------------------------------------------------
+	function preAllocateParticleArray(howMany) {
+		var particles = new Array(howMany),
+			particle = 0;
+
+		for (particle = 0; particle < howMany; particle += 1) {
+			particles[particle] = {
+				image: null,
+				size: 0,
+				center: { x: 0, y: 0 },
+				direction: { x: 0, y: 0 },
+				speed: 0,
+				rateRotation: 0,
+				rotation: 0,
+				lifetime: 0,
+				alive: 0
+			};
+		}
+
+		return particles;
+	}
 
 	//------------------------------------------------------------------
 	//
@@ -30,21 +61,22 @@ Demo.components.ParticleSystem = (function() {
 	//
 	//------------------------------------------------------------------
 	that.createParticle = function(spec) {
-		//
-		// Have to add these into the particle.
-		spec.rotation = 0;
-		spec.alive = 0;		// How long the particle has been alive
+		if (particleCount < MAX_PARTICLES) {
+			var p = particlesCurrent[particleCount];
+			particleCount += 1;
 
-		//
-		// Ensure we have a valid size
-		spec.size = Math.max(0, spec.size);
-		//
-		// Same thing with lifetime
-		spec.lifetime = Math.max(0.01, spec.lifetime);
-		//
-		// Assign a unique name to each particle
-		particles[nextName] = spec;
-		nextName += 1;
+			p.image = spec.image;
+			p.size = Math.max(0, spec.size);	// Ensure a valid size
+			p.center.x = spec.center.x;
+			p.center.y = spec.center.y;
+			p.direction.x = spec.direction.x;
+			p.direction.y = spec.direction.y;
+			p.speed = spec.speed;
+			p.rateRotation = spec.rateRotation;
+			p.rotation = 0;
+			p.lifetime = Math.max(0.01, spec.lifetime);	// Ensure a valid lifetime
+			p.alive = 0;
+		}
 	};
 
 	//------------------------------------------------------------------
@@ -54,10 +86,12 @@ Demo.components.ParticleSystem = (function() {
 	//
 	//------------------------------------------------------------------
 	that.update = function(elapsedTime) {
-		var removeMe = [],
-			keepMe = [],
+		var keepEmitters = [],
+			keepMe = (particlesCurrent === particlesStorage1) ? particlesStorage2 : particlesStorage1,
+			keepMePosition = 0,
 			value = 0,
 			particle = null,
+			temp = null,
 			effect = 0;
 
 		//
@@ -65,50 +99,49 @@ Demo.components.ParticleSystem = (function() {
 		for (effect in emitters) {
 			if (emitters.hasOwnProperty(effect)) {
 				if (emitters[effect].update(elapsedTime) === true) {
-					keepMe.push(emitters[effect]);
+					keepEmitters.push(emitters[effect]);
 				}
 			}
 		}
 
 		//
 		// Re-assign the active effects array
-		emitters = keepMe;
+		emitters = keepEmitters;
 
-		for (value in particles) {
-			if (particles.hasOwnProperty(value)) {
-				particle = particles[value];
-				//
-				// Update how long it has been alive
-				particle.alive += elapsedTime;
+		for (value = 0; value < particleCount; value += 1) {
+			particle = particlesCurrent[value];
+			//
+			// Update how long it has been alive
+			particle.alive += elapsedTime;
 
-				//
-				// Update its position
-				particle.center.x += (elapsedTime * particle.speed * particle.direction.x);
-				particle.center.y += (elapsedTime * particle.speed * particle.direction.y);
+			//
+			// Update its position
+			particle.center.x += (elapsedTime * particle.speed * particle.direction.x);
+			particle.center.y += (elapsedTime * particle.speed * particle.direction.y);
 
-				//
-				// Update rotation
-				particle.rotation += (particle.rateRotation * elapsedTime);
+			//
+			// Update rotation
+			particle.rotation += (particle.rateRotation * elapsedTime);
 
+			//
+			// Only keep particles whose lifetime is still active and is inside
+			// of the unit world.
+			if (particle.alive < particle.lifetime) {
 				//
-				// If the lifetime has expired, identify it for removal
-				if (particle.alive > particle.lifetime) {
-					removeMe.push(value);
-				}
-				//
-				// If the particle goes outside the unit world, kill it.
-				if (particle.center.x < 0 || particle.center.x > 1 || particle.center.y < 0 || particle.center.y > 1) {
-					removeMe.push(value);
+				// If the particle is inside the unit world, keep it.
+				if (particle.center.x >= 0 && particle.center.x <= 1 && particle.center.y >= 0 && particle.center.y <= 1) {
+					temp = keepMe[keepMePosition];
+					keepMe[keepMePosition] = particlesCurrent[value];
+					particlesCurrent[value] = temp;
+					keepMePosition += 1;
 				}
 			}
 		}
 
 		//
-		// Remove all of the expired particles
-		for (particle = 0; particle < removeMe.length; particle += 1) {
-			delete particles[removeMe[particle]];
-		}
-		removeMe.length = 0;
+		// Point the particles ref to the correct particle buffer
+		particlesCurrent = keepMe;
+		particleCount = keepMePosition;
 	};
 
 	return that;
