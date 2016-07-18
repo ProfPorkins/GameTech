@@ -36,5 +36,5 @@ Demo.components.ParticleSystem.createEffectExplosion = function(spec) {
 		return false;	// One time emit!
 	};
 
-	Demo.components.ParticleSystem.emitters.push(effect);
+	Demo.components.ParticleSystem.addEffect(effect);
 };

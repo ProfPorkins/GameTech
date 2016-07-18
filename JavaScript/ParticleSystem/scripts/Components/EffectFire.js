@@ -68,5 +68,5 @@ Demo.components.ParticleSystem.createEffectFire = function(spec) {
 		return lived < spec.lifetime;
 	};
 
-	Demo.components.ParticleSystem.emitters.push(effect);
+	Demo.components.ParticleSystem.addEffect(effect);
 };

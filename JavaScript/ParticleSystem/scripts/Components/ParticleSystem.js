@@ -7,7 +7,8 @@
 // ------------------------------------------------------------------
 Demo.components.ParticleSystem = (function() {
 	'use strict';
-	var emitters = [],	// Set of active effects
+	var emitters = {},	// Set of active effects
+		nextEmitterId = 0,	// Provides unique names for emitters
 		MAX_PARTICLES = 5000,
 		particlesStorage1 = preAllocateParticleArray(MAX_PARTICLES),
 		particlesStorage2 = preAllocateParticleArray(MAX_PARTICLES),
@@ -15,8 +16,7 @@ Demo.components.ParticleSystem = (function() {
 		particleCount = 0,
 		that = {
 			get particles() { return particlesCurrent; },
-			get particleCount() { return particleCount; },
-			get emitters() { return emitters; }
+			get particleCount() { return particleCount; }
 		};
 
 	//------------------------------------------------------------------
@@ -79,6 +79,13 @@ Demo.components.ParticleSystem = (function() {
 		}
 	};
 
+	that.addEffect = function(effect) {
+		emitters[nextEmitterId] = effect;
+		nextEmitterId += 1;
+
+		return nextEmitterId - 1;
+	};
+
 	//------------------------------------------------------------------
 	//
 	// Update the state of all particles.  This includes removing any that
@@ -86,8 +93,7 @@ Demo.components.ParticleSystem = (function() {
 	//
 	//------------------------------------------------------------------
 	that.update = function(elapsedTime) {
-		var keepEmitters = [],
-			keepMe = (particlesCurrent === particlesStorage1) ? particlesStorage2 : particlesStorage1,
+		var keepMe = (particlesCurrent === particlesStorage1) ? particlesStorage2 : particlesStorage1,
 			keepMePosition = 0,
 			value = 0,
 			particle = null,
@@ -98,15 +104,11 @@ Demo.components.ParticleSystem = (function() {
 		// First step, update all the active effects
 		for (effect in emitters) {
 			if (emitters.hasOwnProperty(effect)) {
-				if (emitters[effect].update(elapsedTime) === true) {
-					keepEmitters.push(emitters[effect]);
+				if (emitters[effect].update(elapsedTime) === false) {
+					delete emitters[effect];
 				}
 			}
 		}
-
-		//
-		// Re-assign the active emitters array
-		emitters = keepEmitters;
 
 		for (value = 0; value < particleCount; value += 1) {
 			particle = particlesCurrent[value];
