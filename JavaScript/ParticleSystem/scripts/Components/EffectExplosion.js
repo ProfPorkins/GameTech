@@ -1,5 +1,15 @@
 /* global Demo, Random */
 
+//------------------------------------------------------------------
+//
+// Creates an explostion effect that emits all particles at creation time.
+// The spec is defined as:
+// {
+//		center: { x: , y: },
+//		howMany: // How many particles to emit
+// }
+//
+//------------------------------------------------------------------
 Demo.components.ParticleSystem.createEffectExplosion = function(spec) {
 	'use strict';
 	var effect = {
