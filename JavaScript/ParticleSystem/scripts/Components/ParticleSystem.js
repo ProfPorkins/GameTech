@@ -82,7 +82,7 @@ Demo.components.ParticleSystem = (function() {
 	//------------------------------------------------------------------
 	//
 	// Update the state of all particles.  This includes removing any that
-	// have exceeded their lifetime.
+	// have exceeded their lifetime or have move outside of the unit world.
 	//
 	//------------------------------------------------------------------
 	that.update = function(elapsedTime) {
@@ -105,7 +105,7 @@ Demo.components.ParticleSystem = (function() {
 		}
 
 		//
-		// Re-assign the active effects array
+		// Re-assign the active emitters array
 		emitters = keepEmitters;
 
 		for (value = 0; value < particleCount; value += 1) {

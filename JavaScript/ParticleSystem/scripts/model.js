@@ -63,7 +63,7 @@ Demo.model = (function(input, components, renderer) {
 	// This function renders the demo model.
 	//
 	// ------------------------------------------------------------------
-	that.render = function(/* renderer */) {
+	that.render = function() {
 
 		//
 		// Draw a border around the unit world.
