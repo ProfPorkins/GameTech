@@ -7,7 +7,7 @@
 // ------------------------------------------------------------------
 Demo.components.ParticleSystem = (function() {
 	'use strict';
-	var emitters = {},	// Set of active effects
+	var effects = {},	// Set of active effects
 		nextEmitterId = 0,	// Provides unique names for emitters
 		MAX_PARTICLES = 5000,
 		particlesStorage1 = preAllocateParticleArray(MAX_PARTICLES),
@@ -82,15 +82,15 @@ Demo.components.ParticleSystem = (function() {
 	//------------------------------------------------------------------
 	//
 	// Allow an effect to be added to the current set of effects.  'effect'
-	// must expose an 'update' function:
+	// must expose an 'update' function according to:
 	//
 	//	effect.update = function(elapsedTime) { return true/false; }
 	//
-	// The function returns true if it should continue, false if it should be removed.
+	// The function returns true if it should continue, false if it should be terminated.
 	//
 	//------------------------------------------------------------------
 	that.addEffect = function(effect) {
-		emitters[nextEmitterId] = effect;
+		effects[nextEmitterId] = effect;
 		nextEmitterId += 1;
 
 		return nextEmitterId - 1;
@@ -102,8 +102,8 @@ Demo.components.ParticleSystem = (function() {
 	//
 	//------------------------------------------------------------------
 	that.terminateEffect = function(effectId) {
-		if (emitters.hasOwnProperty(effectId)) {
-			delete emitters[effectId];
+		if (effects.hasOwnProperty(effectId)) {
+			delete effects[effectId];
 		}
 	};
 
@@ -123,14 +123,16 @@ Demo.components.ParticleSystem = (function() {
 
 		//
 		// First step, update all the active effects
-		for (effect in emitters) {
-			if (emitters.hasOwnProperty(effect)) {
-				if (emitters[effect].update(elapsedTime) === false) {
-					delete emitters[effect];
+		for (effect in effects) {
+			if (effects.hasOwnProperty(effect)) {
+				if (effects[effect].update(elapsedTime) === false) {
+					delete effects[effect];
 				}
 			}
 		}
 
+		//
+		// Next step, update all the particles
 		for (value = 0; value < particleCount; value += 1) {
 			particle = particlesCurrent[value];
 			//
@@ -150,8 +152,6 @@ Demo.components.ParticleSystem = (function() {
 			// Only keep particles whose lifetime is still active and is inside
 			// of the unit world.
 			if (particle.alive < particle.lifetime) {
-				//
-				// If the particle is inside the unit world, keep it.
 				if (particle.center.x >= 0 && particle.center.x <= 1 && particle.center.y >= 0 && particle.center.y <= 1) {
 					temp = keepMe[keepMePosition];
 					keepMe[keepMePosition] = particlesCurrent[value];
@@ -162,7 +162,7 @@ Demo.components.ParticleSystem = (function() {
 		}
 
 		//
-		// Point the particles ref to the correct particle buffer
+		// Point the particles reference to the correct particle buffer
 		particlesCurrent = keepMe;
 		particleCount = keepMePosition;
 	};
