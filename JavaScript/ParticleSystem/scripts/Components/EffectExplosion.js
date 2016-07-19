@@ -12,9 +12,7 @@
 //------------------------------------------------------------------
 Demo.components.ParticleSystem.createEffectExplosion = function(spec) {
 	'use strict';
-	var effect = {
-			get center() { return spec.center; }
-		},
+	var effect = { },
 		particle = 0;
 
 	effect.update = function() {

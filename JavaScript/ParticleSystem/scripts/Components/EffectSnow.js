@@ -7,9 +7,7 @@
 //------------------------------------------------------------------
 Demo.components.ParticleSystem.createEffectSnow = function() {
 	'use strict';
-	var effect = {
-			get center() { return { x: 0, y: 0 }; }
-		},
+	var effect = {},
 		createSnowDelta = 5,	// Time between creating particles (in milliseconds)
 		lastSnowElapsed = createSnowDelta;	// How long since the last particle was created
 
