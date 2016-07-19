@@ -13,8 +13,7 @@
 Demo.components.ParticleSystem.createEffectFire = function(spec) {
 	'use strict';
 	var effect = {
-			get center() { return spec.center; },
-			get emitRate() { return spec.emitRate; }
+			get center() { return spec.center; }
 		},
 		createFireDelta = 10,	// Time between creating particles (in milliseconds)
 		lastFireElapsed = createFireDelta,	// How long since the last particle was created
@@ -68,5 +67,5 @@ Demo.components.ParticleSystem.createEffectFire = function(spec) {
 		return lived < spec.lifetime;
 	};
 
-	Demo.components.ParticleSystem.addEffect(effect);
+	return Demo.components.ParticleSystem.addEffect(effect);
 };

@@ -13,8 +13,7 @@
 Demo.components.ParticleSystem.createEffectExplosion = function(spec) {
 	'use strict';
 	var effect = {
-			get center() { return spec.center; },
-			get emitRate() { return 0; }
+			get center() { return spec.center; }
 		},
 		particle = 0;
 
@@ -36,5 +35,5 @@ Demo.components.ParticleSystem.createEffectExplosion = function(spec) {
 		return false;	// One time emit!
 	};
 
-	Demo.components.ParticleSystem.addEffect(effect);
+	return Demo.components.ParticleSystem.addEffect(effect);
 };

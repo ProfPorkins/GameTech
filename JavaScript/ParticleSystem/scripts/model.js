@@ -9,6 +9,8 @@ Demo.model = (function(input, components, renderer) {
 	'use strict';
 	var myKeyboard = input.Keyboard(),
 		myMouse = input.Mouse(),
+		snowActive = false,
+		snowEffectId = 0,
 		that = {};
 
 	// ------------------------------------------------------------------
@@ -37,6 +39,19 @@ Demo.model = (function(input, components, renderer) {
 			});
 		},
 			myMouse.EventMouseDown, false);
+
+		//
+		// Register the s key to toggle the snow effect
+		myKeyboard.registerHandler(function() {
+			snowActive = !snowActive;
+			if (snowActive) {
+				snowEffectId = components.ParticleSystem.createEffectSnow();
+			} else {
+				components.ParticleSystem.terminateEffect(snowEffectId);
+			}
+		},
+			input.KeyEvent.DOM_VK_S, false
+		);
 	};
 
 	// ------------------------------------------------------------------

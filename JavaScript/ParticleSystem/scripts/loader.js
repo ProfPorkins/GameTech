@@ -32,7 +32,7 @@ Demo.loader = (function() {
 			message: 'Components loaded',
 			onComplete: null
 		}, {
-			scripts: ['Components/EffectExplosion', 'Components/EffectFire'],
+			scripts: ['Components/EffectExplosion', 'Components/EffectFire', 'Components/EffectSnow'],
 			message: 'Particle Effects loaded',
 			onComplete: null
 		}, {
@@ -58,6 +58,9 @@ Demo.loader = (function() {
 		}, {
 			key: 'fire',
 			source: '/assets/graphics/fire.png'
+		}, {
+			key: 'snowflake',
+			source: '/assets/graphics/snowflake.png'
 		}];
 
 	//------------------------------------------------------------------

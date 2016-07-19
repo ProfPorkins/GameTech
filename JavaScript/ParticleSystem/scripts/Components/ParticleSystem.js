@@ -79,11 +79,32 @@ Demo.components.ParticleSystem = (function() {
 		}
 	};
 
+	//------------------------------------------------------------------
+	//
+	// Allow an effect to be added to the current set of effects.  'effect'
+	// must expose an 'update' function:
+	//
+	//	effect.update = function(elapsedTime) { return true/false; }
+	//
+	// The function returns true if it should continue, false if it should be removed.
+	//
+	//------------------------------------------------------------------
 	that.addEffect = function(effect) {
 		emitters[nextEmitterId] = effect;
 		nextEmitterId += 1;
 
 		return nextEmitterId - 1;
+	};
+
+	//------------------------------------------------------------------
+	//
+	// Allows an active effect to be removed.
+	//
+	//------------------------------------------------------------------
+	that.terminateEffect = function(effectId) {
+		if (emitters.hasOwnProperty(effectId)) {
+			delete emitters[effectId];
+		}
 	};
 
 	//------------------------------------------------------------------
