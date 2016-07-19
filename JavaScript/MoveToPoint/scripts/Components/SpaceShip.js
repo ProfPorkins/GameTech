@@ -1,0 +1,166 @@
+/* global Demo */
+
+//------------------------------------------------------------------
+//
+// Defines a SpaceShip component.  A Spaceship contains a sprite.
+// The sprite is defined as:
+//	{
+//		size: { width: , height: },	// In world coordinates
+//		center: { x: , y: }			// In world coordinates
+//		rotation: 					// In Radians
+//		moveRate: 					// World units per second
+//		rotateRate:					// Radians per second
+//	}
+//
+//------------------------------------------------------------------
+Demo.components.SpaceShip = function(spec) {
+	'use strict';
+	var sprite = null,
+		that = {
+			get center() { return sprite.center; },
+			get sprite() { return sprite; },
+			get rotation() { return spec.rotation; }
+		};
+
+	//------------------------------------------------------------------
+	//
+	// Returns the magnitude of the 2D cross product.  The sign of the
+	// magnitude tells you which direction to rotate to close the angle
+	// between the two vectors.
+	//
+	//------------------------------------------------------------------
+	function crossProduct2d(v1, v2) {
+		return (v1.x * v2.y) - (v1.y * v2.x);
+	}
+
+	//------------------------------------------------------------------
+	//
+	// Computes the angle, and direction (cross product) between two vectors.
+	//
+	//------------------------------------------------------------------
+	function computeAngle(rotation, ptCenter, ptTarget) {
+		var v1 = {
+				x : Math.cos(rotation),
+				y : Math.sin(rotation)
+			},
+			v2 = {
+				x : ptTarget.x - ptCenter.x,
+				y : ptTarget.y - ptCenter.y
+			},
+			dp,
+			angle,
+			cp;
+
+		v2.len = Math.sqrt(v2.x * v2.x + v2.y * v2.y);
+		v2.x /= v2.len;
+		v2.y /= v2.len;
+
+		dp = v1.x * v2.x + v1.y * v2.y;
+		angle = Math.acos(dp);
+
+		//
+		// Get the cross product of the two vectors so we can know
+		// which direction to rotate.
+		cp = crossProduct2d(v1, v2);
+
+		return {
+			angle : angle,
+			crossProduct : cp
+		};
+	}
+
+	//------------------------------------------------------------------
+	//
+	// Simple helper function to help testing a value with some level of tolerance.
+	//
+	//------------------------------------------------------------------
+	function testTolerance(value, test, tolerance) {
+		if (Math.abs(value - test) < tolerance) {
+			return true;
+		}
+
+		return false;
+	}
+
+	//------------------------------------------------------------------
+	//
+	// The only update to do is to tell the underlying sprite to update.
+	//
+	//------------------------------------------------------------------
+	that.update = function(elapsedTime) {
+		//
+		// Check to see if the spaceship is pointing at the target or not
+		var result = computeAngle(spec.rotation, spec.center, spec.target);
+		if (testTolerance(result.angle, 0, 0.01) === false) {
+			if (result.crossProduct > 0) {
+				spec.rotation += (spec.rotateRate * elapsedTime);
+			} else {
+				spec.rotation -= (spec.rotateRate * elapsedTime);
+			}
+		}
+
+		//
+		// See if we need to move
+		var distance = Math.sqrt(Math.pow(spec.center.x - spec.target.x, 2) + Math.pow(spec.center.y - spec.target.y, 2));
+		if (testTolerance(distance, 0, 0.005) === false) {
+			that.moveForward(elapsedTime);
+		}
+
+		sprite.update(elapsedTime);
+	};
+
+	//------------------------------------------------------------------
+	//
+	// Move in the direction the sprite is facing
+	//
+	//------------------------------------------------------------------
+	that.moveForward = function(elapsedTime) {
+		//
+		// Create a normalized direction vector
+		var vectorX = Math.cos(spec.rotation + spec.orientation),
+			vectorY = Math.sin(spec.rotation + spec.orientation);
+		//
+		// With the normalized direction vector, move the center of the sprite
+		sprite.center.x += (vectorX * spec.moveRate * elapsedTime);
+		sprite.center.y += (vectorY * spec.moveRate * elapsedTime);
+
+		//
+		// Don't allow the spaceship to get outside of the unit world.
+		if (sprite.center.x > (1.0 - spec.size.width / 2)) {
+			sprite.center.x = 1.0 - spec.size.width / 2;
+		}
+		if (sprite.center.x < spec.size.width / 2) {
+			sprite.center.x = spec.size.width / 2;
+		}
+		if (sprite.center.y > (1.0 - spec.size.height / 2)) {
+			sprite.center.y = 1.0 - spec.size.height / 2;
+		}
+		if (sprite.center.y < spec.size.height / 2) {
+			sprite.center.y = spec.size.height / 2;
+		}
+	};
+
+	//------------------------------------------------------------------
+	//
+	// Point we want the spaceship to turn towards.
+	//
+	//------------------------------------------------------------------
+	that.setTarget = function(target) {
+		spec.target = {
+			x : target.x,
+			y : target.y
+		};
+	};
+
+	//
+	// Get our animated bird model and renderer created
+	sprite = Demo.components.Sprite({
+		image: Demo.assets['spaceship'],
+		spriteSize: spec.size,			// Maintain the size on the sprite
+		spriteCenter: spec.center		// Maintain the center on the sprite
+	});
+
+	spec.orientation = 0;
+
+	return that;
+};
