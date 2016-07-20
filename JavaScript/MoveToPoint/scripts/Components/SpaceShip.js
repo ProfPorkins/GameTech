@@ -57,6 +57,12 @@ Demo.components.SpaceShip = function(spec) {
 
 		dp = v1.x * v2.x + v1.y * v2.y;
 		angle = Math.acos(dp);
+		//
+		// It is possible to get a NaN result, when that happens, set the angle to
+		// 0 so that any use of it doesn't have to check for NaN.
+		if (isNaN(angle)) {
+			angle = 0;
+		}
 
 		//
 		// Get the cross product of the two vectors so we can know
@@ -89,13 +95,21 @@ Demo.components.SpaceShip = function(spec) {
 	//------------------------------------------------------------------
 	that.update = function(elapsedTime) {
 		//
-		// Check to see if the spaceship is pointing at the target or not
+		// Check to see if the spaceship is pointing at the target or not.
 		var result = computeAngle(spec.rotation, spec.center, spec.target);
 		if (testTolerance(result.angle, 0, 0.01) === false) {
 			if (result.crossProduct > 0) {
-				spec.rotation += (spec.rotateRate * elapsedTime);
+				if (result.angle > (spec.rotateRate * elapsedTime)) {
+					spec.rotation += (spec.rotateRate * elapsedTime);
+				} else {
+					spec.rotation += result.angle;
+				}
 			} else {
-				spec.rotation -= (spec.rotateRate * elapsedTime);
+				if (result.angle > (spec.rotateRate * elapsedTime)) {
+					spec.rotation -= (spec.rotateRate * elapsedTime);
+				} else {
+					spec.rotation -= result.angle;
+				}
 			}
 		}
 
