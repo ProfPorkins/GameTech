@@ -4,7 +4,7 @@ With the server running, connect to: `http://localhost:3000`
 
 This is not a very interesting demo to run, it is the code that is (hopefully) interesting.
 
-Sound effects used include:
+## Content Acknowledgements
 
 * http://soundbible.com/2017-End-Fx.html
   * License: https://creativecommons.org/licenses/sampling+/1.0/

@@ -18,4 +18,6 @@ The demo can be controlled by the following...
 * j - Rotate bird left
 * l - Rotate bird right
 
-Thanks to http://www.xojo3d.com/tut015.php for the sprite sheet content.
+## Content Acknowledgements
+
+* Thanks to http://www.xojo3d.com/tut015.php for the sprite sheet.
