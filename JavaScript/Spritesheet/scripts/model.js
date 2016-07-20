@@ -2,7 +2,7 @@
 
 // ------------------------------------------------------------------
 //
-// This namespace holds the input demo model.
+// This namespace holds the animated sprite demo model.
 //
 // ------------------------------------------------------------------
 Demo.model = (function(input, components) {

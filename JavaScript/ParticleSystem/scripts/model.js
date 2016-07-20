@@ -2,7 +2,7 @@
 
 // ------------------------------------------------------------------
 //
-// This namespace holds the input demo model.
+// This namespace holds the Particle System demo model.
 //
 // ------------------------------------------------------------------
 Demo.model = (function(input, components, renderer) {

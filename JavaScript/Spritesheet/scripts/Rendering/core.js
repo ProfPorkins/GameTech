@@ -231,7 +231,7 @@ Demo.renderer.core = (function() {
 
 	//------------------------------------------------------------------
 	//
-	// Pass-through that allows an image to be drawing.
+	// Pass-through that allows an image to be drawn.
 	//
 	//------------------------------------------------------------------
 	function drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight) {

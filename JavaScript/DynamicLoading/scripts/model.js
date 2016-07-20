@@ -2,7 +2,7 @@
 
 // ------------------------------------------------------------------
 //
-// This namespace holds the input demo model.
+// This namespace holds the dynamic loading demo model.
 //
 // ------------------------------------------------------------------
 Demo.model = (function(components) {

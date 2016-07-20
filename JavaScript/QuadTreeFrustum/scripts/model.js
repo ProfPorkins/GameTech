@@ -1,7 +1,7 @@
 /* global Demo, Random */
 // ------------------------------------------------------------------
 //
-// This namespace holds the quad-tree demo model.
+// This namespace holds the quad-tree frustum demo model.
 //
 // ------------------------------------------------------------------
 Demo.model = (function(components) {
