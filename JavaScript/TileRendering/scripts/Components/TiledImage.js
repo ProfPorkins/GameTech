@@ -19,9 +19,7 @@ Demo.components.TiledImage = function(spec) {
 	'use strict';
 	var viewport = {
 			left: 0,
-			top: 0,
-			width: 1,
-			height: 1
+			top: 0
 		},
 		that = {
 			get viewport() { return viewport; },
@@ -29,15 +27,13 @@ Demo.components.TiledImage = function(spec) {
 			get size() { return spec.size; },
 			get pixel() { return spec.pixel; },
 			get assetKey() { return spec.assetKey; },
-			get tilesX() { return spec.pixel.width / tileSize; },
-			get tilesY() { return spec.pixel.height / tileSize; }
+			get tilesX() { return spec.pixel.width / spec.tileSize; },
+			get tilesY() { return spec.pixel.height / spec.tileSize; }
 		};
 
-	that.setViewport = function(left, top, width, height) {
+	that.setViewport = function(left, top) {
 		viewport.left = left;
 		viewport.top = top;
-		viewport.width = width;
-		viewport.height = height;
 	};
 
 	that.move = function(distance, vector) {
