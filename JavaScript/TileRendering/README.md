@@ -14,9 +14,9 @@ In order to use this sample, an image from the NASA Hubble Space Telescope site 
    * `$url = "https://cdn.spacetelescope.org/archives/images/large/heic0910e.jpg"`
    * `$output = "heic0910e.jpg"`
    * `Import-Module BitsTransfer`
-   * `Start-BitsTransfer - Source $url -Destination $output`
+   * `Start-BitsTransfer -Source $url -Destination $output`
 5. Use ImageMagick to crop the image to the necessary dimensions, converting to a png format while doing so.
-   * `magick convert heic0910e.jpg -crop 4480x2560+0+0 +repage cropped.jpg`
+   * `magick convert heic0910e.jpg -crop 4480x2560+0+0 +repage cropped.png`
 6. Using ImageMagick to generate the image tiles.
    * `magick convert cropped.png -crop 128x128 +repage +adjoin tiles%03d.png`
 
