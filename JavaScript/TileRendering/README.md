@@ -1,6 +1,6 @@
 # Tile Rendering Demo
-
 This sample demonstrates rendering of a background image using a tile-based approach.
+
 ---
 ![Tile Rendering Sample](https://github.com/ProfPorkins/GameTech/blob/master/JavaScript/TileRendering/Tile-Rendering.png "")
 ---
