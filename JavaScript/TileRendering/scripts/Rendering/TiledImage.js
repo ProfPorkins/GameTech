@@ -8,7 +8,6 @@
 Demo.renderer.TiledImage = (function(core) {
 	'use strict';
 	var that = {},
-		previousViewport = { left: -1, top: -1 },
 		RENDER_POS_EPISILON = 0.00001;
 
 	//------------------------------------------------------------------
@@ -27,74 +26,57 @@ Demo.renderer.TiledImage = (function(core) {
 	// ------------------------------------------------------------------
 	//
 	// Renders a TiledImage model.
+	// TODO: This seems far too complex for what needs to be done, will
+	// have to come back to this at some point and simplify the logic.
 	//
 	// ------------------------------------------------------------------
 	that.render = function(image) {
-		// var newViewport = false;
+		var tileSizeWorldCoords = image.size.width * (image.tileSize / image.pixel.width),
+			oneOverTileSizeWorld = 1 / tileSizeWorldCoords,	// Combination of DRY and eliminating a bunch of divisions
+			imageWorldXPos = image.viewport.left,
+			imageWorldYPos = image.viewport.top,
+			worldXRemain = 1.0,
+			worldYRemain = 1.0,
+			renderPosX = 0.0,
+			renderPosY = 0.0,
+			tileLeft,
+			tileTop,
+			tileAssetName,
+			tileRenderXStart,
+			tileRenderYStart,
+			tileRenderXDist,
+			tileRenderYDist,
+			tileRenderWorldWidth,
+			tileRenderWorldHeight;
 
-		// if (previousViewport.left != image.viewport.left || previousViewport.top != image.viewport.top) {
-		// 	newViewport = true;
-		// 	previousViewport.left = image.viewport.left;
-		// 	previousViewport.top = image.viewport.top;
-		// }
-
-		var tileSizeWorldCoords = image.size.width * (image.tileSize / image.pixel.width);
-
-		var imageWorldXPos = image.viewport.left;
-		var imageWorldYPos = image.viewport.top;
-		var worldXRemain = 1.0;
-		var worldYRemain = 1.0;
-		var renderPosX = 0.0;
-		var renderPosY = 0.0;
 		while (worldYRemain > RENDER_POS_EPISILON) {
-			var tileLeft = Math.floor(imageWorldXPos / tileSizeWorldCoords);
-			var tileTop = Math.floor(imageWorldYPos / tileSizeWorldCoords);
-
-			var tileAssetNumber = tileTop * image.tilesX + tileLeft;
-			var tileAssetName = 'background-' + numberPad(tileAssetNumber, 4);
-			if (!Demo.assets[tileAssetName]) {
-				console.log('tileAssetName: ' + tileAssetName);
-				console.log('not found');
-				return;
-			}
+			tileLeft = Math.floor(imageWorldXPos * oneOverTileSizeWorld);
+			tileTop = Math.floor(imageWorldYPos * oneOverTileSizeWorld);
 
 			if (worldXRemain === 1.0) {
-				var tileRenderXStart = imageWorldXPos / tileSizeWorldCoords - tileLeft;
+				tileRenderXStart = imageWorldXPos * oneOverTileSizeWorld - tileLeft;
 			} else {
 				tileRenderXStart = 0.0;
 			}
 			if (worldYRemain === 1.0) {
-				var tileRenderYStart = imageWorldYPos / tileSizeWorldCoords - tileTop;
+				tileRenderYStart = imageWorldYPos * oneOverTileSizeWorld - tileTop;
 			} else {
 				tileRenderYStart = 0.0;
 			}
-			var tileRenderXDist = 1.0 - tileRenderXStart;
-			var tileRenderYDist = 1.0 - tileRenderYStart;
-			var tileRenderWorldWidth = tileRenderXDist / (1 / tileSizeWorldCoords);
-			var tileRenderWorldHeight = tileRenderYDist / (1 / tileSizeWorldCoords);
+			tileRenderXDist = 1.0 - tileRenderXStart;
+			tileRenderYDist = 1.0 - tileRenderYStart;
+			tileRenderWorldWidth = tileRenderXDist / oneOverTileSizeWorld;
+			tileRenderWorldHeight = tileRenderYDist / oneOverTileSizeWorld;
 			if (renderPosX + tileRenderWorldWidth > 1.0) {
 				tileRenderWorldWidth = 1.0 - renderPosX;
-				tileRenderXDist = tileRenderWorldWidth / tileSizeWorldCoords;
+				tileRenderXDist = tileRenderWorldWidth * oneOverTileSizeWorld;
 			}
 			if (renderPosY + tileRenderWorldHeight > 1.0) {
 				tileRenderWorldHeight = 1.0 - renderPosY;
-				tileRenderYDist = tileRenderWorldHeight / tileSizeWorldCoords;
+				tileRenderYDist = tileRenderWorldHeight * oneOverTileSizeWorld;
 			}
 
-			// if (newViewport) {
-			// 	console.log('tileSizeWorldCoords: ' + tileSizeWorldCoords);
-			// 	console.log('worldXLeft: ' + worldXRemain);
-			// 	console.log('worldYLeft: ' + worldYRemain);
-			// 	console.log('left: ' + tileLeft);
-			// 	console.log('top: ' + tileTop);
-
-			// 	console.log('tileRenderStart: ' + tileRenderXStart + ', ' + tileRenderYStart);
-			// 	console.log('tileRenderDist: ' + tileRenderXDist + ', ' + tileRenderYDist);
-			// 	console.log('tileRenderWorldWidth/Height: ' + tileRenderWorldWidth + ', ' + tileRenderWorldHeight);
-			// 	console.log('RenderPos: ' + renderPosX + ', ' + renderPosY);
-			// 	console.log('');
-			// }
-
+			tileAssetName = 'background-' + numberPad(tileTop * image.tilesX + tileLeft, 4);
 			core.drawImage(
 				Demo.assets[tileAssetName],
 				tileRenderXStart * image.tileSize, tileRenderYStart * image.tileSize,
@@ -106,7 +88,8 @@ Demo.renderer.TiledImage = (function(core) {
 			renderPosX += tileRenderWorldWidth;
 
 			//
-			// Subtract off how much of the current tile we used
+			// Subtract off how much of the current tile we used, if there isn't any
+			// X distance to render, then move down to the next row of tiles.
 			worldXRemain -= tileRenderWorldWidth;
 			if (worldXRemain <= RENDER_POS_EPISILON) {
 				imageWorldYPos += tileRenderWorldHeight;
