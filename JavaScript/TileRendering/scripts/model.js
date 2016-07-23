@@ -66,7 +66,7 @@ Demo.model = (function(input, components) {
 		//
 		background = components.TiledImage({
 			pixel: { width: 4480, height: 2560 },
-			size: { width: 4.375 / 2, height: 2.5 / 2 },
+			size: { width: 4.375, height: 2.5 },
 			tileSize: 128,
 			assetKey: 'background'
 		});

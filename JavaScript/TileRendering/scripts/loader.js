@@ -82,8 +82,8 @@ Demo.loader = (function() {
 
 		for (tileY = 0; tileY < numberY; tileY += 1) {
 			for (tileX = 0; tileX < numberX; tileX += 1) {
-				tileFile =  numberPad((tileY * numberX + tileX), 3);
-				tileSource = rootName + tileFile + '.png';
+				tileFile =  numberPad((tileY * numberX + tileX), 4);
+				tileSource = rootName + tileFile + '.jpg';
 				tileKey = rootKey + '-' + tileFile;
 				assetArray.push({
 					key: tileKey,

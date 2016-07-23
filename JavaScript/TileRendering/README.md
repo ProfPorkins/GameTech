@@ -15,10 +15,10 @@ In order to use this sample, an image from the NASA Hubble Space Telescope site 
    * `$output = "heic0910e.jpg"`
    * `Import-Module BitsTransfer`
    * `Start-BitsTransfer -Source $url -Destination $output`
-5. Use ImageMagick to crop the image to the necessary dimensions, converting to a png format while doing so.
-   * `magick convert heic0910e.jpg -crop 4480x2560+0+0 +repage cropped.png`
+5. Use ImageMagick to crop the image to the necessary dimensions.
+   * `magick convert heic0910e.jpg -crop 4480x2560+0+0 +repage cropped.jpg`
 6. Using ImageMagick to generate the image tiles.
-   * `magick convert cropped.png -crop 128x128 +repage +adjoin tiles%03d.png`
+   * `magick convert cropped.jpg -crop 128x128 +repage +adjoin tiles%04d.jpg`
 
 With the image tiles created, the sample can be run.  It must be run as a server: `node server.js`.  With the server running, connect to: `http://localhost:3000`
 

@@ -51,7 +51,7 @@ Demo.renderer.TiledImage = (function(core) {
 			var tileTop = Math.floor(imageWorldYPos / tileSizeWorldCoords);
 
 			var tileAssetNumber = tileTop * image.tilesX + tileLeft;
-			var tileAssetName = 'background-' + numberPad(tileAssetNumber, 3);
+			var tileAssetName = 'background-' + numberPad(tileAssetNumber, 4);
 			if (!Demo.assets[tileAssetName]) {
 				console.log('tileAssetName: ' + tileAssetName);
 				console.log('not found');
