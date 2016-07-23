@@ -12,7 +12,7 @@ Demo.renderer.SpaceShip = (function(core) {
 	// ------------------------------------------------------------------
 	//
 	// Renders a Spaceship model.  Because the model can be rotated, that needs
-	// to be done here, because the underlying animated sprite doesn't know
+	// to be done here, because the underlying sprite doesn't know
 	// anything about rotation.
 	//
 	// ------------------------------------------------------------------

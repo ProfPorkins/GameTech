@@ -3,10 +3,11 @@
 //------------------------------------------------------------------
 //
 // Defines a SpaceShip component.  A Spaceship contains a sprite.
-// The sprite is defined as:
+// The spec is defined as:
 //	{
 //		size: { width: , height: },	// In world coordinates
 //		center: { x: , y: }			// In world coordinates
+//		target: { x: , y: }			// Location to move to
 //		rotation: 					// In Radians
 //		moveRate: 					// World units per second
 //		rotateRate:					// Radians per second
@@ -167,7 +168,7 @@ Demo.components.SpaceShip = function(spec) {
 	};
 
 	//
-	// Get our animated bird model and renderer created
+	// Get our sprite model
 	sprite = Demo.components.Sprite({
 		image: Demo.assets['spaceship'],
 		spriteSize: spec.size,			// Maintain the size on the sprite

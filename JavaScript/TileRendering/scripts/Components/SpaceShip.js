@@ -26,7 +26,7 @@ Demo.components.SpaceShip = function(spec) {
 
 	//------------------------------------------------------------------
 	//
-	// The only update to do is to tell the underlying sprite to update.
+	// The only thing to do is to tell the underlying sprite to update.
 	//
 	//------------------------------------------------------------------
 	that.update = function(elapsedTime) {
@@ -70,7 +70,7 @@ Demo.components.SpaceShip = function(spec) {
 	};
 
 	//
-	// Get our animated bird model and renderer created
+	// Get our sprite model
 	sprite = Demo.components.Sprite({
 		image: Demo.assets['spaceship'],
 		spriteSize: spec.size,			// Maintain the size on the sprite
