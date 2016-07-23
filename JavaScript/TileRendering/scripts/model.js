@@ -9,9 +9,43 @@ Demo.model = (function(input, components) {
 	'use strict';
 	var background = null,
 		spaceShip = null,
-		myMouse = input.Mouse(),
 		myKeyboard = input.Keyboard(),
 		that = {};
+
+	// ------------------------------------------------------------------
+	//
+	// Handles movement of the spaceship over the background.  As the ship
+	// approaches one of the imaginary boundaries of the visible area, the
+	// background is moved around the ship, rather than moving the ship.
+	//
+	// ------------------------------------------------------------------
+	function moveForward(elapsedTime) {
+		var proposedCenter = spaceShip.proposedMove(elapsedTime),
+			shipCenter = {
+				x: proposedCenter.x,
+				y: proposedCenter.y
+			};
+
+		if (proposedCenter.x >= 0.8 || proposedCenter.x <= 0.2) {
+			var vector = {
+				x: Math.cos(spaceShip.rotation + spaceShip.orientation) * spaceShip.moveRate * elapsedTime,
+				y: 0
+			};
+			background.move(vector);
+			shipCenter.x = (proposedCenter.x >= 0.8) ? 0.8 : 0.2;
+		}
+		if (proposedCenter.y >= 0.8 || proposedCenter.y <= 0.2) {
+			var vector = {
+				x: 0,
+				y: Math.sin(spaceShip.rotation + spaceShip.orientation) * spaceShip.moveRate * elapsedTime,
+			};
+			background.move(vector);
+			shipCenter.y = (proposedCenter.y >= 0.8) ? 0.8 : 0.2;
+		}
+
+		spaceShip.center.x = shipCenter.x;
+		spaceShip.center.y = shipCenter.y;
+	}
 
 	// ------------------------------------------------------------------
 	//
@@ -44,43 +78,27 @@ Demo.model = (function(input, components) {
 		spaceShip = components.SpaceShip({
 			size: { width: 0.08, height: 0.08 },
 			center: { x: 0.5, y: 0.5 },
-			target: { x: 0.5, y: 0.5 },
 			rotation: 0,
-			moveRate: 0.2 / 1000,		// World units per second
+			moveRate: 0.4 / 1000,		// World units per second
 			rotateRate: Math.PI / 1000	// Radians per second
 		});
 
-		//
-		// Whenever the mouse is clicked, set this as the target point
-		// for the spaceship.
-		myMouse.registerHandler(function(event) {
-			spaceShip.setTarget(Demo.renderer.core.clientToWorld(event.clientX, event.clientY));
+		myKeyboard.registerHandler(function(elapsedTime) {
+			moveForward(elapsedTime);
 		},
-			myMouse.EventMouseDown
+			input.KeyEvent.DOM_VK_W, true
 		);
 
 		myKeyboard.registerHandler(function(elapsedTime) {
-			background.move(0.01, {x: 0.0, y: -1.0});
+			spaceShip.rotateLeft(elapsedTime);
 		},
-			input.KeyEvent.DOM_VK_I, true
+			input.KeyEvent.DOM_VK_A, true
 		);
 
 		myKeyboard.registerHandler(function(elapsedTime) {
-			background.move(0.01, {x: 0.0, y: 1.0});
+			spaceShip.rotateRight(elapsedTime);
 		},
-			input.KeyEvent.DOM_VK_K, true
-		);
-
-		myKeyboard.registerHandler(function(elapsedTime) {
-			background.move(0.01, {x: -1.0, y: 0.0});
-		},
-			input.KeyEvent.DOM_VK_J, true
-		);
-
-		myKeyboard.registerHandler(function(elapsedTime) {
-			background.move(0.01, {x: 1.0, y: 0.0});
-		},
-			input.KeyEvent.DOM_VK_L, true
+			input.KeyEvent.DOM_VK_D, true
 		);
 	};
 
@@ -90,7 +108,6 @@ Demo.model = (function(input, components) {
 	//
 	// ------------------------------------------------------------------
 	that.processInput = function(elapsedTime) {
-		myMouse.update(elapsedTime);
 		myKeyboard.update(elapsedTime);
 	};
 

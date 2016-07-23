@@ -44,13 +44,12 @@ Demo.components.TiledImage = function(spec) {
 
 	//------------------------------------------------------------------
 	//
-	// Move the viewport by the distance (in world coordinates) along the
-	// direction vector.
+	// Move the viewport by the distance vector.
 	//
 	//------------------------------------------------------------------
-	that.move = function(distance, vector) {
-		viewport.left += (vector.x * distance);
-		viewport.top += (vector.y * distance);
+	that.move = function(vector) {
+		viewport.left += vector.x;
+		viewport.top += vector.y;
 
 		//
 		// Make sure we don't move beyond the viewport bounds
