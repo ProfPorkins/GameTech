@@ -39,6 +39,14 @@ Demo.components.TiledImage = function(spec) {
 	that.move = function(distance, vector) {
 		viewport.left += (vector.x * distance);
 		viewport.top += (vector.y * distance);
+
+		//
+		// Make sure we don't move beyond the viewport bounds
+		viewport.left = Math.max(viewport.left, 0);
+		viewport.top = Math.max(viewport.top, 0);
+
+		viewport.left = Math.min(viewport.left, spec.size.width - 1);
+		viewport.top = Math.min(viewport.top, spec.size.height - 1);
 	}
 
 	return that;

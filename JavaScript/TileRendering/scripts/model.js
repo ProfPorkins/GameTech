@@ -19,17 +19,16 @@ Demo.model = (function(input, components) {
 	//
 	// ------------------------------------------------------------------
 	that.initialize = function() {
-
 		//
 		// Define the TiledImage model we'll be using for our background.
 		background = components.TiledImage({
-			size: { width: 5.0, height: 5 / 1.75 },		// The image is a 1.75 aspect ratio
+			size: { width: 5.0, height: 5 / 1.6667 },		// The image is a 1.6667 aspect ratio
 			pixel: { width: 1280, height: 768 },
 			tileSize: 128,
 			assetKey: 'background'
 		});
 
-		background.setViewport(0.00, 0.00);
+		background.setViewport(0.10, 0.00);
 
 		//
 		// Get our spaceship model and renderer created
@@ -52,21 +51,27 @@ Demo.model = (function(input, components) {
 		);
 
 		myKeyboard.registerHandler(function(elapsedTime) {
-			spaceShip.moveForward(elapsedTime);
-		},
-			input.KeyEvent.DOM_VK_W, true
-		);
-
-		myKeyboard.registerHandler(function(elapsedTime) {
-			background.move(0.01, {x: 0.5, y: 0.0});
+			background.move(0.01, {x: 0.0, y: -1.0});
 		},
 			input.KeyEvent.DOM_VK_I, true
 		);
 
 		myKeyboard.registerHandler(function(elapsedTime) {
-			background.move(0.01, {x: -0.5, y: -0.0});
+			background.move(0.01, {x: 0.0, y: 1.0});
 		},
 			input.KeyEvent.DOM_VK_K, true
+		);
+
+		myKeyboard.registerHandler(function(elapsedTime) {
+			background.move(0.01, {x: -1.0, y: 0.0});
+		},
+			input.KeyEvent.DOM_VK_J, true
+		);
+
+		myKeyboard.registerHandler(function(elapsedTime) {
+			background.move(0.01, {x: 1.0, y: 0.0});
+		},
+			input.KeyEvent.DOM_VK_L, true
 		);
 	};
 
