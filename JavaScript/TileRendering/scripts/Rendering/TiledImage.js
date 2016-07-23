@@ -32,8 +32,6 @@ Demo.renderer.TiledImage = (function(core) {
 		//
 		// Figure out which is the upper left tile to start rendering from
 		var tileSizeWorldCoords = image.size.width * (image.tileSize / image.pixel.width);
-		//var tileLeft = Math.floor(image.viewport.left / tileSizeWorldCoords);
-		//var tileTop = Math.floor(image.viewport.top / tileSizeWorldCoords);
 
 		var imageWorldXPos = image.viewport.left;
 		var imageWorldYPos = image.viewport.top;
@@ -45,15 +43,23 @@ Demo.renderer.TiledImage = (function(core) {
 			var tileLeft = Math.floor(imageWorldXPos / tileSizeWorldCoords);
 			var tileTop = Math.floor(imageWorldYPos / tileSizeWorldCoords);
 
-			var tileNumber = tileTop * image.tilesX + tileLeft;
-			var tile1Name = 'background-' + numberPad(tileNumber, 3);
+			var tileAssetNumber = tileTop * image.tilesX + tileLeft;
+			var tileAssetName = 'background-' + numberPad(tileAssetNumber, 3);
 
-			var tileRenderXStart = imageWorldXPos * tileSizeWorldCoords - (tileLeft * tileSizeWorldCoords);
-			var tileRenderYStart = imageWorldYPos * tileSizeWorldCoords - (tileTop * tileSizeWorldCoords);
+			if (worldXLeft === 1.0) {
+				var tileRenderXStart = imageWorldXPos - tileLeft;
+			} else {
+				tileRenderXStart = 0.0;
+			}
+			if (worldYLeft === 1.0) {
+				var tileRenderYStart = imageWorldYPos - tileTop;
+			} else {
+				tileRenderYStart = 0.0;
+			}
 			var tileRenderXDist = 1.0 - tileRenderXStart;
 			var tileRenderYDist = 1.0 - tileRenderYStart;
-			var tileRenderWorldWidth = tileSizeWorldCoords - tileRenderXStart * (1 / tileSizeWorldCoords);
-			var tileRenderWorldHeight = tileSizeWorldCoords - tileRenderYStart / tileSizeWorldCoords;
+			var tileRenderWorldWidth = tileSizeWorldCoords - tileRenderXStart;
+			var tileRenderWorldHeight = tileSizeWorldCoords - tileRenderYStart;
 			if (renderPosX + tileRenderWorldWidth > 1.0) {
 				tileRenderWorldWidth = 1.0 - renderPosX;
 				tileRenderXDist = tileRenderWorldWidth;
@@ -63,18 +69,19 @@ Demo.renderer.TiledImage = (function(core) {
 				tileRenderYDist = tileRenderWorldHeight;
 			}
 
-			console.log('worldXLeft: ' + worldXLeft);
-			console.log('worldYLeft: ' + worldYLeft);
-			console.log('left: ' + tileLeft);
-			console.log('top: ' + tileTop);
+			// console.log('worldXLeft: ' + worldXLeft);
+			// console.log('worldYLeft: ' + worldYLeft);
+			// console.log('left: ' + tileLeft);
+			// console.log('top: ' + tileTop);
 
-			console.log('tileRenderStart: ' + tileRenderXStart + ', ' + tileRenderYStart);
-			console.log('tileRenderDist: ' + tileRenderXDist + ', ' + tileRenderYDist);
-			console.log('tileRenderWorldWidth/Height: ' + tileRenderWorldWidth + ', ' + tileRenderWorldHeight);
-			console.log('RenderPos: ' + renderPosX + ', ' + renderPosY);
+			// console.log('tileRenderStart: ' + tileRenderXStart + ', ' + tileRenderYStart);
+			// console.log('tileRenderDist: ' + tileRenderXDist + ', ' + tileRenderYDist);
+			// console.log('tileRenderWorldWidth/Height: ' + tileRenderWorldWidth + ', ' + tileRenderWorldHeight);
+			// console.log('RenderPos: ' + renderPosX + ', ' + renderPosY);
+			// console.log('');
 
 			core.drawImage(
-				Demo.assets[tile1Name],
+				Demo.assets[tileAssetName],
 				tileRenderXStart * image.tileSize, tileRenderYStart * image.tileSize,
 				tileRenderXDist * image.tileSize, tileRenderYDist * image.tileSize,
 				renderPosX, renderPosY,
@@ -87,14 +94,14 @@ Demo.renderer.TiledImage = (function(core) {
 			// Subtract off how much of the current tile we used
 			worldXLeft -= tileRenderWorldWidth;
 			if (worldXLeft <= 0.0) {
-				// imageWorldYPos += (tileSizeWorldCoords - tileRenderYStart);
-				// renderPosY += tileRenderWorldHeight;
-				// worldYLeft -= tileRenderWorldHeight;
+				imageWorldYPos += tileRenderWorldHeight;
+				renderPosY += tileRenderWorldHeight;
+				worldYLeft -= tileRenderWorldHeight;
 
-				// imageWorldXPos = 0.0;
-				// renderPosX = 0.0;
-				// worldXLeft = 1.0;
-				worldYLeft = 0;
+				imageWorldXPos = image.viewport.left;
+				renderPosX = 0.0;
+				worldXLeft = 1.0;
+				//worldYLeft = 0;
 			}
 		}
 	};

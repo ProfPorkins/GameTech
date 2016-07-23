@@ -29,7 +29,7 @@ Demo.model = (function(input, components) {
 			assetKey: 'background'
 		});
 
-		background.setViewport(0.10, 0.00);
+		background.setViewport(0.00, 0.00);
 
 		//
 		// Get our spaceship model and renderer created
@@ -54,7 +54,20 @@ Demo.model = (function(input, components) {
 		myKeyboard.registerHandler(function(elapsedTime) {
 			spaceShip.moveForward(elapsedTime);
 		},
-			input.KeyEvent.DOM_VK_W, true);
+			input.KeyEvent.DOM_VK_W, true
+		);
+
+		myKeyboard.registerHandler(function(elapsedTime) {
+			background.move(0.01, {x: 0.5, y: 0.0});
+		},
+			input.KeyEvent.DOM_VK_I, true
+		);
+
+		myKeyboard.registerHandler(function(elapsedTime) {
+			background.move(0.01, {x: -0.5, y: -0.0});
+		},
+			input.KeyEvent.DOM_VK_K, true
+		);
 	};
 
 	// ------------------------------------------------------------------
