@@ -21,11 +21,18 @@ Demo.model = (function(input, components) {
 	that.initialize = function() {
 		//
 		// Define the TiledImage model we'll be using for our background.
+		// Note: 'size' must be a factor of 'tileSize' and the 'pixel' size
+		// of the image.  For example, if the width of the image in pixels is
+		// 1280 x 768, then 'size.width' multiplied by 'tileSize' would equal
+		// 1280, and 'size.height' multiplied by 'tileSize' would equal 768.  The
+		// values for 'size' may also be any value divided by 2, 4, 6, 8, ...
+		//
+		// [1, 2, 4, 6, 8, ...] = (pixel.width / size.width) * tileSize
+		// [1, 2, 4, 6, 8, ...] = (pixel.height / size.height) * tileSize
+		//
 		background = components.TiledImage({
-			//pixel: { width: 1280, height: 768 },
-			//size: { width: 5.0, height: 5.0 / (1280 / 768) },	// 1280 / 768 is the aspect ratio
 			pixel: { width: 4480, height: 2560 },
-			size: { width: 4.375, height: 2.5 },
+			size: { width: 4.375 / 2, height: 2.5 / 2 },
 			tileSize: 128,
 			assetKey: 'background'
 		});

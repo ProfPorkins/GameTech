@@ -7,7 +7,9 @@
 // ------------------------------------------------------------------
 Demo.renderer.TiledImage = (function(core) {
 	'use strict';
-	var that = {};
+	var that = {},
+		previousViewport = { left: -1, top: -1 },
+		RENDER_POS_EPISILON = 0.00001;
 
 	//------------------------------------------------------------------
 	//
@@ -28,6 +30,13 @@ Demo.renderer.TiledImage = (function(core) {
 	//
 	// ------------------------------------------------------------------
 	that.render = function(image) {
+		// var newViewport = false;
+
+		// if (previousViewport.left != image.viewport.left || previousViewport.top != image.viewport.top) {
+		// 	newViewport = true;
+		// 	previousViewport.left = image.viewport.left;
+		// 	previousViewport.top = image.viewport.top;
+		// }
 
 		var tileSizeWorldCoords = image.size.width * (image.tileSize / image.pixel.width);
 
@@ -37,7 +46,7 @@ Demo.renderer.TiledImage = (function(core) {
 		var worldYRemain = 1.0;
 		var renderPosX = 0.0;
 		var renderPosY = 0.0;
-		while (worldYRemain > 0) {
+		while (worldYRemain > RENDER_POS_EPISILON) {
 			var tileLeft = Math.floor(imageWorldXPos / tileSizeWorldCoords);
 			var tileTop = Math.floor(imageWorldYPos / tileSizeWorldCoords);
 
@@ -46,6 +55,7 @@ Demo.renderer.TiledImage = (function(core) {
 			if (!Demo.assets[tileAssetName]) {
 				console.log('tileAssetName: ' + tileAssetName);
 				console.log('not found');
+				return;
 			}
 
 			if (worldXRemain === 1.0) {
@@ -71,17 +81,19 @@ Demo.renderer.TiledImage = (function(core) {
 				tileRenderYDist = tileRenderWorldHeight / tileSizeWorldCoords;
 			}
 
-			// console.log('tileSizeWorldCoords: ' + tileSizeWorldCoords);
-			// console.log('worldXLeft: ' + worldXRemain);
-			// console.log('worldYLeft: ' + worldYRemain);
-			// console.log('left: ' + tileLeft);
-			// console.log('top: ' + tileTop);
+			// if (newViewport) {
+			// 	console.log('tileSizeWorldCoords: ' + tileSizeWorldCoords);
+			// 	console.log('worldXLeft: ' + worldXRemain);
+			// 	console.log('worldYLeft: ' + worldYRemain);
+			// 	console.log('left: ' + tileLeft);
+			// 	console.log('top: ' + tileTop);
 
-			// console.log('tileRenderStart: ' + tileRenderXStart + ', ' + tileRenderYStart);
-			// console.log('tileRenderDist: ' + tileRenderXDist + ', ' + tileRenderYDist);
-			// console.log('tileRenderWorldWidth/Height: ' + tileRenderWorldWidth + ', ' + tileRenderWorldHeight);
-			// console.log('RenderPos: ' + renderPosX + ', ' + renderPosY);
-			// console.log('');
+			// 	console.log('tileRenderStart: ' + tileRenderXStart + ', ' + tileRenderYStart);
+			// 	console.log('tileRenderDist: ' + tileRenderXDist + ', ' + tileRenderYDist);
+			// 	console.log('tileRenderWorldWidth/Height: ' + tileRenderWorldWidth + ', ' + tileRenderWorldHeight);
+			// 	console.log('RenderPos: ' + renderPosX + ', ' + renderPosY);
+			// 	console.log('');
+			// }
 
 			core.drawImage(
 				Demo.assets[tileAssetName],
@@ -96,7 +108,7 @@ Demo.renderer.TiledImage = (function(core) {
 			//
 			// Subtract off how much of the current tile we used
 			worldXRemain -= tileRenderWorldWidth;
-			if (worldXRemain <= 0.0) {
+			if (worldXRemain <= RENDER_POS_EPISILON) {
 				imageWorldYPos += tileRenderWorldHeight;
 				renderPosY += tileRenderWorldHeight;
 				worldYRemain -= tileRenderWorldHeight;

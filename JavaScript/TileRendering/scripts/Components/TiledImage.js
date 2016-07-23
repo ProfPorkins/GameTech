@@ -31,11 +31,23 @@ Demo.components.TiledImage = function(spec) {
 			get tilesY() { return spec.pixel.height / spec.tileSize; }
 		};
 
+	//------------------------------------------------------------------
+	//
+	// Set the top/left corner of the image viewport.  By definition the
+	// size of the viewport is square and of size 1,1 in world coordinates.
+	//
+	//------------------------------------------------------------------
 	that.setViewport = function(left, top) {
 		viewport.left = left;
 		viewport.top = top;
 	};
 
+	//------------------------------------------------------------------
+	//
+	// Move the viewport by the distance (in world coordinates) along the
+	// direction vector.
+	//
+	//------------------------------------------------------------------
 	that.move = function(distance, vector) {
 		viewport.left += (vector.x * distance);
 		viewport.top += (vector.y * distance);
