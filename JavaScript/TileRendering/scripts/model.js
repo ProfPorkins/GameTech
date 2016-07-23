@@ -22,13 +22,15 @@ Demo.model = (function(input, components) {
 		//
 		// Define the TiledImage model we'll be using for our background.
 		background = components.TiledImage({
-			size: { width: 5.0, height: 5 / 1.6667 },		// The image is a 1.6667 aspect ratio
-			pixel: { width: 1280, height: 768 },
+			//pixel: { width: 1280, height: 768 },
+			//size: { width: 5.0, height: 5.0 / (1280 / 768) },	// 1280 / 768 is the aspect ratio
+			pixel: { width: 4480, height: 2560 },
+			size: { width: 4.375, height: 2.5 },
 			tileSize: 128,
 			assetKey: 'background'
 		});
 
-		background.setViewport(0.10, 0.00);
+		background.setViewport(0.00, 0.00);
 
 		//
 		// Get our spaceship model and renderer created

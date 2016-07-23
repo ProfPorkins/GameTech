@@ -262,13 +262,14 @@ Demo.renderer.core = (function() {
 			dHeight = arguments[8];
 		}
 		//
-		// Convert from pixel to world coordinates on a few items
+		// Convert from world to pixel coordinates on a few items.  Using
+		// floor and ceil to prevent pixel boundary rendering issues.
 		context.drawImage(
 			image,
 			sx, sy,
 			sWidth, sHeight,
-			dx * world.size + world.left, dy * world.size + world.top,
-			dWidth * world.size, dHeight * world.size);
+			Math.floor(dx * world.size + world.left), Math.floor(dy * world.size + world.top),
+			Math.ceil(dWidth * world.size), Math.ceil(dHeight * world.size));
 	}
 
 	//------------------------------------------------------------------

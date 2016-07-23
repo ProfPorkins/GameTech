@@ -29,8 +29,6 @@ Demo.renderer.TiledImage = (function(core) {
 	// ------------------------------------------------------------------
 	that.render = function(image) {
 
-		//
-		// Figure out which is the upper left tile to start rendering from
 		var tileSizeWorldCoords = image.size.width * (image.tileSize / image.pixel.width);
 
 		var imageWorldXPos = image.viewport.left;
@@ -106,7 +104,6 @@ Demo.renderer.TiledImage = (function(core) {
 				imageWorldXPos = image.viewport.left;
 				renderPosX = 0.0;
 				worldXRemain = 1.0;
-				//worldYRemain = 0;
 			}
 		}
 	};
