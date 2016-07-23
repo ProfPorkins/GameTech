@@ -6,6 +6,7 @@ This sample demonstrates rendering of a background image using a tile-based appr
 ---
 
 In order to use this sample, an image from the NASA Hubble Space Telescope site must be downloaded and prepared.  Use the following instructions to prepare the image:
+
 1. Download and install [ImageMagick](http://www.imagemagick.org/script/index.php)
 2. Open a Windows Powershell
 3. Navigate to the \TileRendering\assets\graphics\background folder.
