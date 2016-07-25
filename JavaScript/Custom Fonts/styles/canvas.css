@@ -21,21 +21,21 @@ body {
   font-faces as styles?
 */
 @font-face {	/* One for IE */
-	font-family: 'font-1';
+	font-family: 'KenVector Future';
 	src: url('/assets/kenvector_future.eot');
 }
 @font-face {	/* One for the rest */
-	font-family: 'font-1';
+	font-family: 'KenVector Future';
 	src: url(//:) format('no404'),
 		 url('/assets/kenvector_future.ttf') format('truetype');
 }
 
 @font-face {	/* One for IE */
-	font-family: 'font-2';
+	font-family: 'KenVector Future Thin';
 	src: url('/assets/kenvector_future_thin.eot');
 }
 @font-face {	/* One for the rest */
-	font-family: 'font-2';
+	font-family: 'KenVector Future Thin';
 	src: url(//:) format('no404'),
 		 url('/assets/kenvector_future_thin.ttf') format('truetype');
 }

@@ -6,18 +6,10 @@ Demo.main = (function(renderer, components, input, model) {
 		frameTimes = [],
 		textFPS = components.Text({
 			text : 'FPS',
-			font : '16px font-2',
+			font : '16px KenVector Future Thin',
 			fill : 'rgba(255, 255, 255, 1)',
 			position : { x : 1.025, y : 0.00 }
 		});
-
-	//------------------------------------------------------------------
-	//
-	// Process any captured input.
-	//
-	//------------------------------------------------------------------
-	function processInput(/* elapsedTime */) {
-	}
 
 	//------------------------------------------------------------------
 	//
@@ -65,7 +57,6 @@ Demo.main = (function(renderer, components, input, model) {
 		var elapsedTime = (time - lastTimeStamp);
 		lastTimeStamp = time;
 
-		processInput(elapsedTime);
 		update(elapsedTime);
 		render(elapsedTime);
 
@@ -80,8 +71,8 @@ Demo.main = (function(renderer, components, input, model) {
 	//
 	//------------------------------------------------------------------
 	function initialize() {
-		renderer.core.initialize();
 
+		renderer.core.initialize();
 		model.initialize();
 
 		//

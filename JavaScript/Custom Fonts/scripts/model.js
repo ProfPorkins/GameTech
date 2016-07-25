@@ -10,19 +10,19 @@ Demo.model = (function(components) {
 
 	var textSmall = components.Text({
 			text: 'Small Text',
-			font: '12px font-1',
+			font: '12px KenVector Future',
 			fill: 'rgba(255, 0, 0, 1)',
 			position: { x: 0.0, y: 0.00 }
 		}),
 		textMedium = components.Text({
 			text: 'Medium Text',
-			font: '20px font-1',
+			font: '20px KenVector Future',
 			fill: 'rgba(0, 255, 0, 1)',
 			position: { x: 0.0, y: 0.00 }
 		}),
 		textLarge = components.Text({
 			text: 'Large Text',
-			font: '36px font-1',
+			font: '36px KenVector Future',
 			fill: 'rgba(100, 100, 255, 1)',
 			position: { x: 0.0, y: 0.00 }
 		}),
