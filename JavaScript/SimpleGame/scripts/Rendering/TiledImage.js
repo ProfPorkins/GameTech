@@ -76,7 +76,7 @@ Demo.renderer.TiledImage = (function(core) {
 				tileRenderYDist = tileRenderWorldHeight * oneOverTileSizeWorld;
 			}
 
-			tileAssetName = 'background-' + numberPad(tileTop * image.tilesX + tileLeft, 4);
+			tileAssetName = image.assetKey + '-' + numberPad(tileTop * image.tilesX + tileLeft, 4);
 			core.drawImage(
 				Demo.assets[tileAssetName],
 				tileRenderXStart * image.tileSize, tileRenderYStart * image.tileSize,
