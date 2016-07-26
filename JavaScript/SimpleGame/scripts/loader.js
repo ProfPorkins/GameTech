@@ -79,6 +79,14 @@ Demo.loader = (function() {
 			tileX = 0,
 			tileY = 0;
 
+		//
+		// Create an entry in the assets that holds the properties of the tiled image
+		Demo.assets[rootKey] = {
+			width: sizeX,
+			height: sizeY,
+			tileSize: tileSize
+		};
+
 		for (tileY = 0; tileY < numberY; tileY += 1) {
 			for (tileX = 0; tileX < numberX; tileX += 1) {
 				tileFile = numberPad((tileY * numberX + tileX), 4);

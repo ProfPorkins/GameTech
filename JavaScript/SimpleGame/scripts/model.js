@@ -5,7 +5,7 @@
 // This namespace holds the rotate to point demo model.
 //
 // ------------------------------------------------------------------
-Demo.model = (function(input, components) {
+Demo.model = (function(input, components, assets) {
 	'use strict';
 	var background = null,
 		spaceShip = null,
@@ -65,11 +65,12 @@ Demo.model = (function(input, components) {
 		// [1, 2, 4, 6, 8, ...] = (pixel.width / size.width) * tileSize
 		// [1, 2, 4, 6, 8, ...] = (pixel.height / size.height) * tileSize
 		//
+		var backgroundKey = 'background';
 		background = components.TiledImage({
-			pixel: { width: 1280, height: 768 },
+			pixel: { width: assets[backgroundKey].width, height: assets[backgroundKey].height },
 			size: { width: 5, height: 3 },
-			tileSize: 128,
-			assetKey: 'background'
+			tileSize: assets[backgroundKey].tileSize,
+			assetKey: backgroundKey
 		});
 
 		background.setViewport(0.00, 0.00);
