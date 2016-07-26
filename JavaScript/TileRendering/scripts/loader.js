@@ -80,6 +80,14 @@ Demo.loader = (function() {
 			tileX = 0,
 			tileY = 0;
 
+		//
+		// Create an entry in the assets that holds the properties of the tiled image
+		Demo.assets[rootKey] = {
+			width: sizeX,
+			height: sizeY,
+			tileSize: tileSize
+		};
+
 		for (tileY = 0; tileY < numberY; tileY += 1) {
 			for (tileX = 0; tileX < numberX; tileX += 1) {
 				tileFile =  numberPad((tileY * numberX + tileX), 4);
@@ -215,7 +223,6 @@ Demo.loader = (function() {
 	//
 	// Start with loading the assets, then the scripts.
 	console.log('Starting to dynamically load project assets');
-	//prepareTiledImage(assetOrder, '/assets/graphics/background/tiles', 'background', 1280, 768, 128);
 	prepareTiledImage(assetOrder, '/assets/graphics/background/tiles', 'background', 4480, 2560, 128);
 	loadAssets(assetOrder,
 		function(source, asset) {	// Store it on success
