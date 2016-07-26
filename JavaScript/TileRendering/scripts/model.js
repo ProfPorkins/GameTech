@@ -5,7 +5,7 @@
 // This namespace holds the rotate to point demo model.
 //
 // ------------------------------------------------------------------
-Demo.model = (function(input, components) {
+Demo.model = (function(input, components, assets) {
 	'use strict';
 	var background = null,
 		spaceShip = null,
@@ -24,10 +24,11 @@ Demo.model = (function(input, components) {
 			shipCenter = {
 				x: proposedCenter.x,
 				y: proposedCenter.y
-			};
+			},
+			vector = null;
 
 		if (proposedCenter.x >= 0.8 || proposedCenter.x <= 0.2) {
-			var vector = {
+			vector = {
 				x: Math.cos(spaceShip.rotation + spaceShip.orientation) * spaceShip.moveRate * elapsedTime,
 				y: 0
 			};
@@ -35,7 +36,7 @@ Demo.model = (function(input, components) {
 			shipCenter.x = (proposedCenter.x >= 0.8) ? 0.8 : 0.2;
 		}
 		if (proposedCenter.y >= 0.8 || proposedCenter.y <= 0.2) {
-			var vector = {
+			vector = {
 				x: 0,
 				y: Math.sin(spaceShip.rotation + spaceShip.orientation) * spaceShip.moveRate * elapsedTime,
 			};
@@ -64,11 +65,12 @@ Demo.model = (function(input, components) {
 		// [1, 2, 4, 6, 8, ...] = (pixel.width / size.width) * tileSize
 		// [1, 2, 4, 6, 8, ...] = (pixel.height / size.height) * tileSize
 		//
+		var backgroundKey = 'background';
 		background = components.TiledImage({
-			pixel: { width: 4480, height: 2560 },
+			pixel: { width: assets[backgroundKey].width, height: assets[backgroundKey].height },
 			size: { width: 4.375, height: 2.5 },
-			tileSize: 128,
-			assetKey: 'background'
+			tileSize: assets[backgroundKey].tileSize,
+			assetKey: backgroundKey
 		});
 
 		background.setViewport(0.00, 0.00);
