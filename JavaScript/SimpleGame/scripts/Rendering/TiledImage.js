@@ -30,11 +30,11 @@ Demo.renderer.TiledImage = (function(core) {
 	// have to come back to this at some point and simplify the logic.
 	//
 	// ------------------------------------------------------------------
-	that.render = function(image) {
+	that.render = function(image, viewport) {
 		var tileSizeWorldCoords = image.size.width * (image.tileSize / image.pixel.width),
 			oneOverTileSizeWorld = 1 / tileSizeWorldCoords,	// Combination of DRY and eliminating a bunch of divisions
-			imageWorldXPos = image.viewport.left,
-			imageWorldYPos = image.viewport.top,
+			imageWorldXPos = viewport.left,
+			imageWorldYPos = viewport.top,
 			worldXRemain = 1.0,
 			worldYRemain = 1.0,
 			renderPosX = 0.0,
@@ -96,7 +96,7 @@ Demo.renderer.TiledImage = (function(core) {
 				renderPosY += tileRenderWorldHeight;
 				worldYRemain -= tileRenderWorldHeight;
 
-				imageWorldXPos = image.viewport.left;
+				imageWorldXPos = viewport.left;
 				renderPosX = 0.0;
 				worldXRemain = 1.0;
 			}

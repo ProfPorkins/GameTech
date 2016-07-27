@@ -21,7 +21,7 @@ Demo.components.SpaceShip = function(spec) {
 			get sprite() { return sprite; },
 			get rotation() { return spec.rotation; },
 			get orientation() { return spec.orientation; },
-			get moveRate() { return spec.moveRate; },
+			get moveRate() { return spec.moveRate; }
 		};
 
 	//------------------------------------------------------------------
@@ -49,7 +49,7 @@ Demo.components.SpaceShip = function(spec) {
 			};
 
 		return center;
-	}
+	};
 
 	//------------------------------------------------------------------
 	//

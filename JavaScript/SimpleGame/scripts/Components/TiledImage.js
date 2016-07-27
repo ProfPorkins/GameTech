@@ -14,6 +14,15 @@
 //		assetKey:						// Root asset key to use for the asset tiles
 //	}
 //
+// NOTE: 'size' must be a factor of 'tileSize' and the 'pixel' size
+// of the image.  For example, if the width of the image in pixels is
+// 1280 x 768, then 'size.width' multiplied by 'tileSize' would equal
+// 1280, and 'size.height' multiplied by 'tileSize' would equal 768.  The
+// values for 'size' may also be any valid value divided by 2, 4, 6, 8, ...
+//
+// [1, 2, 4, 6, 8, ...] = (pixel.width / size.width) * tileSize
+// [1, 2, 4, 6, 8, ...] = (pixel.height / size.height) * tileSize
+//
 //------------------------------------------------------------------
 Demo.components.TiledImage = function(spec) {
 	'use strict';

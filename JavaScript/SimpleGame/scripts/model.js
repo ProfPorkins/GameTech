@@ -7,10 +7,36 @@
 // ------------------------------------------------------------------
 Demo.model = (function(input, components, assets) {
 	'use strict';
-	var background = null,
+	var world = {	// The size of the world must match the world-size of the background image
+			get left() { return 0; },
+			get top() { return 0; },
+			get width() { return 5; },
+			get height() { return 3; },
+			get buffer() { return 0.15; }
+		},
+		viewport = {
+			left: 0,
+			top: 0,
+			get width() { return 1; },	// Width and height are always going to be 1
+			get height() { return 1; },
+			get buffer() { return 0.15; }	// This can't really be any larger than world.buffer, guess I could protect against that.
+		},
+		background = null,
 		spaceShip = null,
 		myKeyboard = input.Keyboard(),
 		that = {};
+
+	Object.defineProperty(viewport, 'right', {
+		get: function() { return viewport.left + viewport.width; },
+		enumerable: true,
+		configurable: false
+	});
+
+	Object.defineProperty(viewport, 'bottom', {
+		get: function() { return viewport.top + viewport.height; },
+		enumerable: true,
+		configurable: false
+	});
 
 	// ------------------------------------------------------------------
 	//
@@ -24,28 +50,50 @@ Demo.model = (function(input, components, assets) {
 			shipCenter = {
 				x: proposedCenter.x,
 				y: proposedCenter.y
-			},
-			vector = null;
+			};
 
-		if (proposedCenter.x >= 0.8 || proposedCenter.x <= 0.2) {
-			vector = {
-				x: Math.cos(spaceShip.rotation + spaceShip.orientation) * spaceShip.moveRate * elapsedTime,
-				y: 0
-			};
-			background.move(vector);
-			shipCenter.x = (proposedCenter.x >= 0.8) ? 0.8 : 0.2;
+		if (proposedCenter.x >= (world.width - world.buffer) || proposedCenter.x <= (world.left + world.buffer)) {
+			shipCenter.x = (proposedCenter.x >= (world.width - world.buffer)) ? (world.width - world.buffer) : (world.left + world.buffer);
 		}
-		if (proposedCenter.y >= 0.8 || proposedCenter.y <= 0.2) {
-			vector = {
-				x: 0,
-				y: Math.sin(spaceShip.rotation + spaceShip.orientation) * spaceShip.moveRate * elapsedTime,
-			};
-			background.move(vector);
-			shipCenter.y = (proposedCenter.y >= 0.8) ? 0.8 : 0.2;
+		if (proposedCenter.y >= (world.height - world.buffer) || proposedCenter.y <= (world.top + world.buffer)) {
+			shipCenter.y = (proposedCenter.y >= (world.height - world.buffer)) ? (world.height - world.buffer) : (world.top + world.buffer);
 		}
 
 		spaceShip.center.x = shipCenter.x;
 		spaceShip.center.y = shipCenter.y;
+	}
+
+	// ------------------------------------------------------------------
+	//
+	// This function is used to ensure the viewport moves to keep the specified
+	// model visible.  Based upon the game-world location of the model and the
+	// current state of the viewport, the viewport is updated to ensure the
+	// model is visible.  The viewport is analagous to a camera.
+	//
+	// ------------------------------------------------------------------
+	function updateViewport(model) {
+		//
+		// Compute how close the model is to the visible edge in the unit-world.
+		var diffRight = viewport.right - model.center.x,
+			diffLeft = Math.abs(viewport.left - model.center.x),
+			diffBottom = viewport.bottom - model.center.y,
+			diffTop = Math.abs(viewport.top - model.center.y);
+
+		if (diffRight < viewport.buffer) {
+			viewport.left += (viewport.buffer - diffRight);
+		}
+
+		if (diffLeft < viewport.buffer) {
+			viewport.left -= (viewport.buffer - diffLeft);
+		}
+
+		if (diffBottom < viewport.buffer) {
+			viewport.top += (viewport.buffer - diffBottom);
+		}
+
+		if (diffTop < viewport.buffer) {
+			viewport.top -= (viewport.buffer - diffTop);
+		}
 	}
 
 	// ------------------------------------------------------------------
@@ -56,19 +104,10 @@ Demo.model = (function(input, components, assets) {
 	that.initialize = function() {
 		//
 		// Define the TiledImage model we'll be using for our background.
-		// Note: 'size' must be a factor of 'tileSize' and the 'pixel' size
-		// of the image.  For example, if the width of the image in pixels is
-		// 1280 x 768, then 'size.width' multiplied by 'tileSize' would equal
-		// 1280, and 'size.height' multiplied by 'tileSize' would equal 768.  The
-		// values for 'size' may also be any value divided by 2, 4, 6, 8, ...
-		//
-		// [1, 2, 4, 6, 8, ...] = (pixel.width / size.width) * tileSize
-		// [1, 2, 4, 6, 8, ...] = (pixel.height / size.height) * tileSize
-		//
 		var backgroundKey = 'background';
 		background = components.TiledImage({
 			pixel: { width: assets[backgroundKey].width, height: assets[backgroundKey].height },
-			size: { width: 5, height: 3 },
+			size: { width: world.width, height: world.height },
 			tileSize: assets[backgroundKey].tileSize,
 			assetKey: backgroundKey
 		});
@@ -78,7 +117,7 @@ Demo.model = (function(input, components, assets) {
 		//
 		// Get our spaceship model and renderer created
 		spaceShip = components.SpaceShip({
-			size: { width: 0.08, height: 0.08 },
+			size: { width: 0.06, height: 0.06 },
 			center: { x: 0.5, y: 0.5 },
 			rotation: 0,
 			moveRate: 0.4 / 1000,		// World units per second
@@ -120,6 +159,7 @@ Demo.model = (function(input, components, assets) {
 	// ------------------------------------------------------------------
 	that.update = function(elapsedTime) {
 		spaceShip.update(elapsedTime);
+		updateViewport(spaceShip);
 	};
 
 	// ------------------------------------------------------------------
@@ -129,9 +169,8 @@ Demo.model = (function(input, components, assets) {
 	// ------------------------------------------------------------------
 	that.render = function(renderer) {
 
-		renderer.TiledImage.render(background);
-
-		renderer.SpaceShip.render(spaceShip);
+		renderer.TiledImage.render(background, viewport);
+		renderer.SpaceShip.render(spaceShip, viewport);
 
 		//
 		// Draw a border around the unit world.

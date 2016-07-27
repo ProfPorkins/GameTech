@@ -16,13 +16,18 @@ Demo.renderer.SpaceShip = (function(core) {
 	// anything about rotation.
 	//
 	// ------------------------------------------------------------------
-	that.render = function(sprite) {
+	that.render = function(sprite, viewport) {
 		//
-		// Do any necessary rotation.
+		// Figure out the screen-space position of the spaceship by
+		// using the viewport.
+		var center = {
+			x: sprite.center.x - viewport.left,
+			y: sprite.center.y - viewport.top
+		};
 		core.saveContext();
-		core.rotateCanvas(sprite.center, sprite.rotation);
+		core.rotateCanvas(center, sprite.rotation);
 
-		Demo.renderer.Sprite.render(sprite.sprite);
+		Demo.renderer.Sprite.render(sprite.sprite, viewport);
 
 		//
 		// This undoes the rotation very quickly
