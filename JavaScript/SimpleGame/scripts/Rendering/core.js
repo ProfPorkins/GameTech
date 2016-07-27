@@ -236,7 +236,9 @@ Demo.renderer.core = (function() {
 
 	//------------------------------------------------------------------
 	//
-	// Pass-through that allows an image to be drawn.
+	// Pass-through that allows an image to be drawn.  Sometimes the viewport
+	// doesn't need to be accounted for (e.g., in the case of a background image).
+	// Therefore, the useViewport parameter is used to control if it is accounted for.
 	//
 	//------------------------------------------------------------------
 	function drawImage() {
@@ -244,20 +246,22 @@ Demo.renderer.core = (function() {
 			sx, sy,
 			sWidth, sHeight,
 			dx, dy,
-			dWidth, dHeight;
+			dWidth, dHeight,
+			useViewport;
 
 		//
 		// Figure out which version of drawImage was called and extrac the correct values
-		if (arguments.length === 5) {
+		if (arguments.length === 5 || arguments.length === 6) {
 			sx = 0;
 			sy = 0;
 			sWidth = image.width;
 			sHeight = image.height;
-			dx = arguments[1] - viewport.left;
-			dy = arguments[2] - viewport.top;
+			dx = arguments[1];
+			dy = arguments[2];
 			dWidth = arguments[3];
 			dHeight = arguments[4];
-		} else if (arguments.length === 9) {
+			useViewport = arguments[5];
+		} else if (arguments.length === 9 || arguments.length === 10) {
 			sx = arguments[1];
 			sy = arguments[2];
 			sWidth = arguments[3];
@@ -266,6 +270,12 @@ Demo.renderer.core = (function() {
 			dy = arguments[6];
 			dWidth = arguments[7];
 			dHeight = arguments[8];
+			useViewport = arguments[9];
+		}
+
+		if (useViewport) {
+			dx -= viewport.left;
+			dy -= viewport.top;
 		}
 
 		//
@@ -354,7 +364,7 @@ Demo.renderer.core = (function() {
 		clientToWorld: clientToWorld,
 		notifyResize: notifyResize,
 		clip: clip,
-		viewport: viewport
+		get viewport() { return viewport; }
 	};
 
 }());

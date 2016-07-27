@@ -65,8 +65,6 @@ Demo.model = (function(input, components, assets) {
 			assetKey: backgroundKey
 		});
 
-		background.setViewport(0.00, 0.00);
-
 		//
 		// Get our spaceship model and renderer created
 		spaceShip = components.SpaceShip({
