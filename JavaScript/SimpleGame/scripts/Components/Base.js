@@ -15,11 +15,16 @@
 Demo.components.Base = function(spec) {
 	'use strict';
 	var sprite = null,
+		shield = {
+			get radius() { return spec.radius + spec.shield.thickness; },
+			get strength() { return spec.shield.strength; }
+		},
 		that = {
 			get center() { return sprite.center; },
 			get radius() { return spec.radius; },
 			get rotation() { return spec.rotation; },
-			get sprite() { return sprite; }
+			get sprite() { return sprite; },
+			get shield() { return shield; }
 		};
 
 	//------------------------------------------------------------------
@@ -36,7 +41,7 @@ Demo.components.Base = function(spec) {
 	// Get our sprite model
 	sprite = Demo.components.Sprite({
 		image: Demo.assets['base-red'],
-		spriteSize: { width: spec.radius, height: spec.radius },	// Maintain the size on the sprite
+		spriteSize: { width: spec.radius * 2, height: spec.radius * 2 },	// Maintain the size on the sprite
 		spriteCenter: spec.center	// Maintain the center on the sprite
 	});
 

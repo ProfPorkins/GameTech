@@ -17,6 +17,12 @@ Demo.renderer.Sprite = (function(core) {
 			sprite.center.x - sprite.width / 2,		// Where to draw the sprite
 			sprite.center.y - sprite.height / 2,
 			sprite.width, sprite.height, true);
+
+		// core.drawRectangle(
+		// 	'#FF0000',
+		// 	sprite.center.x - sprite.width / 2,
+		// 	sprite.center.y - sprite.height / 2,
+		// 	sprite.width, sprite.height, true);
 	};
 
 	return that;

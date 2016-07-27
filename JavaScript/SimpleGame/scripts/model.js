@@ -79,7 +79,11 @@ Demo.model = (function(input, components, assets) {
 			center: { x: 0.75, y: 0.75 },
 			radius: 0.10,
 			rotation: 0,
-			rotateRate: (Math.PI / 4) / 1000	// Slow rotation
+			rotateRate: (Math.PI / 4) / 1000,	// Slow rotation
+			shield: {
+				thickness: 0.025,
+				strength: 10
+			}
 		});
 
 		myKeyboard.registerHandler(function(elapsedTime) {
@@ -129,10 +133,10 @@ Demo.model = (function(input, components, assets) {
 	// This function renders the demo model.
 	//
 	// ------------------------------------------------------------------
-	that.render = function(renderer) {
+	that.render = function(renderer, elapsedTime) {
 
 		renderer.TiledImage.render(background, renderer.core.viewport);
-		renderer.Base.render(baseRed);
+		renderer.Base.render(baseRed, elapsedTime);
 		renderer.SpaceShip.render(spaceShip);
 	};
 

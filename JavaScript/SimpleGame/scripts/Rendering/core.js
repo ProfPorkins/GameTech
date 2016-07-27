@@ -205,14 +205,17 @@ Demo.renderer.core = (function() {
 	// Draw a circle within the unit world.
 	//
 	//------------------------------------------------------------------
-	function drawCircle(style, center, radius) {
+	function drawCircle(style, center, radius, useViewport) {
+		var adjustLeft = (useViewport === true) ? viewport.left : 0,
+			adjustTop = (useViewport === true) ? viewport.top : 0;
+
 		//
 		// 0.5, 0.5 is to ensure an actual 1 pixel line is drawn.
 		context.strokeStyle = style;
 		context.beginPath();
 		context.arc(
-			0.5 + world.left + (center.x * world.size),
-			0.5 + world.top + (center.y * world.size),
+			0.5 + world.left + ((center.x - adjustLeft) * world.size),
+			0.5 + world.top + ((center.y - adjustTop) * world.size),
 			radius * world.size,
 			0, 2 * Math.PI);
 		context.stroke();
@@ -220,16 +223,40 @@ Demo.renderer.core = (function() {
 
 	//------------------------------------------------------------------
 	//
+	// Draw a filled circle within the unit world.
+	//
+	//------------------------------------------------------------------
+	function drawFilledCircle(style, center, radius, useViewport) {
+		var adjustLeft = (useViewport === true) ? viewport.left : 0,
+			adjustTop = (useViewport === true) ? viewport.top : 0;
+
+		//
+		// 0.5, 0.5 is to ensure an actual 1 pixel line is drawn.
+		context.fillStyle = style;
+		context.beginPath();
+		context.arc(
+			0.5 + world.left + ((center.x - adjustLeft) * world.size),
+			0.5 + world.top + ((center.y - adjustTop) * world.size),
+			radius * world.size,
+			0, 2 * Math.PI);
+		context.fill();
+	}
+
+	//------------------------------------------------------------------
+	//
 	// Draws a rectangle relative to the 'unit world'.
 	//
 	//------------------------------------------------------------------
-	function drawRectangle(style, left, top, width, height) {
+	function drawRectangle(style, left, top, width, height, useViewport) {
+		var adjustLeft = (useViewport === true) ? viewport.left : 0,
+			adjustTop = (useViewport === true) ? viewport.top : 0;
+
 		//
 		// 0.5, 0.5 is to ensure an actual 1 pixel line is drawn.
 		context.strokeStyle = style;
 		context.strokeRect(
-			0.5 + world.left + (left * world.size),
-			0.5 + world.top + (top * world.size),
+			0.5 + world.left + ((left - adjustLeft) * world.size),
+			0.5 + world.top + ((top - adjustTop) * world.size),
 			width * world.size,
 			height * world.size);
 	}
@@ -357,6 +384,7 @@ Demo.renderer.core = (function() {
 		drawLine: drawLine,
 		drawRectangle: drawRectangle,
 		drawCircle: drawCircle,
+		drawFilledCircle: drawFilledCircle,
 		drawImage: drawImage,
 		saveContext: saveContext,
 		restoreContext: restoreContext,
