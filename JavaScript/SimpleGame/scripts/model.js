@@ -48,6 +48,8 @@ Demo.model = (function(input, components, assets) {
 		spaceShip.center.x = shipCenter.x;
 		spaceShip.center.y = shipCenter.y;
 
+		//
+		// Viewport only needs to be updated when the spaceship moves.
 		viewport.update(spaceShip);
 	}
 
