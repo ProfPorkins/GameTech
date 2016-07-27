@@ -26,20 +26,24 @@ Demo.loader = (function() {
 			message: 'Core Components loaded',
 			onComplete: null
 		}, {
-			scripts: ['Components/Text', 'Components/Sprite', 'Components/SpaceShip', 'Components/TiledImage'],
+			scripts: ['Components/Text', 'Components/Sprite', 'Components/TiledImage'],
 			message: 'Game Components loaded',
+			onComplete: null
+		}, {
+			scripts: ['Components/SpaceShip', 'Components/Base'],
+			message: 'Gameplay Components loaded',
 			onComplete: null
 		}, {
 			scripts: ['Rendering/core'],
 			message: 'Rendering core loaded',
 			onComplete: null
 		}, {
-			scripts: ['Rendering/Text', 'Rendering/Sprite'],
+			scripts: ['Rendering/Text', 'Rendering/Sprite', 'Rendering/TiledImage'],
 			message: 'Core Components Rendering loaded',
 			onComplete: null
 		}, {
-			scripts: ['Rendering/SpaceShip', 'Rendering/TiledImage'],
-			message: 'Game Components Rendering loaded',
+			scripts: ['Rendering/SpaceShip', 'Rendering/Base'],
+			message: 'Gameplay Components Rendering loaded',
 			onComplete: null
 		}, {
 			scripts: ['model'],
@@ -53,6 +57,9 @@ Demo.loader = (function() {
 		assetOrder = [{
 			key: 'spaceship',
 			source: '/assets/graphics/playerShip1_blue.png'
+		}, {
+			key: 'base-red',
+			source: '/assets/graphics/ufoRed.png'
 		}];
 
 	//------------------------------------------------------------------

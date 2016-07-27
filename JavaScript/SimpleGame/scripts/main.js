@@ -39,7 +39,14 @@ Demo.main = (function(renderer, components, model) {
 			fps = 0;
 
 		renderer.core.clearCanvas();
+		renderer.core.saveContext();
+		renderer.core.clip();
 		model.render(Demo.renderer);
+		renderer.core.restoreContext();
+
+		//
+		// Draw a border around the unit world.
+		renderer.core.drawRectangle('rgba(255, 255, 255, 1)', 0, 0, 1, 1);
 
 		//
 		// Show FPS over last several frames

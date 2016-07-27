@@ -240,6 +240,7 @@ Demo.renderer.core = (function() {
 			sWidth, sHeight,
 			dx, dy,
 			dWidth, dHeight;
+
 		//
 		// Figure out which version of drawImage was called and extrac the correct values
 		if (arguments.length === 5) {
@@ -261,6 +262,7 @@ Demo.renderer.core = (function() {
 			dWidth = arguments[7];
 			dHeight = arguments[8];
 		}
+
 		//
 		// Convert from world to pixel coordinates on a few items.  Using
 		// floor and ceil to prevent pixel boundary rendering issues.
@@ -314,6 +316,22 @@ Demo.renderer.core = (function() {
 		};
 	}
 
+	//------------------------------------------------------------------
+	//
+	// Create a clipping region for the area in which the rendering
+	// takes place.
+	//
+	//------------------------------------------------------------------
+	function clip() {
+		//
+		// The beginPath is necessary, because .rect adds to the current path.
+		// Without the beginPath, repeated calls to clip keep adding to the current
+		// path and slows things down to a crawl very, very quickly.
+		context.beginPath();
+		context.rect(world.left, world.top, world.size, world.size);
+		context.clip();
+	}
+
 	return {
 		initialize: initialize,
 		toggleFullScreen: toggleFullScreen,
@@ -329,7 +347,8 @@ Demo.renderer.core = (function() {
 		restoreContext: restoreContext,
 		rotateCanvas: rotateCanvas,
 		clientToWorld: clientToWorld,
-		notifyResize: notifyResize
+		notifyResize: notifyResize,
+		clip: clip
 	};
 
 }());

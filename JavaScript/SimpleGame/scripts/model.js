@@ -21,6 +21,7 @@ Demo.model = (function(input, components, assets) {
 		}),
 		background = null,
 		spaceShip = null,
+		baseRed = null,
 		myKeyboard = input.Keyboard(),
 		that = {};
 
@@ -81,6 +82,13 @@ Demo.model = (function(input, components, assets) {
 			rotateRate: Math.PI / 1000	// Radians per second
 		});
 
+		baseRed = components.Base({
+			center: { x: 0.75, y: 0.75 },
+			radius: 0.10,
+			rotation: 0,
+			rotateRate: (Math.PI / 4) / 1000	// Slow rotation
+		});
+
 		myKeyboard.registerHandler(function(elapsedTime) {
 			moveForward(elapsedTime);
 		},
@@ -116,6 +124,7 @@ Demo.model = (function(input, components, assets) {
 	// ------------------------------------------------------------------
 	that.update = function(elapsedTime) {
 		spaceShip.update(elapsedTime);
+		baseRed.update(elapsedTime);
 	};
 
 	// ------------------------------------------------------------------
@@ -126,11 +135,8 @@ Demo.model = (function(input, components, assets) {
 	that.render = function(renderer) {
 
 		renderer.TiledImage.render(background, viewport);
+		renderer.Base.render(baseRed, viewport);
 		renderer.SpaceShip.render(spaceShip, viewport);
-
-		//
-		// Draw a border around the unit world.
-		renderer.core.drawRectangle('rgba(255, 255, 255, 1)', 0, 0, 1, 1);
 	};
 
 	return that;
