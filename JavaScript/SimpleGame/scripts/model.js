@@ -14,29 +14,15 @@ Demo.model = (function(input, components, assets) {
 			get height() { return 3; },
 			get buffer() { return 0.15; }
 		},
-		viewport = {
+		viewport = components.Viewport({
 			left: 0,
 			top: 0,
-			get width() { return 1; },	// Width and height are always going to be 1
-			get height() { return 1; },
-			get buffer() { return 0.15; }	// This can't really be any larger than world.buffer, guess I could protect against that.
-		},
+			buffer: 0.15	// This can't really be any larger than world.buffer, guess I could protect against that.
+		}),
 		background = null,
 		spaceShip = null,
 		myKeyboard = input.Keyboard(),
 		that = {};
-
-	Object.defineProperty(viewport, 'right', {
-		get: function() { return viewport.left + viewport.width; },
-		enumerable: true,
-		configurable: false
-	});
-
-	Object.defineProperty(viewport, 'bottom', {
-		get: function() { return viewport.top + viewport.height; },
-		enumerable: true,
-		configurable: false
-	});
 
 	// ------------------------------------------------------------------
 	//
@@ -61,39 +47,8 @@ Demo.model = (function(input, components, assets) {
 
 		spaceShip.center.x = shipCenter.x;
 		spaceShip.center.y = shipCenter.y;
-	}
 
-	// ------------------------------------------------------------------
-	//
-	// This function is used to ensure the viewport moves to keep the specified
-	// model visible.  Based upon the game-world location of the model and the
-	// current state of the viewport, the viewport is updated to ensure the
-	// model is visible.  The viewport is analagous to a camera.
-	//
-	// ------------------------------------------------------------------
-	function updateViewport(model) {
-		//
-		// Compute how close the model is to the visible edge in the unit-world.
-		var diffRight = viewport.right - model.center.x,
-			diffLeft = Math.abs(viewport.left - model.center.x),
-			diffBottom = viewport.bottom - model.center.y,
-			diffTop = Math.abs(viewport.top - model.center.y);
-
-		if (diffRight < viewport.buffer) {
-			viewport.left += (viewport.buffer - diffRight);
-		}
-
-		if (diffLeft < viewport.buffer) {
-			viewport.left -= (viewport.buffer - diffLeft);
-		}
-
-		if (diffBottom < viewport.buffer) {
-			viewport.top += (viewport.buffer - diffBottom);
-		}
-
-		if (diffTop < viewport.buffer) {
-			viewport.top -= (viewport.buffer - diffTop);
-		}
+		viewport.update(spaceShip);
 	}
 
 	// ------------------------------------------------------------------
@@ -159,7 +114,6 @@ Demo.model = (function(input, components, assets) {
 	// ------------------------------------------------------------------
 	that.update = function(elapsedTime) {
 		spaceShip.update(elapsedTime);
-		updateViewport(spaceShip);
 	};
 
 	// ------------------------------------------------------------------

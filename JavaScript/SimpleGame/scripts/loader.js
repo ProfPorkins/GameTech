@@ -22,8 +22,12 @@ Demo.loader = (function() {
 			message: 'Inputs loaded',
 			onComplete: null
 		}, {
+			scripts: ['Components/Viewport'],
+			message: 'Core Components loaded',
+			onComplete: null
+		}, {
 			scripts: ['Components/Text', 'Components/Sprite', 'Components/SpaceShip', 'Components/TiledImage'],
-			message: 'Components loaded',
+			message: 'Game Components loaded',
 			onComplete: null
 		}, {
 			scripts: ['Rendering/core'],
@@ -31,11 +35,11 @@ Demo.loader = (function() {
 			onComplete: null
 		}, {
 			scripts: ['Rendering/Text', 'Rendering/Sprite'],
-			message: 'Rendering loaded',
+			message: 'Core Components Rendering loaded',
 			onComplete: null
 		}, {
 			scripts: ['Rendering/SpaceShip', 'Rendering/TiledImage'],
-			message: 'Rendering loaded',
+			message: 'Game Components Rendering loaded',
 			onComplete: null
 		}, {
 			scripts: ['model'],
