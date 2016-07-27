@@ -45,7 +45,7 @@ Demo.components.SpaceShip = function(spec) {
 			vectorY = Math.sin(spec.rotation + spec.orientation),
 			center = {
 				x: sprite.center.x + (vectorX * spec.moveRate * elapsedTime),
-				y: sprite.center.y + (vectorY * spec.moveRate * elapsedTime),
+				y: sprite.center.y + (vectorY * spec.moveRate * elapsedTime)
 			};
 
 		return center;

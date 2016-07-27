@@ -14,6 +14,11 @@ Demo.renderer.core = (function() {
 			top: 0,
 			left: 0
 		},
+		viewport = Demo.components.Viewport({
+			left: 0,
+			top: 0,
+			buffer: 0.15	// This can't really be any larger than world.buffer, guess I could protect against that.
+		}),
 		resizeHandlers = [];
 
 	//------------------------------------------------------------------
@@ -248,8 +253,8 @@ Demo.renderer.core = (function() {
 			sy = 0;
 			sWidth = image.width;
 			sHeight = image.height;
-			dx = arguments[1];
-			dy = arguments[2];
+			dx = arguments[1] - viewport.left;
+			dy = arguments[2] - viewport.top;
 			dWidth = arguments[3];
 			dHeight = arguments[4];
 		} else if (arguments.length === 9) {
@@ -299,9 +304,9 @@ Demo.renderer.core = (function() {
 	//
 	//------------------------------------------------------------------
 	function rotateCanvas(center, rotation) {
-		context.translate(center.x * world.size + world.left, center.y * world.size + world.top);
+		context.translate((center.x - viewport.left) * world.size + world.left, (center.y - viewport.top) * world.size + world.top);
 		context.rotate(rotation);
-		context.translate(-(center.x * world.size + world.left), -(center.y * world.size + world.top));
+		context.translate(-((center.x - viewport.left) * world.size + world.left), -((center.y - viewport.top) * world.size + world.top));
 	}
 
 	//------------------------------------------------------------------
@@ -348,7 +353,8 @@ Demo.renderer.core = (function() {
 		rotateCanvas: rotateCanvas,
 		clientToWorld: clientToWorld,
 		notifyResize: notifyResize,
-		clip: clip
+		clip: clip,
+		viewport: viewport
 	};
 
 }());

@@ -14,11 +14,6 @@ Demo.model = (function(input, components, assets) {
 			get height() { return 3; },
 			get buffer() { return 0.15; }
 		},
-		viewport = components.Viewport({
-			left: 0,
-			top: 0,
-			buffer: 0.15	// This can't really be any larger than world.buffer, guess I could protect against that.
-		}),
 		background = null,
 		spaceShip = null,
 		baseRed = null,
@@ -51,7 +46,7 @@ Demo.model = (function(input, components, assets) {
 
 		//
 		// Viewport only needs to be updated when the spaceship moves.
-		viewport.update(spaceShip);
+		Demo.renderer.core.viewport.update(spaceShip);
 	}
 
 	// ------------------------------------------------------------------
@@ -106,6 +101,10 @@ Demo.model = (function(input, components, assets) {
 		},
 			input.KeyEvent.DOM_VK_D, true
 		);
+
+		//
+		// Get the intial viewport settings prepared.
+		Demo.renderer.core.viewport.set(0, 0, 0.15); // The buffer can't really be any larger than world.buffer, guess I could protect against that.
 	};
 
 	// ------------------------------------------------------------------
@@ -134,9 +133,9 @@ Demo.model = (function(input, components, assets) {
 	// ------------------------------------------------------------------
 	that.render = function(renderer) {
 
-		renderer.TiledImage.render(background, viewport);
-		renderer.Base.render(baseRed, viewport);
-		renderer.SpaceShip.render(spaceShip, viewport);
+		renderer.TiledImage.render(background, renderer.core.viewport);
+		renderer.Base.render(baseRed);
+		renderer.SpaceShip.render(spaceShip);
 	};
 
 	return that;

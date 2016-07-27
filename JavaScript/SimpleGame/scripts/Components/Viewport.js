@@ -61,5 +61,16 @@ Demo.components.Viewport = function(spec) {
 		}
 	};
 
+	// ------------------------------------------------------------------
+	//
+	// Use to specify new properties for the viewport.
+	//
+	// ------------------------------------------------------------------
+	that.set = function(left, top, buffer) {
+		spec.left = left;
+		spec.top = top;
+		spec.buffer = buffer;
+	};
+
 	return that;
 };

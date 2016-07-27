@@ -16,18 +16,12 @@ Demo.renderer.Base = (function(core) {
 	// anything about rotation.
 	//
 	// ------------------------------------------------------------------
-	that.render = function(sprite, viewport) {
-		//
-		// Figure out the screen-space position of the base by
-		// using the viewport.
-		var center = {
-			x: sprite.center.x - viewport.left,
-			y: sprite.center.y - viewport.top
-		};
-		core.saveContext();
-		core.rotateCanvas(center, sprite.rotation);
+	that.render = function(sprite) {
 
-		Demo.renderer.Sprite.render(sprite.sprite, viewport);
+		core.saveContext();
+		core.rotateCanvas(sprite.center, sprite.rotation);
+
+		Demo.renderer.Sprite.render(sprite.sprite);
 
 		//
 		// This undoes the rotation very quickly
