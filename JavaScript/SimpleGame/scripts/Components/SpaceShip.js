@@ -5,10 +5,11 @@
 // Defines a SpaceShip component.  A Spaceship contains a sprite.
 // The spec is defined as:
 //	{
+//		center: { x: , y: },		// In world coordinates
 //		size: { width: , height: },	// In world coordinates
-//		center: { x: , y: }			// In world coordinates
-//		rotation: 					// In Radians
-//		moveRate: 					// World units per second
+//		direction: { x: , y: },		// Direction of momentum
+//		rotation: 	,				// Pointing angle, in radians
+//		accelerationRate: 	,		// World units per second
 //		rotateRate:					// Radians per second
 //	}
 //
@@ -18,37 +19,39 @@ Demo.components.SpaceShip = function(spec) {
 	var sprite = null,
 		that = {
 			get center() { return sprite.center; },
-			get sprite() { return sprite; },
+			get size() { return spec.size; },
+			get direction() { return spec.direction; },
 			get rotation() { return spec.rotation; },
-			get orientation() { return spec.orientation; },
-			get moveRate() { return spec.moveRate; }
+			get accelerateRate() { return spec.accelerateRate; },
+			get sprite() { return sprite; }
 		};
 
 	//------------------------------------------------------------------
 	//
-	// The only thing to do is to tell the underlying sprite to update.
+	// Update the position of the ship based on its current momentum vector,
+	// then tell the underlying sprite model to also update.
 	//
 	//------------------------------------------------------------------
 	that.update = function(elapsedTime) {
+		sprite.center.x += (spec.direction.x * elapsedTime);
+		sprite.center.y += (spec.direction.y * elapsedTime);
+
 		sprite.update(elapsedTime);
 	};
 
 	//------------------------------------------------------------------
 	//
-	// Propose where the ship would move in the direction the sprite is facing.
+	// Add momentum in the direction the ship is facing.
 	//
 	//------------------------------------------------------------------
-	that.proposedMove = function(elapsedTime) {
-		//
-		// Create a normalized direction vector
-		var vectorX = Math.cos(spec.rotation + spec.orientation),
-			vectorY = Math.sin(spec.rotation + spec.orientation),
-			center = {
-				x: sprite.center.x + (vectorX * spec.moveRate * elapsedTime),
-				y: sprite.center.y + (vectorY * spec.moveRate * elapsedTime)
-			};
+	that.accelerate = function(elapsedTime) {
+		var vectorX = Math.cos(spec.rotation),
+			vectorY = Math.sin(spec.rotation);
 
-		return center;
+		spec.direction.x += (vectorX * elapsedTime * spec.accelerationRate);
+		spec.direction.y += (vectorY * elapsedTime * spec.accelerationRate);
+		//
+		// TODO: Set a max-speed
 	};
 
 	//------------------------------------------------------------------
@@ -73,11 +76,9 @@ Demo.components.SpaceShip = function(spec) {
 	// Get our sprite model
 	sprite = Demo.components.Sprite({
 		image: Demo.assets['spaceship'],
-		spriteSize: spec.size,			// Maintain the size on the sprite
+		spriteSize: spec.size,			// Let the sprite know about the size also
 		spriteCenter: spec.center		// Maintain the center on the sprite
 	});
-
-	spec.orientation = 0;
 
 	return that;
 };

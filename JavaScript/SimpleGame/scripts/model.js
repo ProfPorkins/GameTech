@@ -22,35 +22,6 @@ Demo.model = (function(input, components, assets) {
 
 	// ------------------------------------------------------------------
 	//
-	// Handles movement of the spaceship over the background.  As the ship
-	// approaches one of the imaginary boundaries of the visible area, the
-	// background is moved around the ship, rather than moving the ship.
-	//
-	// ------------------------------------------------------------------
-	function moveForward(elapsedTime) {
-		var proposedCenter = spaceShip.proposedMove(elapsedTime),
-			shipCenter = {
-				x: proposedCenter.x,
-				y: proposedCenter.y
-			};
-
-		if (proposedCenter.x >= (world.width - world.buffer) || proposedCenter.x <= (world.left + world.buffer)) {
-			shipCenter.x = (proposedCenter.x >= (world.width - world.buffer)) ? (world.width - world.buffer) : (world.left + world.buffer);
-		}
-		if (proposedCenter.y >= (world.height - world.buffer) || proposedCenter.y <= (world.top + world.buffer)) {
-			shipCenter.y = (proposedCenter.y >= (world.height - world.buffer)) ? (world.height - world.buffer) : (world.top + world.buffer);
-		}
-
-		spaceShip.center.x = shipCenter.x;
-		spaceShip.center.y = shipCenter.y;
-
-		//
-		// Viewport only needs to be updated when the spaceship moves.
-		Demo.renderer.core.viewport.update(spaceShip);
-	}
-
-	// ------------------------------------------------------------------
-	//
 	// This function initializes the model.
 	//
 	// ------------------------------------------------------------------
@@ -70,8 +41,9 @@ Demo.model = (function(input, components, assets) {
 		spaceShip = components.SpaceShip({
 			size: { width: 0.06, height: 0.06 },
 			center: { x: 0.5, y: 0.5 },
+			direction: { x: 0.0, y: 0.0 },
 			rotation: 0,
-			moveRate: 0.4 / 1000,		// World units per second
+			accelerationRate: 0.0005 / 1000,		// World units per second
 			rotateRate: Math.PI / 1000	// Radians per second
 		});
 
@@ -87,7 +59,7 @@ Demo.model = (function(input, components, assets) {
 		});
 
 		myKeyboard.registerHandler(function(elapsedTime) {
-			moveForward(elapsedTime);
+			spaceShip.accelerate(elapsedTime);
 		},
 			input.KeyEvent.DOM_VK_W, true
 		);
@@ -111,6 +83,23 @@ Demo.model = (function(input, components, assets) {
 
 	// ------------------------------------------------------------------
 	//
+	// A moveable entity requires extra care because it can't be allowed to go
+	// outside of the game-world boundaries.
+	//
+	// ------------------------------------------------------------------
+	function updateMovableEntity(entity, elapsedTime) {
+		entity.update(elapsedTime);
+
+		if (entity.center.x >= (world.width - world.buffer) || entity.center.x <= (world.left + world.buffer)) {
+			entity.center.x = (entity.center.x >= (world.width - world.buffer)) ? (world.width - world.buffer) : (world.left + world.buffer);
+		}
+		if (entity.center.y >= (world.height - world.buffer) || entity.center.y <= (world.top + world.buffer)) {
+			entity.center.y = (entity.center.y >= (world.height - world.buffer)) ? (world.height - world.buffer) : (world.top + world.buffer);
+		}
+	}
+
+	// ------------------------------------------------------------------
+	//
 	// Process all input for the model here.
 	//
 	// ------------------------------------------------------------------
@@ -124,8 +113,13 @@ Demo.model = (function(input, components, assets) {
 	//
 	// ------------------------------------------------------------------
 	that.update = function(elapsedTime) {
-		spaceShip.update(elapsedTime);
+		updateMovableEntity(spaceShip, elapsedTime);
+		//
+		//
 		baseRed.update(elapsedTime);
+		//
+		// Keep the viewport oriented with respect to the space ship.
+		Demo.renderer.core.viewport.update(spaceShip);
 	};
 
 	// ------------------------------------------------------------------
