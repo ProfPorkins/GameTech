@@ -5,7 +5,7 @@
 // This namespace holds the rotate to point demo model.
 //
 // ------------------------------------------------------------------
-Demo.model = (function(input, components, assets) {
+Demo.model = (function(input, components, renderer, assets) {
 	'use strict';
 	var world = {	// The size of the world must match the world-size of the background image
 			get left() { return 0; },
@@ -15,8 +15,10 @@ Demo.model = (function(input, components, assets) {
 			get buffer() { return 0.15; }
 		},
 		background = null,
-		spaceShip = null,
-		baseRed = null,
+		spaceShip = null,	// Spaceship is speshul because we keep the viewport oriented based on its location
+		nextEntityName = 0,
+		moveableEntities = {},
+		unmoveableEntities = {},
 		myKeyboard = input.Keyboard(),
 		that = {};
 
@@ -26,9 +28,11 @@ Demo.model = (function(input, components, assets) {
 	//
 	// ------------------------------------------------------------------
 	that.initialize = function() {
+		var baseRed = null,
+			backgroundKey = 'background';
+
 		//
 		// Define the TiledImage model we'll be using for our background.
-		var backgroundKey = 'background';
 		background = components.TiledImage({
 			pixel: { width: assets[backgroundKey].width, height: assets[backgroundKey].height },
 			size: { width: world.width, height: world.height },
@@ -47,6 +51,10 @@ Demo.model = (function(input, components, assets) {
 			accelerationRate: 0.0004 / 1000,	// World units per second
 			rotateRate: Math.PI / 1000			// Radians per second
 		});
+		moveableEntities[nextEntityName++] = {
+			model: spaceShip,
+			renderer: renderer.SpaceShip
+		};
 
 		baseRed = components.Base({
 			center: { x: 0.75, y: 0.75 },
@@ -58,6 +66,10 @@ Demo.model = (function(input, components, assets) {
 				strength: 10
 			}
 		});
+		unmoveableEntities[nextEntityName++] = {
+			model: baseRed,
+			renderer: renderer.Base
+		};
 
 		myKeyboard.registerHandler(function(elapsedTime) {
 			spaceShip.accelerate(elapsedTime);
@@ -120,10 +132,18 @@ Demo.model = (function(input, components, assets) {
 	//
 	// ------------------------------------------------------------------
 	that.update = function(elapsedTime) {
-		updateMovableEntity(spaceShip, elapsedTime);
-		//
-		//
-		baseRed.update(elapsedTime);
+		for (entity in unmoveableEntities) {
+			if (unmoveableEntities.hasOwnProperty(entity)) {
+				unmoveableEntities[entity].model.update(elapsedTime);
+			}
+		}
+
+		for (var entity in moveableEntities) {
+			if (moveableEntities.hasOwnProperty(entity)) {
+				updateMovableEntity(moveableEntities[entity].model, elapsedTime);
+			}
+		}
+
 		//
 		// Keep the viewport oriented with respect to the space ship.
 		Demo.renderer.core.viewport.update(spaceShip);
@@ -134,13 +154,26 @@ Demo.model = (function(input, components, assets) {
 	// This function renders the demo model.
 	//
 	// ------------------------------------------------------------------
-	that.render = function(renderer, elapsedTime) {
+	that.render = function(elapsedTime) {
+		var entityId = null,
+			entity = null;
 
 		renderer.TiledImage.render(background, renderer.core.viewport);
-		renderer.Base.render(baseRed, elapsedTime);
-		renderer.SpaceShip.render(spaceShip);
+
+		for (entityId in unmoveableEntities) {
+			if (unmoveableEntities.hasOwnProperty(entityId)) {
+				entity = unmoveableEntities[entityId];
+				entity.renderer.render(entity.model, elapsedTime);
+			}
+		}
+		for (entityId in moveableEntities) {
+			if (moveableEntities.hasOwnProperty(entityId)) {
+				entity = moveableEntities[entityId];
+				entity.renderer.render(entity.model, elapsedTime);
+			}
+		}
 	};
 
 	return that;
 
-}(Demo.input, Demo.components, Demo.assets));
+}(Demo.input, Demo.components, Demo.renderer, Demo.assets));

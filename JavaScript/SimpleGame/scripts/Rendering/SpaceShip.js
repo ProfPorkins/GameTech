@@ -16,12 +16,12 @@ Demo.renderer.SpaceShip = (function(core) {
 	// anything about rotation.
 	//
 	// ------------------------------------------------------------------
-	that.render = function(sprite) {
+	that.render = function(model) {
 
 		core.saveContext();
-		core.rotateCanvas(sprite.center, sprite.rotation);
+		core.rotateCanvas(model.center, model.rotation);
 
-		Demo.renderer.Sprite.render(sprite.sprite);
+		Demo.renderer.Sprite.render(model.sprite);
 
 		//
 		// This undoes the rotation very quickly

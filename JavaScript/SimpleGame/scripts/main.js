@@ -41,7 +41,7 @@ Demo.main = (function(renderer, components, model) {
 		renderer.core.clearCanvas();
 		renderer.core.saveContext();
 		renderer.core.clip();
-		model.render(Demo.renderer, elapsedTime);
+		model.render(elapsedTime);
 		renderer.core.restoreContext();
 
 		//
