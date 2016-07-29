@@ -7,7 +7,7 @@
 //	{
 //		center: { x: , y: },		// In world coordinates
 //		size: { width: , height: },	// In world coordinates
-//		direction: { x: , y: },		// Direction of momentum
+//		momentum: { x: , y: },		// Direction of momentum
 //		rotation: 	,				// Pointing angle, in radians
 //		accelerationRate: 	,		// World units per second
 //		rotateRate:					// Radians per second
@@ -20,7 +20,7 @@ Demo.components.SpaceShip = function(spec) {
 		that = {
 			get center() { return sprite.center; },
 			get size() { return spec.size; },
-			get direction() { return spec.direction; },
+			get momentum() { return spec.momentum; },
 			get rotation() { return spec.rotation; },
 			get accelerateRate() { return spec.accelerateRate; },
 			get sprite() { return sprite; }
@@ -33,8 +33,8 @@ Demo.components.SpaceShip = function(spec) {
 	//
 	//------------------------------------------------------------------
 	that.update = function(elapsedTime) {
-		sprite.center.x += (spec.direction.x * elapsedTime);
-		sprite.center.y += (spec.direction.y * elapsedTime);
+		sprite.center.x += (spec.momentum.x * elapsedTime);
+		sprite.center.y += (spec.momentum.y * elapsedTime);
 
 		sprite.update(elapsedTime);
 	};
@@ -46,12 +46,20 @@ Demo.components.SpaceShip = function(spec) {
 	//------------------------------------------------------------------
 	that.accelerate = function(elapsedTime) {
 		var vectorX = Math.cos(spec.rotation),
-			vectorY = Math.sin(spec.rotation);
+			vectorY = Math.sin(spec.rotation),
+			newSpeed = 0;
 
-		spec.direction.x += (vectorX * elapsedTime * spec.accelerationRate);
-		spec.direction.y += (vectorY * elapsedTime * spec.accelerationRate);
+		spec.momentum.x += (vectorX * elapsedTime * spec.accelerationRate);
+		spec.momentum.y += (vectorY * elapsedTime * spec.accelerationRate);
 		//
-		// TODO: Set a max-speed
+		// Ensure we are still at or below the max speed
+		newSpeed = Math.sqrt(Math.pow(spec.momentum.x, 2) + Math.pow(spec.momentum.y, 2));
+		if (newSpeed > spec.maxSpeed) {
+			//
+			// Modify the vector to keep the magnitude equal to the max possible speed.
+			spec.momentum.x /= (newSpeed / spec.maxSpeed);
+			spec.momentum.y /= (newSpeed / spec.maxSpeed);
+		}
 	};
 
 	//------------------------------------------------------------------

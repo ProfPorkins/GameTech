@@ -41,10 +41,11 @@ Demo.model = (function(input, components, assets) {
 		spaceShip = components.SpaceShip({
 			size: { width: 0.06, height: 0.06 },
 			center: { x: 0.5, y: 0.5 },
-			direction: { x: 0.0, y: 0.0 },
+			momentum: { x: 0.0, y: 0.0 },		// World units per millisecond
+			maxSpeed: 0.0004,					// World units per millisecond
 			rotation: 0,
-			accelerationRate: 0.0005 / 1000,		// World units per second
-			rotateRate: Math.PI / 1000	// Radians per second
+			accelerationRate: 0.0004 / 1000,	// World units per second
+			rotateRate: Math.PI / 1000			// Radians per second
 		});
 
 		baseRed = components.Base({
@@ -92,9 +93,15 @@ Demo.model = (function(input, components, assets) {
 
 		if (entity.center.x >= (world.width - world.buffer) || entity.center.x <= (world.left + world.buffer)) {
 			entity.center.x = (entity.center.x >= (world.width - world.buffer)) ? (world.width - world.buffer) : (world.left + world.buffer);
+			//
+			// Also stop any motion in the x direction.
+			entity.momentum.x = 0;
 		}
 		if (entity.center.y >= (world.height - world.buffer) || entity.center.y <= (world.top + world.buffer)) {
 			entity.center.y = (entity.center.y >= (world.height - world.buffer)) ? (world.height - world.buffer) : (world.top + world.buffer);
+			//
+			// Also stop any motion in the y direction.
+			entity.momentum.y = 0;
 		}
 	}
 
