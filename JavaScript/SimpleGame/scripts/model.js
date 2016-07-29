@@ -16,7 +16,7 @@ Demo.model = (function(input, components, renderer, assets) {
 		},
 		background = null,
 		spaceShip = null,	// Spaceship is speshul because we keep the viewport oriented based on its location
-		nextEntityName = 0,
+		nextEntityId = 0,
 		moveableEntities = {},
 		unmoveableEntities = {},
 		myKeyboard = input.Keyboard(),
@@ -51,7 +51,7 @@ Demo.model = (function(input, components, renderer, assets) {
 			accelerationRate: 0.0004 / 1000,	// World units per second
 			rotateRate: Math.PI / 1000			// Radians per second
 		});
-		moveableEntities[nextEntityName++] = {
+		moveableEntities[nextEntityId++] = {
 			model: spaceShip,
 			renderer: renderer.SpaceShip
 		};
@@ -66,7 +66,7 @@ Demo.model = (function(input, components, renderer, assets) {
 				strength: 10
 			}
 		});
-		unmoveableEntities[nextEntityName++] = {
+		unmoveableEntities[nextEntityId++] = {
 			model: baseRed,
 			renderer: renderer.Base
 		};
@@ -74,20 +74,27 @@ Demo.model = (function(input, components, renderer, assets) {
 		myKeyboard.registerHandler(function(elapsedTime) {
 			spaceShip.accelerate(elapsedTime);
 		},
-			input.KeyEvent.DOM_VK_W, true
-		);
+			input.KeyEvent.DOM_VK_W, true);
 
 		myKeyboard.registerHandler(function(elapsedTime) {
 			spaceShip.rotateLeft(elapsedTime);
 		},
-			input.KeyEvent.DOM_VK_A, true
-		);
+			input.KeyEvent.DOM_VK_A, true);
 
 		myKeyboard.registerHandler(function(elapsedTime) {
 			spaceShip.rotateRight(elapsedTime);
 		},
-			input.KeyEvent.DOM_VK_D, true
-		);
+			input.KeyEvent.DOM_VK_D, true);
+
+		myKeyboard.registerHandler(function(elapsedTime) {
+			spaceShip.fire(function(entity, renderer) {
+				moveableEntities[nextEntityId++] = {
+					model: entity,
+					renderer: renderer
+				};
+			});
+		},
+			input.KeyEvent.DOM_VK_SPACE, false);
 
 		//
 		// Get the intial viewport settings prepared.

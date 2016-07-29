@@ -39,6 +39,19 @@ Demo.components.SpaceShip = function(spec) {
 		sprite.update(elapsedTime);
 	};
 
+	that.fire = function(callback) {
+		var missile = undefined,
+			x = Math.cos(that.rotation) / 1000,
+			y = Math.sin(that.rotation) / 1000;
+
+		missile = Demo.components.Missile({
+			center : { x: that.center.x, y: that.center.y },
+			momentum: { x: x, y: y }
+		});
+
+		callback(missile, Demo.renderer.Missile);
+	};
+
 	//------------------------------------------------------------------
 	//
 	// Add momentum in the direction the ship is facing.

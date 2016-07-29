@@ -30,7 +30,7 @@ Demo.loader = (function() {
 			message: 'Game Components loaded',
 			onComplete: null
 		}, {
-			scripts: ['Components/SpaceShip', 'Components/Base'],
+			scripts: ['Components/SpaceShip', 'Components/Base', 'Components/Missile'],
 			message: 'Gameplay Components loaded',
 			onComplete: null
 		}, {
@@ -42,7 +42,7 @@ Demo.loader = (function() {
 			message: 'Core Components Rendering loaded',
 			onComplete: null
 		}, {
-			scripts: ['Rendering/SpaceShip', 'Rendering/Base'],
+			scripts: ['Rendering/SpaceShip', 'Rendering/Base', 'Rendering/Missile'],
 			message: 'Gameplay Components Rendering loaded',
 			onComplete: null
 		}, {
@@ -57,6 +57,9 @@ Demo.loader = (function() {
 		assetOrder = [{
 			key: 'spaceship',
 			source: '/assets/graphics/playerShip1_blue.png'
+		}, {
+			key: 'missile-1',
+			source: '/assets/graphics/Lasers/laserBlue01.png'
 		}, {
 			key: 'base-red',
 			source: '/assets/graphics/ufoRed.png'
