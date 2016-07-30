@@ -117,8 +117,8 @@ Demo.model = (function(input, components, renderer, assets) {
 
 	// ------------------------------------------------------------------
 	//
-	// A moveable entity requires extra care because it can't be allowed to go
-	// outside of the game-world boundaries.
+	// This function tells a moveable entity to update itself and then has
+	// is check for collisions with various other kinds of things in the game.
 	//
 	// ------------------------------------------------------------------
 	function updateMovableEntity(entity, elapsedTime) {

@@ -17,7 +17,12 @@ Demo = {
 //------------------------------------------------------------------
 Demo.loader = (function() {
 	'use strict';
-	var scriptOrder = [{
+	var scriptOrder = [
+		{
+			scripts: ['Random'],
+			message: 'Random number generator loaded',
+			onComplete: null
+		}, {
 			scripts: ['Input/Keyboard', 'Input/Mouse'],
 			message: 'Inputs loaded',
 			onComplete: null
@@ -26,8 +31,12 @@ Demo.loader = (function() {
 			message: 'Core Components loaded',
 			onComplete: null
 		}, {
-			scripts: ['Components/Text', 'Components/Sprite', 'Components/TiledImage'],
+			scripts: ['Components/Text', 'Components/Sprite', 'Components/TiledImage', 'Components/ParticleSystem'],
 			message: 'Game Components loaded',
+			onComplete: null
+		}, {
+			scripts: ['Components/EffectExplosion'],
+			message: 'Particle System Effects loaded',
 			onComplete: null
 		}, {
 			scripts: ['Components/SpaceShip', 'Components/Base', 'Components/Missile'],
@@ -38,7 +47,7 @@ Demo.loader = (function() {
 			message: 'Rendering core loaded',
 			onComplete: null
 		}, {
-			scripts: ['Rendering/Text', 'Rendering/Sprite', 'Rendering/TiledImage'],
+			scripts: ['Rendering/Text', 'Rendering/Sprite', 'Rendering/TiledImage', 'Rendering/ParticleSystem'],
 			message: 'Core Components Rendering loaded',
 			onComplete: null
 		}, {
