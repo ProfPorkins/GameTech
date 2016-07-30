@@ -39,7 +39,18 @@ Demo.components.Missile = function(spec) {
 		return true;
 	};
 
+	//------------------------------------------------------------------
+	//
+	// Used to inform the missle that is collided with something at it's
+	// current position.  We'll have it create a small particle explosion
+	// when that happens.
+	//
+	//------------------------------------------------------------------
 	that.collide = function(entity) {
+		Demo.components.ParticleSystem.createEffectExplosion({
+			center: { x: sprite.center.x, y: sprite.center.y },
+			howMany: 100
+		});
 		return false;
 	}
 

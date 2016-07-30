@@ -26,9 +26,9 @@ Demo.renderer.ParticleSystem = (function(core) {
 
 			core.drawImage(
 				particle.image,
-				particle.center.x - particle.size / 2,		// Where to draw the sprite
+				particle.center.x - particle.size / 2,
 				particle.center.y - particle.size / 2,
-				particle.size, particle.size);
+				particle.size, particle.size, true);
 
 			core.restoreContext();
 		}

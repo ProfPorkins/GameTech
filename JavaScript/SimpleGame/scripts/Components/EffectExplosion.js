@@ -20,7 +20,7 @@ Demo.components.ParticleSystem.createEffectExplosion = function(spec) {
 			//
 			// Create a new fire particle
 			Demo.components.ParticleSystem.createParticle({
-				image: Demo.assets['fire'],
+				image: Demo.assets['particle-fire'],
 				center: { x: spec.center.x, y: spec.center.y },
 				size: Random.nextGaussian(0.015, 0.005),
 				direction: Random.nextCircleVector(),

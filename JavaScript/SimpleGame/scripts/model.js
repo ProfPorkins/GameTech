@@ -178,6 +178,8 @@ Demo.model = (function(input, components, renderer, assets) {
 			}
 		}
 
+		components.ParticleSystem.update(elapsedTime);
+
 		//
 		// Keep the viewport oriented with respect to the space ship.
 		Demo.renderer.core.viewport.update(spaceShip);
@@ -206,6 +208,8 @@ Demo.model = (function(input, components, renderer, assets) {
 				entity.renderer.render(entity.model, elapsedTime);
 			}
 		}
+
+		renderer.ParticleSystem.render(components.ParticleSystem);
 	};
 
 	return that;

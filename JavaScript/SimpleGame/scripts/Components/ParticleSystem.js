@@ -149,15 +149,12 @@ Demo.components.ParticleSystem = (function() {
 			particle.rotation += (particle.rateRotation * elapsedTime);
 
 			//
-			// Only keep particles whose lifetime is still active and is inside
-			// of the unit world.
+			// Only keep particles whose lifetime is still active
 			if (particle.alive < particle.lifetime) {
-				if (particle.center.x >= 0 && particle.center.x <= 1 && particle.center.y >= 0 && particle.center.y <= 1) {
-					temp = keepMe[keepMePosition];
-					keepMe[keepMePosition] = particlesCurrent[value];
-					particlesCurrent[value] = temp;
-					keepMePosition += 1;
-				}
+				temp = keepMe[keepMePosition];
+				keepMe[keepMePosition] = particlesCurrent[value];
+				particlesCurrent[value] = temp;
+				keepMePosition += 1;
 			}
 		}
 

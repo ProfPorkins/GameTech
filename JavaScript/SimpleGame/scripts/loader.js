@@ -72,6 +72,9 @@ Demo.loader = (function() {
 		}, {
 			key: 'base-red',
 			source: '/assets/graphics/ufoRed.png'
+		}, {
+			key: 'particle-fire',
+			source: '/assets/graphics/Particles/fire.png'
 		}];
 
 	//------------------------------------------------------------------
