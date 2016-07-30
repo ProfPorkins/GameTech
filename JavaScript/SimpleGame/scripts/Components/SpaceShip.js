@@ -39,17 +39,24 @@ Demo.components.SpaceShip = function(spec) {
 		sprite.update(elapsedTime);
 	};
 
-	that.fire = function(callback) {
+	//------------------------------------------------------------------
+	//
+	// Fire a missle from the spaceship.
+	//
+	//------------------------------------------------------------------
+	that.fire = function(report) {
 		var missile = undefined,
 			x = Math.cos(that.rotation) / 1000,
 			y = Math.sin(that.rotation) / 1000;
 
 		missile = Demo.components.Missile({
 			center : { x: that.center.x, y: that.center.y },
-			momentum: { x: x, y: y }
+			momentum: { x: spec.momentum.x + x, y: spec.momentum.y + y }
 		});
 
-		callback(missile, Demo.renderer.Missile);
+		//
+		// Report the firing of the missle back to the calling code.
+		report(missile, Demo.renderer.Missile);
 	};
 
 	//------------------------------------------------------------------

@@ -19,7 +19,7 @@ Demo.components.Missile = function(spec) {
 			get size() { return spec.size; },
 			get momentum() { return spec.momentum; },
 			get rotation() {
-				return (spec.momentum.x === 0) ? 0 : Math.atan(spec.momentum.y / spec.momentum.x) + Math.PI / 2;
+				return Math.atan2(spec.momentum.y, spec.momentum.x);
 			},
 			get sprite() { return sprite; }
 		};
@@ -39,7 +39,7 @@ Demo.components.Missile = function(spec) {
 
 	//
 	// Missle knows its own size
-	spec.size = { width: 0.01, height: 0.04 };
+	spec.size = { width: 0.04, height: 0.01 };
 
 	//
 	// Get our sprite model
