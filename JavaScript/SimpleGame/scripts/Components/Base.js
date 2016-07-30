@@ -35,7 +35,13 @@ Demo.components.Base = function(spec) {
 	that.update = function(elapsedTime) {
 		sprite.update(elapsedTime);
 		spec.rotation += (spec.rotateRate * elapsedTime);
+
+		return true;
 	};
+
+	that.collide = function(entity) {
+		return true;
+	}
 
 	//
 	// Get our sprite model

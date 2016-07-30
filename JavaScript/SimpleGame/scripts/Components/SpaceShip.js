@@ -37,7 +37,13 @@ Demo.components.SpaceShip = function(spec) {
 		sprite.center.y += (spec.momentum.y * elapsedTime);
 
 		sprite.update(elapsedTime);
+
+		return true;
 	};
+
+	that.collide = function(entity) {
+		return true;
+	}
 
 	//------------------------------------------------------------------
 	//

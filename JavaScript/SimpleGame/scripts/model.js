@@ -12,7 +12,13 @@ Demo.model = (function(input, components, renderer, assets) {
 			get top() { return 0; },
 			get width() { return 5; },
 			get height() { return 3; },
-			get buffer() { return 0.15; }
+			get bufferSize() { return 0.15; }
+		},
+		worldBuffer = {
+			get left() { return world.left + world.bufferSize; },
+			get top() { return world.top + world.bufferSize; },
+			get right() { return world.width - world.bufferSize; },
+			get bottom() { return world.height - world.bufferSize; }
 		},
 		background = null,
 		spaceShip = null,	// Spaceship is speshul because we keep the viewport oriented based on its location
@@ -21,6 +27,14 @@ Demo.model = (function(input, components, renderer, assets) {
 		unmoveableEntities = {},
 		myKeyboard = input.Keyboard(),
 		that = {};
+
+	//
+	// Define properties for the collision buffer used for the world.
+	Object.defineProperty(world, 'buffer', {
+		get: function() { return worldBuffer },
+		enumerable: true,
+		configurable: false
+	});
 
 	// ------------------------------------------------------------------
 	//
@@ -108,20 +122,31 @@ Demo.model = (function(input, components, renderer, assets) {
 	//
 	// ------------------------------------------------------------------
 	function updateMovableEntity(entity, elapsedTime) {
-		entity.update(elapsedTime);
+		var keepAlive = entity.update(elapsedTime);
 
-		if (entity.center.x >= (world.width - world.buffer) || entity.center.x <= (world.left + world.buffer)) {
-			entity.center.x = (entity.center.x >= (world.width - world.buffer)) ? (world.width - world.buffer) : (world.left + world.buffer);
+		if (keepAlive) {
 			//
-			// Also stop any motion in the x direction.
-			entity.momentum.x = 0;
-		}
-		if (entity.center.y >= (world.height - world.buffer) || entity.center.y <= (world.top + world.buffer)) {
-			entity.center.y = (entity.center.y >= (world.height - world.buffer)) ? (world.height - world.buffer) : (world.top + world.buffer);
+			// Check for collision with the world boundary
+			if (entity.center.x >= world.buffer.right || entity.center.x <= world.buffer.left) {
+				entity.center.x = (entity.center.x >= world.buffer.right) ? world.buffer.right : world.buffer.left;
+				//
+				// Also stop any motion in the x direction.
+				entity.momentum.x = 0;
+				keepAlive = entity.collide();
+			}
+			if (entity.center.y >= world.buffer.bottom || entity.center.y <= world.buffer.top) {
+				entity.center.y = (entity.center.y >= world.buffer.bottom) ? world.buffer.bottom : world.buffer.top;
+				//
+				// Also stop any motion in the y direction.
+				entity.momentum.y = 0;
+				keepAlive = entity.collide();
+			}
+
 			//
-			// Also stop any motion in the y direction.
-			entity.momentum.y = 0;
+			// Check for collision with other entities.
 		}
+
+		return keepAlive;
 	}
 
 	// ------------------------------------------------------------------
@@ -147,7 +172,9 @@ Demo.model = (function(input, components, renderer, assets) {
 
 		for (var entity in moveableEntities) {
 			if (moveableEntities.hasOwnProperty(entity)) {
-				updateMovableEntity(moveableEntities[entity].model, elapsedTime);
+				if (!updateMovableEntity(moveableEntities[entity].model, elapsedTime)) {
+					delete moveableEntities[entity];
+				}
 			}
 		}
 

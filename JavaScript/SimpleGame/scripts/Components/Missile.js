@@ -35,7 +35,13 @@ Demo.components.Missile = function(spec) {
 		sprite.center.y += (spec.momentum.y * elapsedTime);
 
 		sprite.update(elapsedTime);
+
+		return true;
 	};
+
+	that.collide = function(entity) {
+		return false;
+	}
 
 	//
 	// Missle knows its own size
