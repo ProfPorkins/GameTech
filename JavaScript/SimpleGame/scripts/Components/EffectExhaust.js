@@ -6,9 +6,10 @@
 // The spec is defined as:
 // {
 //		center: { x: , y: },
-//		direction: ,	// direction (radians) to emite the particles
-//		spread: ,		// Arc (radians) to spread the particles over
-//		howMany: // How many particles to emit
+//		momentum: { x: , y: },	// Momentum to add to the particles
+//		direction: ,			// direction (radians) to emite the particles
+//		spread: ,				// Arc (radians) to spread the particles over
+//		howMany: 				// How many particles to emit
 // }
 //
 //------------------------------------------------------------------
@@ -16,7 +17,8 @@ Demo.components.ParticleSystem.createEffectExhaust = function(spec) {
 	'use strict';
 	var effect = { },
 		particle = 0,
-		angle;
+		angle,
+		addSpeed = Math.sqrt(Math.pow(spec.momentum.x, 2) + Math.pow(spec.momentum.y, 2));
 
 	effect.update = function() {
 		for (particle = 0; particle < spec.howMany; particle += 1) {
@@ -28,7 +30,7 @@ Demo.components.ParticleSystem.createEffectExhaust = function(spec) {
 				center: { x: spec.center.x, y: spec.center.y },
 				size: Random.nextGaussian(0.006, 0.003),
 				direction: { x: Math.cos(angle), y: Math.sin(angle) },
-				speed: Random.nextGaussian(0.0003, 0.0001),
+				speed: addSpeed + Random.nextGaussian(0.0003, 0.0001),
 				rateRotation: (2 * Math.PI) / 1000,	// Radians per millisecond
 				lifetime: Random.nextGaussian(350, 50)
 			});

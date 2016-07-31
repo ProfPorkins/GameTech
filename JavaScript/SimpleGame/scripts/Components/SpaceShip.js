@@ -136,6 +136,7 @@ Demo.components.SpaceShip = function(spec) {
 		};
 		Demo.components.ParticleSystem.createEffectExhaust({
 			center: tail,
+			momentum: that.momentum,
 			direction: Math.PI + spec.rotation,
 			spread: Math.PI / 3,
 			howMany: 5
