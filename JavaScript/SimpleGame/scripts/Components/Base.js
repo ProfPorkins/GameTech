@@ -50,10 +50,20 @@ Demo.components.Base = function(spec) {
 		return true;
 	};
 
+	//------------------------------------------------------------------
+	//
+	// Check to see if the Base collides with another entity.
+	//
+	//------------------------------------------------------------------
 	that.intersects = function(entity) {
 		return Demo.utilities.math.circleCircleIntersect(entity.boundingCircle, that.boundingCircle);
 	}
 
+	//------------------------------------------------------------------
+	//
+	// Handle the collision behavior for when the Base collides with another entity.
+	//
+	//------------------------------------------------------------------
 	that.collide = function(entity) {
 		return true;
 	};

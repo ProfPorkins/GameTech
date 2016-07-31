@@ -7,6 +7,7 @@
 //	{
 //		center: { x: , y: },		// In world coordinates
 //		momentum: { x: , y: },		// Direction of momentum
+//		lifetime:					// How long (in milliseconds) the missle can live
 //	}
 //
 //
@@ -42,14 +43,24 @@ Demo.components.Missile = function(spec) {
 	//
 	//------------------------------------------------------------------
 	that.update = function(elapsedTime) {
-		sprite.center.x += (spec.momentum.x * elapsedTime);
-		sprite.center.y += (spec.momentum.y * elapsedTime);
+		spec.alive += elapsedTime;
+		if (spec.alive < spec.lifetime) {
+			sprite.center.x += (spec.momentum.x * elapsedTime);
+			sprite.center.y += (spec.momentum.y * elapsedTime);
 
-		sprite.update(elapsedTime);
+			sprite.update(elapsedTime);
 
-		return true;
+			return true;
+		}
+
+		return false;
 	};
 
+	//------------------------------------------------------------------
+	//
+	// Check to see if the Missle collides with another entity.
+	//
+	//------------------------------------------------------------------
 	that.intersects = function(entity) {
 		return Demo.utilities.math.circleCircleIntersect(entity.boundingCircle, that.boundingCircle);
 	};
@@ -78,6 +89,7 @@ Demo.components.Missile = function(spec) {
 	//
 	// Missle knows its own size
 	spec.size = { width: 0.04, height: 0.01 };
+	spec.alive = 0;
 
 	//
 	// Get our sprite model

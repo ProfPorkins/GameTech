@@ -145,7 +145,8 @@ Demo.model = (function(input, components, renderer, assets) {
 		}
 
 		//
-		// Check for collision with enemy entities
+		// Check for collision with other entities and take action based
+		// on those collisions.
 		if (keepAlive) {
 			for (test in others) {
 				if (others.hasOwnProperty(test)) {

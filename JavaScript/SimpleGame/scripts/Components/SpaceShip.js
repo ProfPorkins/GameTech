@@ -52,10 +52,20 @@ Demo.components.SpaceShip = function(spec) {
 		return true;
 	};
 
+	//------------------------------------------------------------------
+	//
+	// Check to see if the SpaceShip collides with another entity.
+	//
+	//------------------------------------------------------------------
 	that.intersects = function(entity) {
 		return Demo.utilities.math.circleCircleIntersect(entity.boundingCircle, that.boundingCircle);
 	}
 
+	//------------------------------------------------------------------
+	//
+	// Handle the collision behavior of the SpaceShip with another entity.
+	//
+	//------------------------------------------------------------------
 	that.collide = function(entity) {
 		var keepAlive = true;
 		if (entity && entity.type === Demo.components.Types.Base) {
@@ -85,7 +95,8 @@ Demo.components.SpaceShip = function(spec) {
 
 		missile = Demo.components.Missile({
 			center : { x: that.center.x, y: that.center.y },
-			momentum: { x: spec.momentum.x + x, y: spec.momentum.y + y }
+			momentum: { x: spec.momentum.x + x, y: spec.momentum.y + y },
+			lifetime: 500
 		});
 
 		//
