@@ -2,7 +2,7 @@
 
 // ------------------------------------------------------------------
 //
-// This namespace holds the rotate to point demo model.
+// This namespace holds the Viewport component (a kind of camera).
 //
 // ------------------------------------------------------------------
 Demo.components.Viewport = function(spec) {

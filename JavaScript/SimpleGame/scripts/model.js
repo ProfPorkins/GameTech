@@ -23,8 +23,8 @@ Demo.model = (function(input, components, renderer, assets) {
 		background = null,
 		spaceShip = null,	// Spaceship is speshul because we keep the viewport oriented based on its location
 		nextEntityId = 0,
-		moveableEntities = {},
-		unmoveableEntities = {},
+		friendlyEntities = {},
+		enemyEntities = {},
 		myKeyboard = input.Keyboard(),
 		that = {};
 
@@ -65,7 +65,7 @@ Demo.model = (function(input, components, renderer, assets) {
 			accelerationRate: 0.0004 / 1000,	// World units per second
 			rotateRate: Math.PI / 1000			// Radians per second
 		});
-		moveableEntities[nextEntityId++] = {
+		friendlyEntities[nextEntityId++] = {
 			model: spaceShip,
 			renderer: renderer.SpaceShip
 		};
@@ -80,7 +80,7 @@ Demo.model = (function(input, components, renderer, assets) {
 				strength: 10
 			}
 		});
-		unmoveableEntities[nextEntityId++] = {
+		enemyEntities[nextEntityId++] = {
 			model: baseRed,
 			renderer: renderer.Base
 		};
@@ -102,7 +102,7 @@ Demo.model = (function(input, components, renderer, assets) {
 
 		myKeyboard.registerHandler(function(elapsedTime) {
 			spaceShip.fire(function(entity, renderer) {
-				moveableEntities[nextEntityId++] = {
+				friendlyEntities[nextEntityId++] = {
 					model: entity,
 					renderer: renderer
 				};
@@ -118,10 +118,10 @@ Demo.model = (function(input, components, renderer, assets) {
 	// ------------------------------------------------------------------
 	//
 	// This function tells a moveable entity to update itself and then has
-	// is check for collisions with various other kinds of things in the game.
+	// it check for collisions with various other kinds of things in the game.
 	//
 	// ------------------------------------------------------------------
-	function updateMovableEntity(entity, elapsedTime) {
+	function updateEntity(entity, others, elapsedTime) {
 		var keepAlive = entity.update(elapsedTime),
 			test = undefined;
 
@@ -144,16 +144,15 @@ Demo.model = (function(input, components, renderer, assets) {
 			}
 		}
 
+		//
+		// Check for collision with enemy entities
 		if (keepAlive) {
-			//
-			// Check for collision with other entities.
-			for (test in unmoveableEntities) {
-				if (unmoveableEntities.hasOwnProperty(test)) {
-					test = unmoveableEntities[test].model;
-					if (entity.intersects(test)) {
+			for (test in others) {
+				if (others.hasOwnProperty(test)) {
+					test = others[test].model;
+					if (entity !== test && entity.intersects(test)) {
 						test.collide(entity);
-						entity.collide(test);
-						keepAlive = false;
+						keepAlive = entity.collide(test);
 					}
 				}
 			}
@@ -177,16 +176,18 @@ Demo.model = (function(input, components, renderer, assets) {
 	//
 	// ------------------------------------------------------------------
 	that.update = function(elapsedTime) {
-		for (entity in unmoveableEntities) {
-			if (unmoveableEntities.hasOwnProperty(entity)) {
-				unmoveableEntities[entity].model.update(elapsedTime);
+		for (entity in enemyEntities) {
+			if (enemyEntities.hasOwnProperty(entity)) {
+				if (!updateEntity(enemyEntities[entity].model, friendlyEntities, elapsedTime)) {
+					delete enemyEntities[entity];
+				}
 			}
 		}
 
-		for (var entity in moveableEntities) {
-			if (moveableEntities.hasOwnProperty(entity)) {
-				if (!updateMovableEntity(moveableEntities[entity].model, elapsedTime)) {
-					delete moveableEntities[entity];
+		for (var entity in friendlyEntities) {
+			if (friendlyEntities.hasOwnProperty(entity)) {
+				if (!updateEntity(friendlyEntities[entity].model, enemyEntities, elapsedTime)) {
+					delete friendlyEntities[entity];
 				}
 			}
 		}
@@ -209,15 +210,15 @@ Demo.model = (function(input, components, renderer, assets) {
 
 		renderer.TiledImage.render(background, renderer.core.viewport);
 
-		for (entityId in unmoveableEntities) {
-			if (unmoveableEntities.hasOwnProperty(entityId)) {
-				entity = unmoveableEntities[entityId];
+		for (entityId in enemyEntities) {
+			if (enemyEntities.hasOwnProperty(entityId)) {
+				entity = enemyEntities[entityId];
 				entity.renderer.render(entity.model, elapsedTime);
 			}
 		}
-		for (entityId in moveableEntities) {
-			if (moveableEntities.hasOwnProperty(entityId)) {
-				entity = moveableEntities[entityId];
+		for (entityId in friendlyEntities) {
+			if (friendlyEntities.hasOwnProperty(entityId)) {
+				entity = friendlyEntities[entityId];
 				entity.renderer.render(entity.model, elapsedTime);
 			}
 		}

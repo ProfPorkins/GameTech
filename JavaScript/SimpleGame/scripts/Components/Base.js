@@ -20,12 +20,23 @@ Demo.components.Base = function(spec) {
 			get strength() { return spec.shield.strength; }
 		},
 		that = {
+			get type() { return Demo.components.Types.Base; },
 			get center() { return sprite.center; },
 			get radius() { return spec.radius; },
 			get rotation() { return spec.rotation; },
 			get sprite() { return sprite; },
 			get shield() { return shield; }
+		},
+		boundingCircle = {
+			get center() { return that.center; },
+			get radius() { return that.radius; }
 		};
+
+	Object.defineProperty(that, 'boundingCircle', {
+		get: function() { return boundingCircle; },
+		enumerable: true,
+		configurable: false
+	});
 
 	//------------------------------------------------------------------
 	//
@@ -40,7 +51,7 @@ Demo.components.Base = function(spec) {
 	};
 
 	that.intersects = function(entity) {
-		return Demo.utilities.math.circleCircleIntersect(entity, that);
+		return Demo.utilities.math.circleCircleIntersect(entity.boundingCircle, that.boundingCircle);
 	}
 
 	that.collide = function(entity) {

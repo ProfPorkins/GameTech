@@ -18,13 +18,24 @@ Demo.components.SpaceShip = function(spec) {
 	'use strict';
 	var sprite = null,
 		that = {
+			get type() { return Demo.components.Types.SpaceShip; },
 			get center() { return sprite.center; },
 			get size() { return spec.size; },
 			get momentum() { return spec.momentum; },
 			get rotation() { return spec.rotation; },
 			get accelerateRate() { return spec.accelerateRate; },
 			get sprite() { return sprite; }
+		},
+		boundingCircle = {
+			get center() { return that.center; },
+			get radius() { return that.size.width / 2; }
 		};
+
+	Object.defineProperty(that, 'boundingCircle', {
+		get: function() { return boundingCircle; },
+		enumerable: true,
+		configurable: false
+	});
 
 	//------------------------------------------------------------------
 	//
@@ -42,11 +53,24 @@ Demo.components.SpaceShip = function(spec) {
 	};
 
 	that.intersects = function(entity) {
-		return false;
+		return Demo.utilities.math.circleCircleIntersect(entity.boundingCircle, that.boundingCircle);
 	}
 
 	that.collide = function(entity) {
-		return true;
+		var keepAlive = true;
+		if (entity && entity.type === Demo.components.Types.Base) {
+			//
+			// If we hit a base, we are dead, that's all there is too it, just die!
+			keepAlive = false;
+			//
+			// Make a nice big explosion when this happens!
+			Demo.components.ParticleSystem.createEffectExplosion({
+				center: { x: that.center.x, y: that.center.y },
+				howMany: 500
+			});
+		}
+
+		return keepAlive;
 	}
 
 	//------------------------------------------------------------------

@@ -15,6 +15,7 @@ Demo.components.Missile = function(spec) {
 	'use strict';
 	var sprite = null,
 		that = {
+			get type() { return Demo.components.Types.Missile; },
 			get center() { return sprite.center; },
 			get size() { return spec.size; },
 			get momentum() { return spec.momentum; },
@@ -23,10 +24,16 @@ Demo.components.Missile = function(spec) {
 			},
 			get sprite() { return sprite; }
 		},
-		collisionCircle = {
+		boundingCircle = {
 			get center() { return that.center; },
 			get radius() { return that.size.width / 2; }
 		};
+
+	Object.defineProperty(that, 'boundingCircle', {
+		get: function() { return boundingCircle; },
+		enumerable: true,
+		configurable: false
+	});
 
 	//------------------------------------------------------------------
 	//
@@ -44,7 +51,7 @@ Demo.components.Missile = function(spec) {
 	};
 
 	that.intersects = function(entity) {
-		return Demo.utilities.math.circleCircleIntersect(entity, collisionCircle);
+		return Demo.utilities.math.circleCircleIntersect(entity.boundingCircle, that.boundingCircle);
 	};
 
 	//------------------------------------------------------------------
@@ -55,10 +62,16 @@ Demo.components.Missile = function(spec) {
 	//
 	//------------------------------------------------------------------
 	that.collide = function(entity) {
-		Demo.components.ParticleSystem.createEffectExplosion({
-			center: { x: sprite.center.x, y: sprite.center.y },
-			howMany: 100
-		});
+		//
+		// Only going to generate an effect if we hit another entity, there are
+		// times when no entity was actually hit (like the border of the game world).
+		if (entity) {
+			Demo.components.ParticleSystem.createEffectExplosion({
+				center: { x: sprite.center.x, y: sprite.center.y },
+				howMany: 100
+			});
+		}
+
 		return false;
 	};
 

@@ -28,7 +28,7 @@ Demo.loader = (function() {
 			message: 'Inputs loaded',
 			onComplete: null
 		}, {
-			scripts: ['Components/Viewport'],
+			scripts: ['Components/Types', 'Components/Viewport'],
 			message: 'Core Components loaded',
 			onComplete: null
 		}, {
