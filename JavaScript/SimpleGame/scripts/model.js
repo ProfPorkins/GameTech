@@ -63,7 +63,7 @@ Demo.model = (function(input, components, renderer, assets) {
 			maxSpeed: 0.0004,					// World units per millisecond
 			rotation: 0,
 			accelerationRate: 0.0004 / 1000,	// World units per second
-			rotateRate: Math.PI / 1000			// Radians per second
+			rotateRate: Math.PI / 1000			// Radians per millisecond
 		});
 		friendlyEntities[nextEntityId++] = {
 			model: spaceShip,
@@ -75,6 +75,7 @@ Demo.model = (function(input, components, renderer, assets) {
 			radius: 0.10,
 			rotation: 0,
 			rotateRate: (Math.PI / 4) / 1000,	// Slow rotation
+			vicinity: 0.30,
 			hitPoints: {
 				max: 5
 			},
@@ -155,11 +156,20 @@ Demo.model = (function(input, components, renderer, assets) {
 			for (testId in others) {
 				if (others.hasOwnProperty(testId)) {
 					test = others[testId].model;
-					if (entity !== test && entity.intersects(test)) {
+					if (entity.intersects(test)) {
 						if (!test.collide(entity)) {
 							delete others[testId];
 						}
 						keepAlive = keepAlive && entity.collide(test);
+					} else {
+						//
+						// Check for vicinity if an intersection didn't occur
+						entity.vicinity(test, function(entity, renderer) {
+							enemyEntities[nextEntityId++] = {
+								model: entity,
+								renderer: renderer
+							}
+						});
 					}
 				}
 			}

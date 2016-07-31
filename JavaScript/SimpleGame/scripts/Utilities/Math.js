@@ -11,6 +11,19 @@ Demo.utilities.math = (function() {
 
 	//------------------------------------------------------------------
 	//
+	// Simple helper function to help testing a value with some level of tolerance.
+	//
+	//------------------------------------------------------------------
+	that.testTolerance = function(value, test, tolerance) {
+		if (Math.abs(value - test) < tolerance) {
+			return true;
+		}
+
+		return false;
+	};
+
+	//------------------------------------------------------------------
+	//
 	// Tests to see if two circles intersect with each other.
 	//
 	//------------------------------------------------------------------

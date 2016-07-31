@@ -40,7 +40,7 @@ Demo.loader = (function() {
 			message: 'Particle System Effects loaded',
 			onComplete: null
 		}, {
-			scripts: ['Components/SpaceShip', 'Components/Base', 'Components/Missile'],
+			scripts: ['Components/SpaceShip', 'Components/Base', 'Components/Missile', 'Components/TrackingMissile'],
 			message: 'Gameplay Components loaded',
 			onComplete: null
 		}, {
@@ -70,6 +70,9 @@ Demo.loader = (function() {
 		}, {
 			key: 'missile-1',
 			source: '/assets/graphics/Lasers/laserBlue01.png'
+		}, {
+			key: 'missile-2',
+			source: '/assets/graphics/Lasers/laserRed01.png'
 		}, {
 			key: 'base-red',
 			source: '/assets/graphics/ufoRed.png'

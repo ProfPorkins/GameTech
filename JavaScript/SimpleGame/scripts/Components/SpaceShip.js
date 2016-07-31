@@ -10,7 +10,7 @@
 //		momentum: { x: , y: },		// Direction of momentum
 //		rotation: 	,				// Pointing angle, in radians
 //		accelerationRate: 	,		// World units per second
-//		rotateRate:					// Radians per second
+//		rotateRate:					// Radians per millisecond
 //	}
 //
 //------------------------------------------------------------------
@@ -61,6 +61,16 @@ Demo.components.SpaceShip = function(spec) {
 	that.intersects = function(entity) {
 		return Demo.utilities.math.circleCircleIntersect(entity.boundingCircle, that.boundingCircle);
 	}
+
+	//------------------------------------------------------------------
+	//
+	// Called when another entity gets within the 'vicinity' of this entity.
+	//
+	//------------------------------------------------------------------
+	that.vicinity = function(entity) {
+		//
+		// Nothing to do here
+	};
 
 	//------------------------------------------------------------------
 	//

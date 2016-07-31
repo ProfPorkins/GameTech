@@ -9,6 +9,7 @@
 //		radius: 					// In world coordinates
 //		rotation: 					// In Radians
 //		rotateRate:					// Radians per second
+//		vicinity:					// In world coordinates
 //		hitPoints: {
 //			max:					// Maximum hit points for the base
 //		},
@@ -40,7 +41,8 @@ Demo.components.Base = function(spec) {
 			get center() { return that.center; },
 			get radius() { return that.radius; }
 		},
-		regenerationTime = 0;
+		regenerationTime = 0,
+		lastMissileFired = 0;
 
 	Object.defineProperty(that, 'boundingCircle', {
 		get: function() { return boundingCircle; },
@@ -65,6 +67,10 @@ Demo.components.Base = function(spec) {
 			regenerationTime -= 1000;
 		}
 
+		//
+		// Update how long since last missle was fired
+		lastMissileFired += elapsedTime;
+
 		return true;
 	};
 
@@ -76,6 +82,48 @@ Demo.components.Base = function(spec) {
 	that.intersects = function(entity) {
 		return Demo.utilities.math.circleCircleIntersect(entity.boundingCircle, that.boundingCircle);
 	}
+
+	//------------------------------------------------------------------
+	//
+	// Called when another entity gets within the 'vicinity' of this entity.
+	//
+	//------------------------------------------------------------------
+	that.vicinity = function(entity, report) {
+		var distance,
+			missile,
+			direction = undefined,
+			magnitude;
+
+		//
+		// If the other entity is a spaceship and is within our vicinity, then
+		// fire a missle if we haven't fired one in the last X milliseconds.
+		if (entity.type === Demo.components.Types.SpaceShip) {
+			distance = Math.sqrt(Math.pow(entity.center.x - that.center.x, 2) + Math.pow(entity.center.y - that.center.y, 2));
+			if (distance <= spec.vicinity && lastMissileFired > 1000) {
+				lastMissileFired = 0;
+				direction = {
+					x: entity.center.x - that.center.x,
+					y: entity.center.y - that.center.y
+				};
+				magnitude = Math.sqrt(Math.pow(direction.x, 2) + Math.pow(direction.y, 2));
+
+				direction.x = (direction.x / magnitude) / 5000;
+				direction.y = (direction.y / magnitude) / 5000;
+
+				missile = Demo.components.TrackingMissile({
+					center : { x: that.center.x, y: that.center.y },
+					target: entity,
+					momentum: { x: direction.x, y: direction.y },
+					rotateRate: Math.PI / 1000,
+					lifetime: 3000
+				});
+
+				//
+				// Report the firing of the missle back to the calling code.
+				report(missile, Demo.renderer.Missile);
+			}
+		}
+	};
 
 	//------------------------------------------------------------------
 	//
