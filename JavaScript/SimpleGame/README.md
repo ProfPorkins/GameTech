@@ -36,6 +36,8 @@ With the image tiles created, the sample game can be run.  It must be run as a s
 
 * Use of *spaceshooter* assets under Creative Commons License.  Thank you very much!!
   * Source: http://www.kenney.nl
+* Use of *fire.png* under the Microsoft Permissive License
+  * Source: http://xbox.create.msdn.com/en-US/education/catalog/sample/particle_3d
 * NASA Hubble Image
   * Source: https://www.spacetelescope.org/images/heic0910e/
   * Credit: NASA, ESA and the Hubble SM4 ERO Team

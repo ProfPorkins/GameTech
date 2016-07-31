@@ -36,7 +36,7 @@ Demo.loader = (function() {
 			message: 'Game Components loaded',
 			onComplete: null
 		}, {
-			scripts: ['Components/EffectExplosion'],
+			scripts: ['Components/EffectExplosion', 'Components/EffectExhaust'],
 			message: 'Particle System Effects loaded',
 			onComplete: null
 		}, {
@@ -76,6 +76,9 @@ Demo.loader = (function() {
 		}, {
 			key: 'particle-fire',
 			source: '/assets/graphics/Particles/fire.png'
+		}, {
+			key: 'particle-star',
+			source: '/assets/graphics/Effects/star3-gold.png'
 		}];
 
 	//------------------------------------------------------------------

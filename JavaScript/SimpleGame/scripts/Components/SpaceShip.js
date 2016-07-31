@@ -110,8 +110,8 @@ Demo.components.SpaceShip = function(spec) {
 	//
 	//------------------------------------------------------------------
 	that.accelerate = function(elapsedTime) {
-		var vectorX = Math.cos(spec.rotation),
-			vectorY = Math.sin(spec.rotation),
+		var vectorX = Math.cos(that.rotation),
+			vectorY = Math.sin(that.rotation),
 			newSpeed = 0;
 
 		spec.momentum.x += (vectorX * elapsedTime * spec.accelerationRate);
@@ -125,6 +125,21 @@ Demo.components.SpaceShip = function(spec) {
 			spec.momentum.x /= (newSpeed / spec.maxSpeed);
 			spec.momentum.y /= (newSpeed / spec.maxSpeed);
 		}
+
+		//
+		// Generate a little exhaust
+		// Compute the location of the tail of the spaceship, that is where we
+		// want to emit exhaust particles.
+		var tail = {
+			x: that.center.x - Math.cos(that.rotation) * (that.size.width / 2),
+			y: that.center.y - Math.sin(that.rotation) * (that.size.height / 2)
+		};
+		Demo.components.ParticleSystem.createEffectExhaust({
+			center: tail,
+			direction: Math.PI + spec.rotation,
+			spread: Math.PI / 3,
+			howMany: 5
+		});
 	};
 
 	//------------------------------------------------------------------
