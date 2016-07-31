@@ -39,9 +39,13 @@ Demo.components.Base = function(spec) {
 		return true;
 	};
 
+	that.intersects = function(entity) {
+		return Demo.utilities.math.circleCircleIntersect(entity, that);
+	}
+
 	that.collide = function(entity) {
 		return true;
-	}
+	};
 
 	//
 	// Get our sprite model

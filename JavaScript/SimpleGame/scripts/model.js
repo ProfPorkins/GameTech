@@ -122,7 +122,8 @@ Demo.model = (function(input, components, renderer, assets) {
 	//
 	// ------------------------------------------------------------------
 	function updateMovableEntity(entity, elapsedTime) {
-		var keepAlive = entity.update(elapsedTime);
+		var keepAlive = entity.update(elapsedTime),
+			test = undefined;
 
 		if (keepAlive) {
 			//
@@ -141,9 +142,21 @@ Demo.model = (function(input, components, renderer, assets) {
 				entity.momentum.y = 0;
 				keepAlive = entity.collide();
 			}
+		}
 
+		if (keepAlive) {
 			//
 			// Check for collision with other entities.
+			for (test in unmoveableEntities) {
+				if (unmoveableEntities.hasOwnProperty(test)) {
+					test = unmoveableEntities[test].model;
+					if (entity.intersects(test)) {
+						test.collide(entity);
+						entity.collide(test);
+						keepAlive = false;
+					}
+				}
+			}
 		}
 
 		return keepAlive;

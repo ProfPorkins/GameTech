@@ -41,6 +41,10 @@ Demo.components.SpaceShip = function(spec) {
 		return true;
 	};
 
+	that.intersects = function(entity) {
+		return false;
+	}
+
 	that.collide = function(entity) {
 		return true;
 	}

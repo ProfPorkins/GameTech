@@ -4,6 +4,7 @@ Demo = {
 	input: {},
 	components: {},
 	renderer: {},
+	utilities: {},
 	assets: {}
 };
 
@@ -19,8 +20,8 @@ Demo.loader = (function() {
 	'use strict';
 	var scriptOrder = [
 		{
-			scripts: ['Random'],
-			message: 'Random number generator loaded',
+			scripts: ['Utilities/Math', 'Utilities/Random'],
+			message: 'Utilities loaded',
 			onComplete: null
 		}, {
 			scripts: ['Input/Keyboard', 'Input/Mouse'],

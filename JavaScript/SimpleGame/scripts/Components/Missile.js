@@ -22,6 +22,10 @@ Demo.components.Missile = function(spec) {
 				return Math.atan2(spec.momentum.y, spec.momentum.x);
 			},
 			get sprite() { return sprite; }
+		},
+		collisionCircle = {
+			get center() { return that.center; },
+			get radius() { return that.size.width / 2; }
 		};
 
 	//------------------------------------------------------------------
@@ -39,6 +43,10 @@ Demo.components.Missile = function(spec) {
 		return true;
 	};
 
+	that.intersects = function(entity) {
+		return Demo.utilities.math.circleCircleIntersect(entity, collisionCircle);
+	};
+
 	//------------------------------------------------------------------
 	//
 	// Used to inform the missle that is collided with something at it's
@@ -52,7 +60,7 @@ Demo.components.Missile = function(spec) {
 			howMany: 100
 		});
 		return false;
-	}
+	};
 
 	//
 	// Missle knows its own size
