@@ -81,6 +81,46 @@ Demo.components.ParticleSystem = (function() {
 
 	//------------------------------------------------------------------
 	//
+	// This creates one new animated particle.  The spec is defined as:
+	// {
+	//		image: ,				// Image to use for the particle
+	//		imageSize: ,			// Size of each tile
+	//		imageTime: ,			// How long to display each tile, in milliseconds
+	//		center: { x: , y: },	// In world coordinates
+	//		size: ,					// In world coordinates
+	//		direction: { x: , y: },	// 2D vector
+	//		speed: ,				// World units per millisecond
+	//		rateRotation: ,			// Radians per millisecond
+	//		lifetime: 				// Milliseonds
+	// }
+	//
+	//------------------------------------------------------------------
+	that.createAnimatedParticle = function(spec) {
+		if (particleCount < MAX_PARTICLES) {
+			var p = particlesCurrent[particleCount];
+			particleCount += 1;
+
+			p.image = spec.image;
+			p.imageSize = spec.imageSize;
+			p.imageCount = spec.image.width / spec.imageSize;
+			p.imageCurrent = 0;
+			p.imageTime = spec.imageTime;		// milliseconds per frame
+			p.imageElapsedTime = 0;
+			p.size = Math.max(0, spec.size);	// Ensure a valid size
+			p.center.x = spec.center.x;
+			p.center.y = spec.center.y;
+			p.direction.x = spec.direction.x;
+			p.direction.y = spec.direction.y;
+			p.speed = spec.speed;
+			p.rateRotation = spec.rateRotation;
+			p.rotation = 0;
+			p.lifetime = Math.max(0.01, spec.lifetime);	// Ensure a valid lifetime
+			p.alive = 0;
+		}
+	};
+
+	//------------------------------------------------------------------
+	//
 	// Allow an effect to be added to the current set of effects.  'effect'
 	// must expose an 'update' function according to:
 	//
@@ -145,8 +185,23 @@ Demo.components.ParticleSystem = (function() {
 			particle.center.y += (elapsedTime * particle.speed * particle.direction.y);
 
 			//
-			// Update rotation
-			particle.rotation += (particle.rateRotation * elapsedTime);
+			// Check if this is an animated particle, update accordingly
+			if (particle.imageSize) {
+				particle.imageElapsedTime += elapsedTime;
+				while (particle.imageElapsedTime >= particle.imageTime) {
+					particle.imageElapsedTime -= particle.imageTime;
+					particle.imageCurrent += 1;
+					//
+					// If we've hit the end of the animation, then the particle must die
+					if (particle.imageCurrent >= particle.imageCount) {
+						particle.alive = particle.lifetime;
+					}
+				}
+			} else {
+				//
+				// Only update rotation for non animated particles.
+				particle.rotation += (particle.rateRotation * elapsedTime);
+			}
 
 			//
 			// Only keep particles whose lifetime is still active

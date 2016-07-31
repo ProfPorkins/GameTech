@@ -34,8 +34,12 @@ With the image tiles created, the sample game can be run.  It must be run as a s
 
 ## Content Acknowledgements
 
-* Use of *spaceshooter* assets under Creative Commons License.  Thank you very much!!
+Thanks all sources for the great assets!
+
+* Use of *spaceshooter* assets under Creative Commons License.
   * Source: http://www.kenney.nl
+* Adapted use of *fireball* under Public Domain.
+  * Source: http://opengameart.org/content/sparkling-fireball-effect
 * Use of *fire.png* under the Microsoft Permissive License
   * Source: http://xbox.create.msdn.com/en-US/education/catalog/sample/particle_3d
 * NASA Hubble Image

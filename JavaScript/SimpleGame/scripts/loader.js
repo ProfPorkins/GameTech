@@ -79,6 +79,9 @@ Demo.loader = (function() {
 		}, {
 			key: 'particle-star',
 			source: '/assets/graphics/Effects/star3-gold.png'
+		}, {
+			key: 'particle-fireball',
+			source: '/assets/graphics/Particles/fireball.png'
 		}];
 
 	//------------------------------------------------------------------

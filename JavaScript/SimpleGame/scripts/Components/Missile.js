@@ -78,7 +78,7 @@ Demo.components.Missile = function(spec) {
 		if (entity) {
 			Demo.components.ParticleSystem.createEffectExplosion({
 				center: { x: sprite.center.x, y: sprite.center.y },
-				howMany: 50
+				howMany: 25
 			});
 		}
 

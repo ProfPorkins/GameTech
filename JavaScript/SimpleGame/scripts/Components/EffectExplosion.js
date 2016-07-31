@@ -19,10 +19,12 @@ Demo.components.ParticleSystem.createEffectExplosion = function(spec) {
 		for (particle = 0; particle < spec.howMany; particle += 1) {
 			//
 			// Create a new fire particle
-			Demo.components.ParticleSystem.createParticle({
-				image: Demo.assets['particle-fire'],
+			Demo.components.ParticleSystem.createAnimatedParticle({
+				image: Demo.assets['particle-fireball'],
+				imageSize: 256,
+				imageTime: 40,
 				center: { x: spec.center.x, y: spec.center.y },
-				size: Random.nextGaussian(0.015, 0.005),
+				size: Random.nextGaussian(0.045, 0.01),
 				direction: Random.nextCircleVector(),
 				speed: Random.nextGaussian(0.0003, 0.0001),
 				rateRotation: (2 * Math.PI) / 1000,	// Radians per millisecond
