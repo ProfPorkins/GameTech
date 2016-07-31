@@ -75,9 +75,12 @@ Demo.model = (function(input, components, renderer, assets) {
 			radius: 0.10,
 			rotation: 0,
 			rotateRate: (Math.PI / 4) / 1000,	// Slow rotation
+			hitPoints: {
+				max: 5
+			},
 			shield: {
 				thickness: 0.025,
-				strength: 10
+				max: 10
 			}
 		});
 		enemyEntities[nextEntityId++] = {
@@ -123,6 +126,7 @@ Demo.model = (function(input, components, renderer, assets) {
 	// ------------------------------------------------------------------
 	function updateEntity(entity, others, elapsedTime) {
 		var keepAlive = entity.update(elapsedTime),
+			testId = undefined,
 			test = undefined;
 
 		if (keepAlive) {
@@ -148,12 +152,14 @@ Demo.model = (function(input, components, renderer, assets) {
 		// Check for collision with other entities and take action based
 		// on those collisions.
 		if (keepAlive) {
-			for (test in others) {
-				if (others.hasOwnProperty(test)) {
-					test = others[test].model;
+			for (testId in others) {
+				if (others.hasOwnProperty(testId)) {
+					test = others[testId].model;
 					if (entity !== test && entity.intersects(test)) {
-						test.collide(entity);
-						keepAlive = entity.collide(test);
+						if (!test.collide(entity)) {
+							delete others[testId];
+						}
+						keepAlive = keepAlive && entity.collide(test);
 					}
 				}
 			}

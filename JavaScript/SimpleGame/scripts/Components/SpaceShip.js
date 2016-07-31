@@ -24,6 +24,7 @@ Demo.components.SpaceShip = function(spec) {
 			get momentum() { return spec.momentum; },
 			get rotation() { return spec.rotation; },
 			get accelerateRate() { return spec.accelerateRate; },
+			get damage() { return 4; },
 			get sprite() { return sprite; }
 		},
 		boundingCircle = {

@@ -20,9 +20,8 @@ Demo.components.Missile = function(spec) {
 			get center() { return sprite.center; },
 			get size() { return spec.size; },
 			get momentum() { return spec.momentum; },
-			get rotation() {
-				return Math.atan2(spec.momentum.y, spec.momentum.x);
-			},
+			get rotation() { return Math.atan2(spec.momentum.y, spec.momentum.x); },
+			get damage() { return 1; },
 			get sprite() { return sprite; }
 		},
 		boundingCircle = {
@@ -79,7 +78,7 @@ Demo.components.Missile = function(spec) {
 		if (entity) {
 			Demo.components.ParticleSystem.createEffectExplosion({
 				center: { x: sprite.center.x, y: sprite.center.y },
-				howMany: 100
+				howMany: 50
 			});
 		}
 
