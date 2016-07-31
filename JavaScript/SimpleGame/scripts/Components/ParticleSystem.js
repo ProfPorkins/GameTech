@@ -185,6 +185,10 @@ Demo.components.ParticleSystem = (function() {
 			particle.center.y += (elapsedTime * particle.speed * particle.direction.y);
 
 			//
+			// Update rotation - Yes, I know, redundant comment, but I can't help myself.
+			particle.rotation += (particle.rateRotation * elapsedTime);
+
+			//
 			// Check if this is an animated particle, update accordingly
 			if (particle.imageSize) {
 				particle.imageElapsedTime += elapsedTime;
@@ -197,10 +201,6 @@ Demo.components.ParticleSystem = (function() {
 						particle.alive = particle.lifetime;
 					}
 				}
-			} else {
-				//
-				// Only update rotation for non animated particles.
-				particle.rotation += (particle.rateRotation * elapsedTime);
 			}
 
 			//

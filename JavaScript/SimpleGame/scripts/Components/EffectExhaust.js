@@ -26,11 +26,9 @@ Demo.components.ParticleSystem.createEffectExhaust = function(spec) {
 			// Create a new fire particle
 			angle = spec.direction - (spec.spread / 2) + Random.nextDouble() * spec.spread;
 			Demo.components.ParticleSystem.createAnimatedParticle({
-				image: Demo.assets['particle-fireball'],
-				imageSize: 256,
-				imageTime: 40,
+				image: Demo.assets['particle-fire'],
 				center: { x: spec.center.x, y: spec.center.y },
-				size: Random.nextGaussian(0.026, 0.008),
+				size: Random.nextGaussian(0.015, 0.004),
 				direction: { x: Math.cos(angle), y: Math.sin(angle) },
 				speed: addSpeed + Random.nextGaussian(0.0003, 0.0001),
 				rateRotation: (2 * Math.PI) / 1000,	// Radians per millisecond

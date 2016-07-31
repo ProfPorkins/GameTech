@@ -27,7 +27,7 @@ Demo.components.ParticleSystem.createEffectExplosion = function(spec) {
 				size: Random.nextGaussian(0.045, 0.01),
 				direction: Random.nextCircleVector(),
 				speed: Random.nextGaussian(0.0003, 0.0001),
-				rateRotation: (2 * Math.PI) / 1000,	// Radians per millisecond
+				rateRotation: 0,	// Radians per millisecond
 				lifetime: Random.nextGaussian(1500, 250)
 			});
 		}
