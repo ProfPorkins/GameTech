@@ -99,7 +99,7 @@ Demo.components.Base = function(spec) {
 		// fire a missle if we haven't fired one in the last X milliseconds.
 		if (entity.type === Demo.components.Types.SpaceShip) {
 			distance = Math.sqrt(Math.pow(entity.center.x - that.center.x, 2) + Math.pow(entity.center.y - that.center.y, 2));
-			if (distance <= spec.vicinity && lastMissileFired > 1000) {
+			if (distance <= spec.vicinity && lastMissileFired > 500) {
 				lastMissileFired = 0;
 				direction = {
 					x: entity.center.x - that.center.x,
@@ -107,15 +107,15 @@ Demo.components.Base = function(spec) {
 				};
 				magnitude = Math.sqrt(Math.pow(direction.x, 2) + Math.pow(direction.y, 2));
 
-				direction.x = (direction.x / magnitude) / 5000;
-				direction.y = (direction.y / magnitude) / 5000;
+				direction.x = (direction.x / magnitude) / 4000;
+				direction.y = (direction.y / magnitude) / 4000;
 
 				missile = Demo.components.TrackingMissile({
 					center : { x: that.center.x, y: that.center.y },
 					target: entity,
 					momentum: { x: direction.x, y: direction.y },
 					rotateRate: Math.PI / 1000,
-					lifetime: 3000
+					lifetime: 5000
 				});
 
 				//
@@ -155,7 +155,7 @@ Demo.components.Base = function(spec) {
 	};
 
 	//
-	// Set the initial shild and base strengths
+	// Set the initial shield and base strengths
 	spec.hitPoints.strength = spec.hitPoints.max;
 	spec.shield.strength = spec.shield.max;
 

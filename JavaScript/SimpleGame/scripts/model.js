@@ -63,7 +63,10 @@ Demo.model = (function(input, components, renderer, assets) {
 			maxSpeed: 0.0004,					// World units per millisecond
 			rotation: 0,
 			accelerationRate: 0.0004 / 1000,	// World units per second
-			rotateRate: Math.PI / 1000			// Radians per millisecond
+			rotateRate: Math.PI / 1000,			// Radians per millisecond
+			hitPoints: {
+				max: 10
+			}
 		});
 		friendlyEntities[nextEntityId++] = {
 			model: spaceShip,
@@ -75,7 +78,7 @@ Demo.model = (function(input, components, renderer, assets) {
 			radius: 0.10,
 			rotation: 0,
 			rotateRate: (Math.PI / 4) / 1000,	// Slow rotation
-			vicinity: 0.30,
+			vicinity: 0.40,
 			hitPoints: {
 				max: 5
 			},

@@ -79,9 +79,19 @@ Demo.components.SpaceShip = function(spec) {
 	//------------------------------------------------------------------
 	that.collide = function(entity) {
 		var keepAlive = true;
-		if (entity && entity.type === Demo.components.Types.Base) {
-			//
-			// If we hit a base, we are dead, that's all there is too it, just die!
+		if (entity) {
+			if (entity.type === Demo.components.Types.Base) {
+				//
+				// If we hit a base, we are dead, that's all there is too it, just die!
+				spec.hitPoints.strength = 0;
+			} else {
+				spec.hitPoints.strength = Math.max(spec.hitPoints.strength - entity.damage, 0);
+			}
+		}
+
+		//
+		// If hit points have hit 0, we are done!
+		if (spec.hitPoints.strength <= 0) {
 			keepAlive = false;
 			//
 			// Make a nice big explosion when this happens!
@@ -171,6 +181,10 @@ Demo.components.SpaceShip = function(spec) {
 	that.rotateLeft = function(elapsedTime) {
 		spec.rotation -= spec.rotateRate * (elapsedTime);
 	};
+
+	//
+	// Set the initial number of hit points
+	spec.hitPoints.strength = spec.hitPoints.max;
 
 	//
 	// Get our sprite model
