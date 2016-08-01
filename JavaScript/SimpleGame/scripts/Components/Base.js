@@ -131,12 +131,18 @@ Demo.components.Base = function(spec) {
 	//
 	//------------------------------------------------------------------
 	that.collide = function(entity) {
-		var keepAlive = true;
+		var keepAlive = true,
+			damageLeft = entity.damage;
 
 		if (that.shield.strength > 0) {
-			spec.shield.strength = Math.max(spec.shield.strength - entity.damage, 0);
-		} else {
-			spec.hitPoints.strength = Math.max(spec.hitPoints.strength - entity.damage, 0);
+			spec.shield.strength -= damageLeft;
+			if (spec.shield.strength < 0) {
+				damageLeft = Math.abs(spec.shield.strength);
+				spec.shield.strength = 0;
+			}
+		}
+		if (spec.shield.strength === 0 && damageLeft > 0) {
+			spec.hitPoints.strength = Math.max(spec.hitPoints.strength - damageLeft, 0);
 			if (spec.hitPoints.strength <= 0) {
 				keepAlive = false;
 				//
@@ -148,7 +154,7 @@ Demo.components.Base = function(spec) {
 			}
 		}
 		//
-		// No matter what happens, reset the next shild regeneration time.
+		// No matter what happens, reset the next shield regeneration time.
 		regenerationTime = 0;
 
 		return keepAlive;
