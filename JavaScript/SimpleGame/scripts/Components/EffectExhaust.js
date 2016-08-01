@@ -28,7 +28,7 @@ Demo.components.ParticleSystem.createEffectExhaust = function(spec) {
 			Demo.components.ParticleSystem.createAnimatedParticle({
 				image: Demo.assets['particle-fire'],
 				center: { x: spec.center.x, y: spec.center.y },
-				size: Random.nextGaussian(0.015, 0.004),
+				size: Random.nextGaussian(0.010, 0.004),
 				direction: { x: Math.cos(angle), y: Math.sin(angle) },
 				speed: addSpeed + Random.nextGaussian(0.0003, 0.0001),
 				rateRotation: (2 * Math.PI) / 1000,	// Radians per millisecond

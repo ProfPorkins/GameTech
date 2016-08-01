@@ -24,11 +24,11 @@ Demo.components.ParticleSystem.createEffectExplosion = function(spec) {
 				imageSize: 256,
 				imageTime: 40,
 				center: { x: spec.center.x, y: spec.center.y },
-				size: Random.nextGaussian(0.045, 0.01),
+				size: Random.nextGaussian(0.025, 0.008),
 				direction: Random.nextCircleVector(),
-				speed: Random.nextGaussian(0.0003, 0.0001),
+				speed: Random.nextGaussian(0.0002, 0.00005),
 				rateRotation: 0,	// Radians per millisecond
-				lifetime: Random.nextGaussian(1500, 250)
+				lifetime: Random.nextGaussian(1000, 250)
 			});
 		}
 
