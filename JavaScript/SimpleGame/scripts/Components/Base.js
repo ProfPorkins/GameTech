@@ -10,10 +10,15 @@
 //		rotation: 					// In Radians
 //		rotateRate:					// Radians per second
 //		vicinity:					// In world coordinates
+//		missile: {
+//			delay:					// How long (milliseconds) between firing missiles
+//			lifetime:				// How long (milliseconds) a missle lives
+//			rotateRate:				// How fast (radians/millisecond) a missile can turn
 //		hitPoints: {
 //			max:					// Maximum hit points for the base
 //		},
 //		shield: {
+//			regenerationDelay:		// How long (milliseconds) between shield regeneration
 //			thickness:				// In world coordinates
 //			max:					// Maximum value for the shield, also the starting strength
 //		}
@@ -62,9 +67,9 @@ Demo.components.Base = function(spec) {
 		//
 		// Shields regenerate every 1 second
 		regenerationTime += elapsedTime;
-		if (regenerationTime >= 1000) {
+		if (regenerationTime >= spec.shield.regenerationDelay) {
 			spec.shield.strength = Math.min(spec.shield.strength + 1, spec.shield.max);
-			regenerationTime -= 1000;
+			regenerationTime -= spec.shield.regenerationDelay;
 		}
 
 		//
@@ -99,7 +104,7 @@ Demo.components.Base = function(spec) {
 		// fire a missle if we haven't fired one in the last X milliseconds.
 		if (entity.type === Demo.components.Types.SpaceShip) {
 			distance = Math.sqrt(Math.pow(entity.center.x - that.center.x, 2) + Math.pow(entity.center.y - that.center.y, 2));
-			if (distance <= spec.vicinity && lastMissileFired > 500) {
+			if (distance <= spec.vicinity && lastMissileFired > spec.missile.delay) {
 				lastMissileFired = 0;
 				direction = {
 					x: entity.center.x - that.center.x,
@@ -114,8 +119,8 @@ Demo.components.Base = function(spec) {
 					center : { x: that.center.x, y: that.center.y },
 					target: entity,
 					momentum: { x: direction.x, y: direction.y },
-					rotateRate: Math.PI / 1000,
-					lifetime: 5000
+					rotateRate: spec.missile.rotateRate,
+					lifetime: spec.missile.lifetime
 				});
 
 				//

@@ -79,10 +79,16 @@ Demo.model = (function(input, components, renderer, assets) {
 			rotation: 0,
 			rotateRate: (Math.PI / 4) / 1000,	// Slow rotation
 			vicinity: 0.40,
+			missile: {
+				delay: 500,
+				lifetime: 5000,
+				rotateRate: Math.PI / 1000
+			},
 			hitPoints: {
 				max: 5
 			},
 			shield: {
+				regenerationDelay: 1000,
 				thickness: 0.025,
 				max: 10
 			}
