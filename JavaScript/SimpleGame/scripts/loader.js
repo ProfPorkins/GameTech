@@ -77,6 +77,15 @@ Demo.loader = (function() {
 			key: 'base-red',
 			source: '/assets/graphics/ufoRed.png'
 		}, {
+			key: 'base-green',
+			source: '/assets/graphics/ufoGreen.png'
+		}, {
+			key: 'base-blue',
+			source: '/assets/graphics/ufoBlue.png'
+		}, {
+			key: 'base-yellow',
+			source: '/assets/graphics/ufoYellow.png'
+		}, {
 			key: 'particle-fire',
 			source: '/assets/graphics/Particles/fire.png'
 		}, {

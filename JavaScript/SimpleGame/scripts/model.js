@@ -38,12 +38,125 @@ Demo.model = (function(input, components, renderer, assets) {
 
 	// ------------------------------------------------------------------
 	//
+	// Create the different enemy bases the player must destroy.
+	//
+	// ------------------------------------------------------------------
+	function initializeEnemyBases() {
+		var base = undefined;
+
+		base = components.Base({
+			imageName: 'base-red',
+			center: { x: world.left + 0.75, y: world.top + 0.75 },
+			radius: 0.10,
+			rotation: 0,
+			rotateRate: (Math.PI / 4) / 1000,	// Slow rotation
+			vicinity: 0.40,
+			missile: {
+				delay: 500,
+				lifetime: 5000,
+				rotateRate: Math.PI / 4000
+			},
+			hitPoints: {
+				max: 5
+			},
+			shield: {
+				regenerationDelay: 1000,
+				thickness: 0.025,
+				max: 10
+			}
+		});
+		enemyEntities[nextEntityId++] = {
+			model: base,
+			renderer: renderer.Base
+		};
+
+		base = components.Base({
+			imageName: 'base-green',
+			center: { x: world.width - 0.75, y: world.top + 0.75 },
+			radius: 0.15,
+			rotation: 0,
+			rotateRate: (Math.PI / 4) / 1000,	// Slow rotation
+			vicinity: 0.50,
+			missile: {
+				delay: 400,
+				lifetime: 6000,
+				rotateRate: Math.PI / 3000
+			},
+			hitPoints: {
+				max: 5
+			},
+			shield: {
+				regenerationDelay: 800,
+				thickness: 0.025,
+				max: 10
+			}
+		});
+		enemyEntities[nextEntityId++] = {
+			model: base,
+			renderer: renderer.Base
+		};
+
+		base = components.Base({
+			imageName: 'base-blue',
+			center: { x: world.width / 2, y: world.height / 2 },
+			radius: 0.05,
+			rotation: 0,
+			rotateRate: (Math.PI / 4) / 1000,	// Slow rotation
+			vicinity: 0.50,
+			missile: {
+				delay: 400,
+				lifetime: 7000,
+				rotateRate: Math.PI / 2000
+			},
+			hitPoints: {
+				max: 5
+			},
+			shield: {
+				regenerationDelay: 500,
+				thickness: 0.025,
+				max: 10
+			}
+		});
+		enemyEntities[nextEntityId++] = {
+			model: base,
+			renderer: renderer.Base
+		};
+
+		base = components.Base({
+			imageName: 'base-yellow',
+			center: { x: world.left + 0.667 * world.width , y: world.height - 1.0 },
+			radius: 0.20,
+			rotation: 0,
+			rotateRate: (Math.PI / 4) / 2000,	// Slow rotation
+			vicinity: 1.00,
+			missile: {
+				delay: 1000,
+				lifetime: 7000,
+				rotateRate: Math.PI / 2000
+			},
+			hitPoints: {
+				max: 25
+			},
+			shield: {
+				regenerationDelay: 1000,
+				thickness: 0.03,
+				max: 10
+			}
+		});
+		enemyEntities[nextEntityId++] = {
+			model: base,
+			renderer: renderer.Base
+		};
+
+	}
+
+	// ------------------------------------------------------------------
+	//
 	// This function initializes the model.
 	//
 	// ------------------------------------------------------------------
 	that.initialize = function() {
-		var baseRed = null,
-			backgroundKey = 'background';
+		var backgroundKey = 'background';
 
 		//
 		// Define the TiledImage model we'll be using for our background.
@@ -73,30 +186,7 @@ Demo.model = (function(input, components, renderer, assets) {
 			renderer: renderer.SpaceShip
 		};
 
-		baseRed = components.Base({
-			center: { x: 0.75, y: 0.75 },
-			radius: 0.10,
-			rotation: 0,
-			rotateRate: (Math.PI / 4) / 1000,	// Slow rotation
-			vicinity: 0.40,
-			missile: {
-				delay: 500,
-				lifetime: 5000,
-				rotateRate: Math.PI / 1000
-			},
-			hitPoints: {
-				max: 5
-			},
-			shield: {
-				regenerationDelay: 1000,
-				thickness: 0.025,
-				max: 10
-			}
-		});
-		enemyEntities[nextEntityId++] = {
-			model: baseRed,
-			renderer: renderer.Base
-		};
+		initializeEnemyBases();
 
 		myKeyboard.registerHandler(function(elapsedTime) {
 			spaceShip.accelerate(elapsedTime);

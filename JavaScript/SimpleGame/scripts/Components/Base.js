@@ -5,6 +5,7 @@
 // Defines a Base component.  A Base contains a sprite.
 // The spec is defined as:
 //	{
+//		imageName:					// Asset name to use for the base
 //		center: { x: , y: }			// In world coordinates
 //		radius: 					// In world coordinates
 //		rotation: 					// In Radians
@@ -173,7 +174,7 @@ Demo.components.Base = function(spec) {
 	//
 	// Get our sprite model
 	sprite = Demo.components.Sprite({
-		image: Demo.assets['base-red'],
+		image: Demo.assets[spec.imageName],
 		spriteSize: { width: spec.radius * 2, height: spec.radius * 2 },	// Maintain the size on the sprite
 		spriteCenter: spec.center	// Maintain the center on the sprite
 	});
