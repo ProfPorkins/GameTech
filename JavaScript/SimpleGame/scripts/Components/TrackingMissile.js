@@ -39,59 +39,6 @@ Demo.components.TrackingMissile = function(spec) {
 
 	//------------------------------------------------------------------
 	//
-	// Returns the magnitude of the 2D cross product.  The sign of the
-	// magnitude tells you which direction to rotate to close the angle
-	// between the two vectors.
-	//
-	//------------------------------------------------------------------
-	function crossProduct2d(v1, v2) {
-		return (v1.x * v2.y) - (v1.y * v2.x);
-	}
-
-	//------------------------------------------------------------------
-	//
-	// Computes the angle, and direction (cross product) between two vectors.
-	//
-	//------------------------------------------------------------------
-	function computeAngle(rotation, ptCenter, ptTarget) {
-		var v1 = {
-				x : Math.cos(rotation),
-				y : Math.sin(rotation)
-			},
-			v2 = {
-				x : ptTarget.x - ptCenter.x,
-				y : ptTarget.y - ptCenter.y
-			},
-			dp,
-			angle,
-			cp;
-
-		v2.len = Math.sqrt(v2.x * v2.x + v2.y * v2.y);
-		v2.x /= v2.len;
-		v2.y /= v2.len;
-
-		dp = v1.x * v2.x + v1.y * v2.y;
-		angle = Math.acos(dp);
-		//
-		// It is possible to get a NaN result, when that happens, set the angle to
-		// 0 so that any use of it doesn't have to check for NaN.
-		if (isNaN(angle)) {
-			angle = 0;
-		}
-
-		//
-		// Get the cross product of the two vectors so we can know
-		// which direction to rotate.
-		cp = crossProduct2d(v1, v2);
-
-		return {
-			angle : angle,
-			crossProduct : cp
-		};
-	}
-
-	//------------------------------------------------------------------
-	//
 	// Update the position of the missile based on its current momentum vector,
 	// then tell the underlying sprite model to also update.
 	//
@@ -104,7 +51,7 @@ Demo.components.TrackingMissile = function(spec) {
 
 		spec.alive += elapsedTime;
 		if (spec.alive < spec.lifetime) {
-			angleToTarget = computeAngle(that.rotation, that.center, spec.target.center);
+			angleToTarget = Demo.utilities.math.computeAngle(that.rotation, that.center, spec.target.center);
 			if (Demo.utilities.math.testTolerance(angleToTarget.angle, 0, 0.01) === false) {
 				if (angleToTarget.crossProduct > 0) {
 					if (angleToTarget.angle > (spec.rotateRate * elapsedTime)) {

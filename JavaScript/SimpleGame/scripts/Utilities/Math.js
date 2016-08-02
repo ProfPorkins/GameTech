@@ -35,37 +35,56 @@ Demo.utilities.math = (function() {
 
 	//------------------------------------------------------------------
 	//
-	// This method checks to see if any part of the circle is inside of
-	// the square.  If it is, true is returned, false otherwise.
-	//
-	// This code adapted from: http://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection
+	// Returns the magnitude of the 2D cross product.  The sign of the
+	// magnitude tells you which direction to rotate to close the angle
+	// between the two vectors.
 	//
 	//------------------------------------------------------------------
-	that.circleTouchSquare = function(circle, square) {
-		var squareSizeby2 = square.size / 2,
-			circleDistanceX,
-			circleDistanceY,
-			distanceX,
-			distanceY,
-			cornerDistanceSq;
+	that.crossProduct2d = function(v1, v2) {
+		return (v1.x * v2.y) - (v1.y * v2.x);
+	}
 
-		circleDistanceX = Math.abs(circle.center.x - square.center.x);
-		if (circleDistanceX > (squareSizeby2 + circle.radius)) { return false; }
-		circleDistanceY = Math.abs(circle.center.y - square.center.y);
-		if (circleDistanceY > (squareSizeby2 + circle.radius)) { return false; }
+	//------------------------------------------------------------------
+	//
+	// Computes the angle, and direction (cross product) between two vectors.
+	//
+	//------------------------------------------------------------------
+	that.computeAngle = function(rotation, ptCenter, ptTarget) {
+		var v1 = {
+				x : Math.cos(rotation),
+				y : Math.sin(rotation)
+			},
+			v2 = {
+				x : ptTarget.x - ptCenter.x,
+				y : ptTarget.y - ptCenter.y
+			},
+			dp,
+			angle,
+			cp;
 
-		if (circleDistanceX <= squareSizeby2) { return true; }
-		if (circleDistanceY <= squareSizeby2) { return true; }
+		v2.len = Math.sqrt(v2.x * v2.x + v2.y * v2.y);
+		v2.x /= v2.len;
+		v2.y /= v2.len;
 
-		distanceX = (circleDistanceX - squareSizeby2);
-		distanceY = (circleDistanceY - squareSizeby2);
-		distanceX *= distanceX;
-		distanceY *= distanceY;
+		dp = v1.x * v2.x + v1.y * v2.y;
+		angle = Math.acos(dp);
+		//
+		// It is possible to get a NaN result, when that happens, set the angle to
+		// 0 so that any use of it doesn't have to check for NaN.
+		if (isNaN(angle)) {
+			angle = 0;
+		}
 
-		cornerDistanceSq = distanceX + distanceY;
+		//
+		// Get the cross product of the two vectors so we can know
+		// which direction to rotate.
+		cp = that.crossProduct2d(v1, v2);
 
-		return (cornerDistanceSq <= circle.radiusSq);
-	};
+		return {
+			angle : angle,
+			crossProduct : cp
+		};
+	}
 
 	return that;
 }());
