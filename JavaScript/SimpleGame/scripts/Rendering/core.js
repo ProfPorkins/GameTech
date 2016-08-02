@@ -263,6 +263,25 @@ Demo.renderer.core = (function() {
 
 	//------------------------------------------------------------------
 	//
+	// Draws a filled rectangle relative to the 'unit world'.
+	//
+	//------------------------------------------------------------------
+	function drawFilledRectangle(style, left, top, width, height, useViewport) {
+		var adjustLeft = (useViewport === true) ? viewport.left : 0,
+			adjustTop = (useViewport === true) ? viewport.top : 0;
+
+		//
+		// 0.5, 0.5 is to ensure an actual 1 pixel line is drawn.
+		context.fillStyle = style;
+		context.fillRect(
+			0.5 + world.left + ((left - adjustLeft) * world.size),
+			0.5 + world.top + ((top - adjustTop) * world.size),
+			width * world.size,
+			height * world.size);
+	}
+
+	//------------------------------------------------------------------
+	//
 	// Pass-through that allows an image to be drawn.  Sometimes the viewport
 	// doesn't need to be accounted for (e.g., in the case of a background image).
 	// Therefore, the useViewport parameter is used to control if it is accounted for.
@@ -383,6 +402,7 @@ Demo.renderer.core = (function() {
 		measureTextWidth: measureTextWidth,
 		drawLine: drawLine,
 		drawRectangle: drawRectangle,
+		drawFilledRectangle: drawFilledRectangle,
 		drawCircle: drawCircle,
 		drawFilledCircle: drawFilledCircle,
 		drawImage: drawImage,

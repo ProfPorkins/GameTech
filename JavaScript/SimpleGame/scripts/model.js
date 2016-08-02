@@ -12,7 +12,7 @@ Demo.model = (function(input, components, renderer, assets) {
 			get top() { return 0; },
 			get width() { return 5; },
 			get height() { return 3; },
-			get bufferSize() { return 0.15; }
+			get bufferSize() { return 0.25; }
 		},
 		worldBuffer = {
 			get left() { return world.left + world.bufferSize; },
@@ -215,7 +215,7 @@ Demo.model = (function(input, components, renderer, assets) {
 
 		//
 		// Get the intial viewport settings prepared.
-		Demo.renderer.core.viewport.set(0, 0, 0.15); // The buffer can't really be any larger than world.buffer, guess I could protect against that.
+		Demo.renderer.core.viewport.set(0, 0, 0.25); // The buffer can't really be any larger than world.buffer, guess I could protect against that.
 	};
 
 	// ------------------------------------------------------------------

@@ -44,7 +44,8 @@ Demo.components.TrackingMissile = function(spec) {
 	//
 	//------------------------------------------------------------------
 	that.update = function(elapsedTime) {
-		var angleToTarget,
+		var keepAlive = false,
+			angleToTarget,
 			newRotation,
 			magnitude,
 			newMagnitude;
@@ -84,10 +85,10 @@ Demo.components.TrackingMissile = function(spec) {
 
 			sprite.update(elapsedTime);
 
-			return true;
+			keepAlive = true;
 		}
 
-		return false;
+		return keepAlive;
 	};
 
 	//------------------------------------------------------------------

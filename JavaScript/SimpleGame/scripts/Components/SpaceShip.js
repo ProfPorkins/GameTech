@@ -5,12 +5,15 @@
 // Defines a SpaceShip component.  A Spaceship contains a sprite.
 // The spec is defined as:
 //	{
-//		center: { x: , y: },		// In world coordinates
-//		size: { width: , height: },	// In world coordinates
-//		momentum: { x: , y: },		// Direction of momentum
-//		rotation: 	,				// Pointing angle, in radians
-//		accelerationRate: 	,		// World units per second
+//		center: { x: , y: }			// In world coordinates
+//		size: { width: , height: }	// In world coordinates
+//		momentum: { x: , y: }		// Direction of momentum
+//		rotation: 					// Pointing angle, in radians
+//		accelerationRate: 			// World units per second
 //		rotateRate:					// Radians per millisecond
+//		hitPoints: {
+//			max: 					// Max/initial possible hit points for the space ship
+//		}
 //	}
 //
 //------------------------------------------------------------------
@@ -24,6 +27,7 @@ Demo.components.SpaceShip = function(spec) {
 			get momentum() { return spec.momentum; },
 			get rotation() { return spec.rotation; },
 			get accelerateRate() { return spec.accelerateRate; },
+			get hitPoints() { return spec.hitPoints; },
 			get damage() { return 4; },
 			get sprite() { return sprite; }
 		},

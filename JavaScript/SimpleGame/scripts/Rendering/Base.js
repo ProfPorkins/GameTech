@@ -8,7 +8,7 @@
 Demo.renderer.Base = (function(core) {
 	'use strict';
 	var that = {},
-		totalTime = 0;
+		healthBarHeight = 0.006;
 
 	// ------------------------------------------------------------------
 	//
@@ -18,8 +18,8 @@ Demo.renderer.Base = (function(core) {
 	//
 	// ------------------------------------------------------------------
 	that.render = function(model, elapsedTime) {
-		var sin = Math.sin(totalTime),
-			shieldStrength;
+		var shieldStrength,
+			percentGreen = model.hitPoints.strength / model.hitPoints.max;
 
 		core.saveContext();
 		core.rotateCanvas(model.center, model.rotation);
@@ -40,6 +40,31 @@ Demo.renderer.Base = (function(core) {
 		//
 		// This undoes the rotation very quickly
 		core.restoreContext();
+
+		//
+		// Render a little bar above the spaceship that represents the health
+		// of the ship.
+		Demo.renderer.core.drawRectangle(
+			'rgba(0, 0, 0, 255)',
+			model.center.x - model.radius / 2, model.center.y - healthBarHeight / 2,
+			model.radius, healthBarHeight,
+			true);
+
+		//
+		// Fill the whole thing with red
+		Demo.renderer.core.drawFilledRectangle(
+			'rgba(255, 0, 0, 255)',
+			model.center.x - model.radius / 2, model.center.y - healthBarHeight / 2,
+			model.radius, healthBarHeight,
+			true);
+
+		//
+		// Cover up with the green portion
+		Demo.renderer.core.drawFilledRectangle(
+			'rgba(0, 255, 0, 255)',
+			model.center.x - model.radius / 2, model.center.y - healthBarHeight / 2,
+			model.radius * percentGreen, healthBarHeight,
+			true);
 	};
 
 	return that;

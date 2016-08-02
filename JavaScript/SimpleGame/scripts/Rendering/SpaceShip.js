@@ -7,7 +7,8 @@
 // ------------------------------------------------------------------
 Demo.renderer.SpaceShip = (function(core) {
 	'use strict';
-	var that = {};
+	var that = {},
+		healthBarHeight = 0.006;
 
 	// ------------------------------------------------------------------
 	//
@@ -17,6 +18,7 @@ Demo.renderer.SpaceShip = (function(core) {
 	//
 	// ------------------------------------------------------------------
 	that.render = function(model) {
+		var percentGreen = model.hitPoints.strength / model.hitPoints.max;
 
 		core.saveContext();
 		core.rotateCanvas(model.center, model.rotation);
@@ -26,6 +28,31 @@ Demo.renderer.SpaceShip = (function(core) {
 		//
 		// This undoes the rotation very quickly
 		core.restoreContext();
+
+		//
+		// Render a little bar above the spaceship that represents the health
+		// of the ship.
+		Demo.renderer.core.drawRectangle(
+			'rgba(0, 0, 0, 255)',
+			model.center.x - model.size.width / 2, model.center.y - (model.size.height / 2 + healthBarHeight * 2),
+			model.size.width, healthBarHeight,
+			true);
+
+		//
+		// Fill the whole thing with red
+		Demo.renderer.core.drawFilledRectangle(
+			'rgba(255, 0, 0, 255)',
+			model.center.x - model.size.width / 2, model.center.y - (model.size.height / 2 + healthBarHeight * 2),
+			model.size.width, healthBarHeight,
+			true);
+
+		//
+		// Cover up with the green portion
+		Demo.renderer.core.drawFilledRectangle(
+			'rgba(0, 255, 0, 255)',
+			model.center.x - model.size.width / 2, model.center.y - (model.size.height / 2 + healthBarHeight * 2),
+			model.size.width * percentGreen, healthBarHeight,
+			true);
 	};
 
 	return that;
