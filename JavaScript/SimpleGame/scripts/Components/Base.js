@@ -127,6 +127,10 @@ Demo.components.Base = function(spec) {
 				//
 				// Report the firing of the missle back to the calling code.
 				report(missile, Demo.renderer.Missile);
+				//
+				// Make a sound!
+				Demo.assets['audio-base-missile'].currentTime = 0;
+				Demo.assets['audio-base-missile'].play();
 			}
 		}
 	};
@@ -157,6 +161,10 @@ Demo.components.Base = function(spec) {
 					center: { x: that.center.x, y: that.center.y },
 					howMany: 1000
 				});
+				//
+				// Make a sound!
+				Demo.assets['audio-base-explosion'].currentTime = 0.5;	// Start it a little into the effect because there is a dead spot at the start of it
+				Demo.assets['audio-base-explosion'].play();
 			}
 		}
 		//

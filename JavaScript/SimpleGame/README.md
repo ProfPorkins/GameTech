@@ -38,6 +38,7 @@ Thanks all sources for the great assets!
 
 * Use of *spaceshooter* assets under Creative Commons License.
   * Source: http://www.kenney.nl
+  * License: http://creativecommons.org/publicdomain/zero/1.0/
 * Adapted use of *fireball* under Public Domain.
   * Source: http://opengameart.org/content/sparkling-fireball-effect
 * Use of *fire.png* under the Microsoft Permissive License
@@ -45,3 +46,22 @@ Thanks all sources for the great assets!
 * NASA Hubble Image
   * Source: https://www.spacetelescope.org/images/heic0910e/
   * Credit: NASA, ESA and the Hubble SM4 ERO Team
+* Use of *explosion_01* under Creative Commons License.
+  * Source: https://www.freesound.org/people/tommccann/sounds/235968
+  * License: https://creativecommons.org/publicdomain/zero/1.0/
+* Use of *hvylas* under Creative Commons Sampling Plus 1.0
+  * Source: https://www.freesound.org/people/inferno/sounds/18382/
+  * License: https://creativecommons.org/licenses/sampling+/1.0/
+* Use of *LaserShotSilenced* under Creative Commons License.
+  * Source: https://www.freesound.org/people/bubaproducer/sounds/151022/
+  * License: https://creativecommons.org/licenses/by/3.0/
+* Use of *ProjectileHit* under Creative Commons License.
+  * Source: https://www.freesound.org/people/unfa/sounds/193429/
+  * License: https://creativecommons.org/licenses/by/3.0/
+* Use of *ThrusterLevel3* under Creative Commons Sampling Plus 1.0
+  * Source: https://www.freesound.org/people/nathanshadow/sounds/22456/
+  * License: https://creativecommons.org/licenses/sampling+/1.0/
+* Use of *The Lift* under Creative Commons
+  * Credit: Kevin MacLeod (incompetech.com)
+  * Source: http://incompetech.com
+  * License: https://creativecommons.org/licenses/by/3.0/

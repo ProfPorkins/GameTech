@@ -90,6 +90,9 @@ Demo.components.Missile = function(spec) {
 				center: { x: sprite.center.x, y: sprite.center.y },
 				howMany: 25
 			});
+			// Make a sound!
+			Demo.assets['audio-missile-hit'].currentTime = 0;
+			Demo.assets['audio-missile-hit'].play();
 		}
 
 		return false;

@@ -216,6 +216,15 @@ Demo.model = (function(input, components, renderer, assets) {
 		//
 		// Get the intial viewport settings prepared.
 		Demo.renderer.core.viewport.set(0, 0, 0.25); // The buffer can't really be any larger than world.buffer, guess I could protect against that.
+
+		//
+		// Start the background music
+		Demo.assets['audio-music-background'].addEventListener('ended', function() {
+			this.currentTime = 0;
+			this.play();
+		}, false);
+		Demo.assets['audio-music-background'].volume = 0.5;
+		Demo.assets['audio-music-background'].play();
 	};
 
 	// ------------------------------------------------------------------

@@ -94,6 +94,24 @@ Demo.loader = (function() {
 		}, {
 			key: 'particle-fireball',
 			source: '/assets/graphics/Particles/fireball.png'
+		}, {
+			key: 'audio-base-explosion',
+			source: '/assets/audio/explosion_01.mp3'
+		}, {
+			key: 'audio-spaceship-missile',
+			source: '/assets/audio/hvylas.mp3'
+		}, {
+			key: 'audio-base-missile',
+			source: '/assets/audio/LaserShotSilenced.mp3'
+		}, {
+			key: 'audio-missile-hit',
+			source: '/assets/audio/ProjectileHit.mp3'
+		}, {
+			key: 'audio-spaceship-thrust',
+			source: '/assets/audio/ThrusterLevel3.mp3'
+		}, {
+			key: 'audio-music-background',
+			source: '/assets/audio/TheLift.mp3'
 		}];
 
 	//------------------------------------------------------------------
