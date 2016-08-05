@@ -8,8 +8,11 @@
 Demo.input.Keyboard = function() {
 	'use strict';
 	var keys = {},
+		keysUp = {},
 		keyRepeat = {},
 		handlers = {},
+		handlersDown = {},	// Keydown handlers
+		handlersUp = {},	// Keyup handlers
 		nextHandlerId = 0,
 		that = {};
 
@@ -50,6 +53,57 @@ Demo.input.Keyboard = function() {
 
 	// ------------------------------------------------------------------
 	//
+	// Allows the client code to register a keyboard-up handler.
+	//
+	// ------------------------------------------------------------------
+	that.registerHandlerUp = function(handler, key) {
+		//
+		// Each entry is an array of handlers to allow multiple handlers per keyboard input
+		if (!handlersUp.hasOwnProperty(key)) {
+			handlersUp[key] = [];
+		}
+		handlersUp[key].push({
+			id: nextHandlerId,
+			key: key,
+			handler: handler
+		});
+
+		nextHandlerId += 1;
+
+		//
+		// We return an handler id that client code must track if it is desired
+		// to unregister the handler in the future.
+		return handlersUp[key][handlersUp[key].length - 1].id;
+	}
+
+	// ------------------------------------------------------------------
+	//
+	// Allows the client code to register a keyboard-down handler.
+	//
+	// ------------------------------------------------------------------
+	that.registerHandlerDown = function(handler, key) {
+		//
+		// Each entry is an array of handlers to allow multiple handlers per keyboard input
+		if (!handlersDown.hasOwnProperty(key)) {
+			handlersDown[key] = [];
+		}
+		handlersDown[key].push({
+			id: nextHandlerId,
+			key: key,
+			handler: handler,
+			fired: false
+		});
+
+		nextHandlerId += 1;
+
+		//
+		// We return an handler id that client code must track if it is desired
+		// to unregister the handler in the future.
+		return handlersDown[key][handlersDown[key].length - 1].id;
+	}
+
+	// ------------------------------------------------------------------
+	//
 	// Allows the client code to unregister a keyboard handler.
 	//
 	// ------------------------------------------------------------------
@@ -85,14 +139,19 @@ Demo.input.Keyboard = function() {
 
 	// ------------------------------------------------------------------
 	//
-	// Called when the 'keyrelease' event is fired from the browser.  When
+	// Called when the 'keyup' event is fired from the browser.  When
 	// a key is released, we want to remove it from the set of keys currently
 	// indicated as down.
 	//
 	// ------------------------------------------------------------------
-	function keyRelease(event) {
+	function keyUp(event) {
 		delete keys[event.keyCode];
 		delete keyRepeat[event.keyCode];
+
+		//
+		// We have a keyup event, this allows us to notify keys
+		// which were recently released.
+		keysUp[event.keyCode] = event.timeStamp;
 	}
 
 	// ------------------------------------------------------------------
@@ -128,12 +187,47 @@ Demo.input.Keyboard = function() {
 				}
 			}
 		}
+
+		//
+		// Go through the down key events
+		for (key in keys) {
+			if (handlersDown.hasOwnProperty(key)) {
+				for (entry = 0; entry < handlersDown[key].length; entry += 1) {
+					event = handlersDown[key][entry];
+					if (event.fired === false) {
+						event.handler(elapsedTime);
+						event.fired = true;
+					}
+				}
+			}
+		}
+		//
+		// Go through the up key events
+		for (key in keysUp) {
+			if (handlersUp.hasOwnProperty(key)) {
+				for (entry = 0; entry < handlersUp[key].length; entry += 1) {
+					event = handlersUp[key][entry];
+					event.handler(elapsedTime);
+					delete keysUp[key];
+				}
+			}
+			//
+			// If this key also exists in the handlers down, need to reset the fired
+			// property so the next time the keydown event occurs, the event
+			// will fire again.
+			if (handlersDown.hasOwnProperty(key)) {
+				for (entry = 0; entry < handlersDown[key].length; entry += 1) {
+					event = handlersDown[key][entry];
+					event.fired = false;
+				}
+			}
+		}
 	};
 
 	//
 	// This is how we receive notification of keyboard events.
 	window.addEventListener('keydown', keyDown);
-	window.addEventListener('keyup', keyRelease);
+	window.addEventListener('keyup', keyUp);
 
 	return that;
 };

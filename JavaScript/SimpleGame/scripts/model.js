@@ -190,18 +190,15 @@ Demo.model = (function(input, components, renderer, assets) {
 
 		myKeyboard.registerHandler(function(elapsedTime) {
 			spaceShip.accelerate(elapsedTime);
-		},
-			input.KeyEvent.DOM_VK_W, true);
+		}, input.KeyEvent.DOM_VK_W, true);
 
 		myKeyboard.registerHandler(function(elapsedTime) {
 			spaceShip.rotateLeft(elapsedTime);
-		},
-			input.KeyEvent.DOM_VK_A, true);
+		}, input.KeyEvent.DOM_VK_A, true);
 
 		myKeyboard.registerHandler(function(elapsedTime) {
 			spaceShip.rotateRight(elapsedTime);
-		},
-			input.KeyEvent.DOM_VK_D, true);
+		}, input.KeyEvent.DOM_VK_D, true);
 
 		myKeyboard.registerHandler(function(elapsedTime) {
 			spaceShip.fire(function(entity, renderer) {
@@ -210,19 +207,25 @@ Demo.model = (function(input, components, renderer, assets) {
 					renderer: renderer
 				};
 			});
-		},
-			input.KeyEvent.DOM_VK_SPACE, false);
+		}, input.KeyEvent.DOM_VK_SPACE, false);
+
+		//
+		// Register keyboard handlers to cause a thrust sound to occur
+		myKeyboard.registerHandlerDown(function() {
+			spaceShip.startAccelerate();
+		}, input.KeyEvent.DOM_VK_W);
+
+		myKeyboard.registerHandlerUp(function() {
+			spaceShip.endAccelerate();
+		}, input.KeyEvent.DOM_VK_W);
 
 		//
 		// Get the intial viewport settings prepared.
 		Demo.renderer.core.viewport.set(0, 0, 0.25); // The buffer can't really be any larger than world.buffer, guess I could protect against that.
 
 		//
-		// Start the background music
-		Demo.assets['audio-music-background'].addEventListener('ended', function() {
-			this.currentTime = 0;
-			this.play();
-		}, false);
+		// Start the background music.
+		Demo.assets['audio-music-background'].loop = true;
 		Demo.assets['audio-music-background'].volume = 0.5;
 		Demo.assets['audio-music-background'].play();
 	};

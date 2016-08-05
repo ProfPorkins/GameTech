@@ -178,6 +178,29 @@ Demo.components.SpaceShip = function(spec) {
 
 	//------------------------------------------------------------------
 	//
+	// Public member used to allow client code to start the thrust audio.
+	// Remember, we don't want the space ship itself to bind to keyboard
+	// controls, they need to be abstracted away.  With that said, I'm not
+	// claiming this is the best way to do it, but I didn't want the audio
+	// for the thrust to happen in the game model.
+	//
+	//------------------------------------------------------------------
+	that.startAccelerate = function() {
+		Demo.assets['audio-spaceship-thrust'].currentTime = 0;
+		Demo.assets['audio-spaceship-thrust'].play();
+	}
+
+	//------------------------------------------------------------------
+	//
+	// Public member used to allow client code to stop the thrust audio.
+	//
+	//------------------------------------------------------------------
+	that.endAccelerate = function() {
+		Demo.assets['audio-spaceship-thrust'].pause();
+	}
+
+	//------------------------------------------------------------------
+	//
 	// Rotate the model to the right
 	//
 	//------------------------------------------------------------------
