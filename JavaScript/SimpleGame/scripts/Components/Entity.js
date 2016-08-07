@@ -31,6 +31,14 @@ Demo.components.Entity = function(spec, spriteName) {
 		boundingCircle = undefined;
 
 	//
+	// If no hitpoints, define one
+	if (spec.hasOwnProperty('hitPoints') === false) {
+		spec.hitPoints = {
+			max: 0
+		}
+	};
+
+	//
 	// An entity may be defined in terms of a rectangular size or a radius.  Depending
 	// upon how it is defined, various properties of the entity are defined with respect
 	// to their dimensions.

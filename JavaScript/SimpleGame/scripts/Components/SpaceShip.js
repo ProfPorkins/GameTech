@@ -87,6 +87,7 @@ Demo.components.SpaceShip = function(spec) {
 
 		missile = Demo.components.Missile({
 			center : { x: that.center.x, y: that.center.y },
+			size: { width: 0.04, height: 0.01 },
 			momentum: { x: spec.momentum.x + x, y: spec.momentum.y + y },
 			lifetime: 500
 		});
