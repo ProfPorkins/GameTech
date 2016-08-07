@@ -14,14 +14,14 @@ Demo.renderer.SpaceShip = (function(core) {
 	//
 	// Renders a Spaceship model.  Because the model can be rotated, that needs
 	// to be done here, because the underlying sprite doesn't know
-	// anything about rotation.
+	// anything about orientation.
 	//
 	// ------------------------------------------------------------------
 	that.render = function(model) {
 		var percentGreen = model.hitPoints.strength / model.hitPoints.max;
 
 		core.saveContext();
-		core.rotateCanvas(model.center, model.rotation);
+		core.rotateCanvas(model.center, model.orientation);
 
 		Demo.renderer.Sprite.render(model.sprite);
 

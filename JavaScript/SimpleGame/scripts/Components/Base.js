@@ -8,7 +8,7 @@
 //		imageName:					// Asset name to use for the base
 //		center: { x: , y: }			// In world coordinates
 //		radius: 					// In world coordinates
-//		rotation: 					// In Radians
+//		orientation: 					// In Radians
 //		rotateRate:					// Radians per second
 //		vicinity:					// In world coordinates
 //		missile: {
@@ -38,7 +38,7 @@ Demo.components.Base = function(spec) {
 			get type() { return Demo.components.Types.Base; },
 			get center() { return sprite.center; },
 			get radius() { return spec.radius; },
-			get rotation() { return spec.rotation; },
+			get orientation() { return spec.orientation; },
 			get hitPoints() { return spec.hitPoints; },
 			get shield() { return shield; },
 			get sprite() { return sprite; },
@@ -63,7 +63,7 @@ Demo.components.Base = function(spec) {
 	//------------------------------------------------------------------
 	that.update = function(elapsedTime) {
 		sprite.update(elapsedTime);
-		spec.rotation += (spec.rotateRate * elapsedTime);
+		spec.orientation += (spec.rotateRate * elapsedTime);
 
 		//
 		// Shields regenerate every 1 second

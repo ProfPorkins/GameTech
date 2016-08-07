@@ -14,7 +14,7 @@ Demo.renderer.Base = (function(core) {
 	//
 	// Renders a Base model.  Because the model can be rotated, that needs
 	// to be done here, because the underlying sprite doesn't know
-	// anything about rotation.
+	// anything about orientation.
 	//
 	// ------------------------------------------------------------------
 	that.render = function(model, elapsedTime) {
@@ -22,7 +22,7 @@ Demo.renderer.Base = (function(core) {
 			percentGreen = model.hitPoints.strength / model.hitPoints.max;
 
 		core.saveContext();
-		core.rotateCanvas(model.center, model.rotation);
+		core.rotateCanvas(model.center, model.orientation);
 
 		//
 		// First, render the surrounding shield (if it exists)

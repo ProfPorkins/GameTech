@@ -22,7 +22,7 @@ Demo.components.TrackingMissile = function(spec) {
 			get center() { return sprite.center; },
 			get size() { return spec.size; },
 			get momentum() { return spec.momentum; },
-			get rotation() { return Math.atan2(spec.momentum.y, spec.momentum.x); },
+			get orientation() { return Math.atan2(spec.momentum.y, spec.momentum.x); },
 			get damage() { return 1; },
 			get sprite() { return sprite; }
 		},
@@ -46,35 +46,35 @@ Demo.components.TrackingMissile = function(spec) {
 	that.update = function(elapsedTime) {
 		var keepAlive = false,
 			angleToTarget,
-			newRotation,
+			newOrientation,
 			magnitude,
 			newMagnitude;
 
 		spec.alive += elapsedTime;
 		if (spec.alive < spec.lifetime) {
-			angleToTarget = Demo.utilities.math.computeAngle(that.rotation, that.center, spec.target.center);
+			angleToTarget = Demo.utilities.math.computeAngle(that.orientation, that.center, spec.target.center);
 			if (Demo.utilities.math.testTolerance(angleToTarget.angle, 0, 0.01) === false) {
 				if (angleToTarget.crossProduct > 0) {
 					if (angleToTarget.angle > (spec.rotateRate * elapsedTime)) {
-						newRotation = that.rotation + (spec.rotateRate * elapsedTime);
+						newOrientation = that.orientation + (spec.rotateRate * elapsedTime);
 					} else {
-						newRotation = that.rotation + angleToTarget.angle;
+						newOrientation = that.orientation + angleToTarget.angle;
 					}
 				} else {
 					if (angleToTarget.angle > (spec.rotateRate * elapsedTime)) {
-						newRotation = that.rotation - (spec.rotateRate * elapsedTime);
+						newOrientation = that.orientation - (spec.rotateRate * elapsedTime);
 					} else {
-						newRotation = that.rotation - angleToTarget.angle;
+						newOrientation = that.orientation - angleToTarget.angle;
 					}
 				}
 
 				//
-				// Convert the new rotation back into an updated momentum vector.  Have to
+				// Convert the new orientation back into an updated momentum vector.  Have to
 				// start by getting the current momentum vector magnitude, because the resulting
 				// momentum vector needs to have the same magnitude.
 				magnitude = Math.sqrt(Math.pow(that.momentum.x, 2) + Math.pow(that.momentum.y, 2));
-				spec.momentum.x = Math.cos(newRotation);
-				spec.momentum.y = Math.sin(newRotation);
+				spec.momentum.x = Math.cos(newOrientation);
+				spec.momentum.y = Math.sin(newOrientation);
 				newMagnitude = Math.sqrt(Math.pow(that.momentum.x, 2) + Math.pow(that.momentum.y, 2));
 				spec.momentum.x = (spec.momentum.x / newMagnitude) * magnitude;
 				spec.momentum.y = (spec.momentum.y / newMagnitude) * magnitude;

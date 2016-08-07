@@ -8,7 +8,7 @@
 //		center: { x: , y: }			// In world coordinates
 //		size: { width: , height: }	// In world coordinates
 //		momentum: { x: , y: }		// Direction of momentum
-//		rotation: 					// Pointing angle, in radians
+//		orientation: 					// Pointing angle, in radians
 //		accelerationRate: 			// World units per second
 //		rotateRate:					// Radians per millisecond
 //		hitPoints: {
@@ -25,7 +25,7 @@ Demo.components.SpaceShip = function(spec) {
 			get center() { return sprite.center; },
 			get size() { return spec.size; },
 			get momentum() { return spec.momentum; },
-			get rotation() { return spec.rotation; },
+			get orientation() { return spec.orientation; },
 			get accelerateRate() { return spec.accelerateRate; },
 			get hitPoints() { return spec.hitPoints; },
 			get damage() { return 4; },
@@ -125,8 +125,8 @@ Demo.components.SpaceShip = function(spec) {
 	//------------------------------------------------------------------
 	that.fire = function(report) {
 		var missile = undefined,
-			x = Math.cos(that.rotation) / 1000,
-			y = Math.sin(that.rotation) / 1000;
+			x = Math.cos(that.orientation) / 1000,
+			y = Math.sin(that.orientation) / 1000;
 
 		missile = Demo.components.Missile({
 			center : { x: that.center.x, y: that.center.y },
@@ -149,8 +149,8 @@ Demo.components.SpaceShip = function(spec) {
 	//
 	//------------------------------------------------------------------
 	that.accelerate = function(elapsedTime) {
-		var vectorX = Math.cos(that.rotation),
-			vectorY = Math.sin(that.rotation),
+		var vectorX = Math.cos(that.orientation),
+			vectorY = Math.sin(that.orientation),
 			newSpeed = 0;
 
 		spec.momentum.x += (vectorX * elapsedTime * spec.accelerationRate);
@@ -170,13 +170,13 @@ Demo.components.SpaceShip = function(spec) {
 		// Compute the location of the tail of the spaceship, that is where we
 		// want to emit exhaust particles.
 		var tail = {
-			x: that.center.x - Math.cos(that.rotation) * (that.size.width / 2),
-			y: that.center.y - Math.sin(that.rotation) * (that.size.height / 2)
+			x: that.center.x - Math.cos(that.orientation) * (that.size.width / 2),
+			y: that.center.y - Math.sin(that.orientation) * (that.size.height / 2)
 		};
 		Demo.components.ParticleSystem.createEffectExhaust({
 			center: tail,
 			momentum: that.momentum,
-			direction: Math.PI + spec.rotation,
+			direction: Math.PI + spec.orientation,
 			spread: Math.PI / 3,
 			howMany: 5
 		});
@@ -211,7 +211,7 @@ Demo.components.SpaceShip = function(spec) {
 	//
 	//------------------------------------------------------------------
 	that.rotateRight = function(elapsedTime) {
-		spec.rotation += spec.rotateRate * (elapsedTime);
+		spec.orientation += spec.rotateRate * (elapsedTime);
 	};
 
 	//------------------------------------------------------------------
@@ -220,7 +220,7 @@ Demo.components.SpaceShip = function(spec) {
 	//
 	//------------------------------------------------------------------
 	that.rotateLeft = function(elapsedTime) {
-		spec.rotation -= spec.rotateRate * (elapsedTime);
+		spec.orientation -= spec.rotateRate * (elapsedTime);
 	};
 
 	//------------------------------------------------------------------

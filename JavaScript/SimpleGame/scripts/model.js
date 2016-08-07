@@ -121,7 +121,7 @@ Demo.model = (function(input, components, renderer, assets) {
 			imageName: 'base-red',
 			center: { x: world.left + 0.75, y: world.top + 0.75 },
 			radius: 0.10,
-			rotation: 0,
+			orientation: 0,
 			rotateRate: (Math.PI / 4) / 1000,	// Slow rotation
 			vicinity: 0.40,
 			missile: {
@@ -147,7 +147,7 @@ Demo.model = (function(input, components, renderer, assets) {
 			imageName: 'base-green',
 			center: { x: world.width - 0.75, y: world.top + 0.75 },
 			radius: 0.15,
-			rotation: 0,
+			orientation: 0,
 			rotateRate: (Math.PI / 4) / 1000,	// Slow rotation
 			vicinity: 0.50,
 			missile: {
@@ -173,7 +173,7 @@ Demo.model = (function(input, components, renderer, assets) {
 			imageName: 'base-blue',
 			center: { x: world.width / 2, y: world.height / 2 },
 			radius: 0.05,
-			rotation: 0,
+			orientation: 0,
 			rotateRate: (Math.PI / 4) / 1000,	// Slow rotation
 			vicinity: 0.50,
 			missile: {
@@ -199,7 +199,7 @@ Demo.model = (function(input, components, renderer, assets) {
 			imageName: 'base-yellow',
 			center: { x: world.left + 0.667 * world.width , y: world.height - 1.0 },
 			radius: 0.20,
-			rotation: 0,
+			orientation: 0,
 			rotateRate: (Math.PI / 4) / 2000,	// Slow rotation
 			vicinity: 1.00,
 			missile: {
@@ -250,7 +250,7 @@ Demo.model = (function(input, components, renderer, assets) {
 			center: { x: 0.5, y: 0.5 },
 			momentum: { x: 0.0, y: 0.0 },		// World units per millisecond
 			maxSpeed: 0.0004,					// World units per millisecond
-			rotation: 0,
+			orientation: 0,
 			accelerationRate: 0.0004 / 1000,	// World units per second
 			rotateRate: Math.PI / 1000,			// Radians per millisecond
 			hitPoints: {
