@@ -22,6 +22,7 @@ Demo.model = (function(input, components, renderer, assets) {
 		},
 		background = null,
 		spaceShip = null,	// Spaceship is speshul because we keep the viewport oriented based on its location
+		spaceShipHandlerIds = undefined,
 		nextEntityId = 0,
 		friendlyEntities = {},
 		enemyEntities = {},
@@ -35,6 +36,76 @@ Demo.model = (function(input, components, renderer, assets) {
 		enumerable: true,
 		configurable: false
 	});
+
+	// ------------------------------------------------------------------
+	//
+	// Unregister the various keyboard events from the spaceship.  But, have
+	// to admit, it is kind of funny to be able to keep pressing these after
+	// the spaceship has died.
+	//
+	// ------------------------------------------------------------------
+	function unregisterSpaceShipKeyboard(handlerIds) {
+		var item,
+			entry;
+
+		for (var item in handlerIds) {
+			if (handlerIds.hasOwnProperty(item)) {
+				entry = handlerIds[item];
+				myKeyboard.unregisterHandler(entry.key, entry.handlerId);
+			}
+		}
+	}
+
+	// ------------------------------------------------------------------
+	//
+	// Register the various keyboard events we need for the spaceship.  While
+	// doing so, collect the handler id's so they can be unregistered at
+	// a later time, such as when the spaceship dies.
+	//
+	// ------------------------------------------------------------------
+	function registerSpaceShipKeyboard(ship) {
+		var handlerIds = [],
+			handlerId;
+
+		handlerId = myKeyboard.registerHandler(function(elapsedTime) {
+			ship.accelerate(elapsedTime);
+		}, input.KeyEvent.DOM_VK_W, true);
+		handlerIds.push({ key: input.KeyEvent.DOM_VK_W, handlerId: handlerId });
+
+		handlerId = myKeyboard.registerHandler(function(elapsedTime) {
+			ship.rotateLeft(elapsedTime);
+		}, input.KeyEvent.DOM_VK_A, true);
+		handlerIds.push({ key: input.KeyEvent.DOM_VK_A, handlerId: handlerId });
+
+		handlerId = myKeyboard.registerHandler(function(elapsedTime) {
+			ship.rotateRight(elapsedTime);
+		}, input.KeyEvent.DOM_VK_D, true);
+		handlerIds.push({ key: input.KeyEvent.DOM_VK_D, handlerId: handlerId });
+
+		handlerId = myKeyboard.registerHandler(function(elapsedTime) {
+			ship.fire(function(entity, renderer) {
+				friendlyEntities[nextEntityId++] = {
+					model: entity,
+					renderer: renderer
+				};
+			});
+		}, input.KeyEvent.DOM_VK_SPACE, false);
+		handlerIds.push({ key: input.KeyEvent.DOM_VK_SPACE, handlerId: handlerId });
+
+		//
+		// Register keyboard handlers to cause a thrust sound to occur
+		handlerId = myKeyboard.registerHandlerDown(function() {
+			ship.startAccelerate();
+		}, input.KeyEvent.DOM_VK_W);
+		handlerIds.push({ key: input.KeyEvent.DOM_VK_W, handlerId: handlerId });
+
+		handlerId = myKeyboard.registerHandlerUp(function() {
+			ship.endAccelerate();
+		}, input.KeyEvent.DOM_VK_W);
+		handlerIds.push({ key: input.KeyEvent.DOM_VK_W, handlerId: handlerId });
+
+		return handlerIds;
+	}
 
 	// ------------------------------------------------------------------
 	//
@@ -147,7 +218,6 @@ Demo.model = (function(input, components, renderer, assets) {
 			model: base,
 			renderer: renderer.Base
 		};
-
 	}
 
 	// ------------------------------------------------------------------
@@ -157,6 +227,10 @@ Demo.model = (function(input, components, renderer, assets) {
 	// ------------------------------------------------------------------
 	that.initialize = function() {
 		var backgroundKey = 'background';
+
+		//
+		// Get the intial viewport settings prepared.
+		Demo.renderer.core.viewport.set(0, 0, 0.25); // The buffer can't really be any larger than world.buffer, guess I could protect against that.
 
 		//
 		// Define the TiledImage model we'll be using for our background.
@@ -185,43 +259,12 @@ Demo.model = (function(input, components, renderer, assets) {
 			model: spaceShip,
 			renderer: renderer.SpaceShip
 		};
+		spaceShip.registerDeathHanlder(function() {
+			unregisterSpaceShipKeyboard(spaceShipHandlerIds);
+		});
+		spaceShipHandlerIds = registerSpaceShipKeyboard(spaceShip);
 
 		initializeEnemyBases();
-
-		myKeyboard.registerHandler(function(elapsedTime) {
-			spaceShip.accelerate(elapsedTime);
-		}, input.KeyEvent.DOM_VK_W, true);
-
-		myKeyboard.registerHandler(function(elapsedTime) {
-			spaceShip.rotateLeft(elapsedTime);
-		}, input.KeyEvent.DOM_VK_A, true);
-
-		myKeyboard.registerHandler(function(elapsedTime) {
-			spaceShip.rotateRight(elapsedTime);
-		}, input.KeyEvent.DOM_VK_D, true);
-
-		myKeyboard.registerHandler(function(elapsedTime) {
-			spaceShip.fire(function(entity, renderer) {
-				friendlyEntities[nextEntityId++] = {
-					model: entity,
-					renderer: renderer
-				};
-			});
-		}, input.KeyEvent.DOM_VK_SPACE, false);
-
-		//
-		// Register keyboard handlers to cause a thrust sound to occur
-		myKeyboard.registerHandlerDown(function() {
-			spaceShip.startAccelerate();
-		}, input.KeyEvent.DOM_VK_W);
-
-		myKeyboard.registerHandlerUp(function() {
-			spaceShip.endAccelerate();
-		}, input.KeyEvent.DOM_VK_W);
-
-		//
-		// Get the intial viewport settings prepared.
-		Demo.renderer.core.viewport.set(0, 0, 0.25); // The buffer can't really be any larger than world.buffer, guess I could protect against that.
 
 		//
 		// Start the background music.

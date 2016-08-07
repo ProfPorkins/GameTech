@@ -19,7 +19,7 @@
 //------------------------------------------------------------------
 Demo.components.SpaceShip = function(spec) {
 	'use strict';
-	var sprite = null,
+	var sprite = undefined,
 		that = {
 			get type() { return Demo.components.Types.SpaceShip; },
 			get center() { return sprite.center; },
@@ -34,7 +34,8 @@ Demo.components.SpaceShip = function(spec) {
 		boundingCircle = {
 			get center() { return that.center; },
 			get radius() { return that.size.width / 2; }
-		};
+		},
+		deathHandler = undefined;
 
 	Object.defineProperty(that, 'boundingCircle', {
 		get: function() { return boundingCircle; },
@@ -107,6 +108,11 @@ Demo.components.SpaceShip = function(spec) {
 			// Make a sound!
 			Demo.assets['audio-base-explosion'].currentTime = 0.5;	// Start it a little into the effect because there is a dead spot at the start of it
 			Demo.assets['audio-base-explosion'].play();
+			//
+			// Notify upon our death!
+			if (deathHandler) {
+				deathHandler();
+			}
 		}
 
 		return keepAlive;
@@ -216,6 +222,15 @@ Demo.components.SpaceShip = function(spec) {
 	that.rotateLeft = function(elapsedTime) {
 		spec.rotation -= spec.rotateRate * (elapsedTime);
 	};
+
+	//------------------------------------------------------------------
+	//
+	// Allows client code to be notified upon the death of this spaceship.
+	//
+	//------------------------------------------------------------------
+	that.registerDeathHanlder = function(handler) {
+		deathHandler = handler;
+	}
 
 	//
 	// Set the initial number of hit points

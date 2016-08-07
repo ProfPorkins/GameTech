@@ -10,7 +10,7 @@ Demo.input.Keyboard = function() {
 	var keys = {},
 		keysUp = {},
 		keyRepeat = {},
-		handlers = {},
+		handlersNormal = {},
 		handlersDown = {},	// Keydown handlers
 		handlersUp = {},	// Keyup handlers
 		nextHandlerId = 0,
@@ -31,10 +31,10 @@ Demo.input.Keyboard = function() {
 
 		//
 		// Each entry is an array of handlers to allow multiple handlers per keyboard input
-		if (!handlers.hasOwnProperty(key)) {
-			handlers[key] = [];
+		if (!handlersNormal.hasOwnProperty(key)) {
+			handlersNormal[key] = [];
 		}
-		handlers[key].push({
+		handlersNormal[key].push({
 			id: nextHandlerId,
 			key: key,
 			repeat: repeat,
@@ -48,7 +48,7 @@ Demo.input.Keyboard = function() {
 		//
 		// We return an handler id that client code must track if it is desired
 		// to unregister the handler in the future.
-		return handlers[key][handlers[key].length - 1].id;
+		return handlersNormal[key][handlersNormal[key].length - 1].id;
 	};
 
 	// ------------------------------------------------------------------
@@ -104,18 +104,37 @@ Demo.input.Keyboard = function() {
 
 	// ------------------------------------------------------------------
 	//
-	// Allows the client code to unregister a keyboard handler.
+	// Attempts to remove the handler from the array of handlers passed in.
+	// if it was removed, the handler array is modified and true is returned.
+	// Otherwise, false is returned.
 	//
 	// ------------------------------------------------------------------
-	that.unregisterHandler = function(key, id) {
+	function unregisterHandler(handlers, key, id) {
 		var entry = 0;
 
 		if (handlers.hasOwnProperty(key)) {
 			for (entry = 0; entry < handlers[key].length; entry += 1) {
 				if (handlers[key][entry].id === id) {
 					handlers[key].splice(entry, 1);
-					break;
+					return true;
 				}
+			}
+		}
+
+		return false;
+	}
+
+	// ------------------------------------------------------------------
+	//
+	// Allows the client code to unregister a keyboard handler.
+	//
+	// ------------------------------------------------------------------
+	that.unregisterHandler = function(key, id) {
+		//
+		// Check regular handlers first
+		if (unregisterHandler(handlersNormal, key, id) === false) {
+			if (unregisterHandler(handlersDown, key, id) === false) {
+				unregisterHandler(handlersUp, key, id)
 			}
 		}
 	};
@@ -165,9 +184,9 @@ Demo.input.Keyboard = function() {
 			event = null;
 
 		for (key in keys) {
-			if (handlers.hasOwnProperty(key)) {
-				for (entry = 0; entry < handlers[key].length; entry += 1) {
-					event = handlers[key][entry];
+			if (handlersNormal.hasOwnProperty(key)) {
+				for (entry = 0; entry < handlersNormal[key].length; entry += 1) {
+					event = handlersNormal[key][entry];
 					event.elapsedTime += elapsedTime;
 					if (event.repeat === true) {
 						//
