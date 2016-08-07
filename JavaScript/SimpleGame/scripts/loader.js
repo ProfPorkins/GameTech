@@ -40,6 +40,10 @@ Demo.loader = (function() {
 			message: 'Particle System Effects loaded',
 			onComplete: null
 		}, {
+			scripts: ['Components/Entity'],
+			message: 'Base Entity class loaded',
+			onComplete: null
+		}, {
 			scripts: ['Components/SpaceShip', 'Components/Base', 'Components/Missile', 'Components/TrackingMissile'],
 			message: 'Gameplay Components loaded',
 			onComplete: null
@@ -285,8 +289,8 @@ Demo.loader = (function() {
 	//
 	// Start with loading the assets, then the scripts.
 	console.log('Starting to dynamically load project assets');
-	//prepareTiledImage(assetOrder, '/assets/graphics/background/tiles', 'background', 1280, 768, 128);
-	prepareTiledImage(assetOrder, '/assets/graphics/background/tiles', 'background', 4480, 2560, 128);
+	prepareTiledImage(assetOrder, '/assets/graphics/background/tiles', 'background', 1280, 768, 128);
+	//prepareTiledImage(assetOrder, '/assets/graphics/background/tiles', 'background', 4480, 2560, 128);
 	loadAssets(assetOrder,
 		function(source, asset) {	// Store it on success
 			Demo.assets[source.key] = asset;
