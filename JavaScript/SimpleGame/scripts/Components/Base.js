@@ -28,30 +28,26 @@
 //------------------------------------------------------------------
 Demo.components.Base = function(spec) {
 	'use strict';
-	var sprite = null,
+	var that = Demo.components.Entity(spec, spec.imageName),
 		shield = {
 			get radius() { return spec.radius + spec.shield.thickness; },
 			get strength() { return spec.shield.strength; },
 			get max() { return spec.shield.max; }
 		},
-		that = {
-			get type() { return Demo.components.Types.Base; },
-			get center() { return sprite.center; },
-			get radius() { return spec.radius; },
-			get orientation() { return spec.orientation; },
-			get hitPoints() { return spec.hitPoints; },
-			get shield() { return shield; },
-			get sprite() { return sprite; },
-		},
-		boundingCircle = {
-			get center() { return that.center; },
-			get radius() { return that.radius; }
-		},
 		regenerationTime = 0,
 		lastMissileFired = 0;
 
-	Object.defineProperty(that, 'boundingCircle', {
-		get: function() { return boundingCircle; },
+	Object.defineProperty(that, 'type', {
+		get: function() { return Demo.components.Types.Base; },
+		enumerable: true,
+		configurable: false
+	});
+
+	//
+	// Set the initial shield strengths
+	spec.shield.strength = spec.shield.max;
+	Object.defineProperty(that, 'shield', {
+		get: function() { return shield; },
 		enumerable: true,
 		configurable: false
 	});
@@ -62,7 +58,7 @@ Demo.components.Base = function(spec) {
 	//
 	//------------------------------------------------------------------
 	that.update = function(elapsedTime) {
-		sprite.update(elapsedTime);
+		that.sprite.update(elapsedTime);
 		spec.orientation += (spec.rotateRate * elapsedTime);
 
 		//
@@ -79,15 +75,6 @@ Demo.components.Base = function(spec) {
 
 		return true;
 	};
-
-	//------------------------------------------------------------------
-	//
-	// Check to see if the Base collides with another entity.
-	//
-	//------------------------------------------------------------------
-	that.intersects = function(entity) {
-		return Demo.utilities.math.circleCircleIntersect(entity.boundingCircle, that.boundingCircle);
-	}
 
 	//------------------------------------------------------------------
 	//
@@ -173,19 +160,6 @@ Demo.components.Base = function(spec) {
 
 		return keepAlive;
 	};
-
-	//
-	// Set the initial shield and base strengths
-	spec.hitPoints.strength = spec.hitPoints.max;
-	spec.shield.strength = spec.shield.max;
-
-	//
-	// Get our sprite model
-	sprite = Demo.components.Sprite({
-		image: Demo.assets[spec.imageName],
-		spriteSize: { width: spec.radius * 2, height: spec.radius * 2 },	// Maintain the size on the sprite
-		spriteCenter: spec.center	// Maintain the center on the sprite
-	});
 
 	return that;
 };

@@ -32,26 +32,44 @@ Demo.components.Entity = function(spec, spriteName) {
 
 	//
 	// An entity may be defined in terms of a rectangular size or a radius.  Depending
-	// upon how it is defined, create the boundingCircle accordingly.
+	// upon how it is defined, various properties of the entity are defined with respect
+	// to their dimensions.
 	if (spec.hasOwnProperty('size')) {
 		boundingCircle = {
 			get center() { return that.center; },
 			get radius() { return that.size.width / 2; }
 		};
+
 		Object.defineProperty(that, 'size', {
 			get: function() { return spec.size; },
 			enumerable: true,
 			configurable: false
 		});
+
+		//
+		// Get our sprite model
+		sprite = Demo.components.Sprite({
+			image: Demo.assets[spriteName],
+			spriteSize: spec.size,			// Let the sprite know about the size also
+			spriteCenter: spec.center		// Maintain the center on the sprite
+		});
+
 	} else if (spec.hasOwnProperty('radius')) {
 		boundingCircle = {
 			get center() { return that.center; },
 			get radius() { return that.radius; }
 		};
+
 		Object.defineProperty(that, 'radius', {
 			get: function() { return spec.radius; },
 			enumerable: true,
 			configurable: false
+		});
+
+		sprite = Demo.components.Sprite({
+			image: Demo.assets[spec.imageName],
+			spriteSize: { width: spec.radius * 2, height: spec.radius * 2 },
+			spriteCenter: spec.center	// Maintain the center on the sprite
 		});
 	} else {
 		throw 'Entity does not define either "size" or "radius"';
@@ -108,14 +126,6 @@ Demo.components.Entity = function(spec, spriteName) {
 	//
 	// Set the initial number of hit points
 	spec.hitPoints.strength = spec.hitPoints.max;
-
-	//
-	// Get our sprite model
-	sprite = Demo.components.Sprite({
-		image: Demo.assets[spriteName],
-		spriteSize: spec.size,			// Let the sprite know about the size also
-		spriteCenter: spec.center		// Maintain the center on the sprite
-	});
 
 	return that;
 };
