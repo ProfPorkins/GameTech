@@ -19,63 +19,20 @@
 //------------------------------------------------------------------
 Demo.components.SpaceShip = function(spec) {
 	'use strict';
-	var sprite = undefined,
-		that = {
-			get type() { return Demo.components.Types.SpaceShip; },
-			get center() { return sprite.center; },
-			get size() { return spec.size; },
-			get momentum() { return spec.momentum; },
-			get orientation() { return spec.orientation; },
-			get accelerateRate() { return spec.accelerateRate; },
-			get hitPoints() { return spec.hitPoints; },
-			get damage() { return 4; },
-			get sprite() { return sprite; }
-		},
-		boundingCircle = {
-			get center() { return that.center; },
-			get radius() { return that.size.width / 2; }
-		},
+	var that = Demo.components.Entity(spec, 'spaceship'),
 		deathHandler = undefined;
 
-	Object.defineProperty(that, 'boundingCircle', {
-		get: function() { return boundingCircle; },
+	Object.defineProperty(that, 'type', {
+		get: function() { return Demo.components.Types.SpaceShip; },
 		enumerable: true,
 		configurable: false
 	});
 
-	//------------------------------------------------------------------
-	//
-	// Update the position of the ship based on its current momentum vector,
-	// then tell the underlying sprite model to also update.
-	//
-	//------------------------------------------------------------------
-	that.update = function(elapsedTime) {
-		sprite.center.x += (spec.momentum.x * elapsedTime);
-		sprite.center.y += (spec.momentum.y * elapsedTime);
-
-		sprite.update(elapsedTime);
-
-		return true;
-	};
-
-	//------------------------------------------------------------------
-	//
-	// Check to see if the SpaceShip collides with another entity.
-	//
-	//------------------------------------------------------------------
-	that.intersects = function(entity) {
-		return Demo.utilities.math.circleCircleIntersect(entity.boundingCircle, that.boundingCircle);
-	}
-
-	//------------------------------------------------------------------
-	//
-	// Called when another entity gets within the 'vicinity' of this entity.
-	//
-	//------------------------------------------------------------------
-	that.vicinity = function(entity) {
-		//
-		// Nothing to do here
-	};
+	Object.defineProperty(that, 'damage', {
+		get: function() { return 4; },
+		enumerable: true,
+		configurable: false
+	});
 
 	//------------------------------------------------------------------
 	//
@@ -231,18 +188,6 @@ Demo.components.SpaceShip = function(spec) {
 	that.registerDeathHanlder = function(handler) {
 		deathHandler = handler;
 	}
-
-	//
-	// Set the initial number of hit points
-	spec.hitPoints.strength = spec.hitPoints.max;
-
-	//
-	// Get our sprite model
-	sprite = Demo.components.Sprite({
-		image: Demo.assets['spaceship'],
-		spriteSize: spec.size,			// Let the sprite know about the size also
-		spriteCenter: spec.center		// Maintain the center on the sprite
-	});
 
 	return that;
 };

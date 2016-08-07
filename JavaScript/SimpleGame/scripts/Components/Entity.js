@@ -23,14 +23,12 @@ Demo.components.Entity = function(spec, spriteName) {
 		that = {
 			get type() { return Demo.components.Types.Undefined; },
 			get center() { return sprite.center; },
-			get size() { return spec.size; },
 			get momentum() { return spec.momentum; },
 			get orientation() { return spec.orientation; },
 			get hitPoints() { return spec.hitPoints; },
 			get sprite() { return sprite; }
 		},
-		boundingCircle = undefined,
-		deathHandler = undefined;
+		boundingCircle = undefined;
 
 	//
 	// An entity may be defined in terms of a rectangular size or a radius.  Depending
@@ -39,12 +37,22 @@ Demo.components.Entity = function(spec, spriteName) {
 		boundingCircle = {
 			get center() { return that.center; },
 			get radius() { return that.size.width / 2; }
-		}
+		};
+		Object.defineProperty(that, 'size', {
+			get: function() { return spec.size; },
+			enumerable: true,
+			configurable: false
+		});
 	} else if (spec.hasOwnProperty('radius')) {
 		boundingCircle = {
 			get center() { return that.center; },
 			get radius() { return that.radius; }
-		}
+		};
+		Object.defineProperty(that, 'radius', {
+			get: function() { return spec.radius; },
+			enumerable: true,
+			configurable: false
+		});
 	} else {
 		throw 'Entity does not define either "size" or "radius"';
 	}
@@ -95,15 +103,6 @@ Demo.components.Entity = function(spec, spriteName) {
 	//------------------------------------------------------------------
 	that.collide = function(entity) {
 		return true;
-	}
-
-	//------------------------------------------------------------------
-	//
-	// Allows client code to be notified upon the death of this spaceship.
-	//
-	//------------------------------------------------------------------
-	that.registerDeathHanlder = function(handler) {
-		deathHandler = handler;
 	}
 
 	//
