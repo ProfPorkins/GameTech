@@ -105,7 +105,6 @@ Demo.components.Base = function(spec) {
 
 				missile = Demo.components.TrackingMissile({
 					center : { x: that.center.x, y: that.center.y },
-					size: { width: 0.04, height: 0.01 },
 					target: entity,
 					momentum: { x: direction.x, y: direction.y },
 					rotateRate: spec.missile.rotateRate,
@@ -115,10 +114,6 @@ Demo.components.Base = function(spec) {
 				//
 				// Report the firing of the missle back to the calling code.
 				report(missile, Demo.renderer.Missile);
-				//
-				// Make a sound!
-				Demo.assets['audio-base-missile'].currentTime = 0;
-				Demo.assets['audio-base-missile'].play();
 			}
 		}
 	};

@@ -15,7 +15,12 @@
 //------------------------------------------------------------------
 Demo.components.TrackingMissile = function(spec) {
 	'use strict';
-	var that = Demo.components.Entity(spec, 'missile-2');
+	var that;
+
+	//
+	// A missile knows its own size
+	spec.size = { width: 0.04, height: 0.01 };
+	that = Demo.components.Entity(spec, 'missile-2');
 
 	Object.defineProperty(that, 'type', {
 		get: function() { return Demo.components.Types.Missile; },
@@ -111,6 +116,11 @@ Demo.components.TrackingMissile = function(spec) {
 
 		return false;
 	};
+
+	//
+	// Make a sound!
+	Demo.assets['audio-base-missile'].currentTime = 0;
+	Demo.assets['audio-base-missile'].play();
 
 	return that;
 };

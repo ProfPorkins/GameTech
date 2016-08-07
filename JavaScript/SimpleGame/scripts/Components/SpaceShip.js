@@ -87,7 +87,6 @@ Demo.components.SpaceShip = function(spec) {
 
 		missile = Demo.components.Missile({
 			center : { x: that.center.x, y: that.center.y },
-			size: { width: 0.04, height: 0.01 },
 			momentum: { x: spec.momentum.x + x, y: spec.momentum.y + y },
 			lifetime: 500
 		});
@@ -95,10 +94,6 @@ Demo.components.SpaceShip = function(spec) {
 		//
 		// Report the firing of the missle back to the calling code.
 		report(missile, Demo.renderer.Missile);
-		//
-		// Make a sound!
-		Demo.assets['audio-spaceship-missile'].currentTime = 0;
-		Demo.assets['audio-spaceship-missile'].play();
 	};
 
 	//------------------------------------------------------------------

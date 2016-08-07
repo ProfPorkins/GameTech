@@ -13,7 +13,12 @@
 //------------------------------------------------------------------
 Demo.components.Missile = function(spec) {
 	'use strict';
-	var that = Demo.components.Entity(spec, 'missile-1');
+	var that;
+
+	//
+	// A missile knows its own size
+	spec.size = { width: 0.03, height: 0.008 };
+	that = Demo.components.Entity(spec, 'missile-1');
 
 	Object.defineProperty(that, 'type', {
 		get: function() { return Demo.components.Types.Missile; },
@@ -78,6 +83,11 @@ Demo.components.Missile = function(spec) {
 
 		return false;
 	};
+
+	//
+	// Make a sound!
+	Demo.assets['audio-spaceship-missile'].currentTime = 0;
+	Demo.assets['audio-spaceship-missile'].play();
 
 	return that;
 };
