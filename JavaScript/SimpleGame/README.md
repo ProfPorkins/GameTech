@@ -2,7 +2,7 @@
 This sample demonstrates the gameplay of a basic game; it does not include menus, high-scores, etc., just the gameplay.
 
 ---
-*...A screenshot will eventually show up here...*
+![Simple Game Demo](https://github.com/ProfPorkins/GameTech/blob/master/JavaScript/SimpleGame/SimpleGame.png "")
 ---
 
 In order to use this sample, an image from the NASA Hubble Space Telescope site must be downloaded and prepared.  Use the following instructions to prepare the image:
