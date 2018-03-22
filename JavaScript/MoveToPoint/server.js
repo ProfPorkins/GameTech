@@ -10,7 +10,10 @@ var http = require('http'),
 var mimeTypes = {
 	'.js' : 'text/javascript',
 	'.html' : 'text/html',
-	'.css' : 'text/css'
+	'.css' : 'text/css',
+	'.png' : 'image/png',
+	'.jpg' : 'image/jpeg',
+	'.mp3' : 'audio/mpeg3'
 };
 
 //------------------------------------------------------------------
