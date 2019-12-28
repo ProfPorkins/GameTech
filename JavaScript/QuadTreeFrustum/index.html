@@ -1,33 +1,33 @@
 <!DOCTYPE HTML>
 <html lang = "en-US">
 <head>
-	<meta charset = "UTF-8">
-	<title>Quad-Tree Frustum Culling Demo</title>
+    <meta charset = "UTF-8">
+    <title>Quad-Tree Frustum Culling Demo</title>
 
-	<link rel = "stylesheet" type = "text/css" href = "styles/canvas.css">
+    <link rel = "stylesheet" type = "text/css" href = "styles/canvas.css">
 </head>
 <body onload = "Demo.main.initialize();">
-	<canvas id = "canvas-main" onclick = "Demo.renderer.core.toggleFullScreen(document.body);"></canvas>
+    <canvas id = "canvas-main" onclick = "Demo.renderer.core.toggleFullScreen(document.body);"></canvas>
 
-	<script>
-		var Demo = {
-			input: {},
-			components: {},
-			renderer: {},
-			utilities: {}
-		};
-	</script>
-	<script src = "scripts/Random.js"></script>
-	<script src = "scripts/Input/Keyboard.js"></script>
-	<script src = "scripts/Components/Circle.js"></script>
-	<script src = "scripts/Components/Entity.js"></script>
-	<script src = "scripts/Components/QuadTree.js"></script>
-	<script src = "scripts/Components/Camera.js"></script>
-	<script src = "scripts/Rendering/core.js"></script>
-	<script src = "scripts/Rendering/QuadTree.js"></script>
-	<script src = "scripts/Rendering/Camera.js"></script>
-	<script src = "scripts/Utilities/Math.js"></script>
-	<script src = "scripts/model.js"></script>
-	<script src = "scripts/main.js"></script>
+    <script>
+        let Demo = {
+            input: {},
+            components: {},
+            renderer: {},
+            utilities: {}
+        };
+    </script>
+    <script src = "scripts/Random.js"></script>
+    <script src = "scripts/Input/Keyboard.js"></script>
+    <script src = "scripts/Components/Circle.js"></script>
+    <script src = "scripts/Components/Entity.js"></script>
+    <script src = "scripts/Components/QuadTree.js"></script>
+    <script src = "scripts/Components/Camera.js"></script>
+    <script src = "scripts/Rendering/core.js"></script>
+    <script src = "scripts/Rendering/QuadTree.js"></script>
+    <script src = "scripts/Rendering/Camera.js"></script>
+    <script src = "scripts/Utilities/Math.js"></script>
+    <script src = "scripts/model.js"></script>
+    <script src = "scripts/main.js"></script>
 </body>
 </html>

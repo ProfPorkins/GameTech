@@ -24,13 +24,13 @@ Demo.model = (function(components) {
             text : '',
             font : '16px Arial, sans-serif',
             fill : 'rgba(200, 200, 255, 1)',
-            position : { x : 1.025, y : 0.00 }
+            position : { x : 1.025, y : 0.13 }
         };
     let textCriteria = {
             text : '',
             font : '16px Arial, sans-serif',
             fill : 'rgba(200, 200, 255, 1)',
-            position : { x : 1.025, y : 0.00 }
+            position : { x : 1.025, y : 0.16 }
         };
     let that = {
             get quadTreeCriteria() { return quadTreeCriteria; },
