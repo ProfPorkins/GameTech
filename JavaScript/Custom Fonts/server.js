@@ -4,7 +4,7 @@ let http = require('http');
 let path = require('path');
 let fs = require('fs');
 
-var mimeTypes = {
+let mimeTypes = {
     '.js' : 'text/javascript',
     '.html' : 'text/html',
     '.css' : 'text/css',
