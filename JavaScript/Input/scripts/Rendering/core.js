@@ -5,14 +5,14 @@
 // ------------------------------------------------------------------
 Demo.renderer.core = (function() {
     'use strict';
-    var canvas = null,
-        context = null,
-        world = {
+    let canvas = null;
+    let context = null;
+    let world = {
             size: 0,
             top: 0,
             left: 0
-        },
-        resizeHandlers = [];
+        };
+		let resizeHandlers = [];
 
     //------------------------------------------------------------------
     //
@@ -21,8 +21,8 @@ Demo.renderer.core = (function() {
     //
     //------------------------------------------------------------------
     function resizeCanvas() {
-        var smallestSize = 0,
-            handler = null;
+        let smallestSize = 0;
+        let handler = null;
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -65,7 +65,7 @@ Demo.renderer.core = (function() {
     //
     //------------------------------------------------------------------
     function toggleFullScreen(element) {
-        var    fullScreenElement = document.fullscreenElement ||
+        let fullScreenElement = document.fullscreenElement ||
                                 document.webkitFullscreenElement ||
                                 document.mozFullScreenElement ||
                                 document.msFullscreenElement;
@@ -144,7 +144,7 @@ Demo.renderer.core = (function() {
     //
     //------------------------------------------------------------------
     function measureTextHeight(spec) {
-        var height = 0;
+        let height = 0;
         context.save();
 
         context.font = spec.font;
@@ -163,7 +163,7 @@ Demo.renderer.core = (function() {
     //
     //------------------------------------------------------------------
     function measureTextWidth(spec) {
-        var width = 0;
+        let width = 0;
         context.save();
 
         context.font = spec.font;

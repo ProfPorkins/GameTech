@@ -5,7 +5,7 @@
 // ------------------------------------------------------------------
 Demo.renderer.Text = (function(core) {
     'use strict';
-    var that = {};
+    let that = {};
 
     that.render = function(text) {
         core.drawText(text);

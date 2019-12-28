@@ -1,10 +1,10 @@
 'use strict';
 
-var http = require('http'),
-    path = require('path'),
-    fs = require('fs');
+let http = require('http');
+let path = require('path');
+let fs = require('fs');
 
-var mimeTypes = {
+let mimeTypes = {
     '.js' : 'text/javascript',
     '.html' : 'text/html',
     '.css' : 'text/css'
@@ -17,15 +17,15 @@ var mimeTypes = {
 //
 //------------------------------------------------------------------
 function handleRequest(request, response) {
-    var lookup = (request.url === '/') ? '/index.html' : decodeURI(request.url),
-        file = lookup.substring(1, lookup.length);
+    let lookup = (request.url === '/') ? '/index.html' : decodeURI(request.url);
+	let file = lookup.substring(1, lookup.length);
 
     console.log('request: ' + request.url);
     fs.exists(file, function(exists) {
         if (exists) {
             console.log('Trying to send: ' + lookup);
             fs.readFile(file, function(err, data) {
-                var headers = { 'Content-type': mimeTypes[path.extname(lookup)] };
+                let headers = { 'Content-type': mimeTypes[path.extname(lookup)] };
 
                 if (err) {
                     response.writeHead(500);

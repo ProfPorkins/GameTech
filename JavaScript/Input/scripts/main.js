@@ -5,20 +5,20 @@
 // ------------------------------------------------------------------
 Demo.main = (function(renderer, components, input, model) {
     'use strict';
-    var lastTimeStamp = performance.now(),
-        frameTimes = [],
-        textFPS = components.Text({
+    let lastTimeStamp = performance.now();
+    let frameTimes = [];
+    let textFPS = components.Text({
             text : 'fps',
             font : '16px Arial, sans-serif',
             fill : 'rgba(255, 255, 255, 1)',
             position : { x : 1.025, y : 0.00 }
-        }),
-        myKeyboard = input.Keyboard(),
-        myMouse = input.Mouse(),
-        inputLeftIds = {},
-        inputRightIds = {},
-        mouseMoveId = 0,
-        inputsLeft = true;    // We start with the left inputs
+        });
+    let myKeyboard = input.Keyboard();
+    let myMouse = input.Mouse();
+    let inputLeftIds = {};
+    let inputRightIds = {};
+    let mouseMoveId = 0;
+    let inputsLeft = true;    // We start with the left inputs
 
     //------------------------------------------------------------------
     //
@@ -45,8 +45,8 @@ Demo.main = (function(renderer, components, input, model) {
     //
     //------------------------------------------------------------------
     function render(elapsedTime) {
-        var averageTime = 0,
-            fps = 0;
+        let averageTime = 0;
+        let fps = 0;
 
         renderer.core.clearCanvas();
         model.render(Demo.renderer);
@@ -73,7 +73,7 @@ Demo.main = (function(renderer, components, input, model) {
     //
     //------------------------------------------------------------------
     function gameLoop(time) {
-        var elapsedTime = (time - lastTimeStamp);
+        let elapsedTime = (time - lastTimeStamp);
         lastTimeStamp = time;
 
         processInput(elapsedTime);

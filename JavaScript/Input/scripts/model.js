@@ -6,36 +6,36 @@
 Demo.model = (function(components) {
     'use strict';
 
-    var font = '14px Arial, sans-serif',
-        textSingle = components.Text({
+    let font = '14px Arial, sans-serif';
+    let textSingle = components.Text({
             text: 'Single',
             font: font,
             fill: 'rgba(255, 0, 0, 1)',
             position: { x: 0.05, y: 0.10 }
-        }),
-        textContinuous = components.Text({
+        });
+    let textContinuous = components.Text({
             text: 'Continuous',
             font: font,
             fill: 'rgba(0, 255, 0, 1)',
             position: { x: 0, y: 0.10 }
-        }),
-        textRepeatInterval = components.Text({
+        });
+    let textRepeatInterval = components.Text({
             text: 'Repeat Interval',
             font: font,
             fill: 'rgba(100, 100, 255, 1)',
             position: { x: 0, y: 0.10 }
-        }),
-        textToggle = components.Text({
+        });
+    let textToggle = components.Text({
             text: 'Toggle commands (t) ',
             font: font,
             fill: 'rgba(255, 255, 255, 1)',
             position: { x: 0, y: 0.05 }
-        }),
-        mouseObject = components.Circle({
+        });
+    let mouseObject = components.Circle({
             center: { x: 0.5, y: 0.5 },
             radius: 0.05
-        }),
-        that = {};
+        });
+    let that = {};
 
     // ------------------------------------------------------------------
     //
@@ -43,7 +43,7 @@ Demo.model = (function(components) {
     //
     // ------------------------------------------------------------------
     function notifyResize(updateY) {
-        var textSpacing = {
+        let textSpacing = {
             text: '     ',
             font: textSingle.font
         };

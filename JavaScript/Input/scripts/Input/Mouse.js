@@ -5,15 +5,15 @@
 // ------------------------------------------------------------------
 Demo.input.Mouse = function() {
     'use strict';
-    var eventMouseDown = [],
-        eventMouseUp = [],
-        eventMouseMove = [],
-        handlersDown = {},
-        handlersUp = {},
-        handlersMove = {},
-        nextHandlerId = 0,        // Used to uniquely identify handlers
-        mouseCapture = false,    // Initial state of the mouse capture
-        that = {
+    let eventMouseDown = [];
+    let eventMouseUp = [];
+    let eventMouseMove = [];
+    let handlersDown = {};
+    let handlersUp = {};
+    let handlersMove = {};
+    let nextHandlerId = 0;        // Used to uniquely identify handlers
+    let mouseCapture = false;    // Initial state of the mouse capture
+    let that = {
             //
             // Use these as constants for the mouse event types
             get EventMouseMove() { return 0; },
@@ -27,7 +27,7 @@ Demo.input.Mouse = function() {
     //
     // ------------------------------------------------------------------
     that.registerHandler = function(handler, type, requireCapture) {
-        var handlerId = nextHandlerId;
+        let handlerId = nextHandlerId;
 
         nextHandlerId += 1;
         //
@@ -107,9 +107,9 @@ Demo.input.Mouse = function() {
     //
     // ------------------------------------------------------------------
     that.update = function(elapsedTime) {
-        var event = 0,
-            handlerId = 0,
-            entry = null;
+        let event = 0;
+        let handlerId = 0;
+        let entry = null;
 
         //
         // Process the mouse events for each of the different kinds of handlers

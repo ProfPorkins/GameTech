@@ -5,11 +5,11 @@
 // ------------------------------------------------------------------
 Demo.input.Keyboard = function() {
     'use strict';
-    var keys = {},
-        keyRepeat = {},
-        handlers = {},
-        nextHandlerId = 0,
-        that = {};
+    let keys = {};
+    let keyRepeat = {};
+    let handlers = {};
+    let nextHandlerId = 0;
+    let that = {};
 
     // ------------------------------------------------------------------
     //
@@ -52,7 +52,7 @@ Demo.input.Keyboard = function() {
     //
     // ------------------------------------------------------------------
     that.unregisterHandler = function(key, id) {
-        var entry = 0;
+        let entry = 0;
 
         if (handlers.hasOwnProperty(key)) {
             for (entry = 0; entry < handlers[key].length; entry += 1) {
@@ -99,9 +99,9 @@ Demo.input.Keyboard = function() {
     //
     // ------------------------------------------------------------------
     that.update = function(elapsedTime) {
-        var key = 0,
-            entry = null,
-            event = null;
+        let key = 0;
+        let entry = null;
+        let event = null;
 
         for (key in keys) {
             if (handlers.hasOwnProperty(key)) {
@@ -143,7 +143,7 @@ Demo.input.Keyboard = function() {
 //------------------------------------------------------------------
 Demo.input.KeyEvent = (function() {
     'use strict';
-    var that = {
+    let that = {
         get DOM_VK_CANCEL() { return 3; },
         get DOM_VK_HELP() { return 6; },
         get DOM_VK_BACK_SPACE() { return 8; },
