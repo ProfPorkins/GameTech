@@ -12,7 +12,7 @@ Demo.renderer.core = (function() {
             top: 0,
             left: 0
         };
-		let resizeHandlers = [];
+    let resizeHandlers = [];
 
     //------------------------------------------------------------------
     //
