@@ -8,10 +8,10 @@ Demo.model = (function(input, components, renderer, assets) {
     let world = {    // The size of the world must match the world-size of the background image
             get left() { return 0; },
             get top() { return 0; },
-            //get width() { return 4.375; },    // For use with the large image size: 4480 x 2560
-            //get height() { return 2.5; },
-            get width() { return 5; },            // For use with the small image size: 1280 x 768
-            get height() { return 3; },
+            get width() { return 4.375; },    // For use with the large image size: 4480 x 2560
+            get height() { return 2.5; },
+            //get width() { return 5; },            // For use with the small image size: 1280 x 768
+            //get height() { return 3; },
             get bufferSize() { return 0.25; }
         };
     let worldBuffer = {
