@@ -233,7 +233,7 @@ Demo.renderer.core = (function() {
     //
     //------------------------------------------------------------------
     function drawImage() {
-        var image = arguments[0],
+        let image = arguments[0],
             sx, sy,
             sWidth, sHeight,
             dx, dy,
