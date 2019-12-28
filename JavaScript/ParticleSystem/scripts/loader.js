@@ -73,11 +73,10 @@ Demo.loader = (function() {
     //
     //------------------------------------------------------------------
     function loadScripts(scripts, onComplete) {
-        let entry = 0;
         //
         // When we run out of things to load, that is when we call onComplete.
         if (scripts.length > 0) {
-            entry = scripts[0];
+            let entry = scripts[0];
             require(entry.scripts, function() {
                 console.log(entry.message);
                 if (entry.onComplete) {
