@@ -110,12 +110,12 @@ Demo.main = (function(renderer, components, input, model) {
     //
     //------------------------------------------------------------------
     function unregisterInputsRight() {
-        myKeyboard.unregisterHandler(input.KeyEvent.DOM_VK_J, inputRightIds[input.KeyEvent.DOM_VK_J]);
-        myKeyboard.unregisterHandler(input.KeyEvent.DOM_VK_U, inputRightIds[input.KeyEvent.DOM_VK_U]);
-        myKeyboard.unregisterHandler(input.KeyEvent.DOM_VK_K, inputRightIds[input.KeyEvent.DOM_VK_K]);
-        myKeyboard.unregisterHandler(input.KeyEvent.DOM_VK_I, inputRightIds[input.KeyEvent.DOM_VK_I]);
-        myKeyboard.unregisterHandler(input.KeyEvent.DOM_VK_L, inputRightIds[input.KeyEvent.DOM_VK_L]);
-        myKeyboard.unregisterHandler(input.KeyEvent.DOM_VK_O, inputRightIds[input.KeyEvent.DOM_VK_O]);
+        myKeyboard.unregisterHandler('j', inputRightIds['j']);
+        myKeyboard.unregisterHandler('u', inputRightIds['u']);
+        myKeyboard.unregisterHandler('k', inputRightIds['k']);
+        myKeyboard.unregisterHandler('i', inputRightIds['i']);
+        myKeyboard.unregisterHandler('l', inputRightIds['l']);
+        myKeyboard.unregisterHandler('o', inputRightIds['o']);
     }
 
     //------------------------------------------------------------------
@@ -124,12 +124,12 @@ Demo.main = (function(renderer, components, input, model) {
     //
     //------------------------------------------------------------------
     function unregisterInputsLeft() {
-        myKeyboard.unregisterHandler(input.KeyEvent.DOM_VK_A, inputLeftIds[input.KeyEvent.DOM_VK_A]);
-        myKeyboard.unregisterHandler(input.KeyEvent.DOM_VK_Q, inputLeftIds[input.KeyEvent.DOM_VK_Q]);
-        myKeyboard.unregisterHandler(input.KeyEvent.DOM_VK_S, inputLeftIds[input.KeyEvent.DOM_VK_S]);
-        myKeyboard.unregisterHandler(input.KeyEvent.DOM_VK_W, inputLeftIds[input.KeyEvent.DOM_VK_W]);
-        myKeyboard.unregisterHandler(input.KeyEvent.DOM_VK_D, inputLeftIds[input.KeyEvent.DOM_VK_D]);
-        myKeyboard.unregisterHandler(input.KeyEvent.DOM_VK_E, inputLeftIds[input.KeyEvent.DOM_VK_E]);
+        myKeyboard.unregisterHandler('a', inputLeftIds['a']);
+        myKeyboard.unregisterHandler('q', inputLeftIds['q']);
+        myKeyboard.unregisterHandler('s', inputLeftIds['s']);
+        myKeyboard.unregisterHandler('w', inputLeftIds['w']);
+        myKeyboard.unregisterHandler('d', inputLeftIds['d']);
+        myKeyboard.unregisterHandler('e', inputLeftIds['e']);
 
         myMouse.unregisterHandler(myMouse.EventMouseMove, mouseMoveId);
     }
@@ -140,37 +140,37 @@ Demo.main = (function(renderer, components, input, model) {
     //
     //------------------------------------------------------------------
     function registerInputsLeft() {
-        inputLeftIds[input.KeyEvent.DOM_VK_A] = myKeyboard.registerHandler(function() {
+        inputLeftIds['a'] = myKeyboard.registerHandler(function() {
                 model.moveSingleDown();
             },
-            input.KeyEvent.DOM_VK_A, false
+            'a', false
         );
-        inputLeftIds[input.KeyEvent.DOM_VK_Q] = myKeyboard.registerHandler(function() {
+        inputLeftIds['q'] = myKeyboard.registerHandler(function() {
                 model.moveSingleUp();
             },
-            input.KeyEvent.DOM_VK_Q, false
+            'q', false
         );
 
-        inputLeftIds[input.KeyEvent.DOM_VK_S] = myKeyboard.registerHandler(function(elapsedTime) {
+        inputLeftIds['s'] = myKeyboard.registerHandler(function(elapsedTime) {
                 model.moveRepeatDown(elapsedTime);
             },
-            input.KeyEvent.DOM_VK_S, true
+            's', true
         );
-        inputLeftIds[input.KeyEvent.DOM_VK_W] = myKeyboard.registerHandler(function(elapsedTime) {
+        inputLeftIds['w'] = myKeyboard.registerHandler(function(elapsedTime) {
                 model.moveRepeatUp(elapsedTime);
             },
-            input.KeyEvent.DOM_VK_W, true
+            'w', true
         );
 
-        inputLeftIds[input.KeyEvent.DOM_VK_D] = myKeyboard.registerHandler(function() {
+        inputLeftIds['d'] = myKeyboard.registerHandler(function() {
                 model.moveRepeatTimedDown();
             },
-            input.KeyEvent.DOM_VK_D, true, 250
+            'd', true, 250
         );
-        inputLeftIds[input.KeyEvent.DOM_VK_E] = myKeyboard.registerHandler(function() {
+        inputLeftIds['e'] = myKeyboard.registerHandler(function() {
                 model.moveRepeatTimedUp();
             },
-            input.KeyEvent.DOM_VK_E, true, 250
+            'e', true, 250
         );
 
         mouseMoveId = myMouse.registerHandler(function(event) {
@@ -186,37 +186,37 @@ Demo.main = (function(renderer, components, input, model) {
     //
     //------------------------------------------------------------------
     function registerInputsRight() {
-        inputRightIds[input.KeyEvent.DOM_VK_J] = myKeyboard.registerHandler(function() {
+        inputRightIds['j'] = myKeyboard.registerHandler(function() {
                 model.moveSingleDown();
             },
-            input.KeyEvent.DOM_VK_J, false
+            'j', false
         );
-        inputRightIds[input.KeyEvent.DOM_VK_U] = myKeyboard.registerHandler(function() {
+        inputRightIds['u'] = myKeyboard.registerHandler(function() {
                 model.moveSingleUp();
             },
-            input.KeyEvent.DOM_VK_U, false
+            'u', false
         );
 
-        inputRightIds[input.KeyEvent.DOM_VK_K] = myKeyboard.registerHandler(function(elapsedTime) {
+        inputRightIds['k'] = myKeyboard.registerHandler(function(elapsedTime) {
                 model.moveRepeatDown(elapsedTime);
             },
-            input.KeyEvent.DOM_VK_K, true
+            'k', true
         );
-        inputRightIds[input.KeyEvent.DOM_VK_I] = myKeyboard.registerHandler(function(elapsedTime) {
+        inputRightIds['i'] = myKeyboard.registerHandler(function(elapsedTime) {
                 model.moveRepeatUp(elapsedTime);
             },
-            input.KeyEvent.DOM_VK_I, true
+            'i', true
         );
 
-        inputRightIds[input.KeyEvent.DOM_VK_L] = myKeyboard.registerHandler(function() {
+        inputRightIds['l'] = myKeyboard.registerHandler(function() {
                 model.moveRepeatTimedDown();
             },
-            input.KeyEvent.DOM_VK_L, true, 250
+            'l', true, 250
         );
-        inputRightIds[input.KeyEvent.DOM_VK_O] = myKeyboard.registerHandler(function() {
+        inputRightIds['o'] = myKeyboard.registerHandler(function() {
                 model.moveRepeatTimedUp();
             },
-            input.KeyEvent.DOM_VK_O, true, 250
+            'o', true, 250
         );
     }
 
@@ -241,7 +241,7 @@ Demo.main = (function(renderer, components, input, model) {
         registerInputsLeft();
         //
         // Allow the controls to be changed during runtime.
-        myKeyboard.registerHandler(toggleInput, input.KeyEvent.DOM_VK_T, false);
+        myKeyboard.registerHandler(toggleInput, 't', false);
         //
         // Register the mouse events
         myMouse.registerHandler(function(event) {

@@ -18,7 +18,7 @@ let mimeTypes = {
 //------------------------------------------------------------------
 function handleRequest(request, response) {
     let lookup = (request.url === '/') ? '/index.html' : decodeURI(request.url);
-	let file = lookup.substring(1, lookup.length);
+    let file = lookup.substring(1, lookup.length);
 
     console.log('request: ' + request.url);
     fs.exists(file, function(exists) {

@@ -83,13 +83,13 @@ Demo.model = (function(components) {
     // ------------------------------------------------------------------
     that.notifyCommandToggle = function(isLeft) {
         if (isLeft) {
-            textSingle.text = 'Single (Q/A)';
-            textContinuous.text = 'Continuous (W/S)';
-            textRepeatInterval.text = 'Repeat Interval (E/D)';
+            textSingle.text = 'Single (q/a)';
+            textContinuous.text = 'Continuous (w/s)';
+            textRepeatInterval.text = 'Repeat Interval (e/d)';
         } else {
-            textSingle.text = 'Single (U/J)';
-            textContinuous.text = 'Continuous (I/K)';
-            textRepeatInterval.text = 'Repeat Interval (O/L)';
+            textSingle.text = 'Single (u/j)';
+            textContinuous.text = 'Continuous (i/k)';
+            textRepeatInterval.text = 'Repeat Interval (o/l)';
         }
 
         //
