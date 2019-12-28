@@ -11,7 +11,7 @@
 //------------------------------------------------------------------
 Demo.components.Text = function(spec) {
     'use strict';
-    var that = {
+    let that = {
         get text() { return spec.text; },
         set text(value) { spec.text = value; },
         get font() { return spec.font; },

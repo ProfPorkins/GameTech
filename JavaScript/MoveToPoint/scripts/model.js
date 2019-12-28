@@ -39,7 +39,7 @@ Demo.model = (function(input, components) {
         myKeyboard.registerHandler(function(elapsedTime) {
             spaceShip.moveForward(elapsedTime);
         },
-            input.KeyEvent.DOM_VK_W, true);
+            'w', true);
     };
 
     // ------------------------------------------------------------------

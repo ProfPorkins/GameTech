@@ -38,7 +38,7 @@ Demo.components.SpaceShip = function(spec) {
     //
     //------------------------------------------------------------------
     function computeAngle(rotation, ptCenter, ptTarget) {
-        var v1 = {
+        let v1 = {
                 x : Math.cos(rotation),
                 y : Math.sin(rotation)
             };

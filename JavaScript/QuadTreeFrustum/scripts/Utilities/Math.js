@@ -114,7 +114,7 @@ Demo.utilities.math = (function() {
         c += (pt1.x * pt1.x + pt1.y * pt1.y);
         c -= (2 * (circle.center.x * pt1.x + circle.center.y * pt1.y));
         c -= (circle.radius * circle.radius);
-        var bb4ac = b * b - 4 * a * c;
+        let bb4ac = b * b - 4 * a * c;
 
         return bb4ac >= 0;
     }
@@ -156,7 +156,7 @@ Demo.utilities.math = (function() {
     //
     // ------------------------------------------------------------------
     that.circleFromTriangle = function(ptA, ptB, ptC) {
-        var circleSpec = {
+        let circleSpec = {
                 center: {},
                 radius: 0
             };
