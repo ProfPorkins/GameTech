@@ -1,17 +1,17 @@
 body {
-	width: 100%;
-	height: 100%;
-	margin: 0px;
-	border: 0;
-	overflow: hidden; /* Disable scrollbars */
-	display: block; /* No floating content on sides */
-	background-color: black;
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    border: 0;
+    overflow: hidden; /* Disable scrollbars */
+    display: block; /* No floating content on sides */
+    background-color: black;
 }
 
 #canvas-main {
-	position: absolute;
-	width: 100%;
-	height: 100%;
+    position: absolute;
+    width: 100%;
+    height: 100%;
 }
 
 /*
@@ -20,22 +20,22 @@ body {
   could be due to that this code creates fonts on-the-fly rather than using these
   font-faces as styles?
 */
-@font-face {	/* One for IE */
-	font-family: 'KenVector Future';
-	src: url('/assets/kenvector_future.eot');
+@font-face {    /* One for IE */
+    font-family: 'KenVector Future';
+    src: url('/assets/kenvector_future.eot');
 }
-@font-face {	/* One for the rest */
-	font-family: 'KenVector Future';
-	src: url(//:) format('no404'),
-		 url('/assets/kenvector_future.ttf') format('truetype');
+@font-face {    /* One for the rest */
+    font-family: 'KenVector Future';
+    src: url(//:) format('no404'),
+         url('/assets/kenvector_future.ttf') format('truetype');
 }
 
-@font-face {	/* One for IE */
-	font-family: 'KenVector Future Thin';
-	src: url('/assets/kenvector_future_thin.eot');
+@font-face {    /* One for IE */
+    font-family: 'KenVector Future Thin';
+    src: url('/assets/kenvector_future_thin.eot');
 }
-@font-face {	/* One for the rest */
-	font-family: 'KenVector Future Thin';
-	src: url(//:) format('no404'),
-		 url('/assets/kenvector_future_thin.ttf') format('truetype');
+@font-face {    /* One for the rest */
+    font-family: 'KenVector Future Thin';
+    src: url(//:) format('no404'),
+         url('/assets/kenvector_future_thin.ttf') format('truetype');
 }
