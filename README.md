@@ -1,6 +1,19 @@
 # GameTech
 Game programming samples and techniques
 
-12/27/2019 - Code Updates
+12/29/2019 - Update
 
-Today I decided to update these demos to follow the latest revisions/modernizations I've made to these techniques since I originally posted them.  Some changes are simple like a conversion from tabs to spaces (I finally caved in!), while some are semantic in nature like a move to using `let` instead of `var` in most places.  These changes are in preparation for some new JavaScript demos I want to add, ones I've created in the past couple of years that demonstrate multiplayer network programming techniques.  It is also in preparation for a new set of C++ game programming techniques I want to create and add to my repository...those will be longer in coming, months away, not days or weeks.
+For the past couple of years was distracted by working on a several years long side-project.  That project is now complete and I'm ready, and excited, to return to working on this.
+
+The past couple of days I have returned to working on these code samples.  Have some some small revisions like changing from the user of `var` to `let`.  Another is a conversion from using tabs to spaces (I finally caved in!).  Some have larger scope like the change in how keyboard input is handled, due to deprecation of `keyCode` on the keyboard event.  There are some other changes I'd like to make to the code, for example, adding additional capabilities to the particle system.  But for the most part, my intention is to add several significant new JavaScript demos, and then add some C++ demos.  Some of the C++ demos will have overlap with the JavaScript demos, but the purpose is not to creating a matching set of JavaScript/C++ demos.  Instead, I have a longer-term goal to build up to a small research like project I want/need to do in C++.
+
+The following are some of the additions I plan on adding to this repository over the coming (many) months...
+
+* (JavaScript) Update the particle system example to allow particles to change size over time, also change transparency over time.
+* (JavaScript) Add a set of multiplayer network examples; 4 to 5 examples.
+* (JavaScript) Add an Entity-Component-System example.
+* (C++) Add a set of multiplayer network examples.
+* (C++) Add an Entity-Component-System example.
+* (C++) Add a modest research project.
+
+The JavaScript examples already exist, but I need/want to rewrite them to improve their implementation and better match with the other examples already posted.  All of the C++ examples are yet to be written, but various pieces of them exist in other projects I've done (not posted to my GitHub account).  The exception is the research project, it exists in design only, it will be worked on after completing most of these other examples.  As I work on the C++ examples, will likely add more to the list.  The internet is full of examples of rendering, etc, I'm not wanting to re-create those, instead want to create examples for techniques that are less commonly found.
