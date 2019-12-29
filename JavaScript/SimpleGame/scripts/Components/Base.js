@@ -3,22 +3,22 @@
 // Defines a Base component.  A Base contains a sprite.
 // The spec is defined as:
 //    {
-//        imageName:                    // Asset name to use for the base
-//        center: { x: , y: }            // In world coordinates
+//        imageName:                  // Asset name to use for the base
+//        center: { x: , y: }         // In world coordinates
 //        radius:                     // In world coordinates
-//        orientation:                     // In Radians
-//        rotateRate:                    // Radians per second
-//        vicinity:                    // In world coordinates
+//        orientation:                // In Radians
+//        rotateRate:                 // Radians per second
+//        vicinity:                   // In world coordinates
 //        missile: {
-//            delay:                    // How long (milliseconds) between firing missiles
-//            lifetime:                // How long (milliseconds) a missle lives
-//            rotateRate:                // How fast (radians/millisecond) a missile can turn
+//            delay:                  // How long (milliseconds) between firing missiles
+//            lifetime:               // How long (milliseconds) a missle lives
+//            rotateRate:             // How fast (radians/millisecond) a missile can turn
 //        hitPoints: {
 //            max:                    // Maximum hit points for the base
 //        },
 //        shield: {
-//            regenerationDelay:        // How long (milliseconds) between shield regeneration
-//            thickness:                // In world coordinates
+//            regenerationDelay:      // How long (milliseconds) between shield regeneration
+//            thickness:              // In world coordinates
 //            max:                    // Maximum value for the shield, also the starting strength
 //        }
 //    }

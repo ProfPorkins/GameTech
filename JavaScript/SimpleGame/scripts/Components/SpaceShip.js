@@ -3,12 +3,12 @@
 // Defines a SpaceShip component.  A Spaceship contains a sprite.
 // The spec is defined as:
 //    {
-//        center: { x: , y: }            // In world coordinates
-//        size: { width: , height: }    // In world coordinates
+//        center: { x: , y: }          // In world coordinates
+//        size: { width: , height: }   // In world coordinates
 //        momentum: { x: , y: }        // Direction of momentum
-//        orientation:                     // Pointing angle, in radians
-//        accelerationRate:             // World units per second
-//        rotateRate:                    // Radians per millisecond
+//        orientation:                 // Pointing angle, in radians
+//        accelerationRate:            // World units per second
+//        rotateRate:                  // Radians per millisecond
 //        hitPoints: {
 //            max:                     // Max/initial possible hit points for the space ship
 //        }

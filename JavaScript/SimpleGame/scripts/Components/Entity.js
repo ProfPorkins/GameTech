@@ -6,11 +6,11 @@
 //        center: { x: , y: }            // In world coordinates
 //   ** Either 'size' or 'radius' must be defined **
 //         size: { width: , height: }    // In world coordinates
-//        radius:                     // In world coordinates
-//        momentum: { x: , y: }        // Direction of momentum
-//        orientation:                // Pointing angle, in radians
+//         radius:                       // In world coordinates
+//        momentum: { x: , y: }          // Direction of momentum
+//        orientation:                   // Pointing angle, in radians
 //        hitPoints: {
-//            max:                     // Max/initial possible hit points for the space ship
+//            max:                       // Max/initial possible hit points for the entity
 //        }
 //    }
 //

@@ -3,7 +3,7 @@
 // Defines a missile fired from the player's ship.  A missile contains a sprite.
 // The spec is defined as:
 //    {
-//        center: { x: , y: }            // In world coordinates
+//        center: { x: , y: }          // In world coordinates
 //        momentum: { x: , y: }        // Direction of momentum
 //        lifetime:                    // How long (in milliseconds) the missle can live
 //    }

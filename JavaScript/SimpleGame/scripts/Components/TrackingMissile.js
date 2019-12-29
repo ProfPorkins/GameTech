@@ -3,22 +3,21 @@
 // Defines a tracking missile fired from a base.  A missile contains a sprite.
 // The spec is defined as:
 //    {
-//        center: { x: , y: }            // In world coordinates
-//        target:                     // Entity to follow
-//        momentum: { x: , y: }        // Direction of momentum
-//        rotateRate:                 // Radians per second
-//        lifetime:                    // How long (in milliseconds) the missle can live
+//        center: { x: , y: }           // In world coordinates
+//        target:                       // Entity to follow
+//        momentum: { x: , y: }         // Direction of momentum
+//        rotateRate:                   // Radians per second
+//        lifetime:                     // How long (in milliseconds) the missle can live
 //    }
 //
 //------------------------------------------------------------------
 Demo.components.TrackingMissile = function(spec) {
     'use strict';
-    let that;
 
     //
     // A missile knows its own size
     spec.size = { width: 0.04, height: 0.01 };
-    that = Demo.components.Entity(spec, 'missile-2');
+    let that = Demo.components.Entity(spec, 'missile-2');
 
     Object.defineProperty(that, 'type', {
         get: function() { return Demo.components.Types.Missile; },

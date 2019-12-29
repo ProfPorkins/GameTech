@@ -1,6 +1,10 @@
 # Simple Game Demo
 This sample demonstrates the gameplay of a basic game; it does not include menus, high-scores, etc., just the gameplay.
 
+When I was originally working on these demos and the simple game, I was interrupted by a completely separate, and extremely large, side-project that lasted several years.  That project is now complete.  However, I have decided to not return to make any significant revisions to this game.  Only spent enough time to make a few modest code revisions in order to wrap up where I left off.  Even though I'm not finishing what I originally intended, there is quite a bit in it, probably meeting about 75% of my original intention.
+
+There are a bunch more sample game techniques (JavaScript & C++) I'll be working on now, and plan to eventually get a new "simple game" added to this repository.
+
 ---
 ![Simple Game Demo](https://github.com/ProfPorkins/GameTech/blob/master/JavaScript/SimpleGame/SimpleGame.png "")
 ---
