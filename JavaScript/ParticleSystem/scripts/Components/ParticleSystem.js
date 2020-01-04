@@ -29,6 +29,9 @@ Demo.components.ParticleSystem = (function() {
         for (let particle = 0; particle < howMany; particle += 1) {
             particles[particle] = {
                 image: null,
+                alphaStart: 1.0,
+                alphaEnd: 1.0,
+                alpha: 1.0,     // The current alpha blending value for the particle
                 sizeStart: 0,
                 sizeEnd: 0,
                 size: 0,    // The current size of the particle
@@ -50,6 +53,8 @@ Demo.components.ParticleSystem = (function() {
     // This creates one new particle.  The spec is defined as:
     // {
     //      image: ,                    // Image to use for the particle
+    //      alphaStart: ,               // (optional) Starting value for alpha blending
+    //      alphaEnd: ,                 // (optional) Ending value for alpha blending
     //      center: { x: , y: },        // In world coordinates
     //      sizeStart: ,                // Size of the particle at the start of its life (world coordinates)
     //      sizeEnd: ,                  // Size of the particle at the end of its life (world coordinates)
@@ -66,6 +71,13 @@ Demo.components.ParticleSystem = (function() {
             particleCount += 1;
 
             p.image = spec.image;
+            if (spec.alphaStart != undefined && spec.alphaEnd != undefined) {
+                p.alphaStart = spec.alphaStart;
+                p.alphaEnd = spec.alphaEnd;
+            } else {
+                p.alphaStart = 1.0;
+                p.alphaEnd = 1.0;
+            }
             p.sizeStart = Math.max(0, spec.sizeStart);  // Ensure a valid size
             p.sizeEnd = Math.max(0, spec.sizeEnd);      // Ensure a valid size
             p.size = p.sizeStart;
@@ -152,6 +164,9 @@ Demo.components.ParticleSystem = (function() {
                     let scale = particle.alive / particle.lifetime;
                     let sizeDiff = particle.sizeStart - particle.sizeEnd;
                     particle.size = particle.sizeStart - (scale * sizeDiff);
+
+                    let alphaDiff = particle.alphaStart - particle.alphaEnd;
+                    particle.alpha = particle.alphaStart - (scale * alphaDiff);
 
                     let temp = keepMe[keepMePosition];
                     keepMe[keepMePosition] = particlesCurrent[value];

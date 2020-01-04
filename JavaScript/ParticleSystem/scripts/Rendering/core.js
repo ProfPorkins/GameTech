@@ -88,11 +88,20 @@ Demo.renderer.core = (function() {
 
     //------------------------------------------------------------------
     //
-    // Clear the whole canvas
+    // Clear the whole canvas.
     //
     //------------------------------------------------------------------
     function clearCanvas() {
         context.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    //------------------------------------------------------------------
+    //
+    // Pass-through to allow the global alpha to be changed.
+    //
+    //------------------------------------------------------------------
+    function setGlobalAlpha(alpha) {
+        context.globalAlpha = alpha;
     }
 
     //------------------------------------------------------------------
@@ -315,6 +324,7 @@ Demo.renderer.core = (function() {
         initialize: initialize,
         toggleFullScreen: toggleFullScreen,
         clearCanvas: clearCanvas,
+        setGlobalAlpha: setGlobalAlpha,
         drawText: drawText,
         measureTextHeight: measureTextHeight,
         measureTextWidth: measureTextWidth,

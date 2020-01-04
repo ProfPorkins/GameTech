@@ -29,6 +29,8 @@ Demo.components.ParticleSystem.createEffectFire = function(spec) {
             let sizeEnd = sizeStart * 0.2;
             Demo.components.ParticleSystem.createParticle({
                 image: Demo.assets['fire'],
+                alphaStart: 1.0,
+                alphaEnd: 0.0,
                 center: { x: spec.center.x, y: spec.center.y },
                 sizeStart: sizeStart,
                 sizeEnd: sizeEnd,
