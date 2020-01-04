@@ -9,8 +9,8 @@ The past couple of days I have returned to working on these code samples.  Have 
 
 The following are some of the additions I plan on adding to this repository over the coming (many) months...
 
-* (JavaScript) Update the particle system example to allow particles to change size over time, also change transparency over time.
-* (JavaScript) Add a set of multiplayer network examples; 4 to 5 examples.
+* (JavaScript - completed) Update the particle system example to allow particles to change size over time, also change transparency over time.
+* (JavaScript - in progress) Add a set of multiplayer network examples; 4 to 5 examples.
 * (JavaScript) Add an Entity-Component-System example.
 * (C++) Add a set of multiplayer network examples.
 * (C++) Add an Entity-Component-System example.
