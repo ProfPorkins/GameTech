@@ -15,10 +15,12 @@ Demo.components.ParticleSystem.createEffectSnow = function() {
         while (lastSnowElapsed >= createSnowDelta) {
             //
             // Create a new snowflake particle
+            let sizeStart = Random.nextGaussian(0.008, 0.003);
             Demo.components.ParticleSystem.createParticle({
                 image: Demo.assets['snowflake'],
                 center: { x: Random.nextDouble(), y: 0 },
-                size: Random.nextGaussian(0.008, 0.003),
+                sizeStart: sizeStart,
+                sizeEnd: sizeStart,
                 direction: { x: 0, y: 1 },
                 speed: Math.max(Random.nextGaussian(0.0001, 0.00004), 0.00004),
                 rateRotation: Random.nextRange(1, 2) === 1 ? Math.PI / 1000 : -Math.PI / 1000,    // Radians per millisecond

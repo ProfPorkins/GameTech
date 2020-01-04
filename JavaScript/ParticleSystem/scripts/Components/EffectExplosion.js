@@ -16,10 +16,13 @@ Demo.components.ParticleSystem.createEffectExplosion = function(spec) {
         for (let particle = 0; particle < spec.howMany; particle += 1) {
             //
             // Create a new fire particle
+            let sizeStart = Random.nextGaussian(0.015, 0.005);
+            let sizeEnd = sizeStart * 0.2;
             Demo.components.ParticleSystem.createParticle({
                 image: Demo.assets['fire'],
                 center: { x: spec.center.x, y: spec.center.y },
-                size: Random.nextGaussian(0.015, 0.005),
+                sizeStart: sizeStart,
+                sizeEnd: sizeEnd,
                 direction: Random.nextCircleVector(1.0),
                 speed: Random.nextGaussian(0.0003, 0.0001),
                 rateRotation: (2 * Math.PI) / 1000,    // Radians per millisecond

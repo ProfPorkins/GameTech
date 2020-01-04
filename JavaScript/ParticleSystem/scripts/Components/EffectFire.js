@@ -25,10 +25,13 @@ Demo.components.ParticleSystem.createEffectFire = function(spec) {
         while (lastFireElapsed >= createFireDelta) {
             //
             // Create a new fire particle
+            let sizeStart = Random.nextGaussian(0.015, 0.005);
+            let sizeEnd = sizeStart * 0.2;
             Demo.components.ParticleSystem.createParticle({
                 image: Demo.assets['fire'],
                 center: { x: spec.center.x, y: spec.center.y },
-                size: Random.nextGaussian(0.015, 0.005),
+                sizeStart: sizeStart,
+                sizeEnd: sizeEnd,
                 direction: Random.nextCircleVector(1.0),
                 speed: Random.nextGaussian(0.0001, 0.00005),
                 rateRotation: (2 * Math.PI) / 1000,    // Radians per millisecond
@@ -42,11 +45,14 @@ Demo.components.ParticleSystem.createEffectFire = function(spec) {
 
         while (lastSmokeElapsed >= createSmokeDelta) {
             //
-            // Create a new fire particle
+            // Create a new smoke particle
+            let sizeStart = Random.nextGaussian(0.02, 0.005);
+            let sizeEnd = sizeStart * 0.2;
             Demo.components.ParticleSystem.createParticle({
                 image: Demo.assets['smoke'],
                 center: { x: spec.center.x, y: spec.center.y },
-                size: Random.nextGaussian(0.02, 0.005),
+                sizeStart: sizeStart,
+                sizeEnd: sizeEnd,
                 direction: Random.nextCircleVector(1.0),
                 speed: Random.nextGaussian(0.0001, 0.00005),
                 rateRotation: (2 * Math.PI) / 1000,    // Radians per millisecond

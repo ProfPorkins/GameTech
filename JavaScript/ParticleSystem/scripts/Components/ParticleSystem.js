@@ -29,7 +29,9 @@ Demo.components.ParticleSystem = (function() {
         for (let particle = 0; particle < howMany; particle += 1) {
             particles[particle] = {
                 image: null,
-                size: 0,
+                sizeStart: 0,
+                sizeEnd: 0,
+                size: 0,    // The current size of the particle
                 center: { x: 0, y: 0 },
                 direction: { x: 0, y: 0 },
                 speed: 0,
@@ -47,13 +49,14 @@ Demo.components.ParticleSystem = (function() {
     //
     // This creates one new particle.  The spec is defined as:
     // {
-    //        image: ,                // Image to use for the particle
-    //        center: { x: , y: },    // In world coordinates
-    //        size: ,                    // In world coordinates
-    //        direction: { x: , y: },    // 2D vector
-    //        speed: ,                // World units per millisecond
-    //        rateRotation: ,            // Radians per millisecond
-    //        lifetime:                 // Milliseonds
+    //      image: ,                    // Image to use for the particle
+    //      center: { x: , y: },        // In world coordinates
+    //      sizeStart: ,                // Size of the particle at the start of its life (world coordinates)
+    //      sizeEnd: ,                  // Size of the particle at the end of its life (world coordinates)
+    //      direction: { x: , y: },     // 2D vector
+    //      speed: ,                    // World units per millisecond
+    //      rateRotation: ,             // Radians per millisecond
+    //      lifetime:                   // Milliseonds
     // }
     //
     //------------------------------------------------------------------
@@ -63,7 +66,9 @@ Demo.components.ParticleSystem = (function() {
             particleCount += 1;
 
             p.image = spec.image;
-            p.size = Math.max(0, spec.size);    // Ensure a valid size
+            p.sizeStart = Math.max(0, spec.sizeStart);  // Ensure a valid size
+            p.sizeEnd = Math.max(0, spec.sizeEnd);      // Ensure a valid size
+            p.size = p.sizeStart;
             p.center.x = spec.center.x;
             p.center.y = spec.center.y;
             p.direction.x = spec.direction.x;
@@ -128,24 +133,26 @@ Demo.components.ParticleSystem = (function() {
         // Next step, update all the particles
         for (let value = 0; value < particleCount; value += 1) {
             let particle = particlesCurrent[value];
-            //
-            // Update how long it has been alive
+
             particle.alive += elapsedTime;
 
-            //
-            // Update its position
             particle.center.x += (elapsedTime * particle.speed * particle.direction.x);
             particle.center.y += (elapsedTime * particle.speed * particle.direction.y);
-
-            //
-            // Update rotation
-            particle.rotation += (particle.rateRotation * elapsedTime);
 
             //
             // Only keep particles whose lifetime is still active and is inside
             // of the unit world.
             if (particle.alive < particle.lifetime) {
                 if (particle.center.x >= 0 && particle.center.x <= 1 && particle.center.y >= 0 && particle.center.y <= 1) {
+                    // Waiting to update rotation and size until after we know the particle
+                    // is going to be kept...small optimization.
+
+                    particle.rotation += (particle.rateRotation * elapsedTime);
+
+                    let scale = particle.alive / particle.lifetime;
+                    let sizeDiff = particle.sizeStart - particle.sizeEnd;
+                    particle.size = particle.sizeStart - (scale * sizeDiff);
+
                     let temp = keepMe[keepMePosition];
                     keepMe[keepMePosition] = particlesCurrent[value];
                     particlesCurrent[value] = temp;
