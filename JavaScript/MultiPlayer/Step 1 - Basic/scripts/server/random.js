@@ -4,10 +4,6 @@
 //
 // ------------------------------------------------------------------
 'use strict';
-//
-// This is used to give a small performance optimization in generating gaussian random numbers.
-let usePrevious = false;
-let y2 = 0;
 
 // ------------------------------------------------------------------
 //
@@ -52,6 +48,12 @@ function nextCircleVector(scale) {
 // wrote the code in C# and am now converting it over to JavaScript.
 //
 // ------------------------------------------------------------------
+
+//
+// These are used to give a small performance optimization in generating gaussian random numbers.
+let usePrevious = false;
+let y2 = 0;
+
 function nextGaussian(mean, stdDev) {
     let x1 = 0,
         x2 = 0,

@@ -26,10 +26,10 @@ function handleRequest(request, response) {
     let lookup = (request.url === '/') ? '/index.html' : decodeURI(request.url);
     let file = lookup.substring(1, lookup.length);
 
-    console.log('request: ' + request.url);
+    console.log(`request: ${request.url}`);
     fs.exists(file, function(exists) {
         if (exists) {
-            console.log('Trying to send: ' + lookup);
+            console.log(`Trying to send: ${lookup}`);
             fs.readFile(file, function(err, data) {
                 let headers = { 'Content-type': mimeTypes[path.extname(lookup)] };
 
@@ -42,7 +42,7 @@ function handleRequest(request, response) {
                 }
             });
         } else {
-            console.log('Failed to find/send: ' + lookup);
+            console.log(`Failed to find/send: ${lookup} `);
             response.writeHead(404);
             response.end();
         }

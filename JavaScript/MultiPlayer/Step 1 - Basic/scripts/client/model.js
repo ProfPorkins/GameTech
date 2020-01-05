@@ -39,7 +39,6 @@ Demo.model = (function(input, components, renderer) {
     //
     //------------------------------------------------------------------
     socket.on('connect-other', function(data) {
-        console.log('connect-other: ', data.id);
         let model = components.SpaceShip({
             image: Demo.assets['spaceship-red'],
             size: { width: data.size.width, height: data.size.height },

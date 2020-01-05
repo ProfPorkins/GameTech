@@ -2,9 +2,9 @@
 //
 // Defines a simple sprite object.  The spec is defined as:
 // {
-//        image: Image,
-//        spriteSize: { x: , y: },            // In world coordinates
-//        spriteCenter: { x: , y: },            // In world coordinates
+//      image: Image,
+//      spriteSize: { x: , y: },        // In world coordinates
+//      spriteCenter: { x: , y: },      // In world coordinates
 // }
 //
 //------------------------------------------------------------------

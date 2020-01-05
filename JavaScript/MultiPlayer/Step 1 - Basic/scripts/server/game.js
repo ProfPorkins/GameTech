@@ -29,7 +29,6 @@ function processInput() {
     for (let inputIndex in processMe) {
         let input = processMe[inputIndex];
         let client = activeClients[input.id];
-        //console.log('Processing: ', input.id, input.message.type);
         switch (input.message.type) {
             case 'move':
                 client.player.move(input.message.elapsedTime);
@@ -163,8 +162,16 @@ function initializeSocketIO(httpServer) {
         }
     }
     
+    //------------------------------------------------------------------
+    //
+    // A new connection (browser) was made.  Create a new player at the server
+    // and send that information to the newly connected client.  After
+    // doing that, also want to notify all other currently connected
+    // clients of the new player.
+    //
+    //------------------------------------------------------------------
     io.on('connection', function(socket) {
-        console.log('Connection established: ', socket.id);
+        console.log(`Connection established: ${socket.id}`);
         //
         // Create an entry in our list of connected clients
         let newPlayer = Player.create()
@@ -191,6 +198,7 @@ function initializeSocketIO(httpServer) {
             notifyDisconnect(socket.id);
         });
 
+        // Notify the other already connected clients of this new player
         notifyConnect(socket, newPlayer);
     });
 }
