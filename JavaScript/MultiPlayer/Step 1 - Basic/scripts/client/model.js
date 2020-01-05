@@ -46,7 +46,7 @@ Demo.model = (function(input, components, renderer) {
             direction: data.direction
         });
 
-        playerOthers[data.id] = model;
+        playerOthers[data.clientId] = model;
     });
 
     //------------------------------------------------------------------
@@ -55,7 +55,7 @@ Demo.model = (function(input, components, renderer) {
     //
     //------------------------------------------------------------------
     socket.on('disconnect-other', function(data) {
-        delete playerOthers[data.id];
+        delete playerOthers[data.clientId];
     });
 
     //------------------------------------------------------------------
@@ -76,8 +76,8 @@ Demo.model = (function(input, components, renderer) {
     //
     //------------------------------------------------------------------
     socket.on('update-other', function(data) {
-        if (playerOthers.hasOwnProperty(data.id)) {
-            let model = playerOthers[data.id];
+        if (playerOthers.hasOwnProperty(data.clientId)) {
+            let model = playerOthers[data.clientId];
 
             model.center.x = data.center.x;
             model.center.y = data.center.y

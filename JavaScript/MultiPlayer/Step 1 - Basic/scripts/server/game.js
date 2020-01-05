@@ -28,7 +28,7 @@ function processInput() {
 
     for (let inputIndex in processMe) {
         let input = processMe[inputIndex];
-        let client = activeClients[input.id];
+        let client = activeClients[input.clientId];
         switch (input.message.type) {
             case 'move':
                 client.player.move(input.message.elapsedTime);
@@ -60,10 +60,10 @@ function update(elapsedTime, currentTime) {
 //
 //------------------------------------------------------------------
 function updateClients() {
-    for (let id in activeClients) {
-        let client = activeClients[id];
+    for (let clientId in activeClients) {
+        let client = activeClients[clientId];
         let update = {
-            id: id,
+            clientId: clientId,
             direction: client.player.direction,
             center: client.player.center
         };
@@ -74,15 +74,15 @@ function updateClients() {
             // Notify all other connected clients about every
             // other connected client status...but only if they are updated.
             for (let otherId in activeClients) {
-                if (otherId !== id) {
+                if (otherId !== clientId) {
                     activeClients[otherId].socket.emit('update-other', update);
                 }
             }
         }
     }
 
-    for (let id in activeClients) {
-        activeClients[id].player.reportUpdate = false;
+    for (let clientId in activeClients) {
+        activeClients[clientId].player.reportUpdate = false;
     }
 }
 
@@ -121,13 +121,13 @@ function initializeSocketIO(httpServer) {
     //
     //------------------------------------------------------------------
     function notifyConnect(socket, newPlayer) {
-        for (let id in activeClients) {
-            let client = activeClients[id];
-            if (newPlayer.id !== id) {
+        for (let clientId in activeClients) {
+            let client = activeClients[clientId];
+            if (newPlayer.clientId !== clientId) {
                 //
                 // Tell existing about the newly connected player
                 client.socket.emit('connect-other', {
-                    id: newPlayer.id,
+                    clientId: newPlayer.clientId,
                     direction: newPlayer.direction,
                     center: newPlayer.center,
                     size: newPlayer.size
@@ -136,7 +136,7 @@ function initializeSocketIO(httpServer) {
                 //
                 // Tell the new player about the already connected player
                 socket.emit('connect-other', {
-                    id: client.player.id,
+                    clientId: client.player.clientId,
                     direction: client.player.direction,
                     center: client.player.center,
                     size: client.player.size
@@ -152,11 +152,11 @@ function initializeSocketIO(httpServer) {
     //
     //------------------------------------------------------------------
     function notifyDisconnect(playerId) {
-        for (let id in activeClients) {
-            let client = activeClients[id];
-            if (playerId !== id) {
+        for (let clientId in activeClients) {
+            let client = activeClients[clientId];
+            if (playerId !== clientId) {
                 client.socket.emit('disconnect-other', {
-                    id: playerId
+                    clientId: playerId
                 });
             }
         }
@@ -175,7 +175,7 @@ function initializeSocketIO(httpServer) {
         //
         // Create an entry in our list of connected clients
         let newPlayer = Player.create()
-        newPlayer.id = socket.id;
+        newPlayer.clientId = socket.id;
         activeClients[socket.id] = {
             socket: socket,
             player: newPlayer
@@ -188,7 +188,7 @@ function initializeSocketIO(httpServer) {
 
         socket.on('input', function(data) {
             inputQueue.push({
-                id: socket.id,
+                clientId: socket.id,
                 message: data,
             });
         });
