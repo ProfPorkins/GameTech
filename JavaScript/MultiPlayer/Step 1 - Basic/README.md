@@ -8,3 +8,5 @@ The sample shows how to get a basic, and naive, multiplayer server and client se
 
 * Use of *playerShip1_blue.png* under Creative Commons License
   * Source: http://www.kenney.nl
+* Use of *playerShip1_red.png* under Creative Commons License
+  * Source: http://www.kenney.nl
