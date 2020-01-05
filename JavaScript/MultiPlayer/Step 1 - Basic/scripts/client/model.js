@@ -1,6 +1,6 @@
 // ------------------------------------------------------------------
 //
-// This namespace holds the Particle System demo model.
+// This namespace holds the Basic networked multi-player game model.
 //
 // ------------------------------------------------------------------
 Demo.model = (function(input, components, renderer) {

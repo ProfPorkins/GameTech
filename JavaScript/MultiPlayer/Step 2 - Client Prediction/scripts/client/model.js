@@ -1,6 +1,6 @@
 // ------------------------------------------------------------------
 //
-// This namespace holds the Particle System demo model.
+// This namespace holds the Client Prediction and Server Reconciliation game model.
 //
 // ------------------------------------------------------------------
 Demo.model = (function(input, components, renderer) {
