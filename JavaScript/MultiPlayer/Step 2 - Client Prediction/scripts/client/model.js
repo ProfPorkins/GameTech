@@ -83,7 +83,6 @@ Demo.model = (function(input, components, renderer) {
             if (messageHistory.front.id === data.lastMessageId) {
                 done = true;
             }
-            //console.log('dumping: ', messageHistory.front.id);
             messageHistory.dequeue();
         }
 

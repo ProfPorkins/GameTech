@@ -13,7 +13,8 @@ let mimeTypes = {
     '.jpg' : 'image/jpeg',
     '.mp3' : 'audio/mpeg3',
     '.ttf' : 'application/x-font-ttf',
-    '.eot' : 'application/vnd.ms-fontobject'
+    '.eot' : 'application/vnd.ms-fontobject',
+    '.map' : 'application/json'
 };
 
 //------------------------------------------------------------------
