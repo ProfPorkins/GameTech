@@ -1,3 +1,5 @@
+node_modules
+
 JavaScript/TileRendering/assets/graphics/background/*
 JavaScript/SimpleGame/assets/graphics/background/*
 JavaScript/SimpleGame/assets/graphics/*
