@@ -48,9 +48,9 @@ function processInput() {
 // Update the simulation of the game.
 //
 //------------------------------------------------------------------
-function update(elapsedTime, currentTime) {
+function update(elapsedTime) {
     for (let id in activeClients) {
-        activeClients[id].player.update(currentTime);
+        activeClients[id].player.update(elapsedTime);
     }
 }
 
@@ -93,7 +93,7 @@ function updateClients() {
 //------------------------------------------------------------------
 function gameLoop(currentTime, elapsedTime) {
     processInput();
-    update(elapsedTime, currentTime);
+    update(elapsedTime);
     updateClients();
 
     if (!quit) {

@@ -93,7 +93,7 @@ function createPlayer() {
     // Function used to update the player during the game loop.
     //
     //------------------------------------------------------------------
-    that.update = function(when) {
+    that.update = function(elapsedTime) {
     };
 
     return that;
