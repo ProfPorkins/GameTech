@@ -239,7 +239,7 @@ Demo.renderer.core = (function() {
             dx, dy,
             dWidth, dHeight;
         //
-        // Figure out which version of drawImage was called and extrac the correct values
+        // Figure out which version of drawImage was called and extract the correct values
         if (arguments.length === 5) {
             sx = 0;
             sy = 0;
