@@ -28,10 +28,6 @@
             value: 'rotate-right',
             writable: false
         },
-        'INPUT_FIRE': {
-            value: 'fire',
-            writable: false
-        },
         'CONNECT_ACK': {
             value: 'connect-ack',
             writable: false

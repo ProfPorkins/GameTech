@@ -339,7 +339,7 @@ function initializeSocketIO(httpServer) {
         });
 
         socket.on(NetworkIds.INPUT, function(data) {
-            inputQueue.push({
+            inputQueue.enqueue({
                 clientId: socket.id,
                 message: data,
                 receiveTime: present()

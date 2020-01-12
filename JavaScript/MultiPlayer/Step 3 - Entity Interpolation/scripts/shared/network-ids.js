@@ -28,10 +28,6 @@
             value: 'rotate-right',
             writable: false
         },
-        'INPUT_FIRE': {
-            value: 'fire',
-            writable: false
-        },
         'CONNECT_ACK': {
             value: 'connect-ack',
             writable: false
@@ -50,14 +46,6 @@
         },
         'UPDATE_OTHER': {
             value: 'update-other',
-            writable: false
-        },
-        'MISSILE_NEW': {
-            value: 'missile-new',
-            writable: false
-        },
-        'MISSILE_HIT': {
-            value: 'missile-hit',
             writable: false
         }
     });
