@@ -85,7 +85,7 @@ function processInput() {
                 // thrust input is processed in order to keep the client and server thinking
                 // the same thing about the player's ship.
                 client.player.thrust(input.message.elapsedTime, input.receiveTime - lastUpdateTime);
-             lastUpdateTime = input.receiveTime;
+                lastUpdateTime = input.receiveTime;
                 break;
             case NetworkIds.INPUT_ROTATE_LEFT:
                 client.player.rotateLeft(input.message.elapsedTime);
