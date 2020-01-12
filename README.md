@@ -9,11 +9,11 @@ The past couple of days I have returned to working on these code samples.  Have 
 
 The following are some of the additions I plan on adding to this repository over the coming (many) months...
 
-* (JavaScript - completed 1/4/2019) Update the particle system example to allow particles to change size over time, also change transparency over time.
-* (JavaScript - in progress) Add a set of multiplayer network examples; 4 to 5 examples.
-* (JavaScript) Add an Entity-Component-System example.
+* (JavaScript - completed 1/4/2020) Update the particle system example to allow particles to change size over time, also change transparency over time.
+* (JavaScript - completed 1/12/2020) Add a set of multiplayer network examples.
+* (JavaScript - in progress) Add an Entity-Component-System example.
 * (C++) Add a set of multiplayer network examples.
 * (C++) Add an Entity-Component-System example.
 * (C++) Add a modest research project.
 
-The JavaScript examples already exist, but I need/want to rewrite them to improve their implementation and better match with the other examples already posted.  All of the C++ examples are yet to be written, but various pieces of them exist in other projects I've done (not posted to my GitHub account).  The exception is the research project, it exists in design only, it will be worked on after completing most of these other examples.  As I work on the C++ examples, will likely add more to the list.  The internet is full of examples of rendering, etc, I'm not wanting to re-create those, instead want to create examples for techniques that are less commonly found.
+The JavaScript examples already exist, but I need/want to rewrite them to improve their implementation, also to better match with the other examples already posted.  All of the C++ examples are yet to be written, but various pieces of them exist in other projects I've done (not posted to my GitHub account).  The exception is the research project, it exists in design only, it will be worked on after completing most of these other examples.  As I work on the C++ examples, will likely add more to the list.  The internet is full of examples of rendering, etc, I'm not wanting to re-create those, instead want to create examples for techniques that are less commonly found; particularly the multi-player networking techniques.
