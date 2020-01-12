@@ -24,7 +24,7 @@ function createPlayer() {
     let size = {
         width: 0.05,
         height: 0.05,
-        radius: 0.10
+        radius: 0.025
     };
     let momentum = {
         x: 0,

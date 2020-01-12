@@ -12,7 +12,6 @@ let NetworkIds = require('../shared/network-ids');
 let Queue = require('../shared/queue.js');
 
 const SIMULATION_UPDATE_RATE_MS = 50;   // How often to update the simulation (in ms)
-const STATE_UPDATE_RATE_MS = 100;       // How often to update the state to connected clients (in ms)
 let quit = false;
 let activeClients = {};
 let newMissiles = [];

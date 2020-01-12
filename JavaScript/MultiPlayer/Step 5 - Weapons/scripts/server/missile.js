@@ -44,7 +44,7 @@ function createMissile(spec) {
     //------------------------------------------------------------------
     that.update = function(elapsedTime) {
         spec.center.x += (elapsedTime * spec.momentum.x);
-        spec.center.y += (elapsedTime * spec.momentum.x);
+        spec.center.y += (elapsedTime * spec.momentum.y);
 
         spec.timeRemaining -= elapsedTime;
 

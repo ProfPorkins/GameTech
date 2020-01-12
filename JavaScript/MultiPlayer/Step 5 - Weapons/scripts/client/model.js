@@ -233,13 +233,9 @@ Demo.model = (function(input, components, renderer) {
     //
     //------------------------------------------------------------------
     function missileHit(data) {
-        explosions[nextExplosionId] = components.AnimatedSprite({
+        explosions[nextExplosionId] = components.Explosion({
             id: nextExplosionId++,
-            spriteSheet: Demo.assets['explosion'],
-            spriteSize: { width: 0.07, height: 0.07 },
-            spriteCenter: data.position,
-            spriteCount: 16,
-            spriteTime: [ 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50, 50]
+            center: data.center,
         });
 
         //
@@ -398,7 +394,7 @@ Demo.model = (function(input, components, renderer) {
         }
 
         for (let id in explosions) {
-            renderer.AnimatedSprite.render(explosions[id]);
+            renderer.Explosion.render(explosions[id]);
         }
     };
 

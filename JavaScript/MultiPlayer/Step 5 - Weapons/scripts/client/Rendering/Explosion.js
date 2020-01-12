@@ -1,21 +1,20 @@
 // ------------------------------------------------------------------
 //
-// Rendering function for a /Components/Missile object.
+// Rendering function for a /Components/Explosion object.
 //
 // ------------------------------------------------------------------
-Demo.renderer.Missile = (function(core) {
+Demo.renderer.Explosion = (function(core) {
     'use strict';
     let that = {};
 
     // ------------------------------------------------------------------
     //
-    // Renders a Missile model.
+    // Renders an explosion model.
     //
     // ------------------------------------------------------------------
     that.render = function(model) {
-        core.drawFilledCircle('#FFFFFF', model.center, model.radius);
+        Demo.renderer.AnimatedSprite.render(model.sprite);
     };
 
     return that;
-
 }(Demo.renderer.core));

@@ -251,11 +251,39 @@ Demo.renderer.core = (function() {
     // Pass-through that allows an image to be drawn.
     //
     //------------------------------------------------------------------
-    function drawImage(image, dx, dy, dWidth, dHeight) {
+    function drawImage() {
+        let image = arguments[0],
+            sx, sy,
+            sWidth, sHeight,
+            dx, dy,
+            dWidth, dHeight;
+        //
+        // Figure out which version of drawImage was called and extract the correct values
+        if (arguments.length === 5) {
+            sx = 0;
+            sy = 0;
+            sWidth = image.width;
+            sHeight = image.height;
+            dx = arguments[1];
+            dy = arguments[2];
+            dWidth = arguments[3];
+            dHeight = arguments[4];
+        } else if (arguments.length === 9) {
+            sx = arguments[1];
+            sy = arguments[2];
+            sWidth = arguments[3];
+            sHeight = arguments[4];
+            dx = arguments[5];
+            dy = arguments[6];
+            dWidth = arguments[7];
+            dHeight = arguments[8];
+        }
         //
         // Convert from pixel to world coordinates on a few items
         context.drawImage(
             image,
+            sx, sy,
+            sWidth, sHeight,
             dx * world.size + world.left, dy * world.size + world.top,
             dWidth * world.size, dHeight * world.size);
     }

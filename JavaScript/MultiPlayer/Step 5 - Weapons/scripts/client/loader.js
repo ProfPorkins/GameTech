@@ -38,7 +38,7 @@ Demo.loader = (function() {
             message: 'Core Components loaded',
             onComplete: null
         }, {
-            scripts: ['Components/SpaceShip', 'Components/SpaceShipRemote', 'Components/Missile'],
+            scripts: ['Components/SpaceShip', 'Components/SpaceShipRemote', 'Components/Missile', 'Components/Explosion'],
             message: 'SpaceShip Components loaded',
             onComplete: null
         }, {
@@ -50,7 +50,7 @@ Demo.loader = (function() {
             message: 'Rendering plugins loaded',
             onComplete: null
         }, {
-            scripts: ['Rendering/SpaceShip', 'Rendering/Missile'],
+            scripts: ['Rendering/SpaceShip', 'Rendering/Missile', 'Rendering/Explosion'],
             message: 'More Rendering plugins loaded',
             onComplete: null
         }, {
