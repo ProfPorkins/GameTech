@@ -7,11 +7,13 @@
 
 let present = require('present');
 let Player = require('./player');
+let NetworkIds = require('../shared/network-ids');
+let Queue = require('../shared/queue.js');
 
 const UPDATE_RATE_MS = 100; // How often to update the game model
 let quit = false;
 let activeClients = {};
-let inputQueue = [];
+let inputQueue = Queue.create();
 
 //------------------------------------------------------------------
 //
@@ -24,19 +26,19 @@ function processInput() {
     // Double buffering on the queue so we don't asynchronously receive inputs
     // while processing.
     let processMe = inputQueue;
-    inputQueue = [];
+    inputQueue = Queue.create();
 
-    for (let inputIndex in processMe) {
-        let input = processMe[inputIndex];
+    while (!processMe.empty) {
+        let input = processMe.dequeue();
         let client = activeClients[input.clientId];
         switch (input.message.type) {
-            case 'move':
+            case NetworkIds.INPUT_MOVE:
                 client.player.move(input.message.elapsedTime);
                 break;
-            case 'rotate-left':
+            case NetworkIds.INPUT_ROTATE_LEFT:
                 client.player.rotateLeft(input.message.elapsedTime);
                 break;
-            case 'rotate-right':
+            case NetworkIds.INPUT_ROTATE_RIGHT:
                 client.player.rotateRight(input.message.elapsedTime);
                 break;
         }
@@ -68,14 +70,14 @@ function updateClients() {
             center: client.player.center
         };
         if (client.player.reportUpdate) {
-            client.socket.emit('update-self', update);
+            client.socket.emit(NetworkIds.UPDATE_SELF, update);
 
             //
             // Notify all other connected clients about every
             // other connected client status...but only if they are updated.
             for (let otherId in activeClients) {
                 if (otherId !== clientId) {
-                    activeClients[otherId].socket.emit('update-other', update);
+                    activeClients[otherId].socket.emit(NetworkIds.UPDATE_OTHER, update);
                 }
             }
         }
@@ -126,7 +128,7 @@ function initializeSocketIO(httpServer) {
             if (newPlayer.clientId !== clientId) {
                 //
                 // Tell existing about the newly connected player
-                client.socket.emit('connect-other', {
+                client.socket.emit(NetworkIds.CONNECT_OTHER, {
                     clientId: newPlayer.clientId,
                     direction: newPlayer.direction,
                     center: newPlayer.center,
@@ -135,7 +137,7 @@ function initializeSocketIO(httpServer) {
 
                 //
                 // Tell the new player about the already connected player
-                socket.emit('connect-other', {
+                socket.emit(NetworkIds.CONNECT_OTHER, {
                     clientId: client.player.clientId,
                     direction: client.player.direction,
                     center: client.player.center,
@@ -155,7 +157,7 @@ function initializeSocketIO(httpServer) {
         for (let clientId in activeClients) {
             let client = activeClients[clientId];
             if (playerId !== clientId) {
-                client.socket.emit('disconnect-other', {
+                client.socket.emit(NetworkIds.DISCONNECT_OTHER, {
                     clientId: playerId
                 });
             }
@@ -180,14 +182,14 @@ function initializeSocketIO(httpServer) {
             socket: socket,
             player: newPlayer
         };
-        socket.emit('connect-ack', {
+        socket.emit(NetworkIds.CONNECT_ACK, {
             direction: newPlayer.direction,
             center: newPlayer.center,
             size: newPlayer.size
         });
 
-        socket.on('input', function(data) {
-            inputQueue.push({
+        socket.on(NetworkIds.INPUT, function(data) {
+            inputQueue.enqueue({
                 clientId: socket.id,
                 message: data,
             });
