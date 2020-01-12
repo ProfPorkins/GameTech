@@ -18,7 +18,15 @@ Demo.loader = (function() {
     'use strict';
     let scriptOrder = [
         {
-            scripts: ['Utilities/Math', 'Utilities/Random', 'Utilities/Queue'],
+            scripts: ['../shared/network-ids'],
+            message: 'Network Ids loaded',
+            onComplete: null,
+        }, {
+            scripts: ['../shared/queue'],
+            message: 'Utilities loaded',
+            onComplete: null,
+        }, {
+            scripts: ['Utilities/Math', 'Utilities/Random'],
             message: 'Utilities loaded',
             onComplete: null
         }, {
