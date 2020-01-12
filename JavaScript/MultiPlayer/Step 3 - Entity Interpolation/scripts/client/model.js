@@ -17,9 +17,45 @@ Demo.model = (function(input, components, renderer) {
         speed: 0.0
     });
     let playerOthers = {};
-    let messageHistory = Demo.utilities.Queue();
+    let messageHistory = Queue.create();
     let messageId = 1;
     let socket = io();
+    let networkQueue = Queue.create();
+
+    socket.on(NetworkIds.CONNECT_ACK, data => {
+        networkQueue.enqueue({
+            type: NetworkIds.CONNECT_ACK,
+            data: data
+        });
+    });
+
+    socket.on(NetworkIds.CONNECT_OTHER, data => {
+        networkQueue.enqueue({
+            type: NetworkIds.CONNECT_OTHER,
+            data: data
+        });
+    });
+
+    socket.on(NetworkIds.DISCONNECT_OTHER, data => {
+        networkQueue.enqueue({
+            type: NetworkIds.DISCONNECT_OTHER,
+            data: data
+        });
+    });
+
+    socket.on(NetworkIds.UPDATE_SELF, data => {
+        networkQueue.enqueue({
+            type: NetworkIds.UPDATE_SELF,
+            data: data
+        });
+    });
+
+    socket.on(NetworkIds.UPDATE_OTHER, data => {
+        networkQueue.enqueue({
+            type: NetworkIds.UPDATE_OTHER,
+            data: data
+        });
+    });
 
     //------------------------------------------------------------------
     //
@@ -27,7 +63,7 @@ Demo.model = (function(input, components, renderer) {
     // the state of the newly connected player model.
     //
     //------------------------------------------------------------------
-    socket.on('connect-ack', function(data) {
+    function connectPlayerSelf(data) {
         playerSelf.center.x = data.center.x;
         playerSelf.center.y = data.center.y;
 
@@ -38,7 +74,7 @@ Demo.model = (function(input, components, renderer) {
 
         playerSelf.speed = data.speed;
         playerSelf.rotateRate = data.rotateRate;
-    });
+    }
 
     //------------------------------------------------------------------
     //
@@ -46,7 +82,7 @@ Demo.model = (function(input, components, renderer) {
     // the state of the newly connected player model.
     //
     //------------------------------------------------------------------
-    socket.on('connect-other', function(data) {
+    function connectPlayerOther(data) {
         let model = components.SpaceShipRemote({
             image: Demo.assets['spaceship-red'],
             size: { width: data.size.width, height: data.size.height },
@@ -67,23 +103,23 @@ Demo.model = (function(input, components, renderer) {
         });
 
         playerOthers[data.clientId] = model;
-    });
+    }
 
     //------------------------------------------------------------------
     //
     // Handler for when another player disconnects from the game.
     //
     //------------------------------------------------------------------
-    socket.on('disconnect-other', function(data) {
+    function disconnectPlayerOther(data) {
         delete playerOthers[data.clientId];
-    });
+    }
 
     //------------------------------------------------------------------
     //
     // Handler for receiving state updates about the self player.
     //
     //------------------------------------------------------------------
-    socket.on('update-self', function(data) {
+    function updatePlayerSelf(data) {
         playerSelf.center.x = data.center.x;
         playerSelf.center.y = data.center.y;
         playerSelf.direction = data.direction;
@@ -102,31 +138,31 @@ Demo.model = (function(input, components, renderer) {
         //
         // Update the client simulation since the last server update, by
         // replaying the remaining inputs.
-        let memory = Demo.utilities.Queue();
+        let memory = Queue.create();
         while (!messageHistory.empty) {
             let message = messageHistory.dequeue();
             switch (message.type) {
-                case 'move':
+                case NetworkIds.INPUT_MOVE:
                     playerSelf.move(message.elapsedTime);
                     break;
-                case 'rotate-right':
+                case NetworkIds.INPUT_ROTATE_RIGHT:
                     playerSelf.rotateRight(message.elapsedTime);
                     break;
-                case 'rotate-left':
+                case NetworkIds.INPUT_ROTATE_LEFT:
                     playerSelf.rotateLeft(message.elapsedTime);
                     break;
             }
             memory.enqueue(message);
         }
         messageHistory = memory;
-    });
+    }
 
     //------------------------------------------------------------------
     //
     // Handler for receiving state updates about other players.
     //
     //------------------------------------------------------------------
-    socket.on('update-other', function(data) {
+    function updatePlayerOther(data) {
         if (playerOthers.hasOwnProperty(data.clientId)) {
             let model = playerOthers[data.clientId];
             model.goal.updateWindow = data.updateWindow;
@@ -141,7 +177,7 @@ Demo.model = (function(input, components, renderer) {
             model.start.center.y = model.state.center.y;
             model.start.direction = model.state.direction;
         }
-    });
+    }
 
     // ------------------------------------------------------------------
     //
@@ -157,9 +193,9 @@ Demo.model = (function(input, components, renderer) {
             let message = {
                 id: messageId++,
                 elapsedTime: elapsedTime,
-                type: 'move'
+                type: NetworkIds.INPUT_MOVE
             };
-            socket.emit('input', message);
+            socket.emit(NetworkIds.INPUT, message);
             messageHistory.enqueue(message);
             playerSelf.move(elapsedTime);
         },
@@ -169,9 +205,9 @@ Demo.model = (function(input, components, renderer) {
             let message = {
                 id: messageId++,
                 elapsedTime: elapsedTime,
-                type: 'rotate-right'
+                type: NetworkIds.INPUT_ROTATE_RIGHT
             };
-            socket.emit('input', message);
+            socket.emit(NetworkIds.INPUT, message);
             messageHistory.enqueue(message);
             playerSelf.rotateRight(elapsedTime);
         },
@@ -181,9 +217,9 @@ Demo.model = (function(input, components, renderer) {
             let message = {
                 id: messageId++,
                 elapsedTime: elapsedTime,
-                type: 'rotate-left'
+                type: NetworkIds.INPUT_ROTATE_LEFT
             };
-            socket.emit('input', message);
+            socket.emit(NetworkIds.INPUT, message);
             messageHistory.enqueue(message);
             playerSelf.rotateLeft(elapsedTime);
         },
@@ -196,7 +232,36 @@ Demo.model = (function(input, components, renderer) {
     //
     // ------------------------------------------------------------------
     that.processInput = function(elapsedTime) {
+        //
+        // Start with the keyboard updates so those messages can get in transit
+        // while the local updating of received network messages are processed.
         myKeyboard.update(elapsedTime);
+
+        //
+        // Double buffering on the queue so we don't asynchronously receive messages
+        // while processing.
+        let processMe = networkQueue;
+        networkQueue = networkQueue = Queue.create();
+        while (!processMe.empty) {
+            let message = processMe.dequeue();
+            switch (message.type) {
+                case NetworkIds.CONNECT_ACK:
+                    connectPlayerSelf(message.data);
+                    break;
+                case NetworkIds.CONNECT_OTHER:
+                    connectPlayerOther(message.data);
+                    break;
+                case NetworkIds.DISCONNECT_OTHER:
+                    disconnectPlayerOther(message.data);
+                    break;
+                case NetworkIds.UPDATE_SELF:
+                    updatePlayerSelf(message.data);
+                    break;
+                case NetworkIds.UPDATE_OTHER:
+                    updatePlayerOther(message.data);
+                    break;
+            }
+        }
     };
 
     // ------------------------------------------------------------------
