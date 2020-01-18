@@ -25,8 +25,8 @@ Demo.systems.keyboardInput = (function (components) {
     function update(elapsedTime, entities) {
         for (let id in entities) {
             let entity = entities[id];
-            if (entity.components['keyboard-controlled']) {
-                let input = entity.components['keyboard-controlled'];
+            if (entity.components[Demo.enums.Input.KeyboardControlled]) {
+                let input = entity.components[Demo.enums.Input.KeyboardControlled];
                 for (let key in input.keys) {
                     if (keysDown[key]) {
                         // Protect against turning back onto itself
