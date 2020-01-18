@@ -3,7 +3,8 @@ Demo.components.Appearance = function(spec) {
 
     let api = {
         get name() { return 'appearance'; },
-        get fill() { return spec.fill; },
+        get fillStart() { return spec.fillStart; },
+        get fillEnd() { return spec.fillEnd; },
         get stroke() { return spec.stroke; }
     };
 

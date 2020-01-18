@@ -14,36 +14,28 @@ Demo.model = (function(components, graphics, assets) {
 
     // --------------------------------------------------------------
     //
-    // Defining the game border as entities that have position, collision,
+    // Defining the game border an entities that has position, collision,
     // and visual components.
     //
     // --------------------------------------------------------------
     function initializeBorder() {
-        let border = {};
-
-        function createBorderEntity(x, y) {
-            let border = Demo.Entity.createEntity();
-            border.addComponent(Demo.components.Appearance({ fill: { r: 255, g: 0, b: 0 }, stroke: 'rgb(0, 0, 0)' }));
-            border.addComponent(Demo.components.Position({ segments: [{ x: x, y: y }] }));
-            border.addComponent(Demo.components.Collision());
-
-            return border;
-        }
+        let border = Demo.Entity.createEntity();
+        border.addComponent(Demo.components.Appearance({ fillStart: { r: 255, g: 0, b: 0 }, fillEnd: { r: 255, g: 0, b: 0 }, stroke: 'rgb(0, 0, 0)' }, ));
+        border.addComponent(Demo.components.Collision( { firstOnly: false }));
+        let segments = [];
 
         for (let position = 0; position < GRID_SIZE; position++) {
             // Left border
-            let left = createBorderEntity(0, position);
-            border[left.id] = left;
+            segments.push({ x: 0, y: position });
             // Right border
-            let right = createBorderEntity(GRID_SIZE - 1, position);
-            border[right.id] = right;
+            segments.push({ x: GRID_SIZE - 1, y: position });
             // Top border
-            let top = createBorderEntity(position, 0);
-            border[top.id] = top;
+            segments.push({ x: position, y: 0 });
             // bottom border
-            let bottom = createBorderEntity(position, GRID_SIZE - 1);
-            border[bottom.id] = bottom;
+            segments.push({ x: position, y: GRID_SIZE - 1 });
         }
+
+        border.addComponent(Demo.components.Position({segments: segments }));
 
         return border;
     }
@@ -59,7 +51,7 @@ Demo.model = (function(components, graphics, assets) {
 
         function createObstacleEntity(x, y) {
             let obstacle = Demo.Entity.createEntity();
-            obstacle.addComponent(Demo.components.Appearance({ fill: {r: 0, g: 255, b: 0 }, stroke: 'rgb(0, 0, 0)' }));
+            obstacle.addComponent(Demo.components.Appearance({ fillStart: {r: 0, g: 255, b: 0 }, fillEnd: {r: 0, g: 255, b: 0 }, stroke: 'rgb(0, 0, 0)' }));
             obstacle.addComponent(Demo.components.Position({ segments: [{ x: x, y: y }] }));
             obstacle.addComponent(Demo.components.Collision());
 
@@ -91,7 +83,7 @@ Demo.model = (function(components, graphics, assets) {
 
         function createSnakeEntity(x, y) {
             let snake = Demo.Entity.createEntity();
-            snake.addComponent(Demo.components.Appearance({ fill: { r: 255, g: 255, b: 255 }, stroke: 'rgb(0, 0, 0)' }));
+            snake.addComponent(Demo.components.Appearance({ fillStart: { r: 255, g: 255, b: 255 }, fillEnd: {r: 0, g: 0, b: 255 }, stroke: 'rgb(0, 0, 0)' }));
             snake.addComponent(Demo.components.Position({ segments: [{ x: x, y: y }] }));
             snake.addComponent(Demo.components.Collision());
             snake.addComponent(Demo.components.Movable({ facing: Demo.enums.Direction.Stopped, moveInterval: MOVE_INTERVAL }));
@@ -133,7 +125,7 @@ Demo.model = (function(components, graphics, assets) {
 
         function createFoodEntity(x, y) {
             let food = Demo.Entity.createEntity();
-            food.addComponent(Demo.components.Appearance({ fill: {r: 255, g: 128, b: 0 }, stroke: 'rgb(0, 0, 0)' }));
+            food.addComponent(Demo.components.Appearance({ fillStart: {r: 255, g: 128, b: 0 }, fillEnd: {r: 255, g: 128, b: 0 }, stroke: 'rgb(0, 0, 0)' }));
             food.addComponent(Demo.components.Position({ segments: [{ x: x, y: y }] }));
             food.addComponent(Demo.components.Collision());
             food.addComponent(Demo.components.Food());
@@ -194,7 +186,8 @@ Demo.model = (function(components, graphics, assets) {
     // ------------------------------------------------------------------
     that.initialize = function() {
         console.log('initializing borders...');
-        mergeObjects(entities, initializeBorder());
+        let border = initializeBorder();
+        entities[border.id] = border;
 
         console.log('initializing obstacles...');
         mergeObjects(entities, initializeObstacles());

@@ -48,8 +48,23 @@ Demo.systems.collision = (function () {
             return false;
         }
 
-        return a.components.position.x === b.components.position.x && 
-               a.components.position.y === b.components.position.y;
+        // If only the first segment needs to be tested, only test that segment
+        let lengthA = a.components.collision.firstOnly ? 1 : a.components.position.segments.length;
+        let lengthB = b.components.collision.firstOnly ? 1 : b.components.position.segments.length;
+
+        // Double for loop looks bad, but it isn't because only 1 of these will ever have a length
+        // greater than 1, and most of the time both are of length 1.
+        for (let segmentA = 0; segmentA < lengthA; segmentA++) {
+            let positionA = a.components.position.segments[segmentA];
+            for (let segmentB = 0; segmentB < lengthB; segmentB++) {
+                let positionB = b.components.position.segments[segmentB];
+                if (positionA.x == positionB.x && positionA.y == positionB.y) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     // --------------------------------------------------------------
