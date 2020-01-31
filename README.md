@@ -12,12 +12,12 @@ The following are some of the additions I plan on adding to this repository over
 * (JavaScript - completed 1/4/2020) Update the particle system example to allow particles to change size over time, also change transparency over time.
 * (JavaScript - completed 1/12/2020) Add a set of multiplayer network examples.
 * (JavaScript - completed 1/18/2020) Add an Entity-Component-System example.
+* (C++ - completed 1/30/2020) Add an Entity-Component-System example.
 * (C++ - in progress) Add a set of multiplayer network examples.
-* (C++ - in progress) Add an Entity-Component-System example.
 * (C++) Add a modest research project.
 
 As of 1/18/2020 the JavaScript examples are complete.  Although, there is no such thing as complete, I'm certain to revisit the code making various improvements and additions over time, but the focus now is building the C++ demos.
 
-The multiplayer network examples are being written using the ECS model.  Therefore, there won't be separate multi-player and ECS examples, they are both the same thing.  With that said, it is possible I might make a non-multiplayer example that is ECS only, in order to focus on a C++ ECS implementation without also mixing in multiplayer networking.
+The C++ multiplayer network examples are being written using the ECS model.  An initial ECS example is posted, work is now underway on developing the multiplayer examples.
 
 The research project, it exists in design only, it will be worked on after completing most of these other examples.  As I work on the C++ examples, will likely add more to the list.  The internet is full of examples of rendering, etc, I'm not wanting to re-create those, instead want to create examples for techniques that are less commonly found; particularly the multi-player networking techniques.
