@@ -1,0 +1,13 @@
+Language: Cpp
+ColumnLimit: 0
+BreakBeforeBraces : Allman
+BreakConstructorInitializers: AfterColon
+Cpp11BracedListStyle: true
+IndentCaseLabels: true
+NamespaceIndentation: All
+IndentWidth: 4
+TabWidth: 4
+UseTab: Never
+DerivePointerAlignment: false
+PointerAlignment: Left
+IncludeBlocks: Regroup
