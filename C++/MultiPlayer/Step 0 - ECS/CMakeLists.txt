@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(Step0-ECS)
+project(Multiplayer-Step0-ECS)
 
 #
 # Manually specifying all the source files.
@@ -43,6 +43,9 @@ set(SYSTEMS_SOURCES
     systems/Renderer.cpp
     )
 
+#
+# Organize the files into some logical groups
+#
 source_group("Main\\Header Files" FILES ${HEADER_FILES})
 source_group("Main\\Source Files" FILES ${SOURCE_FILES})
 
@@ -72,29 +75,32 @@ set(ALL_CODE_FILES
 #
 # This is the main target
 #
-add_executable(Step0-ECS ${ALL_CODE_FILES})
+add_executable(Multiplayer-Step0-ECS ${ALL_CODE_FILES})
 #
 # Doing the followoing so that the source code can do includes like...
 # #include "components/Component.hpp"
 # instead of...
 # #include "../components/Component.hpp"
 #
-target_include_directories(Step0-ECS PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(Multiplayer-Step0-ECS PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 #
-# Enable a lot of warnings for both compilers, forcing the developer to write better code
+# Want the C++ 17 standard for our project
+#
+set_property(TARGET Multiplayer-Step0-ECS PROPERTY CXX_STANDARD 17)
+
+#
+# Enable a lot of warnings, forcing better code to be written
 #
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-    target_compile_options(Step0-ECS PRIVATE /W4 /permissive-)
+    target_compile_options(Multiplayer-Step0-ECS PRIVATE /W4 /permissive-)
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    target_compile_options(Step0-ECS PRIVATE -O3 -Wall -Wextra -pedantic) # -Wconversion -Wsign-conversion
+    target_compile_options(Multiplayer-Step0-ECS PRIVATE -O3 -Wall -Wextra -pedantic) # -Wconversion -Wsign-conversion
 endif()
 
 #
-# We want the C++ 17 standard for our project
+# Move the assets into the build folder so they load at runtime (inside MSVC)
 #
-set_property(TARGET Step0-ECS PROPERTY CXX_STANDARD 17)
-
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/assets/playerShip1_blue.png ${CMAKE_CURRENT_BINARY_DIR}/assets/playerShip1_blue.png COPYONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/assets/playerShip1_red.png ${CMAKE_CURRENT_BINARY_DIR}/assets/playerShip1_red.png COPYONLY)
 
@@ -102,7 +108,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/assets/playerShip1_red.png ${CMAKE_CU
 # ------------------------ Add SFML ------------------------
 #
 
-# This causes the SFML .dll files to be copied into the Step0-ECS executable folder.
+# This causes the SFML .dll files to be copied into the Multiplayer-Step0-ECS executable folder.
 # Only need this for development time, for a production release statically link
 # everything together: set BUILD_SHARED_LIBS to FALSE
 # Reference: https://en.sfml-dev.org/forums/index.php?topic=24070.0
@@ -112,8 +118,8 @@ set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 add_subdirectory(ThirdParty/SFML-2.5.1)
 include_directories(ThirdParty/SFML-2.5.1/include)
-add_dependencies(Step0-ECS sfml-main sfml-graphics sfml-audio sfml-system sfml-window sfml-network)
-target_link_libraries(Step0-ECS sfml-main sfml-graphics sfml-audio sfml-system sfml-window sfml-network)
+add_dependencies(Multiplayer-Step0-ECS sfml-main sfml-graphics sfml-audio sfml-system sfml-window sfml-network)
+target_link_libraries(Multiplayer-Step0-ECS sfml-main sfml-graphics sfml-audio sfml-system sfml-window sfml-network)
 
 #
 # ------------------------ Add CTTI ------------------------
@@ -156,9 +162,9 @@ if (CLANG_FORMAT)
         ${CODE_FILES_PATHS}
     )
     #
-    # This makes the clang-format target a dependency of the main Step0-ECS project
+    # This makes the clang-format target a dependency of the main Multiplayer-Step0-ECS project
     #
-    # add_dependencies(Step0-ECS ClangFormat)
+    # add_dependencies(Multiplayer-Step0-ECS ClangFormat)
 else()
     message("Unable to find clang-format")
 endif()

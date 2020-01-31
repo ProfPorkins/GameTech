@@ -7,26 +7,37 @@
 #include <initializer_list>
 #include <unordered_set>
 
-// --------------------------------------------------------------
-//
-// A system is where all logic associated with the game is handled.
-// Each system is specialized to operate over a particular set of
-// entities, handling things like movement, collision detection,
-// and rendering.
-//
-// --------------------------------------------------------------
-class System
+namespace systems
 {
-  public:
-    System(std::initializer_list<ctti::unnamed_type_id_t> list) :
-        m_interests(list)
+    // --------------------------------------------------------------
+    //
+    // A system is where all logic associated with the game is handled.
+    // Each system is specialized to operate over a particular set of
+    // entities, handling things like movement, collision detection,
+    // and rendering.
+    //
+    // --------------------------------------------------------------
+    class System
     {
-    }
+      public:
+        System(std::initializer_list<ctti::unnamed_type_id_t> list) :
+            m_interests(list)
+        {
+        }
 
-    // The (void)elapsedTime is a technique to silence an unused parameter warning
-    virtual void update(std::chrono::milliseconds elapsedTime) { (void)elapsedTime; }
-    bool isInterested(Entity* entity);
+        void addEntity(std::shared_ptr<entities::Entity> entity);
+        void removeEntity(decltype(entities::Entity().getId()) entityId);
 
-  private:
-    std::unordered_set<ctti::unnamed_type_id_t> m_interests;
-};
+        // The (void)elapsedTime is a technique to silence an unused parameter warning
+        virtual void update(std::chrono::milliseconds elapsedTime) { (void)elapsedTime; }
+
+      protected:
+        entities::EntityMap m_entities;
+
+      private:
+        std::unordered_set<ctti::unnamed_type_id_t> m_interests;
+
+        bool isInterested(entities::Entity* entity);
+    };
+
+} // namespace systems

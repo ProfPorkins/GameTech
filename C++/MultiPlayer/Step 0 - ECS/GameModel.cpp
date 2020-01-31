@@ -23,8 +23,8 @@ bool GameModel::initialize(sf::Vector2f viewSize)
         std::make_tuple(components::Input::Type::TurnLeft, sf::Keyboard::A),
         std::make_tuple(components::Input::Type::TurnRight, sf::Keyboard::D),
         std::make_tuple(components::Input::Type::Forward, sf::Keyboard::W)};
-    m_systemKeyboardInput = std::make_unique<KeyboardInput>(inputMapping);
-    m_systemRender = std::make_unique<Renderer>();
+    m_systemKeyboardInput = std::make_unique<systems::KeyboardInput>(inputMapping);
+    m_systemRender = std::make_unique<systems::Renderer>();
 
     //
     // Create the space ship entities we'll use for the players
@@ -45,11 +45,11 @@ void GameModel::update(const std::chrono::milliseconds elapsedTime, std::shared_
 {
     //
     // Only have two systems right now, KeyboardInput and Rendering
-    m_systemKeyboardInput->update(elapsedTime, m_entitiesKeyboardInput);
+    m_systemKeyboardInput->update(elapsedTime);
 
     //
     // Rendering must always be done last
-    m_systemRender->update(elapsedTime, m_entitiesRenderable, renderTarget);
+    m_systemRender->update(elapsedTime, renderTarget);
 }
 
 // --------------------------------------------------------------
@@ -58,26 +58,15 @@ void GameModel::update(const std::chrono::milliseconds elapsedTime, std::shared_
 // to see if they are interested in knowing about them during their
 // updates.
 //
-// Question: Should the systems keep the list of entities themselves
-//           rather than the game model keeping the lists?
-//
 // --------------------------------------------------------------
-void GameModel::addEntity(std::shared_ptr<Entity> entity)
+void GameModel::addEntity(std::shared_ptr<entities::Entity> entity)
 {
     if (entity == nullptr)
         return;
 
     m_entities[entity->getId()] = entity;
-
-    if (m_systemKeyboardInput->isInterested(entity.get()))
-    {
-        m_entitiesKeyboardInput[entity->getId()] = entity;
-    }
-
-    if (m_systemRender->isInterested(entity.get()))
-    {
-        m_entitiesRenderable[entity->getId()] = entity;
-    }
+    m_systemKeyboardInput->addEntity(entity);
+    m_systemRender->addEntity(entity);
 }
 
 // --------------------------------------------------------------
@@ -86,9 +75,11 @@ void GameModel::addEntity(std::shared_ptr<Entity> entity)
 // the entity.
 //
 // --------------------------------------------------------------
-void GameModel::removeEntity(decltype(Entity().getId()) entityId)
+void GameModel::removeEntity(decltype(entities::Entity().getId()) entityId)
 {
     m_entities.erase(entityId);
-    m_entitiesKeyboardInput.erase(entityId);
-    m_entitiesRenderable.erase(entityId);
+    //
+    // Let each of the systems know to remove the entity
+    m_systemKeyboardInput->removeEntity(entityId);
+    m_systemRender->removeEntity(entityId);
 }

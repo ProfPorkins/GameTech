@@ -7,9 +7,7 @@
 #include <SFML/Graphics.hpp>
 #include <chrono>
 #include <memory>
-#include <unordered_map>
 #include <unordered_set>
-#include <utility>
 
 class GameModel
 {
@@ -21,13 +19,13 @@ class GameModel
     // The purpose of this is to have a container that keeps the textures alive throughout the program
     std::unordered_set<std::shared_ptr<sf::Texture>> m_textures;
 
-    EntityMap m_entities;
-    EntityMap m_entitiesKeyboardInput;
-    EntityMap m_entitiesRenderable;
+    entities::EntityMap m_entities;
+    entities::EntityMap m_entitiesKeyboardInput;
+    entities::EntityMap m_entitiesRenderable;
 
-    std::unique_ptr<KeyboardInput> m_systemKeyboardInput;
-    std::unique_ptr<Renderer> m_systemRender;
+    std::unique_ptr<systems::KeyboardInput> m_systemKeyboardInput;
+    std::unique_ptr<systems::Renderer> m_systemRender;
 
-    void addEntity(std::shared_ptr<Entity> entity);
-    void removeEntity(decltype(Entity().getId()) entityId);
+    void addEntity(std::shared_ptr<entities::Entity> entity);
+    void removeEntity(decltype(entities::Entity().getId()) entityId);
 };
