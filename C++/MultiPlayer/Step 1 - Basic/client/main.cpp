@@ -2,9 +2,11 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <SFML/Network.hpp>
 #include <chrono>
 #include <iostream>
 #include <memory>
+#include <string>
 
 std::shared_ptr<sf::RenderWindow> prepareWindow()
 {
@@ -50,8 +52,24 @@ void prepareView(std::shared_ptr<sf::RenderWindow> window)
     window->setView(view);
 }
 
+std::unique_ptr<sf::TcpSocket> connectToServer(std::string serverIP, std::uint16_t serverPort)
+{
+    auto socket = std::make_unique<sf::TcpSocket>();
+    if (socket->connect(serverIP, serverPort) != sf::Socket::Done)
+    {
+        std::cout << "failed to connect to server" << std::endl;
+        return nullptr;
+    }
+
+    return std::move(socket);
+}
+
 int main()
 {
+    //
+// Initiate the network connection to the server
+    auto socket = connectToServer("127.0.0.1", 3000);
+
     //
     // Create and activate the window for rendering on the main thread
     auto window = prepareWindow();
@@ -61,7 +79,7 @@ int main()
     //
     // Get the game model initialized and ready to run
     GameModel model;
-    if (!model.initialize(window->getView().getSize()))
+    if (!model.initialize(std::move(socket), window->getView().getSize()))
     {
         std::cout << "Game model failed to initialize, terminating..." << std::endl;
         exit(0);

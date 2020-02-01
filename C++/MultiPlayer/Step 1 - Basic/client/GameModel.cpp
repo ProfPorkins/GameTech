@@ -15,8 +15,10 @@
 // loading the art assets.
 //
 // --------------------------------------------------------------
-bool GameModel::initialize(sf::Vector2f viewSize)
+bool GameModel::initialize(std::unique_ptr<sf::TcpSocket> socket, sf::Vector2f viewSize)
 {
+    m_socket = std::move(socket);
+
     //
     // Initialize the various sytems
     auto inputMapping = {
