@@ -25,8 +25,8 @@ namespace systems
         {
         }
 
-        void addEntity(std::shared_ptr<entities::Entity> entity);
-        void removeEntity(decltype(entities::Entity().getId()) entityId);
+        virtual void addEntity(std::shared_ptr<entities::Entity> entity);
+        virtual void removeEntity(decltype(entities::Entity().getId()) entityId);
 
         // The (void)elapsedTime is a technique to silence an unused parameter warning
         virtual void update(std::chrono::milliseconds elapsedTime) { (void)elapsedTime; }

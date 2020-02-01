@@ -34,6 +34,16 @@ bool GameModel::initialize(sf::Vector2f viewSize)
     return true;
 }
 
+void GameModel::signalKeyPressed(sf::Event::KeyEvent event)
+{
+    m_systemKeyboardInput->keyPressed(event);
+}
+
+void GameModel::signalKeyReleased(sf::Event::KeyEvent event)
+{
+    m_systemKeyboardInput->keyReleased(event);
+}
+
 // --------------------------------------------------------------
 //
 // This is where everything performs its update.  The very last

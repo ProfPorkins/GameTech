@@ -85,6 +85,15 @@ int main()
                 // end the program
                 running = false;
             }
+
+            if (event.type == sf::Event::KeyPressed)
+            {
+                model.signalKeyPressed(event.key);
+            }
+            if (event.type == sf::Event::KeyReleased)
+            {
+                model.signalKeyReleased(event.key);
+            }
         }
 
         //

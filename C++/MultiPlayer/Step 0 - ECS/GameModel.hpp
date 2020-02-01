@@ -5,6 +5,7 @@
 #include "systems/Renderer.hpp"
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Window/Event.hpp>
 #include <chrono>
 #include <memory>
 #include <unordered_set>
@@ -13,6 +14,8 @@ class GameModel
 {
   public:
     bool initialize(sf::Vector2f viewSize);
+    void signalKeyPressed(sf::Event::KeyEvent event);
+    void signalKeyReleased(sf::Event::KeyEvent event);
     void update(const std::chrono::milliseconds elapsedTime, std::shared_ptr<sf::RenderTarget> renderTarget);
 
   private:
