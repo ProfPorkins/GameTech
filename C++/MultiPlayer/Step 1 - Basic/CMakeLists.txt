@@ -2,6 +2,12 @@ cmake_minimum_required(VERSION 3.10)
 project(Multiplayer-Step1-Basic)
 
 #
+# ------------------------ Google Protocol Buffers ------------------------
+#
+find_package(Protobuf REQUIRED)
+include_directories(${Protobuf_INCLUDE_DIRS})
+
+#
 # ------------------------ Add SFML ------------------------
 # This causes the SFML .dll files to be copied into the Multiplayer-Step0-ECS executable folder.
 # Only need this for development time, for a production release statically link
@@ -14,6 +20,7 @@ set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 add_subdirectory(ThirdParty/SFML-2.5.1)
 include_directories(ThirdParty/SFML-2.5.1/include)
+find_package(Protobuf REQUIRED)
 
 #
 # ------------------------ Add CTTI ------------------------
@@ -33,14 +40,14 @@ add_dependencies(Shared sfml-main sfml-graphics sfml-audio sfml-system sfml-wind
 #
 add_subdirectory(server)
 target_include_directories(Server PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/shared)
-add_dependencies(Server Shared sfml-main sfml-graphics sfml-audio sfml-system sfml-window sfml-network)
+add_dependencies(Server Shared protobuf::libprotobuf sfml-main sfml-graphics sfml-audio sfml-system sfml-window sfml-network)
 
 #
 # ------------------------ Add the Client Project ------------------------
 #
 add_subdirectory(client)
 target_include_directories(Client PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/shared)
-add_dependencies(Client Shared Server sfml-main sfml-graphics sfml-audio sfml-system sfml-window sfml-network)
+add_dependencies(Client Shared Server protobuf::libprotobuf sfml-main sfml-graphics sfml-audio sfml-system sfml-window sfml-network)
 
 #
 # ------------------------ Clang Format ------------------------
@@ -51,27 +58,22 @@ add_dependencies(Client Shared Server sfml-main sfml-graphics sfml-audio sfml-sy
 #
 find_program(CLANG_FORMAT "clang-format")
 if (CLANG_FORMAT)
-    message("Clang-Format found at: " ${CLANG_FORMAT})
-
     #
     # Need to take the simple source file locations used for the project and get their full
     # file system locations for use in putting together the clang-format command line
     #
     unset(CODE_FILES_PATHS)
     foreach(CODE_FILE ${SHARED_CODE_FILES})
-        message(${CODE_FILE})
         get_source_file_property(WHERE "shared/${CODE_FILE}" LOCATION)
         set(CODE_FILES_PATHS ${CODE_FILES_PATHS} ${WHERE})
     endforeach()
 
     foreach(CODE_FILE ${SERVER_CODE_FILES})
-        message(${CODE_FILE})
         get_source_file_property(WHERE "server/${CODE_FILE}" LOCATION)
         set(CODE_FILES_PATHS ${CODE_FILES_PATHS} ${WHERE})
     endforeach()
 
     foreach(CODE_FILE ${CLIENT_CODE_FILES})
-        message(${CODE_FILE})
         get_source_file_property(WHERE "client/${CODE_FILE}" LOCATION)
         set(CODE_FILES_PATHS ${CODE_FILES_PATHS} ${WHERE})
     endforeach()
