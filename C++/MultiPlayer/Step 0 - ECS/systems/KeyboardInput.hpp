@@ -7,6 +7,7 @@
 #include "entities/Entity.hpp"
 
 #include <SFML/Window/Keyboard.hpp>
+#include <SFML/Window/Event.hpp>
 #include <chrono>
 #include <functional>
 #include <initializer_list>

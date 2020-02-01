@@ -1,29 +1,15 @@
 #pragma once
 
 #include "components/Component.hpp"
-#include "components/Input.hpp"
-#include "components/Movement.hpp"
-#include "components/Position.hpp"
-#include "components/Size.hpp"
-#include "components/Sprite.hpp"
 
 #include <atomic>
 #include <cstdint>
 #include <ctti/type_id.hpp>
 #include <memory>
-#include <typeindex>
 #include <unordered_map>
-#include <variant>
 
 namespace entities
 {
-    using ComponentTypes = std::variant<
-        std::unique_ptr<components::Movement>,
-        std::unique_ptr<components::Input>,
-        std::unique_ptr<components::Position>,
-        std::unique_ptr<components::Size>,
-        std::unique_ptr<components::Sprite>>;
-
     // --------------------------------------------------------------
     //
     // An Entity is an 'id' (a number) and a collection of components.
@@ -59,7 +45,7 @@ namespace entities
         static std::atomic<std::uint32_t> nextId; // Each entity needs a unique id, using a static to do this.
 
         decltype(nextId.load()) m_id;
-        std::unordered_map<ctti::unnamed_type_id_t, ComponentTypes> m_components;
+        std::unordered_map<ctti::unnamed_type_id_t, std::unique_ptr<components::Component>> m_components;
     };
 
     // Convenience type alias for use throughout the framework
@@ -98,6 +84,6 @@ namespace entities
     template <typename T>
     T* Entity::getComponent()
     {
-        return std::get<std::unique_ptr<T>>(m_components[ctti::unnamed_type_id<T>()]).get();
+        return static_cast<T*>(m_components[ctti::unnamed_type_id<T>()].get());
     }
 } // namespace entities
