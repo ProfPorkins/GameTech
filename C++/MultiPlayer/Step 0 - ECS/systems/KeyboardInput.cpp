@@ -24,7 +24,7 @@ namespace systems
         // Build a mapping from this entity's keyboard inputs to the functions this system
         // can invoke for those inputs.  This allows those functions to be directly
         // called when the keyboard inputs are seen.
-        KeyToEntityToFunction map;
+        KeyToFunction map;
         for (auto&& input : entity->getComponent<components::Input>()->getInputs())
         {
             switch (input)

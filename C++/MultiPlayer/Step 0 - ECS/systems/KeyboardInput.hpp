@@ -44,7 +44,7 @@ namespace systems
         void keyReleased(sf::Event::KeyEvent keyEvent);
 
       private:
-        class KeyToEntityToFunction
+        class KeyToFunction
         {
           public:
             std::unordered_map<sf::Keyboard::Key, std::function<void(std::chrono::milliseconds, components::Position*, components::Movement*)>> m_keyToFunction;
@@ -52,7 +52,7 @@ namespace systems
 
         std::unordered_map<sf::Keyboard::Key, sf::Event::KeyEvent> m_keysPressed;
         std::unordered_map<components::Input::Type, sf::Keyboard::Key> m_typeToKeyMap;
-        std::unordered_map<decltype(entities::Entity().getId()), KeyToEntityToFunction> m_keyToFunctionMap;
+        std::unordered_map<decltype(entities::Entity().getId()), KeyToFunction> m_keyToFunctionMap;
 
         void turnLeft(std::chrono::milliseconds elapsedTime, components::Position* position, components::Movement* movement);
         void turnRight(std::chrono::milliseconds elapsedTime, components::Position* position, components::Movement* movement);
