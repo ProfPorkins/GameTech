@@ -336,7 +336,7 @@ function initializeSocketIO(httpServer) {
         console.log(`Connection established: ${socket.id}`);
         //
         // Create an entry in our list of connected clients
-        let newPlayer = Player.create()
+        let newPlayer = Player.create();
         newPlayer.clientId = socket.id;
         activeClients[socket.id] = {
             socket: socket,
