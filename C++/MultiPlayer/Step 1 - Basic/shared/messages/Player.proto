@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+import public "Movement.proto";
+import public "Size.proto";
+import public "Position.proto";
+
+package shared;
+
+message Player {
+    Position position = 1;
+    Size size = 2;
+    Movement movement = 3;
+}

@@ -33,6 +33,15 @@ bool GameModel::initialize(std::unique_ptr<sf::TcpSocket> socket, sf::Vector2f v
     addEntity(entities::createPlayerShip("assets/playerShip1_blue.png", viewSize, sf::Vector2f(-0.25f, 0.0f), 0.05f, m_textures));
     addEntity(entities::createPlayerShip("assets/playerShip1_red.png", viewSize, sf::Vector2f(0.25f, 0.0f), 0.05f, m_textures));
 
+    //
+    // NOTE: Quick hack for now, just to get something being received
+    char data[100];
+    std::size_t received;
+    if (m_socket->receive(data, 100, received) == sf::Socket::Done)
+    {
+
+    }
+
     return true;
 }
 

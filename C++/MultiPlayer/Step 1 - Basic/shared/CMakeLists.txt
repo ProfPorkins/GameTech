@@ -4,6 +4,13 @@ project(Shared)
 #
 # Manually specifying all the source files.
 #
+set(PROTOBUF_FILES
+    messages/Movement.proto
+    messages/Position.proto
+    messages/Size.proto
+    messages/Vector2f.proto
+    messages/Player.proto)
+
 set(SHARED_ENTITY_HEADERS
     entities/Entity.hpp
     )
@@ -13,6 +20,10 @@ set(SHARED_ENTITY_SOURCES
 
 set(SHARED_COMPONENTS_HEADERS
     components/Component.hpp
+    components/Input.hpp
+    components/Movement.hpp
+    components/Position.hpp
+    components/Size.hpp
     )
 set(SHARED_COMPONENTS_SOURCES
     )
@@ -25,6 +36,15 @@ set(SHARED_SYSTEMS_SOURCES
     )
 
 #
+# Generate the Protobuf source files
+#
+if (PROTOBUF_FOUND)
+	message(STATUS "Google Protocol Buffers: " ${PROTOBUF_INCLUDE_DIRS})
+
+    protobuf_generate_cpp(PROTOBUF_SOURCES PROTOBUF_HEADERS ${PROTOBUF_FILES})
+endif()
+
+#
 # Organize the files into some logical groups
 #
 source_group("Components\\Header Files" FILES ${SHARED_COMPONENTS_HEADERS})
@@ -35,6 +55,10 @@ source_group("Entities\\Source Files" FILES ${SHARED_ENTITY_SOURCES})
 
 source_group("Systems\\Header Files" FILES ${SHARED_SYSTEMS_HEADERS})
 source_group("Systems\\Source Files" FILES ${SHARED_SYSTEMS_SOURCES})
+
+source_group("Messages\\ProtoFiles" FILES ${PROTOBUF_FILES})
+source_group("Messages\\Header Files" FILES ${PROTOBUF_HEADERS})
+source_group("Messages\\Source Files" FILES ${PROTOBUF_SOURCES})
 
 #
 # Need a list of all code files for convenience
@@ -51,10 +75,15 @@ set(SHARED_CODE_FILES
 #
 # This is the shared library target
 #
-add_library(Shared STATIC ${SHARED_CODE_FILES})
-set(SHARED_CODE_FILES ${SHARED_CODE_FILES} PARENT_SCOPE)    # Exporting to parent scope for clang-format
+add_library(Shared STATIC ${SHARED_CODE_FILES} ${PROTOBUF_HEADERS} ${PROTOBUF_SOURCES})
+target_link_libraries(Shared ${Protobuf_LIBRARIES})
+#
+# This gets the /build/shared folders that include the generated files visible to the projects
+target_include_directories(Shared PUBLIC ${Protobuf_INCLUDE_DIRS})
 
+set(SHARED_CODE_FILES ${SHARED_CODE_FILES} PARENT_SCOPE)    # Exporting to parent scope for clang-format
 target_include_directories(Shared PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
 
 #
 # Want the C++ 17 standard for our project
@@ -68,4 +97,11 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     target_compile_options(Shared PRIVATE /W4 /permissive-)
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     target_compile_options(Shared PRIVATE -O3 -Wall -Wextra -pedantic) # -Wconversion -Wsign-conversion
+endif()
+
+#
+# Enable static multithreaded library linking for MSVC
+# Reference: https://cmake.org/cmake/help/latest/prop_tgt/MSVC_RUNTIME_LIBRARY.html#prop_tgt:MSVC_RUNTIME_LIBRARY
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    target_compile_options(Shared PRIVATE "/MT$<$<CONFIG:Debug>:d>")
 endif()

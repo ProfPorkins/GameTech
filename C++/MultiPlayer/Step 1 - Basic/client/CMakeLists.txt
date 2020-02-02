@@ -20,10 +20,6 @@ set(CLIENT_ENTITY_SOURCES
     )
 
 set(CLIENT_COMPONENTS_HEADERS
-    components/Movement.hpp
-    components/Input.hpp
-    components/Position.hpp
-    components/Size.hpp
     components/Sprite.hpp
     )
 set(CLIENT_COMPONENTS_SOURCES
@@ -88,6 +84,14 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     target_compile_options(Client PRIVATE -O3 -Wall -Wextra -pedantic) # -Wconversion -Wsign-conversion
 endif()
+
+#
+# Enable static multithreaded library linking for MSVC
+# Reference: https://cmake.org/cmake/help/latest/prop_tgt/MSVC_RUNTIME_LIBRARY.html#prop_tgt:MSVC_RUNTIME_LIBRARY
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    target_compile_options(Client PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+endif()
+
 
 #
 # Move the assets into the build folder so they load at runtime (inside MSVC)

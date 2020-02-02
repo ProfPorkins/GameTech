@@ -13,8 +13,10 @@ set(SERVER_HEADER_FILES
     )
 
 set(SERVER_ENTITY_HEADERS
+    entities/Player.hpp
     )
 set(SERVER_ENTITY_SOURCES
+    entities/Player.cpp
     )
 
 set(SERVER_COMPONENTS_HEADERS
@@ -51,6 +53,7 @@ set(SERVER_CODE_FILES
     ${SERVER_COMPONENTS_HEADERS}
     ${SERVER_COMPONENTS_SOURCES}
     ${SERVER_ENTITY_HEADERS}
+    ${SERVER_ENTITY_SOURCES}
     ${SERVER_SYSTEMS_HEADERS}
     ${SERVER_SYSTEMS_SOURCES}
     )
@@ -75,5 +78,13 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     target_compile_options(Server PRIVATE -O3 -Wall -Wextra -pedantic) # -Wconversion -Wsign-conversion
 endif()
+
+#
+# Enable static multithreaded library linking for MSVC
+# Reference: https://cmake.org/cmake/help/latest/prop_tgt/MSVC_RUNTIME_LIBRARY.html#prop_tgt:MSVC_RUNTIME_LIBRARY
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    target_compile_options(Server PRIVATE "/MT$<$<CONFIG:Debug>:d>")
+endif()
+
 
 target_link_libraries(Server Shared sfml-main sfml-graphics sfml-audio sfml-system sfml-window sfml-network)

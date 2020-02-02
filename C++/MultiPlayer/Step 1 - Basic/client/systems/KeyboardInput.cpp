@@ -112,8 +112,8 @@ namespace systems
 
         auto current = position->get();
         position->set(sf::Vector2f(
-            current.x + vectorX * elapsedTime.count() * movement->getAcceleration(),
-            current.y + vectorY * elapsedTime.count() * movement->getAcceleration()));
+            current.x + vectorX * elapsedTime.count() * movement->getMoveRate(),
+            current.y + vectorY * elapsedTime.count() * movement->getMoveRate()));
     }
 
     void KeyboardInput::turnLeft(std::chrono::milliseconds elapsedTime, components::Position* position, components::Movement* movement)

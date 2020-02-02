@@ -7,8 +7,11 @@
 #include <thread>
 #include <utility>
 
+#include "Player.pb.h"
+
 int main()
 {
+    GOOGLE_PROTOBUF_VERIFY_VERSION;
     //
     // Get the game model initialized and ready to run
     GameModel model;
@@ -70,6 +73,8 @@ int main()
     // Tell the incoming network connection thread to shutdown
     done = true;
     thread.join();
+
+    google::protobuf::ShutdownProtobufLibrary();
 
     return 0;
 }

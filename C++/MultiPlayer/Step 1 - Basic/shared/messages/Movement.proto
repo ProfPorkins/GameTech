@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package shared;
+
+message Movement {
+    float moveRate = 1;
+    float rotateRate = 2;
+}

@@ -18,7 +18,7 @@ namespace components
         {
         }
 
-        const float getAcceleration() { return m_moveRate; }
+        const float getMoveRate() { return m_moveRate; }
         const float getRotateRate() { return m_rotateRate; }
 
       private:

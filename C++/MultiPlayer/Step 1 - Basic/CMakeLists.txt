@@ -20,7 +20,6 @@ set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 add_subdirectory(ThirdParty/SFML-2.5.1)
 include_directories(ThirdParty/SFML-2.5.1/include)
-find_package(Protobuf REQUIRED)
 
 #
 # ------------------------ Add CTTI ------------------------
@@ -40,6 +39,7 @@ add_dependencies(Shared sfml-main sfml-graphics sfml-audio sfml-system sfml-wind
 #
 add_subdirectory(server)
 target_include_directories(Server PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/shared)
+target_include_directories(Server PUBLIC ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/shared)
 add_dependencies(Server Shared protobuf::libprotobuf sfml-main sfml-graphics sfml-audio sfml-system sfml-window sfml-network)
 
 #

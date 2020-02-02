@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+import public "Vector2f.proto";
+
+package shared;
+
+message Position {
+    Vector2f center = 1;
+    float orientation = 2;
+}
