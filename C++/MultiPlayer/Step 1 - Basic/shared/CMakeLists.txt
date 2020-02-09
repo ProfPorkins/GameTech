@@ -20,7 +20,6 @@ set(SHARED_MESSAGES_HEADERS
 
 set(SHARED_MESSAGES_SOURCES
     messages/ConnectSelf.cpp
-    messages/Message.cpp
 )
 
 set(SHARED_ENTITY_HEADERS

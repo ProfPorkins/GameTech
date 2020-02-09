@@ -1,14 +1,26 @@
 #pragma once
 
+//
+// Disable some compiler warnings that come from google protocol buffers
+#pragma warning(push)
+#pragma warning(disable : 4127)
+#include "Player.pb.h"
+#pragma warning(pop)
+
 #include "Message.hpp"
 #include "MessageTypes.hpp"
-#include "Player.pb.h"
 #include "entities/Entity.hpp"
 
 #include <memory>
 
 namespace messages
 {
+    // -----------------------------------------------------------------
+    //
+    // This message is send from the server to a client after it connects,
+    // informing it of the location of the player.
+    //
+    // -----------------------------------------------------------------
     class ConnectSelf : public Message
     {
       public:

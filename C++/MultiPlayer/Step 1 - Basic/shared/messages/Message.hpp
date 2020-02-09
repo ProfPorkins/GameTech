@@ -7,6 +7,13 @@
 
 namespace messages
 {
+    // -----------------------------------------------------------------
+    //
+    // A network message types must derive from this class and provide the
+    // specified interface (to use Google Protocol Buffers for serialization
+    // and deserialization).
+    //
+    // -----------------------------------------------------------------
     class Message
     {
       public:

@@ -16,7 +16,7 @@ class GameModel
     void shutdown();
 
   private:
-    std::unique_ptr<messages::MessageQueueServer> m_mq;
+    std::unique_ptr<MessageQueueServer> m_mq;
     std::unordered_set<sf::Uint32> m_players;
     entities::EntityMap m_entities;
 

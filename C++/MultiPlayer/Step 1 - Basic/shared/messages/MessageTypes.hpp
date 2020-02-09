@@ -12,7 +12,6 @@ namespace messages
     // -----------------------------------------------------------------
     enum class Type : std::uint8_t
     {
-        Undefined,
         ConnectSelf,
         ConnectOther,
         DisconnectOther,

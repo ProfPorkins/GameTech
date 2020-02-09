@@ -24,7 +24,7 @@ void GameModel::update(const std::chrono::milliseconds elapsedTime)
 // --------------------------------------------------------------
 bool GameModel::initializeMessageQueue()
 {
-    m_mq = std::make_unique<messages::MessageQueueServer>();
+    m_mq = std::make_unique<MessageQueueServer>();
     return m_mq->initialize(3000, std::bind(&GameModel::clientConnected, this, std::placeholders::_1));
 }
 

@@ -4,6 +4,12 @@
 
 namespace systems
 {
+    // --------------------------------------------------------------
+    //
+    // Primary activity in the constructor is to setup the command map
+    // that maps from message types to their handlers.
+    //
+    // --------------------------------------------------------------
     Network::Network(std::function<void(std::shared_ptr<entities::Entity>)> addEntity, std::unordered_set<std::shared_ptr<sf::Texture>>& textures, sf::Vector2f viewSize) :
         System({}),
         m_addEntity(addEntity),
@@ -18,21 +24,30 @@ namespace systems
         };
     }
 
+    // --------------------------------------------------------------
+    //
+    // Process all outstanding messages since the last update.
+    //
+    // --------------------------------------------------------------
     void Network::update(std::chrono::milliseconds elapsedTime, std::queue<std::shared_ptr<messages::Message>> messages)
     {
-        (void)elapsedTime;
-
         while (!messages.empty())
         {
             auto message = messages.front();
             messages.pop();
-            auto type2 = message->getType();
             m_commandMap[message->getType()](elapsedTime, message);
         }
     }
 
+    // --------------------------------------------------------------
+    //
+    // Handler for the ConnectSelf message.  It gets a 'self' player entity
+    // created and added to the client game simulation.
+    //
+    // --------------------------------------------------------------
     void Network::handleConnectSelf(std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::ConnectSelf> message)
     {
+        (void)elapsedTime;
         auto playerSelf = entities::createPlayerSelf(message->getPBPlayer(), m_viewSize, m_textures);
         m_addEntity(playerSelf);
     }

@@ -23,7 +23,7 @@ class GameModel
     void update(const std::chrono::milliseconds elapsedTime, std::shared_ptr<sf::RenderTarget> renderTarget);
 
   private:
-    std::unique_ptr<messages::MessageQueueClient> m_mq;
+    std::unique_ptr<MessageQueueClient> m_mq;
     // The purpose of this is to have a container that keeps the textures alive throughout the program
     std::unordered_set<std::shared_ptr<sf::Texture>> m_textures;
 

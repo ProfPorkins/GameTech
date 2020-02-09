@@ -12,113 +12,152 @@
 #include <sys/socket.h>
 #endif
 
-namespace messages
+// -----------------------------------------------------------------
+//
+// Create two threads for the message queue:
+//  1. Listen for incoming messages
+//  2. Sending messages
+//
+// -----------------------------------------------------------------
+bool MessageQueueClient::initialize(std::string serverIP, std::uint16_t serverPort)
 {
-    bool MessageQueueClient::initialize(std::string serverIP, std::uint16_t serverPort)
+    m_socketServer = std::make_unique<sf::TcpSocket>();
+    if (m_socketServer->connect(serverIP, serverPort) != sf::Socket::Done)
     {
-        m_socketServer = std::make_unique<sf::TcpSocket>();
-        if (m_socketServer->connect(serverIP, serverPort) != sf::Socket::Done)
+        return false;
+    }
+
+    m_selector.add(*m_socketServer);
+
+    // Register the message types with the handler that can create a message object
+    // of the appropriate type.
+    m_messageCommand[messages::Type::ConnectSelf] = []() {
+        return std::make_shared<messages::ConnectSelf>();
+    };
+
+    initializeSender();
+    initializeReceiver();
+
+    return true;
+}
+
+// -----------------------------------------------------------------
+//
+// Two steps in sending a message:
+//  1. Add the message the the message queue
+//  2. Signal the thread that performs the sending that a new message is available
+//
+// -----------------------------------------------------------------
+void MessageQueueClient::sendMessage(std::shared_ptr<messages::Message> message)
+{
+    {
+        m_sendMessages.enqueue(message);
+        m_eventSendMessages.notify_one();
+    }
+}
+
+// --------------------------------------------------------------
+//
+// Returns the queue of all messages received since the last time
+// this method was called.
+//
+// --------------------------------------------------------------
+std::queue<std::shared_ptr<messages::Message>> MessageQueueClient::getMessages()
+{
+    std::queue<std::shared_ptr<messages::Message>> copy;
+
+    std::lock_guard<std::mutex> lock(m_mutexReceivedMessages);
+    std::swap(copy, m_receivedMessages);
+
+    return copy;
+}
+
+// --------------------------------------------------------------
+//
+// Prepares the message queue for sending of messages.  As messages
+// are added to the queue of messages to send, the thread created
+// in this method sends them as soon as it can.
+//
+// --------------------------------------------------------------
+void MessageQueueClient::initializeSender()
+{
+    m_threadSender = std::thread([this]() {
+        while (m_keepRunning)
         {
-            return false;
-        }
-
-        m_selector.add(*m_socketServer);
-
-        // Register the message types with the handler that can create a message object
-        // of the appropriate type.
-        m_messageCommand[messages::Type::ConnectSelf] = []() {
-            return std::make_shared<messages::ConnectSelf>();
-        };
-
-        initializeSender();
-        initializeReceiver();
-
-        return true;
-    }
-
-    std::queue<std::shared_ptr<Message>> MessageQueueClient::getMessages()
-    {
-        std::queue<std::shared_ptr<Message>> copy;
-
-        std::lock_guard<std::mutex> lock(m_mutexReceivedMessages);
-        std::swap(copy, m_receivedMessages);
-
-        return copy;
-    }
-
-    void MessageQueueClient::initializeSender()
-    {
-        m_threadSender = std::thread([this]() {
-            while (m_keepRunning)
+            auto item = m_sendMessages.dequeue();
+            if (item)
             {
-                auto item = m_sendMessages.dequeue();
-                if (item)
-                {
-                    // Destructure and send
-                    std::string serialized = item.value()->serializeToString();
+                // Destructure and send
+                std::string serialized = item.value()->serializeToString();
 
-                    //
-                    // Need to send a header before the message data that specifies
-                    // the message type and the size of data to expect.
-                    std::array<std::uint8_t, 5> header;
-                    header[0] = static_cast<std::uint8_t>(item.value()->getType());
-                    // Be sure to convert to network representation
-                    std::uint32_t messageSize = htonl(static_cast<std::uint32_t>(serialized.size()));
-                    std::uint8_t* ptrSize = reinterpret_cast<std::uint8_t*>(&messageSize);
-                    header[1] = ptrSize[0];
-                    header[2] = ptrSize[1];
-                    header[3] = ptrSize[2];
-                    header[4] = ptrSize[3];
+                //
+                // Need to send a header before the message data that specifies
+                // the message type and the size of data to expect.
+                std::array<std::uint8_t, 5> header;
+                header[0] = static_cast<std::uint8_t>(item.value()->getType());
+                // Be sure to convert to network representation
+                std::uint32_t messageSize = htonl(static_cast<std::uint32_t>(serialized.size()));
+                std::uint8_t* ptrSize = reinterpret_cast<std::uint8_t*>(&messageSize);
+                header[1] = ptrSize[0];
+                header[2] = ptrSize[1];
+                header[3] = ptrSize[2];
+                header[4] = ptrSize[3];
 
-                    // Send the header
-                    m_socketServer->send(header.data(), header.size());
-                    // Send the message body
-                    m_socketServer->send(static_cast<void*>(serialized.data()), serialized.size());
-                }
-                else
-                {
-                    //
-                    // If no messages available to sent, then wait until an event
-                    // is fired letting us know one is now ready to send.
-                    std::unique_lock<std::mutex> lock(m_mutexEventSendMessages);
-                    m_eventSendMessages.wait(lock);
-                }
+                // Send the header
+                m_socketServer->send(header.data(), header.size());
+                // Send the message body
+                m_socketServer->send(static_cast<void*>(serialized.data()), serialized.size());
             }
-        });
-    }
-
-    void MessageQueueClient::initializeReceiver()
-    {
-        m_threadReceiver = std::thread([this]() {
-            while (m_keepRunning)
+            else
             {
-                if (m_selector.wait(sf::seconds(1.0f)))
+                //
+                // If no messages available to sent, then wait until an event
+                // is fired letting us know one is now ready to send.
+                std::unique_lock<std::mutex> lock(m_mutexEventSendMessages);
+                m_eventSendMessages.wait(lock);
+            }
+        }
+    });
+}
+
+// --------------------------------------------------------------
+//
+// Set's up a thread that listens for incoming messages on the socket
+// to the server.  If there is something to receive, the message is
+// read, parsed, and added to the queue of received messages.
+//
+// --------------------------------------------------------------
+void MessageQueueClient::initializeReceiver()
+{
+    m_threadReceiver = std::thread([this]() {
+        while (m_keepRunning)
+        {
+            if (m_selector.wait(sf::seconds(1.0f)))
+            {
+                if (m_selector.isReady(*m_socketServer))
                 {
-                    if (m_selector.isReady(*m_socketServer))
+                    std::array<messages::Type, 1> type;
+                    std::array<uint32_t, 1> size;
+                    std::size_t received;
+                    if (m_socketServer->receive(type.data(), 1, received) == sf::Socket::Done)
                     {
-                        std::array<messages::Type, 1> type;
-                        std::array<uint32_t, 1> size;
-                        std::size_t received;
-                        if (m_socketServer->receive(type.data(), 1, received) == sf::Socket::Done)
+                        if (m_socketServer->receive(size.data(), sizeof(std::uint32_t), received) == sf::Socket::Done)
                         {
-                            if (m_socketServer->receive(size.data(), sizeof(std::uint32_t), received) == sf::Socket::Done)
+                            // Convert back from network representation
+                            size[0] = ntohl(size[0]);
+                            std::string data;
+                            data.resize(size[0]);
+                            if (m_socketServer->receive(data.data(), size[0], received) == sf::Socket::Done)
                             {
-                                // Convert back from network representation
-                                size[0] = ntohl(size[0]);
-                                std::string data;
-                                data.resize(size[0]);
-                                if (m_socketServer->receive(data.data(), size[0], received) == sf::Socket::Done)
-                                {
-                                    auto message = m_messageCommand[type[0]]();
-                                    message->parseFromString(data);
-                                    std::lock_guard<std::mutex> lock(m_mutexReceivedMessages);
-                                    m_receivedMessages.push(message);
-                                }
+                                auto message = m_messageCommand[type[0]]();
+                                message->parseFromString(data);
+                                std::lock_guard<std::mutex> lock(m_mutexReceivedMessages);
+                                m_receivedMessages.push(message);
                             }
                         }
                     }
                 }
             }
-        });
-    }
-} // namespace messages
+        }
+    });
+}

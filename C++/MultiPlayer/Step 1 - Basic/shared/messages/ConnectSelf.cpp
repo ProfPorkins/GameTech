@@ -6,6 +6,11 @@
 
 namespace messages
 {
+    // -----------------------------------------------------------------
+    //
+    // Use protobuffers to serialize to an std::string
+    //
+    // -----------------------------------------------------------------
     std::string ConnectSelf::serializeToString() const
     {
         shared::Player pbPlayer;
@@ -24,6 +29,11 @@ namespace messages
         return pbPlayer.SerializeAsString();
     }
 
+    // -----------------------------------------------------------------
+    //
+    // Parse the protobuffer object from an std::string
+    //
+    // -----------------------------------------------------------------
     bool ConnectSelf::parseFromString(const std::string& source)
     {
         return m_pbPlayer.ParseFromString(source);

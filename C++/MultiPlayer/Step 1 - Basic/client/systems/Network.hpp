@@ -14,6 +14,12 @@
 
 namespace systems
 {
+    // --------------------------------------------------------------
+    //
+    // This system is used to process network messages that come from
+    // the server.
+    //
+    // --------------------------------------------------------------
     class Network : public System
     {
       public:

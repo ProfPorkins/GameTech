@@ -36,7 +36,7 @@ bool GameModel::initialize(sf::Vector2f viewSize)
 
 bool GameModel::initializeMessageQueue(std::string serverIP, std::uint16_t serverPort)
 {
-    m_mq = std::make_unique<messages::MessageQueueClient>();
+    m_mq = std::make_unique<MessageQueueClient>();
     return m_mq->initialize(serverIP, serverPort);
 }
 
