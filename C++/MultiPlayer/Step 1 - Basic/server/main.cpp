@@ -3,6 +3,9 @@
 #include <chrono>
 #include <google/protobuf/stubs/common.h>
 #include <iostream>
+#include <thread>
+
+const auto SIMULATION_UPDATE_RATE_MS = std::chrono::milliseconds(100);
 
 int main()
 {
@@ -33,6 +36,15 @@ int main()
         // the game model.
         auto currentTime = std::chrono::steady_clock::now();
         auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - previousTime);
+        //
+        // If we are running faster than the simulate update rate, then go
+        // to sleep for a bit so we don't burn up the CPU unnecessarily.
+        auto sleepTime = SIMULATION_UPDATE_RATE_MS - elapsedTime;
+        if (sleepTime > std::chrono::milliseconds(0))
+        {
+            std::this_thread::sleep_for(sleepTime);
+        }
+
         previousTime = currentTime;
 
         //
