@@ -1,9 +1,10 @@
 #pragma once
 
+#include "MessageQueueClient.hpp"
 #include "entities/Entity.hpp"
 #include "systems/KeyboardInput.hpp"
+#include "systems/Network.hpp"
 #include "systems/Renderer.hpp"
-#include "messages/MessageQueue.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window/Event.hpp>
@@ -22,7 +23,7 @@ class GameModel
     void update(const std::chrono::milliseconds elapsedTime, std::shared_ptr<sf::RenderTarget> renderTarget);
 
   private:
-      std::unique_ptr<messages::MessageQueue> m_mq;
+    std::unique_ptr<messages::MessageQueueClient> m_mq;
     // The purpose of this is to have a container that keeps the textures alive throughout the program
     std::unordered_set<std::shared_ptr<sf::Texture>> m_textures;
 
@@ -30,6 +31,7 @@ class GameModel
     entities::EntityMap m_entitiesKeyboardInput;
     entities::EntityMap m_entitiesRenderable;
 
+    std::unique_ptr<systems::Network> m_systemNetwork;
     std::unique_ptr<systems::KeyboardInput> m_systemKeyboardInput;
     std::unique_ptr<systems::Renderer> m_systemRender;
 

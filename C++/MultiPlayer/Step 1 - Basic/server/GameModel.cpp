@@ -13,6 +13,7 @@
 // --------------------------------------------------------------
 void GameModel::update(const std::chrono::milliseconds elapsedTime)
 {
+    (void)elapsedTime;
 }
 
 // --------------------------------------------------------------
@@ -23,8 +24,8 @@ void GameModel::update(const std::chrono::milliseconds elapsedTime)
 // --------------------------------------------------------------
 bool GameModel::initializeMessageQueue()
 {
-    m_mq = std::make_unique<messages::MessageQueue>();
-    return m_mq->initializeServer(3000, std::bind(&GameModel::clientConnected, this, std::placeholders::_1));
+    m_mq = std::make_unique<messages::MessageQueueServer>();
+    return m_mq->initialize(3000, std::bind(&GameModel::clientConnected, this, std::placeholders::_1));
 }
 
 // --------------------------------------------------------------

@@ -1,9 +1,17 @@
-#include "MessageQueue.hpp"
-#include "ConnectSelf.hpp"
+#include "MessageQueueServer.hpp"
+
+#include "messages/ConnectSelf.hpp"
 
 #include <array>
 #include <cstdint>
 #include <iostream>
+
+// For htonl and ntohl
+#ifdef _MSC_VER
+#include <winsock2.h>
+#else
+#include <sys/socket.h>
+#endif
 
 namespace messages
 {
@@ -15,7 +23,7 @@ namespace messages
     //  3. Send messages
     //
     // -----------------------------------------------------------------
-    bool MessageQueue::initializeServer(std::uint16_t listenPort, std::function<void(sf::Uint32)> onClientConnected)
+    bool MessageQueueServer::initialize(std::uint16_t listenPort, std::function<void(sf::Uint32)> onClientConnected)
     {
         m_onClientConnected = onClientConnected;
 
@@ -26,21 +34,7 @@ namespace messages
         return true;
     }
 
-    bool MessageQueue::initializeClient(std::string serverIP, std::uint16_t serverPort)
-    {
-        m_socketServer = std::make_unique<sf::TcpSocket>();
-        if (m_socketServer->connect(serverIP, serverPort) != sf::Socket::Done)
-        {
-            return false;
-        }
-
-        m_selector.add(*m_socketServer);
-        initializeClientReceiver();
-
-        return true;
-    }
-
-    void MessageQueue::shutdown()
+    void MessageQueueServer::shutdown()
     {
         m_keepRunning = false;
         m_listener.close();
@@ -53,7 +47,7 @@ namespace messages
     //  2. Signal the thread that performs the sending that a new message is available
     //
     // -----------------------------------------------------------------
-    void MessageQueue::sendMessage(sf::Uint32 clientId, std::shared_ptr<Message> message)
+    void MessageQueueServer::sendMessage(sf::Uint32 clientId, std::shared_ptr<Message> message)
     {
         {
             m_sendMessages.enqueue(std::make_tuple(clientId, message));
@@ -61,7 +55,7 @@ namespace messages
         }
     }
 
-    void MessageQueue::initializeListener(std::uint16_t listenPort)
+    void MessageQueueServer::initializeListener(std::uint16_t listenPort)
     {
         m_threadListener = std::thread([listenPort, this]() {
             if (m_listener.listen(listenPort) != sf::Socket::Done)
@@ -97,7 +91,7 @@ namespace messages
         });
     }
 
-    void MessageQueue::initializeSender()
+    void MessageQueueServer::initializeSender()
     {
         m_threadSender = std::thread([this]() {
             while (m_keepRunning)
@@ -116,7 +110,7 @@ namespace messages
                     // the message type and the size of data to expect.
                     std::array<std::uint8_t, 5> header;
                     header[0] = static_cast<std::uint8_t>(message->getType());
-                    std::uint32_t messageSize = serialized.size();
+                    std::uint32_t messageSize = htonl(static_cast<std::uint32_t>(serialized.size()));
                     std::uint8_t* ptrSize = reinterpret_cast<std::uint8_t*>(&messageSize);
                     header[1] = ptrSize[0];
                     header[2] = ptrSize[1];
@@ -140,7 +134,7 @@ namespace messages
         });
     }
 
-    void MessageQueue::initializeReceiver()
+    void MessageQueueServer::initializeReceiver()
     {
         m_threadReceiver = std::thread([this]() {
             while (m_keepRunning)
@@ -164,43 +158,4 @@ namespace messages
         });
     }
 
-    void MessageQueue::initializeClientReceiver()
-    {
-        m_threadReceiver = std::thread([this]() {
-            while (m_keepRunning)
-            {
-                if (m_selector.wait(sf::seconds(1.0f)))
-                {
-                    if (m_selector.isReady(*m_socketServer))
-                    {
-                        std::array<messages::Type, 1> type;
-                        std::array<uint32_t, 1> size;
-                        std::size_t received;
-                        if (m_socketServer->receive(type.data(), 1, received) == sf::Socket::Done)
-                        {
-                            std::cout << "type: " << static_cast<int>(type[0]) << ", " << received << std::endl;
-                            if (m_socketServer->receive(size.data(), sizeof(std::uint32_t), received) == sf::Socket::Done)
-                            {
-                                std::cout << "size: " << size[0] << ", " << received << std::endl;
-                                std::string data;
-                                data.resize(size[0]);
-                                if (m_socketServer->receive(data.data(), size[0], received) == sf::Socket::Done)
-                                {
-                                    std::cout << "received: " << received << std::endl;
-                                    switch (type[0])
-                                    {
-                                        case messages::Type::ConnectSelf:
-                                            auto message = std::make_unique<messages::ConnectSelf>();
-                                            message->parseFromString(data);
-                                            break;
-                                    }
-
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        });
-    }
 } // namespace messages

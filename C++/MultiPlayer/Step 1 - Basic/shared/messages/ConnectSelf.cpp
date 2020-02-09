@@ -1,6 +1,5 @@
 #include "ConnectSelf.hpp"
 
-#include "Player.pb.h"
 #include "components/Movement.hpp"
 #include "components/Position.hpp"
 #include "components/Size.hpp"
@@ -27,19 +26,7 @@ namespace messages
 
     bool ConnectSelf::parseFromString(const std::string& source)
     {
-        shared::Player pbPlayer;
-
-        if (pbPlayer.ParseFromString(source))
-        {
-            auto c = pbPlayer.position().center();
-            auto s = pbPlayer.size().size();
-            auto o = pbPlayer.position().orientation();
-            auto mr = pbPlayer.movement().moverate();
-            auto rr = pbPlayer.movement().rotaterate();
-            return true;
-        }
-
-        return false;
+        return m_pbPlayer.ParseFromString(source);
     }
 
 } // namespace messages

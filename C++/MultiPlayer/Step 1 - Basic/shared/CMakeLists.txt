@@ -12,17 +12,15 @@ set(PROTOBUF_FILES
     messages/Player.proto)
 
 set(SHARED_MESSAGES_HEADERS
-    messages/ConcurrentQueue.hpp
+    ConcurrentQueue.hpp
     messages/ConnectSelf.hpp
     messages/Message.hpp
-    messages/MessageQueue.hpp
     messages/MessageTypes.hpp
 )
 
 set(SHARED_MESSAGES_SOURCES
     messages/ConnectSelf.cpp
     messages/Message.cpp
-    messages/MessageQueue.cpp
 )
 
 set(SHARED_ENTITY_HEADERS
@@ -108,6 +106,7 @@ set_property(TARGET Shared PROPERTY CXX_STANDARD 17)
 #
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     target_compile_options(Shared PRIVATE /W4 /permissive-)
+#    target_link_libraries(Shared PRIVATE ws2_32)
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     target_compile_options(Shared PRIVATE -O3 -Wall -Wextra -pedantic) # -Wconversion -Wsign-conversion
 endif()

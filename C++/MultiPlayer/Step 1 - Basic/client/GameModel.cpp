@@ -19,25 +19,25 @@ bool GameModel::initialize(sf::Vector2f viewSize)
 {
     //
     // Initialize the various sytems
+    m_systemNetwork = std::make_unique<systems::Network>(
+        std::bind(&GameModel::addEntity, this, std::placeholders::_1),
+        m_textures, viewSize);
+
     auto inputMapping = {
         std::make_tuple(components::Input::Type::TurnLeft, sf::Keyboard::A),
         std::make_tuple(components::Input::Type::TurnRight, sf::Keyboard::D),
         std::make_tuple(components::Input::Type::Forward, sf::Keyboard::W)};
     m_systemKeyboardInput = std::make_unique<systems::KeyboardInput>(inputMapping);
-    m_systemRender = std::make_unique<systems::Renderer>();
 
-    //
-    // Create the space ship entities we'll use for the players
-    addEntity(entities::createPlayerShip("assets/playerShip1_blue.png", viewSize, sf::Vector2f(-0.25f, 0.0f), 0.05f, m_textures));
-    addEntity(entities::createPlayerShip("assets/playerShip1_red.png", viewSize, sf::Vector2f(0.25f, 0.0f), 0.05f, m_textures));
+    m_systemRender = std::make_unique<systems::Renderer>();
 
     return true;
 }
 
 bool GameModel::initializeMessageQueue(std::string serverIP, std::uint16_t serverPort)
 {
-    m_mq = std::make_unique<messages::MessageQueue>();
-    return m_mq->initializeClient(serverIP, serverPort);
+    m_mq = std::make_unique<messages::MessageQueueClient>();
+    return m_mq->initialize(serverIP, serverPort);
 }
 
 void GameModel::signalKeyPressed(sf::Event::KeyEvent event)
@@ -59,6 +59,11 @@ void GameModel::signalKeyReleased(sf::Event::KeyEvent event)
 // --------------------------------------------------------------
 void GameModel::update(const std::chrono::milliseconds elapsedTime, std::shared_ptr<sf::RenderTarget> renderTarget)
 {
+    //
+    // Process the network system first, it is like local input, so should
+    // be processed early on.
+    m_systemNetwork->update(elapsedTime, m_mq->getMessages());
+
     //
     // Only have two systems right now, KeyboardInput and Rendering
     m_systemKeyboardInput->update(elapsedTime);

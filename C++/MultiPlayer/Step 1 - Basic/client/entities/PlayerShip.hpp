@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Player.pb.h"
 #include "entities/Entity.hpp"
 
 #include <SFML/Graphics/Texture.hpp>
@@ -17,4 +18,5 @@
 namespace entities
 {
     std::shared_ptr<Entity> createPlayerShip(std::string textureFile, sf::Vector2f viewSize, sf::Vector2f position, float size, std::unordered_set<std::shared_ptr<sf::Texture>>& textures);
-}
+    std::shared_ptr<Entity> createPlayerSelf(const shared::Player& pbPlayer, sf::Vector2f viewSize, std::unordered_set<std::shared_ptr<sf::Texture>>& textures);
+} // namespace entities

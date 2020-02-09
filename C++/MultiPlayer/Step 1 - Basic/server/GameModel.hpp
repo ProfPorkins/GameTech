@@ -1,7 +1,7 @@
 #pragma once
 
+#include "MessageQueueServer.hpp"
 #include "entities/Entity.hpp"
-#include "messages/MessageQueue.hpp"
 
 #include <SFML/Network.hpp>
 #include <chrono>
@@ -16,7 +16,7 @@ class GameModel
     void shutdown();
 
   private:
-    std::unique_ptr<messages::MessageQueue> m_mq;
+    std::unique_ptr<messages::MessageQueueServer> m_mq;
     std::unordered_set<sf::Uint32> m_players;
     entities::EntityMap m_entities;
 

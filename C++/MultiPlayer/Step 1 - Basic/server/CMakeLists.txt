@@ -7,9 +7,11 @@ project(Server)
 set(SERVER_SOURCE_FILES
     main.cpp
     GameModel.cpp
+    MessageQueueServer.cpp
     )
 set(SERVER_HEADER_FILES 
     GameModel.hpp
+    MessageQueueServer.hpp
     )
 
 set(SERVER_ENTITY_HEADERS
@@ -73,8 +75,10 @@ set_property(TARGET Server PROPERTY CXX_STANDARD 17)
 #
 # Enable a lot of warnings, forcing better code to be written
 #
+unset(SOCKET_LIBRARY)
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     target_compile_options(Server PRIVATE /W4 /permissive-)
+    set(SOCKET_LIBRARY ws2_32)
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     target_compile_options(Server PRIVATE -O3 -Wall -Wextra -pedantic) # -Wconversion -Wsign-conversion
 endif()
@@ -87,4 +91,4 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 endif()
 
 
-target_link_libraries(Server Shared sfml-main sfml-graphics sfml-audio sfml-system sfml-window sfml-network)
+target_link_libraries(Server Shared sfml-main sfml-graphics sfml-audio sfml-system sfml-window sfml-network ${SOCKET_LIBRARY})

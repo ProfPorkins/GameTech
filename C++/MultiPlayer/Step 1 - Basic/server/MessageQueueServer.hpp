@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ConcurrentQueue.hpp"
-#include "Message.hpp"
+#include "messages/Message.hpp"
 
 #include <SFML/Network.hpp>
 #include <condition_variable>
@@ -15,11 +15,10 @@
 
 namespace messages
 {
-    class MessageQueue
+    class MessageQueueServer
     {
       public:
-        bool initializeServer(std::uint16_t listenPort, std::function<void(sf::Uint32)> onClientConnected);
-        bool initializeClient(std::string serverIP, std::uint16_t serverPort);
+        bool initialize(std::uint16_t listenPort, std::function<void(sf::Uint32)> onClientConnected);
         void shutdown();
 
         void sendMessage(sf::Uint32 clientId, std::shared_ptr<Message> message);
@@ -29,6 +28,7 @@ namespace messages
         std::thread m_threadListener;
         std::thread m_threadSender;
         std::thread m_threadReceiver;
+        std::unordered_map<messages::Type, std::function<std::shared_ptr<messages::Message>(void)>> m_messageCommand;
 
         ConcurrentQueue<std::tuple<sf::Uint32, std::shared_ptr<Message>>> m_sendMessages;
         std::mutex m_mutexSendMessages;
@@ -47,6 +47,5 @@ namespace messages
         void initializeListener(std::uint16_t listenPort);
         void initializeSender();
         void initializeReceiver();
-        void initializeClientReceiver();
     };
 } // namespace messages
