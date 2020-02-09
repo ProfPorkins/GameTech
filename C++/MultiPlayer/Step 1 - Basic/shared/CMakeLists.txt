@@ -11,6 +11,20 @@ set(PROTOBUF_FILES
     messages/Vector2f.proto
     messages/Player.proto)
 
+set(SHARED_MESSAGES_HEADERS
+    messages/ConcurrentQueue.hpp
+    messages/ConnectSelf.hpp
+    messages/Message.hpp
+    messages/MessageQueue.hpp
+    messages/MessageTypes.hpp
+)
+
+set(SHARED_MESSAGES_SOURCES
+    messages/ConnectSelf.cpp
+    messages/Message.cpp
+    messages/MessageQueue.cpp
+)
+
 set(SHARED_ENTITY_HEADERS
     entities/Entity.hpp
     )
@@ -57,8 +71,8 @@ source_group("Systems\\Header Files" FILES ${SHARED_SYSTEMS_HEADERS})
 source_group("Systems\\Source Files" FILES ${SHARED_SYSTEMS_SOURCES})
 
 source_group("Messages\\ProtoFiles" FILES ${PROTOBUF_FILES})
-source_group("Messages\\Header Files" FILES ${PROTOBUF_HEADERS})
-source_group("Messages\\Source Files" FILES ${PROTOBUF_SOURCES})
+source_group("Messages\\Header Files" FILES ${PROTOBUF_HEADERS} ${SHARED_MESSAGES_HEADERS})
+source_group("Messages\\Source Files" FILES ${PROTOBUF_SOURCES} ${SHARED_MESSAGES_SOURCES})
 
 #
 # Need a list of all code files for convenience
@@ -70,6 +84,8 @@ set(SHARED_CODE_FILES
     ${SHARED_ENTITY_SOURCES}
     ${SHARED_SYSTEMS_HEADERS}
     ${SHARED_SYSTEMS_SOURCES}
+    ${SHARED_MESSAGES_HEADERS}
+    ${SHARED_MESSAGES_SOURCES}
     )
 
 #
@@ -77,13 +93,10 @@ set(SHARED_CODE_FILES
 #
 add_library(Shared STATIC ${SHARED_CODE_FILES} ${PROTOBUF_HEADERS} ${PROTOBUF_SOURCES})
 target_link_libraries(Shared ${Protobuf_LIBRARIES})
-#
-# This gets the /build/shared folders that include the generated files visible to the projects
 target_include_directories(Shared PUBLIC ${Protobuf_INCLUDE_DIRS})
 
 set(SHARED_CODE_FILES ${SHARED_CODE_FILES} PARENT_SCOPE)    # Exporting to parent scope for clang-format
 target_include_directories(Shared PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-
 
 #
 # Want the C++ 17 standard for our project

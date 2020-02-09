@@ -32,6 +32,8 @@ include_directories(ThirdParty/ctti/include)
 # ------------------------ Add the Shared Project ------------------------
 #
 add_subdirectory(shared)
+# This gets the /build/shared folders that include the generated files visible to the project
+target_include_directories(Shared PUBLIC ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/shared)
 add_dependencies(Shared sfml-main sfml-graphics sfml-audio sfml-system sfml-window sfml-network)
 
 #
@@ -39,6 +41,7 @@ add_dependencies(Shared sfml-main sfml-graphics sfml-audio sfml-system sfml-wind
 #
 add_subdirectory(server)
 target_include_directories(Server PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/shared)
+# This gets the /build/shared folders that include the generated files visible to the project
 target_include_directories(Server PUBLIC ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/shared)
 add_dependencies(Server Shared protobuf::libprotobuf sfml-main sfml-graphics sfml-audio sfml-system sfml-window sfml-network)
 
@@ -47,6 +50,8 @@ add_dependencies(Server Shared protobuf::libprotobuf sfml-main sfml-graphics sfm
 #
 add_subdirectory(client)
 target_include_directories(Client PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/shared)
+# This gets the /build/shared folders that include the generated files visible to the project
+target_include_directories(Client PUBLIC ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/shared)
 add_dependencies(Client Shared Server protobuf::libprotobuf sfml-main sfml-graphics sfml-audio sfml-system sfml-window sfml-network)
 
 #

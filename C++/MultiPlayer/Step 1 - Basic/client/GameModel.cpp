@@ -15,10 +15,8 @@
 // loading the art assets.
 //
 // --------------------------------------------------------------
-bool GameModel::initialize(std::unique_ptr<sf::TcpSocket> socket, sf::Vector2f viewSize)
+bool GameModel::initialize(sf::Vector2f viewSize)
 {
-    m_socket = std::move(socket);
-
     //
     // Initialize the various sytems
     auto inputMapping = {
@@ -33,16 +31,13 @@ bool GameModel::initialize(std::unique_ptr<sf::TcpSocket> socket, sf::Vector2f v
     addEntity(entities::createPlayerShip("assets/playerShip1_blue.png", viewSize, sf::Vector2f(-0.25f, 0.0f), 0.05f, m_textures));
     addEntity(entities::createPlayerShip("assets/playerShip1_red.png", viewSize, sf::Vector2f(0.25f, 0.0f), 0.05f, m_textures));
 
-    //
-    // NOTE: Quick hack for now, just to get something being received
-    char data[100];
-    std::size_t received;
-    if (m_socket->receive(data, 100, received) == sf::Socket::Done)
-    {
-
-    }
-
     return true;
+}
+
+bool GameModel::initializeMessageQueue(std::string serverIP, std::uint16_t serverPort)
+{
+    m_mq = std::make_unique<messages::MessageQueue>();
+    return m_mq->initializeClient(serverIP, serverPort);
 }
 
 void GameModel::signalKeyPressed(sf::Event::KeyEvent event)

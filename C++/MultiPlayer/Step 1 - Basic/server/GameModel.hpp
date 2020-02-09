@@ -1,25 +1,26 @@
 #pragma once
 
 #include "entities/Entity.hpp"
+#include "messages/MessageQueue.hpp"
 
 #include <SFML/Network.hpp>
 #include <chrono>
 #include <memory>
-#include <mutex>
-#include <unordered_map>
+#include <unordered_set>
 
 class GameModel
 {
   public:
     void update(const std::chrono::milliseconds elapsedTime);
-
-    void clientConnected(std::unique_ptr<sf::TcpSocket> socket);
+    bool initializeMessageQueue();
+    void shutdown();
 
   private:
-    std::mutex m_mutexSockets;
-    std::unordered_map<sf::Uint32, std::unique_ptr<sf::TcpSocket>> m_sockets;
+    std::unique_ptr<messages::MessageQueue> m_mq;
+    std::unordered_set<sf::Uint32> m_players;
     entities::EntityMap m_entities;
 
+    void clientConnected(sf::Uint32 clientId);
     void addEntity(std::shared_ptr<entities::Entity> entity);
     void removeEntity(decltype(entities::Entity().getId()) entityId);
 };

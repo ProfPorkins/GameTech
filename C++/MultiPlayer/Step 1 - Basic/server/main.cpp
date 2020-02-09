@@ -1,13 +1,8 @@
 #include "GameModel.hpp"
 
-#include <SFML/Network.hpp>
 #include <chrono>
+#include <google/protobuf/stubs/common.h>
 #include <iostream>
-#include <memory>
-#include <thread>
-#include <utility>
-
-#include "Player.pb.h"
 
 int main()
 {
@@ -17,36 +12,12 @@ int main()
     GameModel model;
 
     //
-    // Initialize SFML TCP communication
-    auto done = bool{false};
-    std::thread thread = std::thread([&done, &model]() {
-        sf::TcpListener listener;
-        if (listener.listen(3000) != sf::Socket::Done)
-        {
-            std::cout << "error initializing network socket" << std::endl;
-            exit(0);
-        }
-        else
-        {
-            std::cout << "successfully initialized sockets" << std::endl;
-        }
-
-        while (!done)
-        {
-            auto socket = std::make_unique<sf::TcpSocket>();
-            if (listener.accept(*socket) != sf::Socket::Done)
-            {
-                std::cout << "error in accepting client connection" << std::endl;
-            }
-            else
-            {
-                std::cout << "new client connection accepted" << std::endl;
-                model.clientConnected(std::move(socket));
-            }
-        }
-
-        std::cout << "incoming network connection listener shutdown" << std::endl;
-    });
+    // Get the network message queue up and running
+    if (!model.initializeMessageQueue())
+    {
+        std::cout << "Failed to initialize the message queue" << std::endl;
+        exit(0);
+    }
 
     //
     // Grab an initial time-stamp to get the elapsed time working
@@ -70,10 +41,10 @@ int main()
     }
 
     //
-    // Tell the incoming network connection thread to shutdown
-    done = true;
-    thread.join();
-
+    // Gracefully shutdown the game model
+    model.shutdown();
+    //
+    // Do the same for the Google Protocol Buffers library
     google::protobuf::ShutdownProtobufLibrary();
 
     return 0;

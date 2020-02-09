@@ -1,8 +1,8 @@
 #include "Player.hpp"
 
+#include "components/Input.hpp"
 #include "components/Movement.hpp"
 #include "components/Position.hpp"
-#include "components/Input.hpp"
 #include "components/Size.hpp"
 
 namespace entities
