@@ -3,7 +3,6 @@
 #include "entities/Entity.hpp"
 
 #include <cmath>
-#include <iostream>
 
 namespace systems
 {

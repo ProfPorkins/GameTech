@@ -4,7 +4,6 @@
 
 #include <array>
 #include <cstdint>
-#include <iostream>
 
 // For htonl and ntohl
 #ifdef _MSC_VER
