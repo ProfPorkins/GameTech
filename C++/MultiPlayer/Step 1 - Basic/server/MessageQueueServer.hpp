@@ -24,13 +24,27 @@
 class MessageQueueServer
 {
   public:
-    bool initialize(std::uint16_t listenPort, std::function<void(sf::Uint32)> onClientConnected);
+      MessageQueueServer(const MessageQueueServer&) = delete;
+      MessageQueueServer(MessageQueueServer&&) = delete;
+      MessageQueueServer& operator=(const MessageQueueServer&) = delete;
+      MessageQueueServer& operator=(MessageQueueServer&&) = delete;
+
+      static auto& instance()
+      {
+          static MessageQueueServer instance;
+          return instance;
+      }
+
+      bool initialize(std::uint16_t listenPort);
+      void onClientConnected(std::function<void(sf::Uint32)> onClientConnected) { m_onClientConnected = onClientConnected; }
     void shutdown();
 
     void sendMessage(sf::Uint32 clientId, std::shared_ptr<messages::Message> message);
     std::queue<std::shared_ptr<messages::Message>> getMessages();
 
   private:
+      MessageQueueServer() {}
+
     bool m_keepRunning{true};
     std::thread m_threadListener;
     std::thread m_threadSender;

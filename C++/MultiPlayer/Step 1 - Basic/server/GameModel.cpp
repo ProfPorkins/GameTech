@@ -18,14 +18,13 @@ void GameModel::update(const std::chrono::milliseconds elapsedTime)
 
 // --------------------------------------------------------------
 //
-// Create the message queue and setup notifications for when new
-// clients connect.
+// Setup notifications for when new clients connect.
 //
 // --------------------------------------------------------------
-bool GameModel::initializeMessageQueue()
+bool GameModel::initialize()
 {
-    m_mq = std::make_unique<MessageQueueServer>();
-    return m_mq->initialize(3000, std::bind(&GameModel::clientConnected, this, std::placeholders::_1));
+    MessageQueueServer::instance().onClientConnected(std::bind(&GameModel::clientConnected, this, std::placeholders::_1));
+    return true;
 }
 
 // --------------------------------------------------------------
@@ -35,7 +34,6 @@ bool GameModel::initializeMessageQueue()
 // --------------------------------------------------------------
 void GameModel::shutdown()
 {
-    m_mq->shutdown();
 }
 
 // --------------------------------------------------------------
@@ -53,7 +51,7 @@ void GameModel::clientConnected(sf::Uint32 clientId)
     auto player = entities::createPlayer(sf::Vector2f(0.0f, 0.0f), 0.05f, 0.0002f, 180.0f / 1000);
     addEntity(player);
 
-    m_mq->sendMessage(clientId, std::make_shared<messages::ConnectSelf>(player));
+    MessageQueueServer::instance().sendMessage(clientId, std::make_shared<messages::ConnectSelf>(player));
 }
 
 // --------------------------------------------------------------

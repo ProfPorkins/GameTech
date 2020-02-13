@@ -12,11 +12,10 @@ class GameModel
 {
   public:
     void update(const std::chrono::milliseconds elapsedTime);
-    bool initializeMessageQueue();
+    bool initialize();
     void shutdown();
 
   private:
-    std::unique_ptr<MessageQueueServer> m_mq;
     std::unordered_set<sf::Uint32> m_players;
     entities::EntityMap m_entities;
 

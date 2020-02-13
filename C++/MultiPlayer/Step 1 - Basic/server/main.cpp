@@ -1,4 +1,5 @@
 #include "GameModel.hpp"
+#include "MessageQueueServer.hpp"
 
 #include <chrono>
 #include <google/protobuf/stubs/common.h>
@@ -11,12 +12,13 @@ int main()
 {
     GOOGLE_PROTOBUF_VERIFY_VERSION;
     //
-    // Get the game model initialized and ready to run
+    // Get the network messaging service and game model initialized and ready to run
+    MessageQueueServer::instance().initialize(3000);
     GameModel model;
 
     //
     // Get the network message queue up and running
-    if (!model.initializeMessageQueue())
+    if (!model.initialize())
     {
         std::cout << "Failed to initialize the message queue" << std::endl;
         exit(0);
@@ -53,7 +55,8 @@ int main()
     }
 
     //
-    // Gracefully shutdown the game model
+    // Gracefully shutdown the network message service and game model
+    MessageQueueServer::instance().shutdown();
     model.shutdown();
     //
     // Do the same for the Google Protocol Buffers library

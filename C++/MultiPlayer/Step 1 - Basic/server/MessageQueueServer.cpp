@@ -21,10 +21,8 @@
 //  3. Sending of messages
 //
 // -----------------------------------------------------------------
-bool MessageQueueServer::initialize(std::uint16_t listenPort, std::function<void(sf::Uint32)> onClientConnected)
+bool MessageQueueServer::initialize(std::uint16_t listenPort)
 {
-    m_onClientConnected = onClientConnected;
-
     initializeListener(listenPort);
     initializeSender();
     initializeReceiver();
