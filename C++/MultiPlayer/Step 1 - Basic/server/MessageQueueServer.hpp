@@ -19,31 +19,32 @@
 // This provides the network message communication for the server.
 // All connections and messages to and from clients are served here.
 //
-// TODO: This should be turned into a singleton
+// Note: This is a Singleton
+//
 // --------------------------------------------------------------
 class MessageQueueServer
 {
   public:
-      MessageQueueServer(const MessageQueueServer&) = delete;
-      MessageQueueServer(MessageQueueServer&&) = delete;
-      MessageQueueServer& operator=(const MessageQueueServer&) = delete;
-      MessageQueueServer& operator=(MessageQueueServer&&) = delete;
+    MessageQueueServer(const MessageQueueServer&) = delete;
+    MessageQueueServer(MessageQueueServer&&) = delete;
+    MessageQueueServer& operator=(const MessageQueueServer&) = delete;
+    MessageQueueServer& operator=(MessageQueueServer&&) = delete;
 
-      static auto& instance()
-      {
-          static MessageQueueServer instance;
-          return instance;
-      }
+    static auto& instance()
+    {
+        static MessageQueueServer instance;
+        return instance;
+    }
 
-      bool initialize(std::uint16_t listenPort);
-      void onClientConnected(std::function<void(sf::Uint32)> onClientConnected) { m_onClientConnected = onClientConnected; }
+    bool initialize(std::uint16_t listenPort);
+    void onClientConnected(std::function<void(sf::Uint32)> onClientConnected) { m_onClientConnected = onClientConnected; }
     void shutdown();
 
     void sendMessage(sf::Uint32 clientId, std::shared_ptr<messages::Message> message);
     std::queue<std::shared_ptr<messages::Message>> getMessages();
 
   private:
-      MessageQueueServer() {}
+    MessageQueueServer() {}
 
     bool m_keepRunning{true};
     std::thread m_threadListener;

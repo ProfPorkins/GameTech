@@ -56,8 +56,9 @@ int main()
 
     //
     // Gracefully shutdown the network message service and game model
-    MessageQueueServer::instance().shutdown();
     model.shutdown();
+    MessageQueueServer::instance().shutdown();
+
     //
     // Do the same for the Google Protocol Buffers library
     google::protobuf::ShutdownProtobufLibrary();
