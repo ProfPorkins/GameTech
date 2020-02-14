@@ -12,8 +12,10 @@ namespace messages
     // -----------------------------------------------------------------
     enum class Type : std::uint8_t
     {
-        ConnectSelf,
-        ConnectOther,
+        ConnectAck,
+        Join,
+        NotifyJoinSelf,
+        NotifyJoinOther,
         DisconnectOther,
         UpdateSelf,
         UpdateOther,

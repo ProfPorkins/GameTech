@@ -1,6 +1,7 @@
 #include "MessageQueueClient.hpp"
 
-#include "messages/ConnectSelf.hpp"
+#include "messages/JoinSelf.hpp"
+#include "messages/ConnectAck.hpp"
 
 #include <array>
 #include <cstdint>
@@ -31,8 +32,11 @@ bool MessageQueueClient::initialize(std::string serverIP, std::uint16_t serverPo
 
     // Register the message types with the handler that can create a message object
     // of the appropriate type.
-    m_messageCommand[messages::Type::ConnectSelf] = []() {
-        return std::make_shared<messages::ConnectSelf>();
+    m_messageCommand[messages::Type::ConnectAck] = []() {
+        return std::make_shared<messages::ConnectAck>();
+    };
+    m_messageCommand[messages::Type::NotifyJoinSelf] = []() {
+        return std::make_shared<messages::JoinSelf>();
     };
 
     initializeSender();

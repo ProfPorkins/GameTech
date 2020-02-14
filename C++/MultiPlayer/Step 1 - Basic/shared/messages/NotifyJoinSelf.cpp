@@ -1,4 +1,4 @@
-#include "ConnectSelf.hpp"
+#include "NotifyJoinSelf.hpp"
 
 #include "components/Movement.hpp"
 #include "components/Position.hpp"
@@ -11,7 +11,7 @@ namespace messages
     // Use protobuffers to serialize to an std::string
     //
     // -----------------------------------------------------------------
-    std::string ConnectSelf::serializeToString() const
+    std::string NotifyJoinSelf::serializeToString() const
     {
         shared::Player pbPlayer;
 
@@ -34,7 +34,7 @@ namespace messages
     // Parse the protobuffer object from an std::string
     //
     // -----------------------------------------------------------------
-    bool ConnectSelf::parseFromString(const std::string& source)
+    bool NotifyJoinSelf::parseFromString(const std::string& source)
     {
         return m_pbPlayer.ParseFromString(source);
     }

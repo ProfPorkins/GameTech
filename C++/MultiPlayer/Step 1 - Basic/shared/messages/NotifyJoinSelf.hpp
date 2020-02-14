@@ -17,20 +17,20 @@ namespace messages
 {
     // -----------------------------------------------------------------
     //
-    // This message is send from the server to a client after it connects,
-    // informing it of the location of the player.
+    // This message is send from the server to a client after it sends
+    // a join request.
     //
     // -----------------------------------------------------------------
-    class ConnectSelf : public Message
+    class NotifyJoinSelf : public Message
     {
       public:
-        ConnectSelf(std::shared_ptr<entities::Entity> player) :
-            Message(Type::ConnectSelf),
+          NotifyJoinSelf(std::shared_ptr<entities::Entity> player) :
+            Message(Type::ConnectAck),
             m_player(player)
         {
         }
-        ConnectSelf() :
-            Message(Type::ConnectSelf)
+          NotifyJoinSelf() :
+            Message(Type::ConnectAck)
         {
         }
 

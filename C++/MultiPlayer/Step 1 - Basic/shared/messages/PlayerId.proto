@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package shared;
+
+message PlayerId {
+    uint32 id = 1;
+}

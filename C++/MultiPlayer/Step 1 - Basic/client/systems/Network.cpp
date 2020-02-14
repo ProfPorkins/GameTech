@@ -18,9 +18,14 @@ namespace systems
     {
         //
         // Build a command map of message types to operations
-        m_commandMap[messages::Type::ConnectSelf] = [this](std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
+        m_commandMap[messages::Type::ConnectAck] = [this](std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
             // Not completely in love with having to do a static_pointer_case, but living with it for now
-            handleConnectSelf(elapsedTime, std::static_pointer_cast<messages::ConnectSelf>(message));
+            handleConnectAck(elapsedTime, std::static_pointer_cast<messages::ConnectAck>(message));
+        };
+
+        m_commandMap[messages::Type::NotifyJoinSelf] = [this](std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
+            // Not completely in love with having to do a static_pointer_case, but living with it for now
+            handleNotifyJoinSelf(elapsedTime, std::static_pointer_cast<messages::NotifyJoinSelf>(message));
         };
     }
 
@@ -45,7 +50,13 @@ namespace systems
     // created and added to the client game simulation.
     //
     // --------------------------------------------------------------
-    void Network::handleConnectSelf(std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::ConnectSelf> message)
+    void Network::handleConnectAck(std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::ConnectAck> message)
+    {
+        //(void)elapsedTime;
+        m_playerId = message->getPBPlayerId().id();
+    }
+
+    void Network::handleNotifyJoinSelf(std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::NotifyJoinSelf> message)
     {
         (void)elapsedTime;
         auto playerSelf = entities::createPlayerSelf(message->getPBPlayer(), m_viewSize, m_textures);

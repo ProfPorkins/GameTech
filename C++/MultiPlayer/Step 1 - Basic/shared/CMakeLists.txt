@@ -6,6 +6,7 @@ project(Shared)
 #
 set(PROTOBUF_FILES
     messages/Movement.proto
+    messages/PlayerId.proto
     messages/Position.proto
     messages/Size.proto
     messages/Vector2f.proto
@@ -13,13 +14,15 @@ set(PROTOBUF_FILES
 
 set(SHARED_MESSAGES_HEADERS
     ConcurrentQueue.hpp
-    messages/ConnectSelf.hpp
+    messages/ConnectAck.hpp
+    messages/NotifyJoinSelf.hpp
     messages/Message.hpp
     messages/MessageTypes.hpp
 )
 
 set(SHARED_MESSAGES_SOURCES
-    messages/ConnectSelf.cpp
+    messages/ConnectAck.cpp
+    messages/NotifyJoinSelf.cpp
 )
 
 set(SHARED_ENTITY_HEADERS

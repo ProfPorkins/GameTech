@@ -1,7 +1,5 @@
 #include "MessageQueueServer.hpp"
 
-#include "messages/ConnectSelf.hpp"
-
 #include <array>
 #include <cstdint>
 #include <iostream>

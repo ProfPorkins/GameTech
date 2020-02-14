@@ -1,6 +1,7 @@
 #pragma once
 
-#include "messages/ConnectSelf.hpp"
+#include "messages/ConnectAck.hpp"
+#include "messages/NotifyJoinSelf.hpp"
 #include "messages/Message.hpp"
 #include "systems/System.hpp"
 
@@ -28,6 +29,7 @@ namespace systems
         void update(std::chrono::milliseconds elapsedTime, std::queue<std::shared_ptr<messages::Message>> messages);
 
       private:
+          sf::Uint32 m_playerId;
         // TODO: This is still just a temporary hack until I get something better done
         std::unordered_set<std::shared_ptr<sf::Texture>>& m_textures;
         sf::Vector2f m_viewSize;
@@ -35,6 +37,7 @@ namespace systems
         std::function<void(std::shared_ptr<entities::Entity>)> m_addEntity;
         std::unordered_map<messages::Type, std::function<void(std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message>)>> m_commandMap;
 
-        void handleConnectSelf(std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::ConnectSelf> message);
+        void handleConnectAck(std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::ConnectAck> message);
+        void handleNotifyJoinSelf(std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::NotifyJoinSelf> message);
     };
 } // namespace systems

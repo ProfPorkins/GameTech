@@ -1,5 +1,6 @@
 syntax = "proto3";
 
+import public "PlayerId.proto";
 import public "Movement.proto";
 import public "Size.proto";
 import public "Position.proto";
@@ -7,7 +8,9 @@ import public "Position.proto";
 package shared;
 
 message Player {
-    Position position = 1;
-    Size size = 2;
-    Movement movement = 3;
+    PlayerId id = 1;
+    Position position = 2;
+    Size size = 3;
+    Movement movement = 4;
 }
+
