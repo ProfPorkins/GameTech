@@ -1,6 +1,8 @@
 #include "Network.hpp"
 
+#include "MessageQueueClient.hpp"
 #include "entities/PlayerShip.hpp"
+#include "messages/Join.hpp"
 
 namespace systems
 {
@@ -52,8 +54,11 @@ namespace systems
     // --------------------------------------------------------------
     void Network::handleConnectAck(std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::ConnectAck> message)
     {
-        //(void)elapsedTime;
+        (void)elapsedTime;
         m_playerId = message->getPBPlayerId().id();
+        //
+        // Now, send a Join message back to the server so we can get into the game!
+        MessageQueueClient::instance().sendMessage(std::make_shared<messages::Join>());
     }
 
     void Network::handleNotifyJoinSelf(std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::NotifyJoinSelf> message)

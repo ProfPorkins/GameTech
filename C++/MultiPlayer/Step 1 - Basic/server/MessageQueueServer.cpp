@@ -1,5 +1,7 @@
 #include "MessageQueueServer.hpp"
 
+#include "messages/Join.hpp"
+
 #include <array>
 #include <cstdint>
 #include <iostream>
@@ -21,6 +23,12 @@
 // -----------------------------------------------------------------
 bool MessageQueueServer::initialize(std::uint16_t listenPort)
 {
+    // Register the message types with the handler that can create a message object
+    // of the appropriate type.
+    m_messageCommand[messages::Type::Join] = []() {
+        return std::make_shared<messages::Join>();
+    };
+
     initializeListener(listenPort);
     initializeSender();
     initializeReceiver();
@@ -149,7 +157,10 @@ void MessageQueueServer::initializeSender()
                 // Send the header
                 m_sockets[clientId]->send(header.data(), header.size());
                 // Send the message body
-                m_sockets[clientId]->send(static_cast<void*>(serialized.data()), serialized.size());
+                if (serialized.size() > 0)
+                {
+                    m_sockets[clientId]->send(static_cast<void*>(serialized.data()), serialized.size());
+                }
             }
             else
             {
@@ -192,12 +203,23 @@ void MessageQueueServer::initializeReceiver()
                             {
                                 // Convert back from network representation
                                 size[0] = ntohl(size[0]);
-                                std::string data;
-                                data.resize(size[0]);
-                                if (socket->receive(data.data(), size[0], received) == sf::Socket::Done)
+                                //
+                                // The message may not have any payload, don't try to read in that case
+                                if (size[0] > 0)
+                                {
+                                    std::string data;
+                                    data.resize(size[0]);
+                                    if (socket->receive(data.data(), size[0], received) == sf::Socket::Done)
+                                    {
+                                        auto message = m_messageCommand[type[0]]();
+                                        message->parseFromString(data);
+                                        std::lock_guard<std::mutex> lock(m_mutexReceivedMessages);
+                                        m_receivedMessages.push(message);
+                                    }
+                                }
+                                else
                                 {
                                     auto message = m_messageCommand[type[0]]();
-                                    message->parseFromString(data);
                                     std::lock_guard<std::mutex> lock(m_mutexReceivedMessages);
                                     m_receivedMessages.push(message);
                                 }

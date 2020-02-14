@@ -23,10 +23,11 @@ namespace messages
     class ConnectAck : public Message
     {
       public:
-          ConnectAck(sf::Uint32 playerId) :
-              Message(Type::ConnectAck),
-              m_playerId(playerId)
-          {}
+        ConnectAck(sf::Uint32 playerId) :
+            Message(Type::ConnectAck),
+            m_playerId(playerId)
+        {
+        }
 
         ConnectAck() :
             Message(Type::ConnectAck)
@@ -34,12 +35,12 @@ namespace messages
         }
 
         virtual std::string serializeToString() const override;
-            virtual bool parseFromString(const std::string& source) override;
+        virtual bool parseFromString(const std::string& source) override;
 
-            const shared::PlayerId& getPBPlayerId() const { return m_pbPlayerId; }
+        const shared::PlayerId& getPBPlayerId() const { return m_pbPlayerId; }
 
       private:
-          sf::Uint32 m_playerId;
-          shared::PlayerId m_pbPlayerId;
+        sf::Uint32 m_playerId;
+        shared::PlayerId m_pbPlayerId;
     };
 } // namespace messages

@@ -1,7 +1,7 @@
 #include "MessageQueueClient.hpp"
 
-#include "messages/JoinSelf.hpp"
 #include "messages/ConnectAck.hpp"
+#include "messages/NotifyJoinSelf.hpp"
 
 #include <array>
 #include <cstdint>
@@ -36,7 +36,7 @@ bool MessageQueueClient::initialize(std::string serverIP, std::uint16_t serverPo
         return std::make_shared<messages::ConnectAck>();
     };
     m_messageCommand[messages::Type::NotifyJoinSelf] = []() {
-        return std::make_shared<messages::JoinSelf>();
+        return std::make_shared<messages::NotifyJoinSelf>();
     };
 
     initializeSender();
@@ -120,7 +120,10 @@ void MessageQueueClient::initializeSender()
                 // Send the header
                 m_socketServer->send(header.data(), header.size());
                 // Send the message body
-                m_socketServer->send(static_cast<void*>(serialized.data()), serialized.size());
+                if (serialized.size() > 0)
+                {
+                    m_socketServer->send(static_cast<void*>(serialized.data()), serialized.size());
+                }
             }
             else
             {

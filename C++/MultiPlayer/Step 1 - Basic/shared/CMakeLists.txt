@@ -15,6 +15,7 @@ set(PROTOBUF_FILES
 set(SHARED_MESSAGES_HEADERS
     ConcurrentQueue.hpp
     messages/ConnectAck.hpp
+    messages/Join.hpp
     messages/NotifyJoinSelf.hpp
     messages/Message.hpp
     messages/MessageTypes.hpp

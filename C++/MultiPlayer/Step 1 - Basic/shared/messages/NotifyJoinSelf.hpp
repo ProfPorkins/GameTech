@@ -24,12 +24,12 @@ namespace messages
     class NotifyJoinSelf : public Message
     {
       public:
-          NotifyJoinSelf(std::shared_ptr<entities::Entity> player) :
+        NotifyJoinSelf(std::shared_ptr<entities::Entity> player) :
             Message(Type::ConnectAck),
             m_player(player)
         {
         }
-          NotifyJoinSelf() :
+        NotifyJoinSelf() :
             Message(Type::ConnectAck)
         {
         }

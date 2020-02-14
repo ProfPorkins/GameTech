@@ -1,8 +1,8 @@
 #pragma once
 
 #include "messages/ConnectAck.hpp"
-#include "messages/NotifyJoinSelf.hpp"
 #include "messages/Message.hpp"
+#include "messages/NotifyJoinSelf.hpp"
 #include "systems/System.hpp"
 
 #include <SFML/Graphics.hpp>
@@ -29,7 +29,7 @@ namespace systems
         void update(std::chrono::milliseconds elapsedTime, std::queue<std::shared_ptr<messages::Message>> messages);
 
       private:
-          sf::Uint32 m_playerId;
+        sf::Uint32 m_playerId;
         // TODO: This is still just a temporary hack until I get something better done
         std::unordered_set<std::shared_ptr<sf::Texture>>& m_textures;
         sf::Vector2f m_viewSize;
