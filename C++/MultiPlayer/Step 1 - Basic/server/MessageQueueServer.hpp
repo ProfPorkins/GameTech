@@ -37,8 +37,8 @@ class MessageQueueServer
     }
 
     bool initialize(std::uint16_t listenPort);
-    void onClientConnected(std::function<void(sf::Uint32)> onClientConnected) { m_onClientConnected = onClientConnected; }
     void shutdown();
+    void onClientConnected(std::function<void(sf::Uint32)> onClientConnected) { m_onClientConnected = onClientConnected; }
 
     void sendMessage(sf::Uint32 clientId, std::shared_ptr<messages::Message> message);
     std::queue<std::shared_ptr<messages::Message>> getMessages();

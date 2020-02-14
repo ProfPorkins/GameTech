@@ -13,7 +13,11 @@ int main()
     GOOGLE_PROTOBUF_VERIFY_VERSION;
     //
     // Get the network messaging service and game model initialized and ready to run
-    MessageQueueServer::instance().initialize(3000);
+    if (!MessageQueueServer::instance().initialize(3000))
+    {
+        std::cout << "Failed to initialize the networking messaging server, terminating..." << std::endl;
+        exit(0);
+    }
     GameModel model;
 
     //

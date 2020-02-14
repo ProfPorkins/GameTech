@@ -1,6 +1,5 @@
 #pragma once
 
-#include "MessageQueueClient.hpp"
 #include "entities/Entity.hpp"
 #include "systems/KeyboardInput.hpp"
 #include "systems/Network.hpp"
@@ -16,14 +15,12 @@ class GameModel
 {
   public:
     bool initialize(sf::Vector2f viewSize);
-    bool initializeMessageQueue(std::string serverIP, std::uint16_t serverPort);
 
     void signalKeyPressed(sf::Event::KeyEvent event);
     void signalKeyReleased(sf::Event::KeyEvent event);
     void update(const std::chrono::milliseconds elapsedTime, std::shared_ptr<sf::RenderTarget> renderTarget);
 
   private:
-    std::unique_ptr<MessageQueueClient> m_mq;
     // The purpose of this is to have a container that keeps the textures alive throughout the program
     std::unordered_set<std::shared_ptr<sf::Texture>> m_textures;
 

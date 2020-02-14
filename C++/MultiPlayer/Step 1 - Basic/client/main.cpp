@@ -1,4 +1,5 @@
 #include "GameModel.hpp"
+#include "MessageQueueClient.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
@@ -59,17 +60,18 @@ int main()
     prepareView(window);
     window->setActive(true);
 
+    if (!MessageQueueClient::instance().initialize("127.0.0.1", 3000))
+    {
+        std::cout << "Failed to initialize connection to the server, terminating..." << std::endl;
+        exit(0);
+    }
+
     //
     // Get the game model initialized and ready to run
     GameModel model;
     if (!model.initialize(window->getView().getSize()))
     {
         std::cout << "Game model failed to initialize, terminating..." << std::endl;
-        exit(0);
-    }
-    if (!model.initializeMessageQueue("127.0.0.1", 3000))
-    {
-        std::cout << "Failed to initialize connection to the server, terminating..." << std::endl;
         exit(0);
     }
 
@@ -120,6 +122,8 @@ int main()
         // causes the rendering to occur.
         window->display();
     }
+
+    MessageQueueClient::instance().shutdown();
 
     return 0;
 }

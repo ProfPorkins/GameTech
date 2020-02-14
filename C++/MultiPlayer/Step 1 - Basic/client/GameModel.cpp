@@ -1,5 +1,6 @@
 #include "GameModel.hpp"
 
+#include "MessageQueueClient.hpp"
 #include "components/Input.hpp"
 #include "entities/PlayerShip.hpp"
 
@@ -34,12 +35,6 @@ bool GameModel::initialize(sf::Vector2f viewSize)
     return true;
 }
 
-bool GameModel::initializeMessageQueue(std::string serverIP, std::uint16_t serverPort)
-{
-    m_mq = std::make_unique<MessageQueueClient>();
-    return m_mq->initialize(serverIP, serverPort);
-}
-
 void GameModel::signalKeyPressed(sf::Event::KeyEvent event)
 {
     m_systemKeyboardInput->keyPressed(event);
@@ -62,7 +57,7 @@ void GameModel::update(const std::chrono::milliseconds elapsedTime, std::shared_
     //
     // Process the network system first, it is like local input, so should
     // be processed early on.
-    m_systemNetwork->update(elapsedTime, m_mq->getMessages());
+    m_systemNetwork->update(elapsedTime, MessageQueueClient::instance().getMessages());
 
     //
     // Only have two systems right now, KeyboardInput and Rendering

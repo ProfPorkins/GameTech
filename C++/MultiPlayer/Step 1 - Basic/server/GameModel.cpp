@@ -1,5 +1,6 @@
 #include "GameModel.hpp"
 
+#include "MessageQueueServer.hpp"
 #include "components/Movement.hpp"
 #include "components/Position.hpp"
 #include "components/Size.hpp"

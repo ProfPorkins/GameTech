@@ -43,6 +43,16 @@ bool MessageQueueClient::initialize(std::string serverIP, std::uint16_t serverPo
 
 // -----------------------------------------------------------------
 //
+// Gracefully shutdown the network connection and related activities
+//
+// -----------------------------------------------------------------
+void MessageQueueClient::shutdown()
+{
+    m_socketServer->disconnect();
+}
+
+// -----------------------------------------------------------------
+//
 // Two steps in sending a message:
 //  1. Add the message the the message queue
 //  2. Signal the thread that performs the sending that a new message is available

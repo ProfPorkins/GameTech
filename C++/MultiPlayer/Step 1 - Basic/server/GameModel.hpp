@@ -1,6 +1,5 @@
 #pragma once
 
-#include "MessageQueueServer.hpp"
 #include "entities/Entity.hpp"
 
 #include <SFML/Network.hpp>
