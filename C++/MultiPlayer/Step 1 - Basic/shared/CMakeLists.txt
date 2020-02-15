@@ -5,13 +5,13 @@ project(Shared)
 # Manually specifying all the source files.
 #
 set(PROTOBUF_FILES
-    messages/ClientId.proto
-    messages/Entity.proto
-    messages/Input.proto
-    messages/Movement.proto
-    messages/Position.proto
-    messages/Size.proto
-    messages/Vector2f.proto
+    messages/protos/ClientId.proto
+    messages/protos/Entity.proto
+    messages/protos/Input.proto
+    messages/protos/Movement.proto
+    messages/protos/Position.proto
+    messages/protos/Size.proto
+    messages/protos/Vector2f.proto
     )
 
 set(SHARED_MESSAGES_HEADERS
@@ -75,9 +75,12 @@ source_group("Entities\\Source Files" FILES ${SHARED_ENTITY_SOURCES})
 source_group("Systems\\Header Files" FILES ${SHARED_SYSTEMS_HEADERS})
 source_group("Systems\\Source Files" FILES ${SHARED_SYSTEMS_SOURCES})
 
-source_group("Messages\\Proto Files" FILES ${PROTOBUF_FILES})
-source_group("Messages\\Header Files" FILES ${PROTOBUF_HEADERS} ${SHARED_MESSAGES_HEADERS})
-source_group("Messages\\Source Files" FILES ${PROTOBUF_SOURCES} ${SHARED_MESSAGES_SOURCES})
+source_group("Messages\\Header Files" FILES ${SHARED_MESSAGES_HEADERS})
+source_group("Messages\\Source Files" FILES ${SHARED_MESSAGES_SOURCES})
+
+source_group("ProtoBuf\\Proto Files" FILES ${PROTOBUF_FILES})
+source_group("ProtoBuf\\Header Files" FILES ${PROTOBUF_HEADERS})
+source_group("ProtoBuf\\Source Files" FILES ${PROTOBUF_SOURCES})
 
 #
 # Need a list of all code files for convenience
