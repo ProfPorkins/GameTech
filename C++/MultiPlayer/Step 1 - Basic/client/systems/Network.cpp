@@ -48,8 +48,9 @@ namespace systems
 
     // --------------------------------------------------------------
     //
-    // Handler for the ConnectSelf message.  It gets a 'self' player entity
-    // created and added to the client game simulation.
+    // Handler for the ConnectAck message.  This records the playerId
+    // assigned to it by the server, it also sends a request to the server
+    // to join the game.
     //
     // --------------------------------------------------------------
     void Network::handleConnectAck(std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::ConnectAck> message)
@@ -61,6 +62,12 @@ namespace systems
         MessageQueueClient::instance().sendMessage(std::make_shared<messages::Join>());
     }
 
+    // --------------------------------------------------------------
+    //
+    // Handler for the JoinSelf message.  It gets a 'self' player entity
+    // created and added to the client game simulation.
+    //
+    // --------------------------------------------------------------
     void Network::handleNotifyJoinSelf(std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::NotifyJoinSelf> message)
     {
         (void)elapsedTime;

@@ -69,9 +69,9 @@ void MessageQueueServer::sendMessage(sf::Uint32 clientId, std::shared_ptr<messag
 // this method was called.
 //
 // --------------------------------------------------------------
-std::queue<std::shared_ptr<messages::Message>> MessageQueueServer::getMessages()
+std::queue<std::tuple<std::uint32_t, std::shared_ptr<messages::Message>>> MessageQueueServer::getMessages()
 {
-    std::queue<std::shared_ptr<messages::Message>> copy;
+    std::queue<std::tuple<std::uint32_t, std::shared_ptr<messages::Message>>> copy;
 
     std::lock_guard<std::mutex> lock(m_mutexReceivedMessages);
     std::swap(copy, m_receivedMessages);
@@ -214,14 +214,14 @@ void MessageQueueServer::initializeReceiver()
                                         auto message = m_messageCommand[type[0]]();
                                         message->parseFromString(data);
                                         std::lock_guard<std::mutex> lock(m_mutexReceivedMessages);
-                                        m_receivedMessages.push(message);
+                                        m_receivedMessages.push(std::make_tuple(socket->getRemoteAddress().toInteger(), message));
                                     }
                                 }
                                 else
                                 {
                                     auto message = m_messageCommand[type[0]]();
                                     std::lock_guard<std::mutex> lock(m_mutexReceivedMessages);
-                                    m_receivedMessages.push(message);
+                                    m_receivedMessages.push(std::make_tuple(socket->getRemoteAddress().toInteger(), message));
                                 }
                             }
                         }

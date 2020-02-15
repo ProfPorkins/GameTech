@@ -4,7 +4,6 @@
 #include "components/Movement.hpp"
 #include "components/Position.hpp"
 #include "components/Size.hpp"
-#include "entities/Player.hpp"
 #include "messages/ConnectAck.hpp"
 
 // --------------------------------------------------------------
@@ -14,7 +13,10 @@
 // --------------------------------------------------------------
 void GameModel::update(const std::chrono::milliseconds elapsedTime)
 {
-    (void)elapsedTime;
+    //
+    // Process the network system first, it is like local input, so should
+    // be processed early on.
+    m_systemNetwork->update(elapsedTime, MessageQueueServer::instance().getMessages());
 }
 
 // --------------------------------------------------------------
@@ -24,6 +26,10 @@ void GameModel::update(const std::chrono::milliseconds elapsedTime)
 // --------------------------------------------------------------
 bool GameModel::initialize()
 {
+    //
+    // Initialize the various systems
+    m_systemNetwork = std::make_unique<systems::Network>(std::bind(&GameModel::addEntity, this, std::placeholders::_1));
+
     MessageQueueServer::instance().onClientConnected(std::bind(&GameModel::clientConnected, this, std::placeholders::_1));
     return true;
 }
@@ -48,11 +54,6 @@ void GameModel::clientConnected(sf::Uint32 clientId)
 {
     m_players.insert(clientId);
 
-    // Generate a player, add to server simulation, and send to the client
-    //auto player = entities::createPlayer(sf::Vector2f(0.0f, 0.0f), 0.05f, 0.0002f, 180.0f / 1000);
-    //addEntity(player);
-
-    //MessageQueueServer::instance().sendMessage(clientId, std::make_shared<messages::ConnectSelf>(player));
     MessageQueueServer::instance().sendMessage(clientId, std::make_shared<messages::ConnectAck>(clientId));
 }
 

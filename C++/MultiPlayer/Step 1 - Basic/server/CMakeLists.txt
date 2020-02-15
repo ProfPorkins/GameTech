@@ -27,8 +27,10 @@ set(SERVER_COMPONENTS_SOURCES
     )
 
 set(SERVER_SYSTEMS_HEADERS
+    systems/Network.hpp
     )
 set(SERVER_SYSTEMS_SOURCES
+    systems/Network.cpp
     )
 
 #

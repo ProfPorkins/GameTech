@@ -1,6 +1,7 @@
 #pragma once
 
 #include "entities/Entity.hpp"
+#include "systems/Network.hpp"
 
 #include <SFML/Network.hpp>
 #include <chrono>
@@ -17,6 +18,8 @@ class GameModel
   private:
     std::unordered_set<sf::Uint32> m_players;
     entities::EntityMap m_entities;
+
+    std::unique_ptr<systems::Network> m_systemNetwork;
 
     void clientConnected(sf::Uint32 clientId);
     void addEntity(std::shared_ptr<entities::Entity> entity);

@@ -41,7 +41,7 @@ class MessageQueueServer
     void onClientConnected(std::function<void(sf::Uint32)> onClientConnected) { m_onClientConnected = onClientConnected; }
 
     void sendMessage(sf::Uint32 clientId, std::shared_ptr<messages::Message> message);
-    std::queue<std::shared_ptr<messages::Message>> getMessages();
+    std::queue<std::tuple<std::uint32_t, std::shared_ptr<messages::Message>>> getMessages();
 
   private:
     MessageQueueServer() {}
@@ -56,7 +56,7 @@ class MessageQueueServer
     std::condition_variable m_eventSendMessages;
     std::mutex m_mutexEventSendMessages;
 
-    std::queue<std::shared_ptr<messages::Message>> m_receivedMessages;
+    std::queue<std::tuple<std::uint32_t, std::shared_ptr<messages::Message>>> m_receivedMessages;
     std::mutex m_mutexReceivedMessages;
 
     sf::SocketSelector m_selector;
