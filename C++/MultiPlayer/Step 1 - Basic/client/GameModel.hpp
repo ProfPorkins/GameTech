@@ -1,6 +1,7 @@
 #pragma once
 
 #include "entities/Entity.hpp"
+#include "messages/NotifyJoinSelf.hpp"
 #include "systems/KeyboardInput.hpp"
 #include "systems/Network.hpp"
 #include "systems/Renderer.hpp"
@@ -23,6 +24,7 @@ class GameModel
   private:
     // The purpose of this is to have a container that keeps the textures alive throughout the program
     std::unordered_set<std::shared_ptr<sf::Texture>> m_textures;
+    sf::Vector2f m_viewSize;
 
     entities::EntityMap m_entities;
     entities::EntityMap m_entitiesKeyboardInput;
@@ -34,4 +36,6 @@ class GameModel
 
     void addEntity(std::shared_ptr<entities::Entity> entity);
     void removeEntity(decltype(entities::Entity().getId()) entityId);
+
+    void handleNotifyJoinSelf(std::shared_ptr<messages::NotifyJoinSelf> message);
 };

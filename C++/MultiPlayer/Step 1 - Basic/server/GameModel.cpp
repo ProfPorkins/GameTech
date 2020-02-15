@@ -4,7 +4,11 @@
 #include "components/Movement.hpp"
 #include "components/Position.hpp"
 #include "components/Size.hpp"
+#include "entities/Player.hpp"
 #include "messages/ConnectAck.hpp"
+#include "messages/NotifyJoinSelf.hpp"
+
+#include <functional>
 
 // --------------------------------------------------------------
 //
@@ -28,7 +32,12 @@ bool GameModel::initialize()
 {
     //
     // Initialize the various systems
-    m_systemNetwork = std::make_unique<systems::Network>(std::bind(&GameModel::addEntity, this, std::placeholders::_1));
+    m_systemNetwork = std::make_unique<systems::Network>();
+    m_systemNetwork->registerHandler(messages::Type::Join,
+                                     [this](std::uint32_t clientId, std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
+                                         (void)elapsedTime; // unused parameter
+                                         handleJoin(clientId, std::static_pointer_cast<messages::Join>(message));
+                                     });
 
     MessageQueueServer::instance().onClientConnected(std::bind(&GameModel::clientConnected, this, std::placeholders::_1));
     return true;
@@ -83,4 +92,20 @@ void GameModel::removeEntity(decltype(entities::Entity().getId()) entityId)
     m_entities.erase(entityId);
     //
     // Let each of the systems know to remove the entity
+}
+
+// --------------------------------------------------------------
+//
+// Handler for the Join message.  It gets a player entity created,
+// added to the server game model, and notifies the requesting client
+// of the player.
+//
+// --------------------------------------------------------------
+void GameModel::handleJoin(std::uint32_t clientId, std::shared_ptr<messages::Join> message)
+{
+    // Generate a player, add to server simulation, and send to the client
+    auto player = entities::createPlayer(sf::Vector2f(0.0f, 0.0f), 0.05f, 0.0002f, 180.0f / 1000);
+    addEntity(player);
+
+    MessageQueueServer::instance().sendMessage(clientId, std::make_shared<messages::NotifyJoinSelf>(player));
 }

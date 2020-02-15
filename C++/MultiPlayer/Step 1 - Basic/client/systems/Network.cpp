@@ -1,7 +1,6 @@
 #include "Network.hpp"
 
 #include "MessageQueueClient.hpp"
-#include "entities/PlayerShip.hpp"
 #include "messages/Join.hpp"
 
 namespace systems
@@ -12,22 +11,14 @@ namespace systems
     // that maps from message types to their handlers.
     //
     // --------------------------------------------------------------
-    Network::Network(std::function<void(std::shared_ptr<entities::Entity>)> addEntity, std::unordered_set<std::shared_ptr<sf::Texture>>& textures, sf::Vector2f viewSize) :
-        System({}),
-        m_addEntity(addEntity),
-        m_textures(textures),
-        m_viewSize(viewSize)
+    Network::Network() :
+        System({})
     {
         //
-        // Build a command map of message types to operations
+        // We know how to privately handle these messages
         m_commandMap[messages::Type::ConnectAck] = [this](std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
             // Not completely in love with having to do a static_pointer_case, but living with it for now
             handleConnectAck(elapsedTime, std::static_pointer_cast<messages::ConnectAck>(message));
-        };
-
-        m_commandMap[messages::Type::NotifyJoinSelf] = [this](std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
-            // Not completely in love with having to do a static_pointer_case, but living with it for now
-            handleNotifyJoinSelf(elapsedTime, std::static_pointer_cast<messages::NotifyJoinSelf>(message));
         };
     }
 
@@ -48,6 +39,16 @@ namespace systems
 
     // --------------------------------------------------------------
     //
+    // Allow handlers for messages to be registered.
+    //
+    // --------------------------------------------------------------
+    void Network::registerHandler(messages::Type type, std::function<void(std::chrono::milliseconds, std::shared_ptr<messages::Message>)> handler)
+    {
+        m_commandMap[type] = handler;
+    }
+
+    // --------------------------------------------------------------
+    //
     // Handler for the ConnectAck message.  This records the playerId
     // assigned to it by the server, it also sends a request to the server
     // to join the game.
@@ -60,19 +61,6 @@ namespace systems
         //
         // Now, send a Join message back to the server so we can get into the game!
         MessageQueueClient::instance().sendMessage(std::make_shared<messages::Join>());
-    }
-
-    // --------------------------------------------------------------
-    //
-    // Handler for the JoinSelf message.  It gets a 'self' player entity
-    // created and added to the client game simulation.
-    //
-    // --------------------------------------------------------------
-    void Network::handleNotifyJoinSelf(std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::NotifyJoinSelf> message)
-    {
-        (void)elapsedTime;
-        auto playerSelf = entities::createPlayerSelf(message->getPBPlayer(), m_viewSize, m_textures);
-        m_addEntity(playerSelf);
     }
 
 } // namespace systems

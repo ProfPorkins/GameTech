@@ -1,6 +1,7 @@
 #pragma once
 
 #include "entities/Entity.hpp"
+#include "messages/Join.hpp"
 #include "systems/Network.hpp"
 
 #include <SFML/Network.hpp>
@@ -24,4 +25,6 @@ class GameModel
     void clientConnected(sf::Uint32 clientId);
     void addEntity(std::shared_ptr<entities::Entity> entity);
     void removeEntity(decltype(entities::Entity().getId()) entityId);
+
+    void handleJoin(std::uint32_t clientId, std::shared_ptr<messages::Join> message);
 };

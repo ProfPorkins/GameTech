@@ -18,18 +18,27 @@
 // --------------------------------------------------------------
 bool GameModel::initialize(sf::Vector2f viewSize)
 {
+    m_viewSize = viewSize;
     //
-    // Initialize the various sytems
-    m_systemNetwork = std::make_unique<systems::Network>(
-        std::bind(&GameModel::addEntity, this, std::placeholders::_1),
-        m_textures, viewSize);
+    // Initialize the network system, including registering handlers for
+    // messages the game model has responsibility.
+    m_systemNetwork = std::make_unique<systems::Network>();
+    m_systemNetwork->registerHandler(messages::Type::NotifyJoinSelf,
+                                     [this](std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
+                                         (void)elapsedTime; // unused parameter
+                                         handleNotifyJoinSelf(std::static_pointer_cast<messages::NotifyJoinSelf>(message));
+                                     });
 
+    //
+    // Initialize the keyboard input system.
     auto inputMapping = {
         std::make_tuple(components::Input::Type::TurnLeft, sf::Keyboard::A),
         std::make_tuple(components::Input::Type::TurnRight, sf::Keyboard::D),
         std::make_tuple(components::Input::Type::Forward, sf::Keyboard::W)};
     m_systemKeyboardInput = std::make_unique<systems::KeyboardInput>(inputMapping);
 
+    //
+    // Initialize the renderer system.
     m_systemRender = std::make_unique<systems::Renderer>();
 
     return true;
@@ -56,7 +65,7 @@ void GameModel::update(const std::chrono::milliseconds elapsedTime, std::shared_
 {
     //
     // Process the network system first, it is like local input, so should
-    // be processed early on.
+    // be processed early.
     m_systemNetwork->update(elapsedTime, MessageQueueClient::instance().getMessages());
 
     //
@@ -98,4 +107,16 @@ void GameModel::removeEntity(decltype(entities::Entity().getId()) entityId)
     // Let each of the systems know to remove the entity
     m_systemKeyboardInput->removeEntity(entityId);
     m_systemRender->removeEntity(entityId);
+}
+
+// --------------------------------------------------------------
+//
+// Handler for the NotifyJoinSelf message.  It gets a 'self' player entity
+// created and added to the client game simulation.
+//
+// --------------------------------------------------------------
+void GameModel::handleNotifyJoinSelf(std::shared_ptr<messages::NotifyJoinSelf> message)
+{
+    auto playerSelf = entities::createPlayerSelf(message->getPBPlayer(), m_viewSize, m_textures);
+    addEntity(playerSelf);
 }
