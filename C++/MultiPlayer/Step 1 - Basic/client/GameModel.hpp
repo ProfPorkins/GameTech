@@ -35,7 +35,7 @@ class GameModel
     std::unique_ptr<systems::Renderer> m_systemRender;
 
     void addEntity(std::shared_ptr<entities::Entity> entity);
-    void removeEntity(decltype(entities::Entity().getId()) entityId);
+    void removeEntity(entities::Entity::IdType entityId);
 
     void handleNotifyJoinSelf(std::shared_ptr<messages::NotifyJoinSelf> message);
 };

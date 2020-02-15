@@ -13,9 +13,10 @@ namespace entities
     // Creates the 'self' player based on a protobuf object.
     //
     // --------------------------------------------------------------
-    std::shared_ptr<Entity> createPlayerSelf(const shared::Player& pbPlayer, sf::Vector2f viewSize, std::unordered_set<std::shared_ptr<sf::Texture>>& textures)
+    std::shared_ptr<Entity> createPlayerSelf(const shared::Entity& pbPlayer, sf::Vector2f viewSize, std::unordered_set<std::shared_ptr<sf::Texture>>& textures)
     {
-        std::shared_ptr<Entity> entity = std::make_shared<Entity>();
+        // Server provided the entity id, so use it
+        std::shared_ptr<Entity> entity = std::make_shared<Entity>(pbPlayer.id());
 
         //
         // Get the associated texture loaded first

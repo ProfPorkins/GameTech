@@ -4,7 +4,7 @@
 // Disable some compiler warnings that come from google protocol buffers
 #pragma warning(push)
 #pragma warning(disable : 4127)
-#include "Player.pb.h"
+#include "Entity.pb.h"
 #pragma warning(pop)
 
 #include "Message.hpp"
@@ -37,10 +37,10 @@ namespace messages
         virtual std::string serializeToString() const override;
         virtual bool parseFromString(const std::string& source) override;
 
-        const shared::Player& getPBPlayer() const { return m_pbPlayer; }
+        const shared::Entity& getPBPlayer() const { return m_pbPlayer; }
 
       private:
         std::shared_ptr<entities::Entity> m_player;
-        shared::Player m_pbPlayer;
+        shared::Entity m_pbPlayer;
     };
 } // namespace messages

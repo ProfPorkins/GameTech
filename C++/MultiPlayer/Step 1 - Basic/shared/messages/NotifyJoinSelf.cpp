@@ -13,7 +13,9 @@ namespace messages
     // -----------------------------------------------------------------
     std::string NotifyJoinSelf::serializeToString() const
     {
-        shared::Player pbPlayer;
+        shared::Entity pbPlayer;
+
+        pbPlayer.set_id(m_player->getId());
 
         auto position = m_player->getComponent<components::Position>();
         pbPlayer.mutable_position()->mutable_center()->set_x(position->get().x);

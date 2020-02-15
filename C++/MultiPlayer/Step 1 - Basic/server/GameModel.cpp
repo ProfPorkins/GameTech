@@ -10,6 +10,7 @@
 
 #include <cstdint>
 #include <functional>
+#include <limits>
 
 // --------------------------------------------------------------
 //
@@ -22,6 +23,10 @@ void GameModel::update(const std::chrono::milliseconds elapsedTime)
     // Process the network system first, it is like local input, so should
     // be processed early on.
     m_systemNetwork->update(elapsedTime, MessageQueueServer::instance().getMessages());
+
+    //
+    // Send game state updates back out to connected clients
+    updateClients();
 }
 
 // --------------------------------------------------------------
@@ -31,6 +36,11 @@ void GameModel::update(const std::chrono::milliseconds elapsedTime)
 // --------------------------------------------------------------
 bool GameModel::initialize()
 {
+    //
+    // TODO: Super dangerous, I know.  I'll eventually find a better solution that
+    // doesn't require creating guids;
+    entities::Entity::nextId = std::numeric_limits<entities::Entity::IdType>::max() / 2;
+
     //
     // Initialize the various systems
     m_systemNetwork = std::make_unique<systems::Network>();
@@ -94,9 +104,12 @@ void GameModel::addEntity(std::shared_ptr<entities::Entity> entity)
 // the entity.
 //
 // --------------------------------------------------------------
-void GameModel::removeEntity(decltype(entities::Entity().getId()) entityId)
+void GameModel::removeEntity(entities::Entity::IdType entityId)
 {
     m_entities.erase(entityId);
+    //
+    // TODO: remove the entity from the clientIdToEntityId map
+
     //
     // Let each of the systems know to remove the entity
 }
@@ -112,12 +125,68 @@ void GameModel::handleJoin(std::uint32_t clientId, std::shared_ptr<messages::Joi
 {
     // Generate a player, add to server simulation, and send to the client
     auto player = entities::createPlayer(sf::Vector2f(0.0f, 0.0f), 0.05f, 0.0002f, 180.0f / 1000);
+    // Need to provide the mapping from the clientId to the player's entityId
+    m_clientIdToEntityId[clientId] = player->getId();
+    // Go ahead and add to the game model
     addEntity(player);
 
     MessageQueueServer::instance().sendMessage(clientId, std::make_shared<messages::NotifyJoinSelf>(player));
 }
 
+// --------------------------------------------------------------
+//
+// Handler for the Input message.  It updates the player model based
+// on the input and sends the updated state back to the player and
+// any other connected clients.
+//
+// --------------------------------------------------------------
 void GameModel::handleInput(std::uint32_t clientId, std::shared_ptr<messages::Input> message)
 {
-    std::cout << "received an input messages: " << message->getPBInput().type() << std::endl;
+    //std::cout << "received an input messages: " << message->getPBInput().type() << std::endl;
+    auto entityId = m_clientIdToEntityId[clientId];
+    auto player = m_entities[entityId];
+    auto position = player->getComponent<components::Position>();
+    auto movement = player->getComponent<components::Movement>();
+
+    switch (message->getPBInput().type())
+    {
+        case shared::InputType::Thrust:
+        {
+            const float PI = 3.14159f;
+            const float DEGREES_TO_RADIANS = PI / 180.0f;
+
+            auto vectorX = std::cos(position->getOrientation() * DEGREES_TO_RADIANS);
+            auto vectorY = std::sin(position->getOrientation() * DEGREES_TO_RADIANS);
+
+            auto current = position->get();
+            position->set(sf::Vector2f(
+                current.x + vectorX * message->getPBInput().elapsedtime() * movement->getMoveRate(),
+                current.y + vectorY * message->getPBInput().elapsedtime() * movement->getMoveRate()));
+
+            m_reportThese.insert(entityId);
+        }
+        break;
+        case shared::InputType::RotateLeft:
+            position->setOrientation(position->getOrientation() - movement->getRotateRate() * message->getPBInput().elapsedtime());
+            m_reportThese.insert(entityId);
+            break;
+        case shared::InputType::RotateRight:
+            position->setOrientation(position->getOrientation() + movement->getRotateRate() * message->getPBInput().elapsedtime());
+            m_reportThese.insert(entityId);
+            break;
+    }
+}
+
+void GameModel::updateClients()
+{
+    for (auto entityId : m_reportThese)
+    {
+        auto entity = m_entities[entityId];
+        auto& components = entity->getComponents();
+        for (auto& [type, component] : components)
+        {
+        }
+    }
+
+    m_reportThese.clear();
 }

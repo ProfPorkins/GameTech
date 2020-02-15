@@ -55,7 +55,7 @@ namespace systems
         m_keyToFunctionMap[entity->getId()] = map;
     }
 
-    void KeyboardInput::removeEntity(decltype(entities::Entity().getId()) entityId)
+    void KeyboardInput::removeEntity(entities::Entity::IdType entityId)
     {
         // Need to let the System class do its thing
         System::removeEntity(entityId);

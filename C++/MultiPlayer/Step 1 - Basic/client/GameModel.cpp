@@ -100,7 +100,7 @@ void GameModel::addEntity(std::shared_ptr<entities::Entity> entity)
 // the entity.
 //
 // --------------------------------------------------------------
-void GameModel::removeEntity(decltype(entities::Entity().getId()) entityId)
+void GameModel::removeEntity(entities::Entity::IdType entityId)
 {
     m_entities.erase(entityId);
     //

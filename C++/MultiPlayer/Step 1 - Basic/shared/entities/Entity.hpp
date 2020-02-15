@@ -8,6 +8,12 @@
 #include <memory>
 #include <unordered_map>
 
+//
+// Want to allow the server game model to set the starting point for the Entity
+// nextId to halfway through the numbers to "prevent" id collisions with entities
+// created at the clients.
+class GameModel;
+
 namespace entities
 {
     // --------------------------------------------------------------
@@ -22,9 +28,21 @@ namespace entities
     // --------------------------------------------------------------
     class Entity
     {
+      private:
+        static std::atomic<std::uint32_t> nextId; // Each entity needs a unique id, using a static to do this.
+        friend GameModel;
+
       public:
+        using IdType = decltype(nextId.load());
+
         Entity() :
             m_id(Entity::nextId++)
+        {
+        }
+        //
+        // Constructor for an Entity created at the server
+        Entity(IdType id) :
+            m_id(id)
         {
         }
 
@@ -36,20 +54,21 @@ namespace entities
         template <typename T>
         void removeComponent();
 
+        template <typename T>
+        bool hasComponent();
+
         auto& getComponents() { return m_components; }
 
         template <typename T>
         T* getComponent();
 
       private:
-        static std::atomic<std::uint32_t> nextId; // Each entity needs a unique id, using a static to do this.
-
-        decltype(nextId.load()) m_id;
+        IdType m_id;
         std::unordered_map<ctti::unnamed_type_id_t, std::unique_ptr<components::Component>> m_components;
     };
 
     // Convenience type alias for use throughout the framework
-    using EntityMap = std::unordered_map<decltype(Entity().getId()), std::shared_ptr<Entity>>;
+    using EntityMap = std::unordered_map<Entity::IdType, std::shared_ptr<Entity>>;
 
     // --------------------------------------------------------------
     //
@@ -72,6 +91,17 @@ namespace entities
     void Entity::removeComponent()
     {
         m_components.erase(ctti::unnamed_type_id<T>());
+    }
+
+    // --------------------------------------------------------------
+    //
+    // Returns true if the Entity has the component, false otherwise.
+    //
+    // --------------------------------------------------------------
+    template <typename T>
+    bool Entity::hasComponent()
+    {
+        return m_components.find(ctti::unnamed_type_id<T>()) == m_components.end();
     }
 
     // --------------------------------------------------------------

@@ -23,7 +23,7 @@ namespace systems
     // All systems must be given a chance to remove an entity.
     //
     // --------------------------------------------------------------
-    void System::removeEntity(decltype(entities::Entity().getId()) entityId)
+    void System::removeEntity(entities::Entity::IdType entityId)
     {
         m_entities.erase(entityId);
     }

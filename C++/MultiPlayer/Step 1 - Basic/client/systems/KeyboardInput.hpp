@@ -37,7 +37,7 @@ namespace systems
         }
 
         virtual void addEntity(std::shared_ptr<entities::Entity> entity);
-        virtual void removeEntity(decltype(entities::Entity().getId()) entityId);
+        virtual void removeEntity(entities::Entity::IdType entityId);
 
         virtual void update(std::chrono::milliseconds elapsedTime);
 
@@ -53,7 +53,7 @@ namespace systems
 
         std::unordered_map<sf::Keyboard::Key, sf::Event::KeyEvent> m_keysPressed;
         std::unordered_map<components::Input::Type, sf::Keyboard::Key> m_typeToKeyMap;
-        std::unordered_map<decltype(entities::Entity().getId()), KeyToFunction> m_keyToFunctionMap;
+        std::unordered_map<entities::Entity::IdType, KeyToFunction> m_keyToFunctionMap;
 
         void rotateLeft(std::chrono::milliseconds elapsedTime, components::Position* position, components::Movement* movement);
         void rotateRight(std::chrono::milliseconds elapsedTime, components::Position* position, components::Movement* movement);
