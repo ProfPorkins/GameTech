@@ -8,8 +8,8 @@
 #include "messages/ConnectAck.hpp"
 #include "messages/NotifyJoinSelf.hpp"
 
-#include <functional>
 #include <cstdint>
+#include <functional>
 
 // --------------------------------------------------------------
 //
