@@ -54,7 +54,7 @@ namespace systems
 
     // --------------------------------------------------------------
     //
-    // Handler for the ConnectAck message.  This records the playerId
+    // Handler for the ConnectAck message.  This records the clientId
     // assigned to it by the server, it also sends a request to the server
     // to join the game.
     //
@@ -62,7 +62,7 @@ namespace systems
     void Network::handleConnectAck(std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::ConnectAck> message)
     {
         (void)elapsedTime;
-        m_playerId = message->getPBPlayerId().id();
+        m_clientId = message->getPbClientIdId().id();
         //
         // Now, send a Join message back to the server so we can get into the game!
         MessageQueueClient::instance().sendMessage(std::make_shared<messages::Join>());

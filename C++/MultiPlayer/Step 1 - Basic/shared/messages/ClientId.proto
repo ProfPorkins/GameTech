@@ -2,6 +2,6 @@ syntax = "proto3";
 
 package shared;
 
-message PlayerId {
+message ClientId {
     uint32 id = 1;
 }

@@ -4,7 +4,7 @@
 // Disable some compiler warnings that come from google protocol buffers
 #pragma warning(push)
 #pragma warning(disable : 4127)
-#include "PlayerId.pb.h"
+#include "ClientId.pb.h"
 #pragma warning(pop)
 
 #include "Message.hpp"
@@ -23,9 +23,9 @@ namespace messages
     class ConnectAck : public Message
     {
       public:
-        ConnectAck(sf::Uint32 playerId) :
+        ConnectAck(std::uint32_t clientId) :
             Message(Type::ConnectAck),
-            m_playerId(playerId)
+            m_clientId(clientId)
         {
         }
 
@@ -37,10 +37,10 @@ namespace messages
         virtual std::string serializeToString() const override;
         virtual bool parseFromString(const std::string& source) override;
 
-        const shared::PlayerId& getPBPlayerId() const { return m_pbPlayerId; }
+        const shared::ClientId& getPbClientIdId() const { return m_pbClientId; }
 
       private:
-        sf::Uint32 m_playerId;
-        shared::PlayerId m_pbPlayerId;
+          std::uint32_t m_clientId;
+        shared::ClientId m_pbClientId;
     };
 } // namespace messages

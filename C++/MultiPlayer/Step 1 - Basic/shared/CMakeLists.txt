@@ -5,8 +5,8 @@ project(Shared)
 # Manually specifying all the source files.
 #
 set(PROTOBUF_FILES
+    messages/ClientId.proto
     messages/Movement.proto
-    messages/PlayerId.proto
     messages/Position.proto
     messages/Size.proto
     messages/Vector2f.proto

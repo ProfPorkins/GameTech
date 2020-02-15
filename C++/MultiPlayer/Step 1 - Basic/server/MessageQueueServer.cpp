@@ -55,7 +55,7 @@ void MessageQueueServer::shutdown()
 //  2. Signal the thread that performs the sending that a new message is available
 //
 // -----------------------------------------------------------------
-void MessageQueueServer::sendMessage(sf::Uint32 clientId, std::shared_ptr<messages::Message> message)
+void MessageQueueServer::sendMessage(std::uint32_t clientId, std::shared_ptr<messages::Message> message)
 {
     {
         m_sendMessages.enqueue(std::make_tuple(clientId, message));

@@ -9,6 +9,7 @@
 #include "messages/NotifyJoinSelf.hpp"
 
 #include <functional>
+#include <cstdint>
 
 // --------------------------------------------------------------
 //
@@ -59,7 +60,7 @@ void GameModel::shutdown()
 // the server simulation.
 //
 // --------------------------------------------------------------
-void GameModel::clientConnected(sf::Uint32 clientId)
+void GameModel::clientConnected(std::uint32_t clientId)
 {
     m_players.insert(clientId);
 

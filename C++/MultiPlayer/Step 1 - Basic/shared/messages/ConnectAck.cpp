@@ -9,11 +9,11 @@ namespace messages
     // -----------------------------------------------------------------
     std::string ConnectAck::serializeToString() const
     {
-        shared::PlayerId pbPlayerId;
+        shared::ClientId pbClientId;
 
-        pbPlayerId.set_id(m_playerId);
+        pbClientId.set_id(m_clientId);
 
-        return pbPlayerId.SerializeAsString();
+        return pbClientId.SerializeAsString();
     }
 
     // -----------------------------------------------------------------
@@ -23,7 +23,7 @@ namespace messages
     // -----------------------------------------------------------------
     bool ConnectAck::parseFromString(const std::string& source)
     {
-        return m_pbPlayerId.ParseFromString(source);
+        return m_pbClientId.ParseFromString(source);
     }
 
 } // namespace messages
