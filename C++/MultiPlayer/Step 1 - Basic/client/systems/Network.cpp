@@ -33,7 +33,12 @@ namespace systems
         {
             auto message = messages.front();
             messages.pop();
-            m_commandMap[message->getType()](elapsedTime, message);
+            auto entry = m_commandMap.find(message->getType());
+            if (entry != m_commandMap.end())
+            {
+                auto& [type, handler] = *entry;
+                handler(elapsedTime, message);
+            }
         }
     }
 
