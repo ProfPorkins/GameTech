@@ -40,7 +40,7 @@ namespace messages
         const shared::ClientId& getPbClientIdId() const { return m_pbClientId; }
 
       private:
-        std::uint32_t m_clientId;
+        std::uint32_t m_clientId{0};
         shared::ClientId m_pbClientId;
     };
 } // namespace messages
