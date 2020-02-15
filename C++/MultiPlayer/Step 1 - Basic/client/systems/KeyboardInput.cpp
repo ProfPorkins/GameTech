@@ -1,6 +1,8 @@
 #include "KeyboardInput.hpp"
 
+#include "MessageQueueClient.hpp"
 #include "entities/Entity.hpp"
+#include "messages/Input.hpp"
 
 #include <cmath>
 
@@ -28,21 +30,21 @@ namespace systems
         {
             switch (input)
             {
-                case components::Input::Type::Forward:
+                case components::Input::Type::Thrust:
                 {
-                    std::function<void(std::chrono::milliseconds, components::Position*, components::Movement*)> f = std::bind(&KeyboardInput::moveForward, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+                    std::function<void(std::chrono::milliseconds, components::Position*, components::Movement*)> f = std::bind(&KeyboardInput::thrust, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
                     map.m_keyToFunction[m_typeToKeyMap[input]] = f;
                 }
                 break;
-                case components::Input::Type::TurnLeft:
+                case components::Input::Type::RotateLeft:
                 {
-                    std::function<void(std::chrono::milliseconds, components::Position*, components::Movement*)> f = std::bind(&KeyboardInput::turnLeft, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+                    std::function<void(std::chrono::milliseconds, components::Position*, components::Movement*)> f = std::bind(&KeyboardInput::rotateLeft, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
                     map.m_keyToFunction[m_typeToKeyMap[input]] = f;
                 }
                 break;
-                case components::Input::Type::TurnRight:
+                case components::Input::Type::RotateRight:
                 {
-                    std::function<void(std::chrono::milliseconds, components::Position*, components::Movement*)> f = std::bind(&KeyboardInput::turnRight, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
+                    std::function<void(std::chrono::milliseconds, components::Position*, components::Movement*)> f = std::bind(&KeyboardInput::rotateRight, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3);
                     map.m_keyToFunction[m_typeToKeyMap[input]] = f;
                 }
                 break;
@@ -101,27 +103,30 @@ namespace systems
         m_keysPressed.erase(keyEvent.code);
     }
 
-    void KeyboardInput::moveForward(std::chrono::milliseconds elapsedTime, components::Position* position, components::Movement* movement)
+    void KeyboardInput::thrust(std::chrono::milliseconds elapsedTime, components::Position* position, components::Movement* movement)
     {
-        const float PI = 3.14159f;
-        const float DEGREES_TO_RADIANS = PI / 180.0f;
+        //const float PI = 3.14159f;
+        //const float DEGREES_TO_RADIANS = PI / 180.0f;
 
-        auto vectorX = std::cos(position->getOrientation() * DEGREES_TO_RADIANS);
-        auto vectorY = std::sin(position->getOrientation() * DEGREES_TO_RADIANS);
+        //auto vectorX = std::cos(position->getOrientation() * DEGREES_TO_RADIANS);
+        //auto vectorY = std::sin(position->getOrientation() * DEGREES_TO_RADIANS);
 
-        auto current = position->get();
-        position->set(sf::Vector2f(
-            current.x + vectorX * elapsedTime.count() * movement->getMoveRate(),
-            current.y + vectorY * elapsedTime.count() * movement->getMoveRate()));
+        //auto current = position->get();
+        //position->set(sf::Vector2f(
+        //    current.x + vectorX * elapsedTime.count() * movement->getMoveRate(),
+        //    current.y + vectorY * elapsedTime.count() * movement->getMoveRate()));
+        MessageQueueClient::instance().sendMessage(std::make_shared<messages::Input>(components::Input::Type::Thrust, elapsedTime));
     }
 
-    void KeyboardInput::turnLeft(std::chrono::milliseconds elapsedTime, components::Position* position, components::Movement* movement)
+    void KeyboardInput::rotateLeft(std::chrono::milliseconds elapsedTime, components::Position* position, components::Movement* movement)
     {
-        position->setOrientation(position->getOrientation() - movement->getRotateRate() * elapsedTime.count());
+        //position->setOrientation(position->getOrientation() - movement->getRotateRate() * elapsedTime.count());
+        MessageQueueClient::instance().sendMessage(std::make_shared<messages::Input>(components::Input::Type::RotateLeft, elapsedTime));
     }
 
-    void KeyboardInput::turnRight(std::chrono::milliseconds elapsedTime, components::Position* position, components::Movement* movement)
+    void KeyboardInput::rotateRight(std::chrono::milliseconds elapsedTime, components::Position* position, components::Movement* movement)
     {
-        position->setOrientation(position->getOrientation() + movement->getRotateRate() * elapsedTime.count());
+        //position->setOrientation(position->getOrientation() + movement->getRotateRate() * elapsedTime.count());
+        MessageQueueClient::instance().sendMessage(std::make_shared<messages::Input>(components::Input::Type::RotateRight, elapsedTime));
     }
 } // namespace systems

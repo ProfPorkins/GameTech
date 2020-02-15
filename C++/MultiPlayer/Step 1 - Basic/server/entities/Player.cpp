@@ -18,9 +18,9 @@ namespace entities
         entity->addComponent(std::make_unique<components::Movement>(speed, rotateRate));
 
         auto inputs = {
-            components::Input::Type::Forward,
-            components::Input::Type::TurnLeft,
-            components::Input::Type::TurnRight};
+            components::Input::Type::Thrust,
+            components::Input::Type::RotateLeft,
+            components::Input::Type::RotateRight};
         entity->addComponent(std::make_unique<components::Input>(inputs));
 
         return entity;

@@ -64,10 +64,8 @@ void MessageQueueClient::shutdown()
 // -----------------------------------------------------------------
 void MessageQueueClient::sendMessage(std::shared_ptr<messages::Message> message)
 {
-    {
-        m_sendMessages.enqueue(message);
-        m_eventSendMessages.notify_one();
-    }
+    m_sendMessages.enqueue(message);
+    m_eventSendMessages.notify_one();
 }
 
 // --------------------------------------------------------------

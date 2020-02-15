@@ -6,6 +6,7 @@ project(Shared)
 #
 set(PROTOBUF_FILES
     messages/ClientId.proto
+    messages/Input.proto
     messages/Movement.proto
     messages/Position.proto
     messages/Size.proto
@@ -15,6 +16,7 @@ set(PROTOBUF_FILES
 set(SHARED_MESSAGES_HEADERS
     ConcurrentQueue.hpp
     messages/ConnectAck.hpp
+    messages/Input.hpp
     messages/Join.hpp
     messages/NotifyJoinSelf.hpp
     messages/Message.hpp
@@ -23,6 +25,7 @@ set(SHARED_MESSAGES_HEADERS
 
 set(SHARED_MESSAGES_SOURCES
     messages/ConnectAck.cpp
+    messages/Input.cpp
     messages/NotifyJoinSelf.cpp
 )
 
@@ -71,7 +74,7 @@ source_group("Entities\\Source Files" FILES ${SHARED_ENTITY_SOURCES})
 source_group("Systems\\Header Files" FILES ${SHARED_SYSTEMS_HEADERS})
 source_group("Systems\\Source Files" FILES ${SHARED_SYSTEMS_SOURCES})
 
-source_group("Messages\\ProtoFiles" FILES ${PROTOBUF_FILES})
+source_group("Messages\\Proto Files" FILES ${PROTOBUF_FILES})
 source_group("Messages\\Header Files" FILES ${PROTOBUF_HEADERS} ${SHARED_MESSAGES_HEADERS})
 source_group("Messages\\Source Files" FILES ${PROTOBUF_SOURCES} ${SHARED_MESSAGES_SOURCES})
 

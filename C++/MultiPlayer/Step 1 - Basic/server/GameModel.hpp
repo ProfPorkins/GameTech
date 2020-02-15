@@ -1,6 +1,7 @@
 #pragma once
 
 #include "entities/Entity.hpp"
+#include "messages/Input.hpp"
 #include "messages/Join.hpp"
 #include "systems/Network.hpp"
 
@@ -27,4 +28,5 @@ class GameModel
     void removeEntity(decltype(entities::Entity().getId()) entityId);
 
     void handleJoin(std::uint32_t clientId, std::shared_ptr<messages::Join> message);
+    void handleInput(std::uint32_t clientId, std::shared_ptr<messages::Input> message);
 };

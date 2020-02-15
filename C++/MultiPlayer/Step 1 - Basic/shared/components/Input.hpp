@@ -18,10 +18,9 @@ namespace components
       public:
         enum class Type : std::uint8_t
         {
-            Forward,
-            Backward,
-            TurnLeft,
-            TurnRight,
+            Thrust,
+            RotateLeft,
+            RotateRight,
             FireWeapon
         };
 

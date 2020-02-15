@@ -1,5 +1,6 @@
 #include "MessageQueueServer.hpp"
 
+#include "messages/Input.hpp"
 #include "messages/Join.hpp"
 
 #include <array>
@@ -27,6 +28,9 @@ bool MessageQueueServer::initialize(std::uint16_t listenPort)
     // of the appropriate type.
     m_messageCommand[messages::Type::Join] = []() {
         return std::make_shared<messages::Join>();
+    };
+    m_messageCommand[messages::Type::Input] = []() {
+        return std::make_shared<messages::Input>();
     };
 
     initializeListener(listenPort);
@@ -57,10 +61,8 @@ void MessageQueueServer::shutdown()
 // -----------------------------------------------------------------
 void MessageQueueServer::sendMessage(std::uint32_t clientId, std::shared_ptr<messages::Message> message)
 {
-    {
-        m_sendMessages.enqueue(std::make_tuple(clientId, message));
-        m_eventSendMessages.notify_one();
-    }
+    m_sendMessages.enqueue(std::make_tuple(clientId, message));
+    m_eventSendMessages.notify_one();
 }
 
 // --------------------------------------------------------------

@@ -32,9 +32,9 @@ bool GameModel::initialize(sf::Vector2f viewSize)
     //
     // Initialize the keyboard input system.
     auto inputMapping = {
-        std::make_tuple(components::Input::Type::TurnLeft, sf::Keyboard::A),
-        std::make_tuple(components::Input::Type::TurnRight, sf::Keyboard::D),
-        std::make_tuple(components::Input::Type::Forward, sf::Keyboard::W)};
+        std::make_tuple(components::Input::Type::RotateLeft, sf::Keyboard::A),
+        std::make_tuple(components::Input::Type::RotateRight, sf::Keyboard::D),
+        std::make_tuple(components::Input::Type::Thrust, sf::Keyboard::W)};
     m_systemKeyboardInput = std::make_unique<systems::KeyboardInput>(inputMapping);
 
     //

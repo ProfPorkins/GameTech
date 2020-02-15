@@ -40,6 +40,12 @@ bool GameModel::initialize()
                                          handleJoin(clientId, std::static_pointer_cast<messages::Join>(message));
                                      });
 
+    m_systemNetwork->registerHandler(messages::Type::Input,
+                                     [this](std::uint32_t clientId, std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
+                                         (void)elapsedTime; // unused parameter
+                                         handleInput(clientId, std::static_pointer_cast<messages::Input>(message));
+                                     });
+
     MessageQueueServer::instance().onClientConnected(std::bind(&GameModel::clientConnected, this, std::placeholders::_1));
     return true;
 }
@@ -109,4 +115,9 @@ void GameModel::handleJoin(std::uint32_t clientId, std::shared_ptr<messages::Joi
     addEntity(player);
 
     MessageQueueServer::instance().sendMessage(clientId, std::make_shared<messages::NotifyJoinSelf>(player));
+}
+
+void GameModel::handleInput(std::uint32_t clientId, std::shared_ptr<messages::Input> message)
+{
+    std::cout << "received an input messages: " << message->getPBInput().type() << std::endl;
 }

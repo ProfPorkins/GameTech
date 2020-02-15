@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package shared;
+
+enum InputType {
+    Thrust = 0;
+    RotateLeft = 1;
+    RotateRight = 2;
+    FireWeapon = 3;
+}
+
+message Input {
+    InputType type = 1;
+    uint32 elapsedTime = 2;
+}
