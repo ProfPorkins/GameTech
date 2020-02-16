@@ -97,6 +97,8 @@ void GameModel::addEntity(std::shared_ptr<entities::Entity> entity)
         return;
 
     m_entities[entity->getId()] = entity;
+
+    m_systemNetwork->addEntity(entity);
 }
 
 // --------------------------------------------------------------

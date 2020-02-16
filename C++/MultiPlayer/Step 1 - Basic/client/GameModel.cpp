@@ -99,6 +99,7 @@ void GameModel::addEntity(std::shared_ptr<entities::Entity> entity)
     m_entities[entity->getId()] = entity;
     m_systemKeyboardInput->addEntity(entity);
     m_systemRender->addEntity(entity);
+    m_systemNetwork->addEntity(entity);
 }
 
 // --------------------------------------------------------------
@@ -128,6 +129,13 @@ void GameModel::handleNotifyJoinSelf(std::shared_ptr<messages::NotifyJoinSelf> m
     addEntity(playerSelf);
 }
 
+// --------------------------------------------------------------
+//
+// Handler for the UpdateEntity message.  It checks to see if the client
+// actually has the entity, and if it does, updates the components
+// that are in common between the message and the entity.
+//
+// --------------------------------------------------------------
 void GameModel::handleUpdateEntity(std::shared_ptr<messages::UpdateEntity> message)
 {
     auto& pbEntity = message->getPBEntity();
