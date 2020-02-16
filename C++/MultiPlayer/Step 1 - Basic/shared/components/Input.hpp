@@ -31,7 +31,8 @@ namespace components
 
         Input(const std::vector<Type>& inputs) :
             m_inputs(inputs.begin(), inputs.end())
-        {}
+        {
+        }
 
         const auto& getInputs() { return m_inputs; }
 

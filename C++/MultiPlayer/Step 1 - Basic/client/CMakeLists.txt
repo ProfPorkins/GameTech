@@ -14,13 +14,6 @@ set(CLIENT_HEADER_FILES
     MessageQueueClient.hpp
     )
 
-set(CLIENT_ENTITY_HEADERS
-    entities/PlayerShip.hpp
-    )
-set(CLIENT_ENTITY_SOURCES
-    entities/PlayerShip.cpp
-    )
-
 set(CLIENT_COMPONENTS_HEADERS
     components/Sprite.hpp
     )
@@ -47,9 +40,6 @@ source_group("Main\\Source Files" FILES ${CLIENT_SOURCE_FILES})
 source_group("Components\\Header Files" FILES ${CLIENT_COMPONENTS_HEADERS})
 source_group("Components\\Source Files" FILES ${CLIENT_COMPONENTS_SOURCES})
 
-source_group("Entities\\Header Files" FILES ${CLIENT_ENTITY_HEADERS})
-source_group("Entities\\Source Files" FILES ${CLIENT_ENTITY_SOURCES})
-
 source_group("Systems\\Header Files" FILES ${CLIENT_SYSTEMS_HEADERS})
 source_group("Systems\\Source Files" FILES ${CLIENT_SYSTEMS_SOURCES})
 
@@ -61,8 +51,6 @@ set(CLIENT_CODE_FILES
     ${CLIENT_HEADER_FILES}
     ${CLIENT_COMPONENTS_HEADERS}
     ${CLIENT_COMPONENTS_SOURCES}
-    ${CLIENT_ENTITY_HEADERS}
-    ${CLIENT_ENTITY_SOURCES}
     ${CLIENT_SYSTEMS_HEADERS}
     ${CLIENT_SYSTEMS_SOURCES}
     )

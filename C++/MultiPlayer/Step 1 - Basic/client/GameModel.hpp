@@ -1,5 +1,12 @@
 #pragma once
 
+//
+// Disable some compiler warnings that come from google protocol buffers
+#pragma warning(push)
+#pragma warning(disable : 4127)
+#include "Entity.pb.h"
+#pragma warning(pop)
+
 #include "entities/Entity.hpp"
 #include "messages/NotifyJoinSelf.hpp"
 #include "messages/UpdateEntity.hpp"
@@ -35,6 +42,7 @@ class GameModel
     std::unique_ptr<systems::KeyboardInput> m_systemKeyboardInput;
     std::unique_ptr<systems::Renderer> m_systemRender;
 
+    std::shared_ptr<entities::Entity> createEntity(const shared::Entity& pbEntity);
     void addEntity(std::shared_ptr<entities::Entity> entity);
     void removeEntity(entities::Entity::IdType entityId);
 

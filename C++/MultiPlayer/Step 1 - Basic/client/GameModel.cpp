@@ -2,8 +2,12 @@
 
 #include "MessageQueueClient.hpp"
 #include "components/Input.hpp"
-#include "entities/PlayerShip.hpp"
+#include "components/Movement.hpp"
+#include "components/Position.hpp"
+#include "components/Size.hpp"
+#include "components/Sprite.hpp"
 
+#include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <memory>
@@ -86,6 +90,87 @@ void GameModel::update(const std::chrono::milliseconds elapsedTime, std::shared_
 
 // --------------------------------------------------------------
 //
+// Based upon an Entity received from the server, create the
+// entity at the client.
+//
+// --------------------------------------------------------------
+std::shared_ptr<entities::Entity> GameModel::createEntity(const shared::Entity& pbEntity)
+{
+    // Server provided the entity id, so use it
+    std::shared_ptr<entities::Entity> entity = std::make_shared<entities::Entity>(pbEntity.id());
+
+    if (pbEntity.has_sprite())
+    {
+        //
+        // Get the associated texture loaded first
+        auto texture = std::make_shared<sf::Texture>();
+        m_textures.insert(texture);
+        if (!texture->loadFromFile("assets/" + pbEntity.sprite().texture()))
+        {
+            return nullptr;
+        }
+
+        auto spriteShip = std::make_shared<sf::Sprite>();
+        spriteShip->setTexture(*texture);
+        // This sets the point about which rotation takes place - center of the sprite/texture
+        spriteShip->setOrigin({texture->getSize().x / 2.0f, texture->getSize().y / 2.0f});
+
+        //
+        // Original inspiration: https://en.sfml-dev.org/forums/index.php?topic=15755.0
+        // Define a scaling that converts from the texture size in pixels to unit coordinates
+        // that match the view.  This makes the texture have the same size/shape as the view.
+        sf::Vector2f scaleToUnitSize(m_viewSize.x / texture->getSize().x, m_viewSize.y / texture->getSize().y);
+
+        // Now, set the actual size of the ship based on the size passed in through the parameter
+        spriteShip->setScale(pbEntity.size().size().x() * scaleToUnitSize.x, pbEntity.size().size().x() * scaleToUnitSize.y);
+
+        entity->addComponent(std::make_unique<components::Sprite>(spriteShip));
+    }
+
+    if (pbEntity.has_position())
+    {
+        entity->addComponent(std::make_unique<components::Position>(
+            sf::Vector2f(pbEntity.position().center().x(), pbEntity.position().center().y()),
+            pbEntity.position().orientation()));
+    }
+
+    if (pbEntity.has_size())
+    {
+        entity->addComponent(std::make_unique<components::Size>(m_viewSize));
+    }
+
+    if (pbEntity.has_movement())
+    {
+        entity->addComponent(std::make_unique<components::Movement>(pbEntity.movement().moverate(), pbEntity.movement().rotaterate()));
+    }
+
+    if (pbEntity.has_input())
+    {
+        std::vector<components::Input::Type> inputs;
+        for (auto input : pbEntity.input().type())
+        {
+            switch (input)
+            {
+                case shared::InputType::Thrust:
+                    inputs.push_back(components::Input::Type::Thrust);
+                    break;
+                case shared::InputType::RotateLeft:
+                    inputs.push_back(components::Input::Type::RotateLeft);
+                    break;
+                case shared::InputType::RotateRight:
+                    inputs.push_back(components::Input::Type::RotateRight);
+                    break;
+            }
+        }
+
+        entity->addComponent(std::make_unique<components::Input>(inputs));
+    }
+
+    return entity;
+}
+
+// --------------------------------------------------------------
+//
 // As entities are added to the game model, they are run by the systems
 // to see if they are interested in knowing about them during their
 // updates.
@@ -125,7 +210,7 @@ void GameModel::removeEntity(entities::Entity::IdType entityId)
 // --------------------------------------------------------------
 void GameModel::handleNotifyJoinSelf(std::shared_ptr<messages::NotifyJoinSelf> message)
 {
-    auto playerSelf = entities::createPlayerSelf(message->getPBPlayer(), m_viewSize, m_textures);
+    auto playerSelf = createEntity(message->getPBPlayer());
     addEntity(playerSelf);
 }
 

@@ -20,7 +20,8 @@ namespace systems
     bool KeyboardInput::addEntity(std::shared_ptr<entities::Entity> entity)
     {
         // Need to let the System class do its thing
-        if (!System::addEntity(entity)) return false;
+        if (!System::addEntity(entity))
+            return false;
         //
         // Build a mapping from this entity's keyboard inputs to the functions this system
         // can invoke for those inputs.  This allows those functions to be directly
