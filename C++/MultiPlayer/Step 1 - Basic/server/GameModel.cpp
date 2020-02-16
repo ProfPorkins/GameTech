@@ -138,7 +138,7 @@ void GameModel::handleJoin(std::uint64_t clientId, std::shared_ptr<messages::Joi
 
         auto position = entity->getComponent<components::Position>();
         pbEntity.mutable_position()->mutable_center()->set_x(position->get().x);
-        pbEntity.mutable_position()->mutable_center()->set_x(position->get().y);
+        pbEntity.mutable_position()->mutable_center()->set_y(position->get().y);
         pbEntity.mutable_position()->set_orientation(entity->getComponent<components::Position>()->getOrientation());
 
         pbEntity.mutable_size()->mutable_size()->set_x(entity->getComponent<components::Size>()->get().x);
@@ -173,7 +173,7 @@ void GameModel::handleJoin(std::uint64_t clientId, std::shared_ptr<messages::Joi
 
         auto position = player->getComponent<components::Position>();
         pbEntity.mutable_position()->mutable_center()->set_x(position->get().x);
-        pbEntity.mutable_position()->mutable_center()->set_x(position->get().y);
+        pbEntity.mutable_position()->mutable_center()->set_y(position->get().y);
         pbEntity.mutable_position()->set_orientation(player->getComponent<components::Position>()->getOrientation());
 
         pbEntity.mutable_size()->mutable_size()->set_x(player->getComponent<components::Size>()->get().x);
