@@ -126,6 +126,31 @@ void GameModel::removeEntity(entities::Entity::IdType entityId)
 // --------------------------------------------------------------
 void GameModel::handleJoin(std::uint64_t clientId, std::shared_ptr<messages::Join> message)
 {
+    //
+    // Step 1: Tell the newly connected player about all other entities
+    for (auto& [entityId, entity] : m_entities)
+    {
+        shared::Entity pbEntity;
+
+        pbEntity.set_id(entity->getId());
+
+        pbEntity.mutable_sprite()->set_texture("playerShip1_Red.png");
+
+        auto position = entity->getComponent<components::Position>();
+        pbEntity.mutable_position()->mutable_center()->set_x(position->get().x);
+        pbEntity.mutable_position()->mutable_center()->set_x(position->get().y);
+        pbEntity.mutable_position()->set_orientation(entity->getComponent<components::Position>()->getOrientation());
+
+        pbEntity.mutable_size()->mutable_size()->set_x(entity->getComponent<components::Size>()->get().x);
+        pbEntity.mutable_size()->mutable_size()->set_y(entity->getComponent<components::Size>()->get().y);
+
+        auto entityMessage = std::make_shared<messages::NewEntity>(pbEntity);
+        MessageQueueServer::instance().sendMessage(clientId, entityMessage);
+    }
+
+    //
+    // Step 2: Create an entity for the newly connected player
+
     // Generate a player, add to server simulation, and send to the client
     auto player = entities::createPlayer(sf::Vector2f(0.0f, 0.0f), 0.05f, 0.0002f, 180.0f / 1000);
     // Need to provide the mapping from the clientId to the player's entityId
@@ -157,7 +182,23 @@ void GameModel::handleJoin(std::uint64_t clientId, std::shared_ptr<messages::Joi
         pbEntity.mutable_movement()->set_moverate(player->getComponent<components::Movement>()->getMoveRate());
         pbEntity.mutable_movement()->set_rotaterate(player->getComponent<components::Movement>()->getRotateRate());
 
+        //
+        // Step 3: Send the new player entity to the newly joined client.
         MessageQueueServer::instance().sendMessage(clientId, std::make_shared<messages::NewEntity>(pbEntity));
+
+        //
+        // Step 4: Let all other clients know about this new player entity
+        pbEntity.mutable_sprite()->set_texture("playerShip1_red.png");
+        pbEntity.release_input();
+        pbEntity.release_movement();
+        auto entityMessage = std::make_shared<messages::NewEntity>(pbEntity);
+        for (auto otherId : m_players)
+        {
+            if (otherId != clientId)
+            {
+                MessageQueueServer::instance().sendMessage(otherId, entityMessage);
+            }
+        }
     }
 }
 

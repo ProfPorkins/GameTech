@@ -10,8 +10,6 @@
 #include "Message.hpp"
 #include "MessageTypes.hpp"
 
-#include <memory>
-
 namespace messages
 {
     // -----------------------------------------------------------------
