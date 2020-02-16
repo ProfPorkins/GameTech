@@ -38,11 +38,11 @@ class MessageQueueServer
 
     bool initialize(std::uint16_t listenPort);
     void shutdown();
-    void onClientConnected(std::function<void(std::uint32_t)> onClientConnected) { m_onClientConnected = onClientConnected; }
+    void onClientConnected(std::function<void(std::uint64_t)> onClientConnected) { m_onClientConnected = onClientConnected; }
 
-    void sendMessage(std::uint32_t clientId, std::shared_ptr<messages::Message> message);
+    void sendMessage(std::uint64_t clientId, std::shared_ptr<messages::Message> message);
     void broadcastMessage(std::shared_ptr<messages::Message> message);
-    std::queue<std::tuple<std::uint32_t, std::shared_ptr<messages::Message>>> getMessages();
+    std::queue<std::tuple<std::uint64_t, std::shared_ptr<messages::Message>>> getMessages();
 
   private:
     MessageQueueServer() {}
@@ -53,20 +53,21 @@ class MessageQueueServer
     std::thread m_threadReceiver;
     std::unordered_map<messages::Type, std::function<std::shared_ptr<messages::Message>(void)>> m_messageCommand;
 
-    ConcurrentQueue<std::tuple<std::uint32_t, std::shared_ptr<messages::Message>>> m_sendMessages;
+    ConcurrentQueue<std::tuple<std::uint64_t, std::shared_ptr<messages::Message>>> m_sendMessages;
     std::condition_variable m_eventSendMessages;
     std::mutex m_mutexEventSendMessages;
 
-    std::queue<std::tuple<std::uint32_t, std::shared_ptr<messages::Message>>> m_receivedMessages;
+    std::queue<std::tuple<std::uint64_t, std::shared_ptr<messages::Message>>> m_receivedMessages;
     std::mutex m_mutexReceivedMessages;
 
     sf::SocketSelector m_selector;
     sf::TcpListener m_listener;
-    std::function<void(std::uint32_t)> m_onClientConnected;
-    std::unordered_map<std::uint32_t, std::unique_ptr<sf::TcpSocket>> m_sockets;
+    std::function<void(std::uint64_t)> m_onClientConnected;
+    std::unordered_map<std::uint64_t, std::unique_ptr<sf::TcpSocket>> m_sockets;
     std::unique_ptr<sf::TcpSocket> m_socketServer;
     std::mutex m_mutexSockets;
 
+    std::uint64_t socketToId(sf::TcpSocket* socket);
     void initializeListener(std::uint16_t listenPort);
     void initializeSender();
     void initializeReceiver();

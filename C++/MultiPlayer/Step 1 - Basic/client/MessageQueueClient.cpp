@@ -164,12 +164,21 @@ void MessageQueueClient::initializeReceiver()
                         {
                             // Convert back from network representation
                             size[0] = ntohl(size[0]);
-                            std::string data;
-                            data.resize(size[0]);
-                            if (m_socketServer->receive(data.data(), size[0], received) == sf::Socket::Done)
+                            if (size[0] > 0)
+                            {
+                                std::string data;
+                                data.resize(size[0]);
+                                if (m_socketServer->receive(data.data(), size[0], received) == sf::Socket::Done)
+                                {
+                                    auto message = m_messageCommand[type[0]]();
+                                    message->parseFromString(data);
+                                    std::lock_guard<std::mutex> lock(m_mutexReceivedMessages);
+                                    m_receivedMessages.push(message);
+                                }
+                            }
+                            else
                             {
                                 auto message = m_messageCommand[type[0]]();
-                                message->parseFromString(data);
                                 std::lock_guard<std::mutex> lock(m_mutexReceivedMessages);
                                 m_receivedMessages.push(message);
                             }

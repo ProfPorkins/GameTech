@@ -10,8 +10,6 @@
 #include "Message.hpp"
 #include "MessageTypes.hpp"
 
-#include <SFML/Network.hpp>
-
 namespace messages
 {
     // -----------------------------------------------------------------
@@ -23,24 +21,12 @@ namespace messages
     class ConnectAck : public Message
     {
       public:
-        ConnectAck(std::uint32_t clientId) :
-            Message(Type::ConnectAck),
-            m_clientId(clientId)
-        {
-        }
-
         ConnectAck() :
             Message(Type::ConnectAck)
         {
         }
 
-        virtual std::string serializeToString() const override;
-        virtual bool parseFromString(const std::string& source) override;
-
-        const shared::ClientId& getPbClientIdId() const { return m_pbClientId; }
-
-      private:
-        std::uint32_t m_clientId{0};
-        shared::ClientId m_pbClientId;
+        virtual std::string serializeToString() const override { return ""; }
+        virtual bool parseFromString(const std::string&) override { return true; }
     };
 } // namespace messages

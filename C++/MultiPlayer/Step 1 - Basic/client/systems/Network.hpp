@@ -30,7 +30,6 @@ namespace systems
         void registerHandler(messages::Type type, std::function<void(std::chrono::milliseconds, std::shared_ptr<messages::Message>)> handler);
 
       private:
-        std::uint32_t m_clientId{0};
         std::unordered_map<messages::Type, std::function<void(std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message>)>> m_commandMap;
 
         void handleConnectAck(std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::ConnectAck> message);

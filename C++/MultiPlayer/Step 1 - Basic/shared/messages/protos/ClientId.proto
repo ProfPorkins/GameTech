@@ -3,5 +3,5 @@ syntax = "proto3";
 package shared;
 
 message ClientId {
-    uint32 id = 1;
+    uint64 id = 1;
 }

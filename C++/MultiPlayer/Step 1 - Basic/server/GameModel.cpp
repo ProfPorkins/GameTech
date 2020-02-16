@@ -46,13 +46,13 @@ bool GameModel::initialize()
     // Initialize the various systems
     m_systemNetwork = std::make_unique<systems::Network>();
     m_systemNetwork->registerHandler(messages::Type::Join,
-                                     [this](std::uint32_t clientId, std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
+                                     [this](std::uint64_t clientId, std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
                                          (void)elapsedTime; // unused parameter
                                          handleJoin(clientId, std::static_pointer_cast<messages::Join>(message));
                                      });
 
     m_systemNetwork->registerHandler(messages::Type::Input,
-                                     [this](std::uint32_t clientId, std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
+                                     [this](std::uint64_t clientId, std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
                                          (void)elapsedTime; // unused parameter
                                          handleInput(clientId, std::static_pointer_cast<messages::Input>(message));
                                      });
@@ -77,11 +77,11 @@ void GameModel::shutdown()
 // the server simulation.
 //
 // --------------------------------------------------------------
-void GameModel::clientConnected(std::uint32_t clientId)
+void GameModel::clientConnected(std::uint64_t clientId)
 {
     m_players.insert(clientId);
 
-    MessageQueueServer::instance().sendMessage(clientId, std::make_shared<messages::ConnectAck>(clientId));
+    MessageQueueServer::instance().sendMessage(clientId, std::make_shared<messages::ConnectAck>());
 }
 
 // --------------------------------------------------------------
@@ -124,7 +124,7 @@ void GameModel::removeEntity(entities::Entity::IdType entityId)
 // of the player.
 //
 // --------------------------------------------------------------
-void GameModel::handleJoin(std::uint32_t clientId, std::shared_ptr<messages::Join> message)
+void GameModel::handleJoin(std::uint64_t clientId, std::shared_ptr<messages::Join> message)
 {
     // Generate a player, add to server simulation, and send to the client
     auto player = entities::createPlayer(sf::Vector2f(0.0f, 0.0f), 0.05f, 0.0002f, 180.0f / 1000);
@@ -143,7 +143,7 @@ void GameModel::handleJoin(std::uint32_t clientId, std::shared_ptr<messages::Joi
 // any other connected clients.
 //
 // --------------------------------------------------------------
-void GameModel::handleInput(std::uint32_t clientId, std::shared_ptr<messages::Input> message)
+void GameModel::handleInput(std::uint64_t clientId, std::shared_ptr<messages::Input> message)
 {
     //std::cout << "received an input messages: " << message->getPBInput().type() << std::endl;
     auto entityId = m_clientIdToEntityId[clientId];

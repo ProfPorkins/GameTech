@@ -18,10 +18,7 @@ namespace messages
         {
         }
 
-        virtual std::string serializeToString() const override
-        {
-            return "";
-        }
+        virtual std::string serializeToString() const override { return ""; }
         virtual bool parseFromString(const std::string&) override { return true; }
     };
 } // namespace messages

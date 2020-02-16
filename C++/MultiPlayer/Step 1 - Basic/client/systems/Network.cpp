@@ -62,7 +62,6 @@ namespace systems
     void Network::handleConnectAck(std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::ConnectAck> message)
     {
         (void)elapsedTime;
-        m_clientId = message->getPbClientIdId().id();
         //
         // Now, send a Join message back to the server so we can get into the game!
         MessageQueueClient::instance().sendMessage(std::make_shared<messages::Join>());

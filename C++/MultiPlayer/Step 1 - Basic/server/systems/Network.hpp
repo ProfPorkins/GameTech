@@ -23,10 +23,10 @@ namespace systems
       public:
         Network();
 
-        void update(std::chrono::milliseconds elapsedTime, std::queue<std::tuple<std::uint32_t, std::shared_ptr<messages::Message>>> messages);
-        void registerHandler(messages::Type type, std::function<void(std::uint32_t, std::chrono::milliseconds, std::shared_ptr<messages::Message>)> handler);
+        void update(std::chrono::milliseconds elapsedTime, std::queue<std::tuple<std::uint64_t, std::shared_ptr<messages::Message>>> messages);
+        void registerHandler(messages::Type type, std::function<void(std::uint64_t, std::chrono::milliseconds, std::shared_ptr<messages::Message>)> handler);
 
       private:
-        std::unordered_map<messages::Type, std::function<void(std::uint32_t, std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message>)>> m_commandMap;
+        std::unordered_map<messages::Type, std::function<void(std::uint64_t, std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message>)>> m_commandMap;
     };
 } // namespace systems

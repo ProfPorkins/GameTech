@@ -26,7 +26,6 @@ set(SHARED_MESSAGES_HEADERS
     )
 
 set(SHARED_MESSAGES_SOURCES
-    messages/ConnectAck.cpp
     messages/Input.cpp
     messages/NotifyJoinSelf.cpp
     messages/UpdateEntity.cpp

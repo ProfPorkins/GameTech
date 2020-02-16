@@ -19,7 +19,7 @@ namespace systems
     // Process all outstanding messages since the last update.
     //
     // --------------------------------------------------------------
-    void Network::update(std::chrono::milliseconds elapsedTime, std::queue<std::tuple<std::uint32_t, std::shared_ptr<messages::Message>>> messages)
+    void Network::update(std::chrono::milliseconds elapsedTime, std::queue<std::tuple<std::uint64_t, std::shared_ptr<messages::Message>>> messages)
     {
         while (!messages.empty())
         {
@@ -39,7 +39,7 @@ namespace systems
     // Allow handlers for messages to be registered.
     //
     // --------------------------------------------------------------
-    void Network::registerHandler(messages::Type type, std::function<void(std::uint32_t, std::chrono::milliseconds, std::shared_ptr<messages::Message>)> handler)
+    void Network::registerHandler(messages::Type type, std::function<void(std::uint64_t, std::chrono::milliseconds, std::shared_ptr<messages::Message>)> handler)
     {
         m_commandMap[type] = handler;
     }

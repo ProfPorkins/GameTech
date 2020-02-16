@@ -6,6 +6,7 @@
 #include <array>
 #include <cstdint>
 #include <iostream>
+#include <limits>
 
 // For htonl and ntohl
 #ifdef _MSC_VER
@@ -59,7 +60,7 @@ void MessageQueueServer::shutdown()
 //  2. Signal the thread that performs the sending that a new message is available
 //
 // -----------------------------------------------------------------
-void MessageQueueServer::sendMessage(std::uint32_t clientId, std::shared_ptr<messages::Message> message)
+void MessageQueueServer::sendMessage(std::uint64_t clientId, std::shared_ptr<messages::Message> message)
 {
     m_sendMessages.enqueue(std::make_tuple(clientId, message));
     m_eventSendMessages.notify_one();
@@ -86,14 +87,26 @@ void MessageQueueServer::broadcastMessage(std::shared_ptr<messages::Message> mes
 // this method was called.
 //
 // --------------------------------------------------------------
-std::queue<std::tuple<std::uint32_t, std::shared_ptr<messages::Message>>> MessageQueueServer::getMessages()
+std::queue<std::tuple<std::uint64_t, std::shared_ptr<messages::Message>>> MessageQueueServer::getMessages()
 {
-    std::queue<std::tuple<std::uint32_t, std::shared_ptr<messages::Message>>> copy;
+    std::queue<std::tuple<std::uint64_t, std::shared_ptr<messages::Message>>> copy;
 
     std::lock_guard<std::mutex> lock(m_mutexReceivedMessages);
     std::swap(copy, m_receivedMessages);
 
     return copy;
+}
+
+// --------------------------------------------------------------
+//
+// Utility to combine an IP address value and Port into a single
+// 64 bit number for unique identification of each client.
+//
+// --------------------------------------------------------------
+std::uint64_t MessageQueueServer::socketToId(sf::TcpSocket* socket)
+{
+    std::uint64_t id = socket->getRemoteAddress().toInteger() + (static_cast<std::uint64_t>(socket->getRemotePort()) << 32);
+    return id;
 }
 
 // --------------------------------------------------------------
@@ -125,7 +138,7 @@ void MessageQueueServer::initializeListener(std::uint16_t listenPort)
             {
                 std::cout << "new client connection accepted" << std::endl;
                 m_selector.add(*socket);
-                auto clientId = socket->getRemoteAddress().toInteger();
+                auto clientId = socketToId(socket.get());
                 {
                     std::lock_guard<std::mutex> lock(m_mutexSockets);
                     m_sockets[clientId] = std::move(socket);
@@ -231,14 +244,14 @@ void MessageQueueServer::initializeReceiver()
                                         auto message = m_messageCommand[type[0]]();
                                         message->parseFromString(data);
                                         std::lock_guard<std::mutex> lock(m_mutexReceivedMessages);
-                                        m_receivedMessages.push(std::make_tuple(socket->getRemoteAddress().toInteger(), message));
+                                        m_receivedMessages.push(std::make_tuple(socketToId(socket.get()), message));
                                     }
                                 }
                                 else
                                 {
                                     auto message = m_messageCommand[type[0]]();
                                     std::lock_guard<std::mutex> lock(m_mutexReceivedMessages);
-                                    m_receivedMessages.push(std::make_tuple(socket->getRemoteAddress().toInteger(), message));
+                                    m_receivedMessages.push(std::make_tuple(socketToId(socket.get()), message));
                                 }
                             }
                         }
