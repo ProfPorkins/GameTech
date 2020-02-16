@@ -48,15 +48,15 @@ namespace systems
         class KeyToFunction
         {
           public:
-            std::unordered_map<sf::Keyboard::Key, std::function<void(std::chrono::milliseconds, components::Position*, components::Movement*)>> m_keyToFunction;
+            std::unordered_map<sf::Keyboard::Key, std::function<void(std::chrono::milliseconds)>> m_keyToFunction;
         };
 
         std::unordered_map<sf::Keyboard::Key, sf::Event::KeyEvent> m_keysPressed;
         std::unordered_map<components::Input::Type, sf::Keyboard::Key> m_typeToKeyMap;
         std::unordered_map<entities::Entity::IdType, KeyToFunction> m_keyToFunctionMap;
 
-        void rotateLeft(std::chrono::milliseconds elapsedTime, components::Position* position, components::Movement* movement);
-        void rotateRight(std::chrono::milliseconds elapsedTime, components::Position* position, components::Movement* movement);
-        void thrust(std::chrono::milliseconds elapsedTime, components::Position* position, components::Movement* movement);
+        void rotateLeft(std::chrono::milliseconds elapsedTime);
+        void rotateRight(std::chrono::milliseconds elapsedTime);
+        void thrust(std::chrono::milliseconds elapsedTime);
     };
 } // namespace systems
