@@ -12,7 +12,7 @@ set(PROTOBUF_FILES
     messages/protos/MovementComponent.proto
     messages/protos/PositionComponent.proto
     messages/protos/SizeComponent.proto
-    messages/protos/SpriteComponent.proto
+    messages/protos/AppearanceComponent.proto
     messages/protos/Vector2f.proto
     )
 

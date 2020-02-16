@@ -99,13 +99,13 @@ std::shared_ptr<entities::Entity> GameModel::createEntity(const shared::Entity& 
     // Server provided the entity id, so use it
     std::shared_ptr<entities::Entity> entity = std::make_shared<entities::Entity>(pbEntity.id());
 
-    if (pbEntity.has_sprite())
+    if (pbEntity.has_appearance())
     {
         //
         // Get the associated texture loaded first
         auto texture = std::make_shared<sf::Texture>();
         m_textures.insert(texture);
-        if (!texture->loadFromFile("assets/" + pbEntity.sprite().texture()))
+        if (!texture->loadFromFile("assets/" + pbEntity.appearance().texture()))
         {
             return nullptr;
         }

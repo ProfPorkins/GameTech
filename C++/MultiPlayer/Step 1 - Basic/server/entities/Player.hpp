@@ -4,6 +4,7 @@
 
 #include <SFML/System/Vector2.hpp>
 #include <memory>
+#include <string>
 
 // --------------------------------------------------------------
 //
@@ -13,5 +14,5 @@
 // --------------------------------------------------------------
 namespace entities
 {
-    std::shared_ptr<Entity> createPlayer(sf::Vector2f position, float size, float speed, float rotateRate);
+    std::shared_ptr<Entity> createPlayer(std::string texture, sf::Vector2f position, float size, float speed, float rotateRate);
 }

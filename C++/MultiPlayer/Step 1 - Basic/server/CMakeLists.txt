@@ -22,6 +22,7 @@ set(SERVER_ENTITY_SOURCES
     )
 
 set(SERVER_COMPONENTS_HEADERS
+    components/Appearance.hpp
     )
 set(SERVER_COMPONENTS_SOURCES
     )

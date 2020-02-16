@@ -2,6 +2,6 @@ syntax = "proto3";
 
 package shared;
 
-message SpriteComponent {
+message AppearanceComponent {
     string texture = 1;
 }

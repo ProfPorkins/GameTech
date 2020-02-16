@@ -1,6 +1,7 @@
 #include "GameModel.hpp"
 
 #include "MessageQueueServer.hpp"
+#include "components/Appearance.hpp"
 #include "components/Movement.hpp"
 #include "components/Position.hpp"
 #include "components/Size.hpp"
@@ -134,10 +135,10 @@ void GameModel::handleJoin(std::uint64_t clientId, std::shared_ptr<messages::Joi
 
         pbEntity.set_id(entity->getId());
 
-        //
-        // TODO: Need some way to know if this really is a player ship at the server without
-        //       having to have a Sprite component at the server
-        pbEntity.mutable_sprite()->set_texture("playerShip1_Red.png");
+        if (entity->hasComponent<components::Appearance>())
+        {
+            pbEntity.mutable_appearance()->set_texture(entity->getComponent<components::Appearance>()->get());
+        }
 
         if (entity->hasComponent<components::Position>())
         {
@@ -161,7 +162,7 @@ void GameModel::handleJoin(std::uint64_t clientId, std::shared_ptr<messages::Joi
     // Step 2: Create an entity for the newly connected player
 
     // Generate a player, add to server simulation, and send to the client
-    auto player = entities::createPlayer(sf::Vector2f(0.0f, 0.0f), 0.05f, 0.0002f, 180.0f / 1000);
+    auto player = entities::createPlayer("playerShip1_Blue.png", sf::Vector2f(0.0f, 0.0f), 0.05f, 0.0002f, 180.0f / 1000);
     // Need to provide the mapping from the clientId to the player's entityId
     m_clientIdToEntityId[clientId] = player->getId();
     // Go ahead and add to the game model
@@ -174,7 +175,7 @@ void GameModel::handleJoin(std::uint64_t clientId, std::shared_ptr<messages::Joi
 
         pbEntity.set_id(player->getId());
 
-        pbEntity.mutable_sprite()->set_texture("playerShip1_blue.png");
+        pbEntity.mutable_appearance()->set_texture(player->getComponent<components::Appearance>()->get());
 
         pbEntity.mutable_input()->add_type(shared::InputType::Thrust);
         pbEntity.mutable_input()->add_type(shared::InputType::RotateLeft);
@@ -183,7 +184,7 @@ void GameModel::handleJoin(std::uint64_t clientId, std::shared_ptr<messages::Joi
         auto position = player->getComponent<components::Position>();
         pbEntity.mutable_position()->mutable_center()->set_x(position->get().x);
         pbEntity.mutable_position()->mutable_center()->set_y(position->get().y);
-        pbEntity.mutable_position()->set_orientation(player->getComponent<components::Position>()->getOrientation());
+        pbEntity.mutable_position()->set_orientation(position->getOrientation());
 
         pbEntity.mutable_size()->mutable_size()->set_x(player->getComponent<components::Size>()->get().x);
         pbEntity.mutable_size()->mutable_size()->set_y(player->getComponent<components::Size>()->get().y);
@@ -197,7 +198,12 @@ void GameModel::handleJoin(std::uint64_t clientId, std::shared_ptr<messages::Joi
 
         //
         // Step 4: Let all other clients know about this new player entity
-        pbEntity.mutable_sprite()->set_texture("playerShip1_red.png");
+
+        // We change the appearance for a player ship entity for all other clients to a different
+        // texture.
+        player->getComponent<components::Appearance>()->set("playerShip1_Red.png");
+        pbEntity.mutable_appearance()->set_texture(player->getComponent<components::Appearance>()->get());
+
         pbEntity.release_input();
         pbEntity.release_movement();
         auto entityMessage = std::make_shared<messages::NewEntity>(pbEntity);
@@ -255,6 +261,12 @@ void GameModel::handleInput(std::uint64_t clientId, std::shared_ptr<messages::In
     }
 }
 
+// --------------------------------------------------------------
+//
+// For the entities that have updates, send those updates to all
+// connected clients.
+//
+// --------------------------------------------------------------
 void GameModel::updateClients()
 {
     for (auto entityId : m_reportThese)
