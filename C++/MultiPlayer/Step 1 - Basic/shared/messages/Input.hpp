@@ -33,7 +33,9 @@ namespace messages
         }
 
         Input() :
-            Message(Type::Input)
+            Message(Type::Input),
+            m_type(components::Input::Type::Undefined),
+            m_elapsedTime(0)
         {
         }
 
