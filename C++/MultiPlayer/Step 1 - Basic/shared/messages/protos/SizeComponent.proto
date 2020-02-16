@@ -4,6 +4,6 @@ import public "Vector2f.proto";
 
 package shared;
 
-message Size {
+message SizeComponent {
     Vector2f size = 1;
 }

@@ -4,7 +4,7 @@ import public "Vector2f.proto";
 
 package shared;
 
-message Position {
+message PositionComponent {
     Vector2f center = 1;
     float orientation = 2;
 }

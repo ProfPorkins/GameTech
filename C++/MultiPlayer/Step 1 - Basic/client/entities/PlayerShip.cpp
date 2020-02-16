@@ -18,37 +18,50 @@ namespace entities
         // Server provided the entity id, so use it
         std::shared_ptr<Entity> entity = std::make_shared<Entity>(pbPlayer.id());
 
-        //
-        // Get the associated texture loaded first
-        auto texture = std::make_shared<sf::Texture>();
-        textures.insert(texture);
-        if (!texture->loadFromFile("assets/playerShip1_blue.png"))
+        if (pbPlayer.has_sprite())
         {
-            return nullptr;
+            //
+            // Get the associated texture loaded first
+            auto texture = std::make_shared<sf::Texture>();
+            textures.insert(texture);
+            if (!texture->loadFromFile("assets/" + pbPlayer.sprite().texture()))
+            {
+                return nullptr;
+            }
+
+            auto spriteShip = std::make_shared<sf::Sprite>();
+            spriteShip->setTexture(*texture);
+            // This sets the point about which rotation takes place - center of the sprite/texture
+            spriteShip->setOrigin({ texture->getSize().x / 2.0f, texture->getSize().y / 2.0f });
+
+            //
+            // Original inspiration: https://en.sfml-dev.org/forums/index.php?topic=15755.0
+            // Define a scaling that converts from the texture size in pixels to unit coordinates
+            // that match the view.  This makes the texture have the same size/shape as the view.
+            sf::Vector2f scaleToUnitSize(viewSize.x / texture->getSize().x, viewSize.y / texture->getSize().y);
+
+            // Now, set the actual size of the ship based on the size passed in through the parameter
+            spriteShip->setScale(pbPlayer.size().size().x() * scaleToUnitSize.x, pbPlayer.size().size().x() * scaleToUnitSize.y);
+
+            entity->addComponent(std::make_unique<components::Sprite>(spriteShip));
         }
 
-        auto spriteShip = std::make_shared<sf::Sprite>();
-        spriteShip->setTexture(*texture);
-        // This sets the point about which rotation takes place - center of the sprite/texture
-        spriteShip->setOrigin({texture->getSize().x / 2.0f, texture->getSize().y / 2.0f});
+        if (pbPlayer.has_position())
+        {
+            entity->addComponent(std::make_unique<components::Position>(
+                sf::Vector2f(pbPlayer.position().center().x(), pbPlayer.position().center().y()),
+                pbPlayer.position().orientation()));
+        }
 
-        //
-        // Original inspiration: https://en.sfml-dev.org/forums/index.php?topic=15755.0
-        // Define a scaling that converts from the texture size in pixels to unit coordinates
-        // that match the view.  This makes the texture have the same size/shape as the view.
-        sf::Vector2f scaleToUnitSize(viewSize.x / texture->getSize().x, viewSize.y / texture->getSize().y);
+        if (pbPlayer.has_size())
+        {
+            entity->addComponent(std::make_unique<components::Size>(viewSize));
+        }
 
-        // Now, set the actual size of the ship based on the size passed in through the parameter
-        spriteShip->setScale(pbPlayer.size().size().x() * scaleToUnitSize.x, pbPlayer.size().size().x() * scaleToUnitSize.y);
-
-        //
-        // A player ship has the following components
-        entity->addComponent(std::make_unique<components::Position>(
-            sf::Vector2f(pbPlayer.position().center().x(), pbPlayer.position().center().y()),
-            pbPlayer.position().orientation()));
-        entity->addComponent(std::make_unique<components::Size>(viewSize));
-        entity->addComponent(std::make_unique<components::Sprite>(spriteShip));
-        entity->addComponent(std::make_unique<components::Movement>(pbPlayer.movement().moverate(), pbPlayer.movement().rotaterate()));
+        if (pbPlayer.has_movement())
+        {
+            entity->addComponent(std::make_unique<components::Movement>(pbPlayer.movement().moverate(), pbPlayer.movement().rotaterate()));
+        }
 
         auto inputs = {
             components::Input::Type::Thrust,

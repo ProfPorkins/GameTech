@@ -17,6 +17,8 @@ namespace messages
 
         pbPlayer.set_id(m_player->getId());
 
+        pbPlayer.mutable_sprite()->set_texture("playerShip1_blue.png");
+
         auto position = m_player->getComponent<components::Position>();
         pbPlayer.mutable_position()->mutable_center()->set_x(position->get().x);
         pbPlayer.mutable_position()->mutable_center()->set_x(position->get().y);

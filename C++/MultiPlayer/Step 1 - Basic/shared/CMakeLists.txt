@@ -8,9 +8,10 @@ set(PROTOBUF_FILES
     messages/protos/ClientId.proto
     messages/protos/Entity.proto
     messages/protos/Input.proto
-    messages/protos/Movement.proto
-    messages/protos/Position.proto
-    messages/protos/Size.proto
+    messages/protos/MovementComponent.proto
+    messages/protos/PositionComponent.proto
+    messages/protos/SizeComponent.proto
+    messages/protos/SpriteComponent.proto
     messages/protos/Vector2f.proto
     )
 
