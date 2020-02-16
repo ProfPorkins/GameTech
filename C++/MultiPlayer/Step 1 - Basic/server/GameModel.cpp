@@ -6,7 +6,7 @@
 #include "components/Size.hpp"
 #include "entities/Player.hpp"
 #include "messages/ConnectAck.hpp"
-#include "messages/NotifyJoinSelf.hpp"
+#include "messages/NewEntity.hpp"
 #include "messages/UpdateEntity.hpp"
 
 #include <cstdint>
@@ -133,7 +133,32 @@ void GameModel::handleJoin(std::uint64_t clientId, std::shared_ptr<messages::Joi
     // Go ahead and add to the game model
     addEntity(player);
 
-    MessageQueueServer::instance().sendMessage(clientId, std::make_shared<messages::NotifyJoinSelf>(player));
+    //
+    // Build the protobuf represetnation and get it sent off to the client
+    {
+        shared::Entity pbEntity;
+
+        pbEntity.set_id(player->getId());
+
+        pbEntity.mutable_sprite()->set_texture("playerShip1_blue.png");
+
+        pbEntity.mutable_input()->add_type(shared::InputType::Thrust);
+        pbEntity.mutable_input()->add_type(shared::InputType::RotateLeft);
+        pbEntity.mutable_input()->add_type(shared::InputType::RotateRight);
+
+        auto position = player->getComponent<components::Position>();
+        pbEntity.mutable_position()->mutable_center()->set_x(position->get().x);
+        pbEntity.mutable_position()->mutable_center()->set_x(position->get().y);
+        pbEntity.mutable_position()->set_orientation(player->getComponent<components::Position>()->getOrientation());
+
+        pbEntity.mutable_size()->mutable_size()->set_x(player->getComponent<components::Size>()->get().x);
+        pbEntity.mutable_size()->mutable_size()->set_y(player->getComponent<components::Size>()->get().y);
+
+        pbEntity.mutable_movement()->set_moverate(player->getComponent<components::Movement>()->getMoveRate());
+        pbEntity.mutable_movement()->set_rotaterate(player->getComponent<components::Movement>()->getRotateRate());
+
+        MessageQueueServer::instance().sendMessage(clientId, std::make_shared<messages::NewEntity>(pbEntity));
+    }
 }
 
 // --------------------------------------------------------------

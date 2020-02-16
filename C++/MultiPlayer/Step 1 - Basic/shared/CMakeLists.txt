@@ -23,13 +23,13 @@ set(SHARED_MESSAGES_HEADERS
     messages/Join.hpp
     messages/Message.hpp
     messages/MessageTypes.hpp
-    messages/NotifyJoinSelf.hpp
+    messages/NewEntity.hpp
     messages/UpdateEntity.hpp
     )
 
 set(SHARED_MESSAGES_SOURCES
     messages/Input.cpp
-    messages/NotifyJoinSelf.cpp
+    messages/NewEntity.cpp
     messages/UpdateEntity.cpp
     )
 

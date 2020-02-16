@@ -14,10 +14,9 @@ namespace messages
     {
         ConnectAck,
         Join,
-        NotifyJoinSelf,
-        NotifyJoinOther,
-        DisconnectOther,
+        NewEntity,
         UpdateEntity,
+        RemoveEntity,
         Input
     };
 } // namespace messages

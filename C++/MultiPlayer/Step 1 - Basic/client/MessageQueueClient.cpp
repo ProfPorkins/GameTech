@@ -1,7 +1,7 @@
 #include "MessageQueueClient.hpp"
 
 #include "messages/ConnectAck.hpp"
-#include "messages/NotifyJoinSelf.hpp"
+#include "messages/NewEntity.hpp"
 #include "messages/UpdateEntity.hpp"
 
 #include <array>
@@ -36,8 +36,8 @@ bool MessageQueueClient::initialize(std::string serverIP, std::uint16_t serverPo
     m_messageCommand[messages::Type::ConnectAck] = []() {
         return std::make_shared<messages::ConnectAck>();
     };
-    m_messageCommand[messages::Type::NotifyJoinSelf] = []() {
-        return std::make_shared<messages::NotifyJoinSelf>();
+    m_messageCommand[messages::Type::NewEntity] = []() {
+        return std::make_shared<messages::NewEntity>();
     };
     m_messageCommand[messages::Type::UpdateEntity] = []() {
         return std::make_shared<messages::UpdateEntity>();

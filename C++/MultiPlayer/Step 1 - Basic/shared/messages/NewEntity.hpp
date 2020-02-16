@@ -9,7 +9,6 @@
 
 #include "Message.hpp"
 #include "MessageTypes.hpp"
-#include "entities/Entity.hpp"
 
 #include <memory>
 
@@ -17,30 +16,29 @@ namespace messages
 {
     // -----------------------------------------------------------------
     //
-    // This message is send from the server to a client after it sends
-    // a join request.
+    // This message is send from the server to a client to inform it of
+    // a new entity to add to its model.
     //
     // -----------------------------------------------------------------
-    class NotifyJoinSelf : public Message
+    class NewEntity : public Message
     {
       public:
-        NotifyJoinSelf(std::shared_ptr<entities::Entity> player) :
-            Message(Type::NotifyJoinSelf),
-            m_player(player)
+        NewEntity(shared::Entity entity) :
+            Message(Type::NewEntity),
+            m_pbEntity(entity)
         {
         }
-        NotifyJoinSelf() :
-            Message(Type::NotifyJoinSelf)
+        NewEntity() :
+            Message(Type::NewEntity)
         {
         }
 
         virtual std::string serializeToString() const override;
         virtual bool parseFromString(const std::string& source) override;
 
-        const shared::Entity& getPBPlayer() const { return m_pbPlayer; }
+        const shared::Entity& getPBEntity() const { return m_pbEntity; }
 
       private:
-        std::shared_ptr<entities::Entity> m_player;
-        shared::Entity m_pbPlayer;
+        shared::Entity m_pbEntity;
     };
 } // namespace messages

@@ -8,7 +8,7 @@
 #pragma warning(pop)
 
 #include "entities/Entity.hpp"
-#include "messages/NotifyJoinSelf.hpp"
+#include "messages/NewEntity.hpp"
 #include "messages/UpdateEntity.hpp"
 #include "systems/KeyboardInput.hpp"
 #include "systems/Network.hpp"
@@ -46,6 +46,6 @@ class GameModel
     void addEntity(std::shared_ptr<entities::Entity> entity);
     void removeEntity(entities::Entity::IdType entityId);
 
-    void handleNotifyJoinSelf(std::shared_ptr<messages::NotifyJoinSelf> message);
+    void handleNewEntity(std::shared_ptr<messages::NewEntity> message);
     void handleUpdateEntity(std::shared_ptr<messages::UpdateEntity> message);
 };

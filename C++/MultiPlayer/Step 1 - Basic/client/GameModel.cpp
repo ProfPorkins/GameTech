@@ -28,10 +28,10 @@ bool GameModel::initialize(sf::Vector2f viewSize)
     // messages the game model has responsibility.
     m_systemNetwork = std::make_unique<systems::Network>();
 
-    m_systemNetwork->registerHandler(messages::Type::NotifyJoinSelf,
+    m_systemNetwork->registerHandler(messages::Type::NewEntity,
                                      [this](std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
                                          (void)elapsedTime; // unused parameter
-                                         handleNotifyJoinSelf(std::static_pointer_cast<messages::NotifyJoinSelf>(message));
+                                         handleNewEntity(std::static_pointer_cast<messages::NewEntity>(message));
                                      });
 
     m_systemNetwork->registerHandler(messages::Type::UpdateEntity,
@@ -204,14 +204,14 @@ void GameModel::removeEntity(entities::Entity::IdType entityId)
 
 // --------------------------------------------------------------
 //
-// Handler for the NotifyJoinSelf message.  It gets a 'self' player entity
-// created and added to the client game simulation.
+// Handler for the NewEntity message.  It gets the entity built and
+// added to the client model.
 //
 // --------------------------------------------------------------
-void GameModel::handleNotifyJoinSelf(std::shared_ptr<messages::NotifyJoinSelf> message)
+void GameModel::handleNewEntity(std::shared_ptr<messages::NewEntity> message)
 {
-    auto playerSelf = createEntity(message->getPBPlayer());
-    addEntity(playerSelf);
+    auto entity = createEntity(message->getPBEntity());
+    addEntity(entity);
 }
 
 // --------------------------------------------------------------
