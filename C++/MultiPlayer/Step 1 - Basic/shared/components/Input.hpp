@@ -24,10 +24,14 @@ namespace components
             FireWeapon
         };
 
-        Input(std::initializer_list<Type> inputs) :
+        Input(const std::initializer_list<Type>& inputs) :
             m_inputs(inputs)
         {
         }
+
+        Input(const std::vector<Type>& inputs) :
+            m_inputs(inputs.begin(), inputs.end())
+        {}
 
         const auto& getInputs() { return m_inputs; }
 

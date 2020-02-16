@@ -19,6 +19,10 @@ namespace messages
 
         pbPlayer.mutable_sprite()->set_texture("playerShip1_blue.png");
 
+        pbPlayer.mutable_input()->add_type(shared::InputType::Thrust);
+        pbPlayer.mutable_input()->add_type(shared::InputType::RotateLeft);
+        pbPlayer.mutable_input()->add_type(shared::InputType::RotateRight);
+
         auto position = m_player->getComponent<components::Position>();
         pbPlayer.mutable_position()->mutable_center()->set_x(position->get().x);
         pbPlayer.mutable_position()->mutable_center()->set_x(position->get().y);

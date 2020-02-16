@@ -17,10 +17,10 @@ namespace systems
     // entity methods (if they exist).
     //
     // --------------------------------------------------------------
-    void KeyboardInput::addEntity(std::shared_ptr<entities::Entity> entity)
+    bool KeyboardInput::addEntity(std::shared_ptr<entities::Entity> entity)
     {
         // Need to let the System class do its thing
-        System::addEntity(entity);
+        if (!System::addEntity(entity)) return false;
         //
         // Build a mapping from this entity's keyboard inputs to the functions this system
         // can invoke for those inputs.  This allows those functions to be directly
@@ -53,6 +53,8 @@ namespace systems
         // Add after creating the map, to ensure the copy into the m_keyToFunctionMap is correctly made
         // with all the keys to functions setup.
         m_keyToFunctionMap[entity->getId()] = map;
+
+        return true;
     }
 
     void KeyboardInput::removeEntity(entities::Entity::IdType entityId)

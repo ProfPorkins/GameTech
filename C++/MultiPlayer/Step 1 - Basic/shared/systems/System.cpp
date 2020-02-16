@@ -10,12 +10,15 @@ namespace systems
     // to perform an update on.
     //
     // --------------------------------------------------------------
-    void System::addEntity(std::shared_ptr<entities::Entity> entity)
+    bool System::addEntity(std::shared_ptr<entities::Entity> entity)
     {
         if (isInterested(entity.get()))
         {
             m_entities[entity->getId()] = entity;
+            return true;
         }
+
+        return false;
     }
 
     // --------------------------------------------------------------

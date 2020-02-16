@@ -4,6 +4,7 @@ import public "SpriteComponent.proto";
 import public "MovementComponent.proto";
 import public "SizeComponent.proto";
 import public "PositionComponent.proto";
+import public "InputComponent.proto";
 
 package shared;
 
@@ -13,4 +14,5 @@ message Entity {
     PositionComponent position = 3;
     SizeComponent size = 4;
     MovementComponent movement = 5;
+    InputComponent input = 6;
 }

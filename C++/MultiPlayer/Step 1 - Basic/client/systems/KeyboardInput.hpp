@@ -25,7 +25,7 @@ namespace systems
     class KeyboardInput : public System
     {
       public:
-        KeyboardInput(std::initializer_list<std::tuple<components::Input::Type, sf::Keyboard::Key>> mapping) :
+        KeyboardInput(const std::initializer_list<std::tuple<components::Input::Type, sf::Keyboard::Key>>& mapping) :
             System({ctti::unnamed_type_id<components::Input>(),
                     ctti::unnamed_type_id<components::Position>(),
                     ctti::unnamed_type_id<components::Movement>()})
@@ -36,10 +36,10 @@ namespace systems
             }
         }
 
-        virtual void addEntity(std::shared_ptr<entities::Entity> entity);
-        virtual void removeEntity(entities::Entity::IdType entityId);
+        virtual bool addEntity(std::shared_ptr<entities::Entity> entity) override;
+        virtual void removeEntity(entities::Entity::IdType entityId) override;
 
-        virtual void update(std::chrono::milliseconds elapsedTime);
+        virtual void update(std::chrono::milliseconds elapsedTime) override;
 
         void keyPressed(sf::Event::KeyEvent keyEvent);
         void keyReleased(sf::Event::KeyEvent keyEvent);

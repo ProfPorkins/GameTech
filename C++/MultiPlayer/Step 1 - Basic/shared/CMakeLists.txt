@@ -8,6 +8,7 @@ set(PROTOBUF_FILES
     messages/protos/ClientId.proto
     messages/protos/Entity.proto
     messages/protos/Input.proto
+    messages/protos/InputComponent.proto
     messages/protos/MovementComponent.proto
     messages/protos/PositionComponent.proto
     messages/protos/SizeComponent.proto

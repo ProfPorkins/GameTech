@@ -63,11 +63,27 @@ namespace entities
             entity->addComponent(std::make_unique<components::Movement>(pbPlayer.movement().moverate(), pbPlayer.movement().rotaterate()));
         }
 
-        auto inputs = {
-            components::Input::Type::Thrust,
-            components::Input::Type::RotateLeft,
-            components::Input::Type::RotateRight};
-        entity->addComponent(std::make_unique<components::Input>(inputs));
+        if (pbPlayer.has_input())
+        {
+            std::vector<components::Input::Type> inputs;
+            for (auto input : pbPlayer.input().type())
+            {
+                switch (input)
+                {
+                    case shared::InputType::Thrust:
+                        inputs.push_back(components::Input::Type::Thrust);
+                        break;
+                    case shared::InputType::RotateLeft:
+                        inputs.push_back(components::Input::Type::RotateLeft);
+                        break;
+                    case shared::InputType::RotateRight:
+                        inputs.push_back(components::Input::Type::RotateRight);
+                        break;
+                }
+            }
+
+            entity->addComponent(std::make_unique<components::Input>(inputs));
+        }
 
         return entity;
     }
