@@ -65,6 +65,21 @@ void MessageQueueServer::sendMessage(std::uint32_t clientId, std::shared_ptr<mes
     m_eventSendMessages.notify_one();
 }
 
+// -----------------------------------------------------------------
+//
+// Send the message to all connected clients.
+//
+//// -----------------------------------------------------------------
+void MessageQueueServer::broadcastMessage(std::shared_ptr<messages::Message> message)
+{
+    std::lock_guard<std::mutex> lock(m_mutexSockets);
+
+    for (auto& [clientId, socket] : m_sockets)
+    {
+        sendMessage(clientId, message);
+    }
+}
+
 // --------------------------------------------------------------
 //
 // Returns the queue of all messages received since the last time

@@ -2,6 +2,7 @@
 
 #include "entities/Entity.hpp"
 #include "messages/NotifyJoinSelf.hpp"
+#include "messages/UpdateEntity.hpp"
 #include "systems/KeyboardInput.hpp"
 #include "systems/Network.hpp"
 #include "systems/Renderer.hpp"
@@ -38,4 +39,5 @@ class GameModel
     void removeEntity(entities::Entity::IdType entityId);
 
     void handleNotifyJoinSelf(std::shared_ptr<messages::NotifyJoinSelf> message);
+    void handleUpdateEntity(std::shared_ptr<messages::UpdateEntity> message);
 };

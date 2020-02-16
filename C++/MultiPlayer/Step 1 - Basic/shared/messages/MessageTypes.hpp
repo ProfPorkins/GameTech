@@ -17,8 +17,7 @@ namespace messages
         NotifyJoinSelf,
         NotifyJoinOther,
         DisconnectOther,
-        UpdateSelf,
-        UpdateOther,
+        UpdateEntity,
         Input
     };
 } // namespace messages

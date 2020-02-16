@@ -41,6 +41,7 @@ class MessageQueueServer
     void onClientConnected(std::function<void(std::uint32_t)> onClientConnected) { m_onClientConnected = onClientConnected; }
 
     void sendMessage(std::uint32_t clientId, std::shared_ptr<messages::Message> message);
+    void broadcastMessage(std::shared_ptr<messages::Message> message);
     std::queue<std::tuple<std::uint32_t, std::shared_ptr<messages::Message>>> getMessages();
 
   private:

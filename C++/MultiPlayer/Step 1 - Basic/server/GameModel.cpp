@@ -7,6 +7,7 @@
 #include "entities/Player.hpp"
 #include "messages/ConnectAck.hpp"
 #include "messages/NotifyJoinSelf.hpp"
+#include "messages/UpdateEntity.hpp"
 
 #include <cstdint>
 #include <functional>
@@ -182,10 +183,8 @@ void GameModel::updateClients()
     for (auto entityId : m_reportThese)
     {
         auto entity = m_entities[entityId];
-        auto& components = entity->getComponents();
-        for (auto& [type, component] : components)
-        {
-        }
+        auto message = std::make_shared<messages::UpdateEntity>(entity);
+        MessageQueueServer::instance().broadcastMessage(message);
     }
 
     m_reportThese.clear();

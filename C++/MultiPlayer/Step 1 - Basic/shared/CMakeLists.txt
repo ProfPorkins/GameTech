@@ -19,15 +19,17 @@ set(SHARED_MESSAGES_HEADERS
     messages/ConnectAck.hpp
     messages/Input.hpp
     messages/Join.hpp
-    messages/NotifyJoinSelf.hpp
     messages/Message.hpp
     messages/MessageTypes.hpp
+    messages/NotifyJoinSelf.hpp
+    messages/UpdateEntity.hpp
     )
 
 set(SHARED_MESSAGES_SOURCES
     messages/ConnectAck.cpp
     messages/Input.cpp
     messages/NotifyJoinSelf.cpp
+    messages/UpdateEntity.cpp
     )
 
 set(SHARED_ENTITY_HEADERS

@@ -101,7 +101,7 @@ namespace entities
     template <typename T>
     bool Entity::hasComponent()
     {
-        return m_components.find(ctti::unnamed_type_id<T>()) == m_components.end();
+        return m_components.find(ctti::unnamed_type_id<T>()) != m_components.end();
     }
 
     // --------------------------------------------------------------

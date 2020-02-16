@@ -2,6 +2,7 @@
 
 #include "messages/ConnectAck.hpp"
 #include "messages/NotifyJoinSelf.hpp"
+#include "messages/UpdateEntity.hpp"
 
 #include <array>
 #include <cstdint>
@@ -37,6 +38,9 @@ bool MessageQueueClient::initialize(std::string serverIP, std::uint16_t serverPo
     };
     m_messageCommand[messages::Type::NotifyJoinSelf] = []() {
         return std::make_shared<messages::NotifyJoinSelf>();
+    };
+    m_messageCommand[messages::Type::UpdateEntity] = []() {
+        return std::make_shared<messages::UpdateEntity>();
     };
 
     initializeSender();

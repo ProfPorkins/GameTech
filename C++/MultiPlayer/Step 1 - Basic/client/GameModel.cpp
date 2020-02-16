@@ -23,10 +23,17 @@ bool GameModel::initialize(sf::Vector2f viewSize)
     // Initialize the network system, including registering handlers for
     // messages the game model has responsibility.
     m_systemNetwork = std::make_unique<systems::Network>();
+
     m_systemNetwork->registerHandler(messages::Type::NotifyJoinSelf,
                                      [this](std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
                                          (void)elapsedTime; // unused parameter
                                          handleNotifyJoinSelf(std::static_pointer_cast<messages::NotifyJoinSelf>(message));
+                                     });
+
+    m_systemNetwork->registerHandler(messages::Type::UpdateEntity,
+                                     [this](std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
+                                         (void)elapsedTime; // unused parameter
+                                         handleUpdateEntity(std::static_pointer_cast<messages::UpdateEntity>(message));
                                      });
 
     //
@@ -119,4 +126,19 @@ void GameModel::handleNotifyJoinSelf(std::shared_ptr<messages::NotifyJoinSelf> m
 {
     auto playerSelf = entities::createPlayerSelf(message->getPBPlayer(), m_viewSize, m_textures);
     addEntity(playerSelf);
+}
+
+void GameModel::handleUpdateEntity(std::shared_ptr<messages::UpdateEntity> message)
+{
+    auto& pbEntity = message->getPBEntity();
+    if (m_entities.find(pbEntity.id()) != m_entities.end())
+    {
+        auto entity = m_entities[pbEntity.id()];
+        if (entity->hasComponent<components::Position>() && pbEntity.has_position())
+        {
+            auto position = entity->getComponent<components::Position>();
+            position->set(sf::Vector2f(pbEntity.position().center().x(), pbEntity.position().center().y()));
+            position->setOrientation(pbEntity.position().orientation());
+        }
+    }
 }
