@@ -134,15 +134,24 @@ void GameModel::handleJoin(std::uint64_t clientId, std::shared_ptr<messages::Joi
 
         pbEntity.set_id(entity->getId());
 
+        //
+        // TODO: Need some way to know if this really is a player ship at the server without
+        //       having to have a Sprite component at the server
         pbEntity.mutable_sprite()->set_texture("playerShip1_Red.png");
 
-        auto position = entity->getComponent<components::Position>();
-        pbEntity.mutable_position()->mutable_center()->set_x(position->get().x);
-        pbEntity.mutable_position()->mutable_center()->set_y(position->get().y);
-        pbEntity.mutable_position()->set_orientation(entity->getComponent<components::Position>()->getOrientation());
+        if (entity->hasComponent<components::Position>())
+        {
+            auto position = entity->getComponent<components::Position>();
+            pbEntity.mutable_position()->mutable_center()->set_x(position->get().x);
+            pbEntity.mutable_position()->mutable_center()->set_y(position->get().y);
+            pbEntity.mutable_position()->set_orientation(entity->getComponent<components::Position>()->getOrientation());
+        }
 
-        pbEntity.mutable_size()->mutable_size()->set_x(entity->getComponent<components::Size>()->get().x);
-        pbEntity.mutable_size()->mutable_size()->set_y(entity->getComponent<components::Size>()->get().y);
+        if (entity->hasComponent<components::Size>())
+        {
+            pbEntity.mutable_size()->mutable_size()->set_x(entity->getComponent<components::Size>()->get().x);
+            pbEntity.mutable_size()->mutable_size()->set_y(entity->getComponent<components::Size>()->get().y);
+        }
 
         auto entityMessage = std::make_shared<messages::NewEntity>(pbEntity);
         MessageQueueServer::instance().sendMessage(clientId, entityMessage);
