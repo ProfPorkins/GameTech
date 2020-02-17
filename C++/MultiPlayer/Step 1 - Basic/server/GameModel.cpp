@@ -229,7 +229,7 @@ void GameModel::handleInput(std::shared_ptr<messages::Input> message)
     auto position = entity->getComponent<components::Position>();
     auto movement = entity->getComponent<components::Movement>();
 
-    for (auto input : message->getPBInput().input())
+    for (auto&& input : message->getPBInput().input())
     {
         switch (input.type())
         {
