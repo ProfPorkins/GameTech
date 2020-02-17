@@ -11,19 +11,34 @@ namespace messages
     {
         shared::Input pbInput;
 
-        switch (m_type)
+        pbInput.set_entityid(m_entityId);
+        for (auto input : m_inputs)
         {
-            case components::Input::Type::Thrust:
-                pbInput.set_type(shared::InputType::Thrust);
+            switch (input)
+            {
+                case components::Input::Type::Thrust:
+                {
+                    auto pair = pbInput.add_input();
+                    pair->set_type(shared::InputType::Thrust);
+                    pair->set_elapsedtime(static_cast<std::uint32_t>(m_elapsedTime.count()));
+                }
                 break;
-            case components::Input::Type::RotateLeft:
-                pbInput.set_type(shared::InputType::RotateLeft);
+                case components::Input::Type::RotateLeft:
+                {
+                    auto pair = pbInput.add_input();
+                    pair->set_type(shared::InputType::RotateLeft);
+                    pair->set_elapsedtime(static_cast<std::uint32_t>(m_elapsedTime.count()));
+                }
                 break;
-            case components::Input::Type::RotateRight:
-                pbInput.set_type(shared::InputType::RotateRight);
+                case components::Input::Type::RotateRight:
+                {
+                    auto pair = pbInput.add_input();
+                    pair->set_type(shared::InputType::RotateRight);
+                    pair->set_elapsedtime(static_cast<std::uint32_t>(m_elapsedTime.count()));
+                }
                 break;
+            }
         }
-        pbInput.set_elapsedtime(static_cast<std::uint32_t>(m_elapsedTime.count()));
 
         return pbInput.SerializeAsString();
     }

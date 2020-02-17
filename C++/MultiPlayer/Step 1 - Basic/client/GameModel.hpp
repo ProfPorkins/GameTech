@@ -25,8 +25,8 @@ class GameModel
   public:
     bool initialize(sf::Vector2f viewSize);
 
-    void signalKeyPressed(sf::Event::KeyEvent event);
-    void signalKeyReleased(sf::Event::KeyEvent event);
+    void signalKeyPressed(sf::Event::KeyEvent event, std::chrono::milliseconds elapsedTime);
+    void signalKeyReleased(sf::Event::KeyEvent event, std::chrono::milliseconds elapsedTime);
     void update(const std::chrono::milliseconds elapsedTime, std::shared_ptr<sf::RenderTarget> renderTarget);
 
   private:

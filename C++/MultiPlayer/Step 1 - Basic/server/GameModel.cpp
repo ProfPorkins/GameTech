@@ -54,8 +54,9 @@ bool GameModel::initialize()
 
     m_systemNetwork->registerHandler(messages::Type::Input,
                                      [this](std::uint64_t clientId, std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
+                                         (void)clientId;
                                          (void)elapsedTime; // unused parameter
-                                         handleInput(clientId, std::static_pointer_cast<messages::Input>(message));
+                                         handleInput(std::static_pointer_cast<messages::Input>(message));
                                      });
 
     MessageQueueServer::instance().onClientConnected(std::bind(&GameModel::clientConnected, this, std::placeholders::_1));
@@ -163,9 +164,6 @@ void GameModel::handleJoin(std::uint64_t clientId, std::shared_ptr<messages::Joi
 
     // Generate a player, add to server simulation, and send to the client
     auto player = entities::createPlayer("playerShip1_Blue.png", sf::Vector2f(0.0f, 0.0f), 0.05f, 0.0002f, 180.0f / 1000);
-    // Need to provide the mapping from the clientId to the player's entityId
-    m_clientIdToEntityId[clientId] = player->getId();
-    // Go ahead and add to the game model
     addEntity(player);
 
     //
@@ -224,40 +222,42 @@ void GameModel::handleJoin(std::uint64_t clientId, std::shared_ptr<messages::Joi
 // any other connected clients.
 //
 // --------------------------------------------------------------
-void GameModel::handleInput(std::uint64_t clientId, std::shared_ptr<messages::Input> message)
+void GameModel::handleInput(std::shared_ptr<messages::Input> message)
 {
-    //std::cout << "received an input messages: " << message->getPBInput().type() << std::endl;
-    auto entityId = m_clientIdToEntityId[clientId];
-    auto player = m_entities[entityId];
-    auto position = player->getComponent<components::Position>();
-    auto movement = player->getComponent<components::Movement>();
+    auto entityId = message->getPBInput().entityid();
+    auto entity = m_entities[entityId];
+    auto position = entity->getComponent<components::Position>();
+    auto movement = entity->getComponent<components::Movement>();
 
-    switch (message->getPBInput().type())
+    for (auto input : message->getPBInput().input())
     {
-        case shared::InputType::Thrust:
+        switch (input.type())
         {
-            const float PI = 3.14159f;
-            const float DEGREES_TO_RADIANS = PI / 180.0f;
+            case shared::InputType::Thrust:
+            {
+                const float PI = 3.14159f;
+                const float DEGREES_TO_RADIANS = PI / 180.0f;
 
-            auto vectorX = std::cos(position->getOrientation() * DEGREES_TO_RADIANS);
-            auto vectorY = std::sin(position->getOrientation() * DEGREES_TO_RADIANS);
+                auto vectorX = std::cos(position->getOrientation() * DEGREES_TO_RADIANS);
+                auto vectorY = std::sin(position->getOrientation() * DEGREES_TO_RADIANS);
 
-            auto current = position->get();
-            position->set(sf::Vector2f(
-                current.x + vectorX * message->getPBInput().elapsedtime() * movement->getMoveRate(),
-                current.y + vectorY * message->getPBInput().elapsedtime() * movement->getMoveRate()));
+                auto current = position->get();
+                position->set(sf::Vector2f(
+                    current.x + vectorX * input.elapsedtime() * movement->getMoveRate(),
+                    current.y + vectorY * input.elapsedtime() * movement->getMoveRate()));
 
-            m_reportThese.insert(entityId);
+                m_reportThese.insert(entityId);
+            }
+            break;
+            case shared::InputType::RotateLeft:
+                position->setOrientation(position->getOrientation() - movement->getRotateRate() * input.elapsedtime());
+                m_reportThese.insert(entityId);
+                break;
+            case shared::InputType::RotateRight:
+                position->setOrientation(position->getOrientation() + movement->getRotateRate() * input.elapsedtime());
+                m_reportThese.insert(entityId);
+                break;
         }
-        break;
-        case shared::InputType::RotateLeft:
-            position->setOrientation(position->getOrientation() - movement->getRotateRate() * message->getPBInput().elapsedtime());
-            m_reportThese.insert(entityId);
-            break;
-        case shared::InputType::RotateRight:
-            position->setOrientation(position->getOrientation() + movement->getRotateRate() * message->getPBInput().elapsedtime());
-            m_reportThese.insert(entityId);
-            break;
     }
 }
 

@@ -9,11 +9,11 @@
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <chrono>
-#include <functional>
 #include <initializer_list>
 #include <tuple>
 #include <unordered_map>
 #include <unordered_set>
+#include <vector>
 
 namespace systems
 {
@@ -41,22 +41,20 @@ namespace systems
 
         virtual void update(std::chrono::milliseconds elapsedTime) override;
 
-        void keyPressed(sf::Event::KeyEvent keyEvent);
-        void keyReleased(sf::Event::KeyEvent keyEvent);
+        void keyPressed(sf::Event::KeyEvent keyEvent, std::chrono::milliseconds elapsedTime);
+        void keyReleased(sf::Event::KeyEvent keyEvent, std::chrono::milliseconds elapsedTime);
 
       private:
-        class KeyToFunction
+        class KeyToType
         {
           public:
-            std::unordered_map<sf::Keyboard::Key, std::function<void(std::chrono::milliseconds)>> m_keyToFunction;
+            std::unordered_map<sf::Keyboard::Key, components::Input::Type> m_keyToType;
         };
 
         std::unordered_map<sf::Keyboard::Key, sf::Event::KeyEvent> m_keysPressed;
-        std::unordered_map<components::Input::Type, sf::Keyboard::Key> m_typeToKeyMap;
-        std::unordered_map<entities::Entity::IdType, KeyToFunction> m_keyToFunctionMap;
+        std::vector<components::Input::Type> m_inputEvents;
 
-        void rotateLeft(std::chrono::milliseconds elapsedTime);
-        void rotateRight(std::chrono::milliseconds elapsedTime);
-        void thrust(std::chrono::milliseconds elapsedTime);
+        std::unordered_map<components::Input::Type, sf::Keyboard::Key> m_typeToKeyMap;
+        std::unordered_map<entities::Entity::IdType, KeyToType> m_keyToFunctionMap;
     };
 } // namespace systems

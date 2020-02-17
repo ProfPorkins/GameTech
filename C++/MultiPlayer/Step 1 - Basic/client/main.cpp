@@ -84,6 +84,13 @@ int main()
     bool running = true;
     while (running)
     {
+        //
+        // Figure out the elapsed time in milliseconds.  Need this to pass on to
+        // the game model.
+        auto currentTime = std::chrono::steady_clock::now();
+        auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - previousTime);
+        previousTime = currentTime;
+
         // Handle all pending Windows events
         sf::Event event;
         while (window->pollEvent(event))
@@ -96,20 +103,13 @@ int main()
 
             if (event.type == sf::Event::KeyPressed)
             {
-                model.signalKeyPressed(event.key);
+                model.signalKeyPressed(event.key, elapsedTime);
             }
             if (event.type == sf::Event::KeyReleased)
             {
-                model.signalKeyReleased(event.key);
+                model.signalKeyReleased(event.key, elapsedTime);
             }
         }
-
-        //
-        // Figure out the elapsed time in milliseconds.  Need this to pass on to
-        // the game model.
-        auto currentTime = std::chrono::steady_clock::now();
-        auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - previousTime);
-        previousTime = currentTime;
 
         //
         // Execute the game loop steps.  Because this is an ECS model, there is

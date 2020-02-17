@@ -18,7 +18,6 @@ namespace components
       public:
         enum class Type : std::uint8_t
         {
-            Undefined,
             Thrust,
             RotateLeft,
             RotateRight,

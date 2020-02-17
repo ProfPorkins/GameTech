@@ -55,14 +55,14 @@ bool GameModel::initialize(sf::Vector2f viewSize)
     return true;
 }
 
-void GameModel::signalKeyPressed(sf::Event::KeyEvent event)
+void GameModel::signalKeyPressed(sf::Event::KeyEvent event, std::chrono::milliseconds elapsedTime)
 {
-    m_systemKeyboardInput->keyPressed(event);
+    m_systemKeyboardInput->keyPressed(event, elapsedTime);
 }
 
-void GameModel::signalKeyReleased(sf::Event::KeyEvent event)
+void GameModel::signalKeyReleased(sf::Event::KeyEvent event, std::chrono::milliseconds elapsedTime)
 {
-    m_systemKeyboardInput->keyReleased(event);
+    m_systemKeyboardInput->keyReleased(event, elapsedTime);
 }
 
 // --------------------------------------------------------------

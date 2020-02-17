@@ -19,7 +19,6 @@ class GameModel
 
   private:
     std::unordered_set<std::uint64_t> m_players;
-    std::unordered_map<std::uint64_t, entities::Entity::IdType> m_clientIdToEntityId;
     entities::EntityMap m_entities;
     std::unordered_set<entities::Entity::IdType> m_reportThese;
 
@@ -31,5 +30,5 @@ class GameModel
 
     void updateClients();
     void handleJoin(std::uint64_t clientId, std::shared_ptr<messages::Join> message);
-    void handleInput(std::uint64_t clientId, std::shared_ptr<messages::Input> message);
+    void handleInput(std::shared_ptr<messages::Input> message);
 };

@@ -4,8 +4,6 @@
 #include "entities/Entity.hpp"
 #include "messages/Input.hpp"
 
-#include <cmath>
-
 namespace systems
 {
     // --------------------------------------------------------------
@@ -26,30 +24,10 @@ namespace systems
         // Build a mapping from this entity's keyboard inputs to the functions this system
         // can invoke for those inputs.  This allows those functions to be directly
         // called when the keyboard inputs are seen.
-        KeyToFunction map;
+        KeyToType map;
         for (auto&& input : entity->getComponent<components::Input>()->getInputs())
         {
-            switch (input)
-            {
-                case components::Input::Type::Thrust:
-                {
-                    std::function<void(std::chrono::milliseconds)> f = std::bind(&KeyboardInput::thrust, this, std::placeholders::_1);
-                    map.m_keyToFunction[m_typeToKeyMap[input]] = f;
-                }
-                break;
-                case components::Input::Type::RotateLeft:
-                {
-                    std::function<void(std::chrono::milliseconds)> f = std::bind(&KeyboardInput::rotateLeft, this, std::placeholders::_1);
-                    map.m_keyToFunction[m_typeToKeyMap[input]] = f;
-                }
-                break;
-                case components::Input::Type::RotateRight:
-                {
-                    std::function<void(std::chrono::milliseconds)> f = std::bind(&KeyboardInput::rotateRight, this, std::placeholders::_1);
-                    map.m_keyToFunction[m_typeToKeyMap[input]] = f;
-                }
-                break;
-            }
+            map.m_keyToType[m_typeToKeyMap[input]] = input;
         }
         // Add after creating the map, to ensure the copy into the m_keyToFunctionMap is correctly made
         // with all the keys to functions setup.
@@ -74,14 +52,19 @@ namespace systems
     // --------------------------------------------------------------
     void KeyboardInput::update(std::chrono::milliseconds elapsedTime)
     {
-        for (auto&& [key, keyEvent] : m_keysPressed)
+        for (auto&& [id, entity] : m_entities)
         {
-            for (auto&& [id, entity] : m_entities)
+            std::vector<components::Input::Type> inputs;
+            for (auto&& [key, keyEvent] : m_keysPressed)
             {
-                if (m_keyToFunctionMap[id].m_keyToFunction.find(key) != m_keyToFunctionMap[id].m_keyToFunction.end())
+                if (m_keyToFunctionMap[id].m_keyToType.find(key) != m_keyToFunctionMap[id].m_keyToType.end())
                 {
-                    m_keyToFunctionMap[id].m_keyToFunction[key](elapsedTime);
+                    inputs.push_back(m_keyToFunctionMap[id].m_keyToType[key]);
                 }
+            }
+            if (!inputs.empty())
+            {
+                MessageQueueClient::instance().sendMessage(std::make_shared<messages::Input>(id, inputs, elapsedTime));
             }
         }
     }
@@ -95,27 +78,14 @@ namespace systems
     // keys and asking if they are pressed.
     //
     // --------------------------------------------------------------
-    void KeyboardInput::keyPressed(sf::Event::KeyEvent keyEvent)
+    void KeyboardInput::keyPressed(sf::Event::KeyEvent keyEvent, std::chrono::milliseconds elapsedTime)
     {
+        (void)elapsedTime; // currently unused, will use it soon
         m_keysPressed[keyEvent.code] = keyEvent;
     }
-    void KeyboardInput::keyReleased(sf::Event::KeyEvent keyEvent)
+    void KeyboardInput::keyReleased(sf::Event::KeyEvent keyEvent, std::chrono::milliseconds elapsedTime)
     {
+        (void)elapsedTime; // currently unused, will use it soon
         m_keysPressed.erase(keyEvent.code);
-    }
-
-    void KeyboardInput::thrust(std::chrono::milliseconds elapsedTime)
-    {
-        MessageQueueClient::instance().sendMessage(std::make_shared<messages::Input>(components::Input::Type::Thrust, elapsedTime));
-    }
-
-    void KeyboardInput::rotateLeft(std::chrono::milliseconds elapsedTime)
-    {
-        MessageQueueClient::instance().sendMessage(std::make_shared<messages::Input>(components::Input::Type::RotateLeft, elapsedTime));
-    }
-
-    void KeyboardInput::rotateRight(std::chrono::milliseconds elapsedTime)
-    {
-        MessageQueueClient::instance().sendMessage(std::make_shared<messages::Input>(components::Input::Type::RotateRight, elapsedTime));
     }
 } // namespace systems
