@@ -46,18 +46,8 @@ bool GameModel::initialize()
     //
     // Initialize the various systems
     m_systemNetwork = std::make_unique<systems::Network>();
-    m_systemNetwork->registerHandler(messages::Type::Join,
-                                     [this](std::uint64_t clientId, std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
-                                         (void)elapsedTime; // unused parameter
-                                         handleJoin(clientId, std::static_pointer_cast<messages::Join>(message));
-                                     });
-
-    m_systemNetwork->registerHandler(messages::Type::Input,
-                                     [this](std::uint64_t clientId, std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
-                                         (void)clientId;
-                                         (void)elapsedTime; // unused parameter
-                                         handleInput(std::static_pointer_cast<messages::Input>(message));
-                                     });
+    m_systemNetwork->registerJoinHandler(std::bind(&GameModel::handleJoin, this, std::placeholders::_1));
+    m_systemNetwork->registerInputHandler(std::bind(&GameModel::handleInput, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
     MessageQueueServer::instance().onClientConnected(std::bind(&GameModel::clientConnected, this, std::placeholders::_1));
     return true;
@@ -81,7 +71,7 @@ void GameModel::shutdown()
 // --------------------------------------------------------------
 void GameModel::clientConnected(std::uint64_t clientId)
 {
-    m_players.insert(clientId);
+    m_clients.insert(clientId);
 
     MessageQueueServer::instance().sendMessage(clientId, std::make_shared<messages::ConnectAck>());
 }
@@ -113,10 +103,26 @@ void GameModel::removeEntity(entities::Entity::IdType entityId)
 {
     m_entities.erase(entityId);
     //
-    // TODO: remove the entity from the clientIdToEntityId map
-
-    //
     // Let each of the systems know to remove the entity
+    m_systemNetwork->removeEntity(entityId);
+}
+
+// --------------------------------------------------------------
+//
+// For the entities that have updates, send those updates to all
+// connected clients.
+//
+// --------------------------------------------------------------
+void GameModel::updateClients()
+{
+    for (auto entityId : m_reportThese)
+    {
+        auto entity = m_entities[entityId];
+        auto message = std::make_shared<messages::UpdateEntity>(entity);
+        MessageQueueServer::instance().broadcastMessage(message);
+    }
+
+    m_reportThese.clear();
 }
 
 // --------------------------------------------------------------
@@ -126,7 +132,7 @@ void GameModel::removeEntity(entities::Entity::IdType entityId)
 // of the player.
 //
 // --------------------------------------------------------------
-void GameModel::handleJoin(std::uint64_t clientId, std::shared_ptr<messages::Join> message)
+void GameModel::handleJoin(std::uint64_t clientId)
 {
     //
     // Step 1: Tell the newly connected player about all other entities
@@ -205,7 +211,7 @@ void GameModel::handleJoin(std::uint64_t clientId, std::shared_ptr<messages::Joi
         pbEntity.release_input();
         pbEntity.release_movement();
         auto entityMessage = std::make_shared<messages::NewEntity>(pbEntity);
-        for (auto otherId : m_players)
+        for (auto otherId : m_clients)
         {
             if (otherId != clientId)
             {
@@ -222,59 +228,35 @@ void GameModel::handleJoin(std::uint64_t clientId, std::shared_ptr<messages::Joi
 // any other connected clients.
 //
 // --------------------------------------------------------------
-void GameModel::handleInput(std::shared_ptr<messages::Input> message)
+void GameModel::handleInput(std::shared_ptr<entities::Entity>& entity, shared::InputType type, std::chrono::milliseconds elapsedTime)
 {
-    auto entityId = message->getPBInput().entityid();
-    auto entity = m_entities[entityId];
     auto position = entity->getComponent<components::Position>();
     auto movement = entity->getComponent<components::Movement>();
-
-    for (auto&& input : message->getPBInput().input())
+    switch (type)
     {
-        switch (input.type())
+        case shared::InputType::Thrust:
         {
-            case shared::InputType::Thrust:
-            {
-                const float PI = 3.14159f;
-                const float DEGREES_TO_RADIANS = PI / 180.0f;
+            const float PI = 3.14159f;
+            const float DEGREES_TO_RADIANS = PI / 180.0f;
 
-                auto vectorX = std::cos(position->getOrientation() * DEGREES_TO_RADIANS);
-                auto vectorY = std::sin(position->getOrientation() * DEGREES_TO_RADIANS);
+            auto vectorX = std::cos(position->getOrientation() * DEGREES_TO_RADIANS);
+            auto vectorY = std::sin(position->getOrientation() * DEGREES_TO_RADIANS);
 
-                auto current = position->get();
-                position->set(sf::Vector2f(
-                    current.x + vectorX * input.elapsedtime() * movement->getMoveRate(),
-                    current.y + vectorY * input.elapsedtime() * movement->getMoveRate()));
+            auto current = position->get();
+            position->set(sf::Vector2f(
+                current.x + vectorX * elapsedTime.count() * movement->getMoveRate(),
+                current.y + vectorY * elapsedTime.count() * movement->getMoveRate()));
 
-                m_reportThese.insert(entityId);
-            }
-            break;
-            case shared::InputType::RotateLeft:
-                position->setOrientation(position->getOrientation() - movement->getRotateRate() * input.elapsedtime());
-                m_reportThese.insert(entityId);
-                break;
-            case shared::InputType::RotateRight:
-                position->setOrientation(position->getOrientation() + movement->getRotateRate() * input.elapsedtime());
-                m_reportThese.insert(entityId);
-                break;
+            m_reportThese.insert(entity->getId());
         }
+        break;
+        case shared::InputType::RotateLeft:
+            position->setOrientation(position->getOrientation() - movement->getRotateRate() * elapsedTime.count());
+            m_reportThese.insert(entity->getId());
+            break;
+        case shared::InputType::RotateRight:
+            position->setOrientation(position->getOrientation() + movement->getRotateRate() * elapsedTime.count());
+            m_reportThese.insert(entity->getId());
+            break;
     }
-}
-
-// --------------------------------------------------------------
-//
-// For the entities that have updates, send those updates to all
-// connected clients.
-//
-// --------------------------------------------------------------
-void GameModel::updateClients()
-{
-    for (auto entityId : m_reportThese)
-    {
-        auto entity = m_entities[entityId];
-        auto message = std::make_shared<messages::UpdateEntity>(entity);
-        MessageQueueServer::instance().broadcastMessage(message);
-    }
-
-    m_reportThese.clear();
 }

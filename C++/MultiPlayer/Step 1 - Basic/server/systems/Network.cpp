@@ -6,16 +6,6 @@ namespace systems
 {
     // --------------------------------------------------------------
     //
-    // Not much
-    //
-    // --------------------------------------------------------------
-    Network::Network() :
-        System({})
-    {
-    }
-
-    // --------------------------------------------------------------
-    //
     // Process all outstanding messages since the last update.
     //
     // --------------------------------------------------------------
@@ -36,11 +26,31 @@ namespace systems
 
     // --------------------------------------------------------------
     //
-    // Allow handlers for messages to be registered.
+    // Allow message handlers to be registered.
     //
     // --------------------------------------------------------------
     void Network::registerHandler(messages::Type type, std::function<void(std::uint64_t, std::chrono::milliseconds, std::shared_ptr<messages::Message>)> handler)
     {
         m_commandMap[type] = handler;
+    }
+
+    // --------------------------------------------------------------
+    //
+    // Handler for the Input message.  This simply passes the responsibility
+    // to the registered input handler.
+    //
+    // --------------------------------------------------------------
+    void Network::handleInput(std::shared_ptr<messages::Input> message)
+    {
+        if (m_inputHandler)
+        {
+            auto entityId = message->getPBInput().entityid();
+            auto entity = m_entities[entityId];
+
+            for (auto&& input : message->getPBInput().input())
+            {
+                m_inputHandler(entity, input.type(), std::chrono::milliseconds(input.elapsedtime()));
+            }
+        }
     }
 } // namespace systems

@@ -1,8 +1,6 @@
 #pragma once
 
 #include "entities/Entity.hpp"
-#include "messages/Input.hpp"
-#include "messages/Join.hpp"
 #include "systems/Network.hpp"
 
 #include <SFML/Network.hpp>
@@ -18,7 +16,7 @@ class GameModel
     void shutdown();
 
   private:
-    std::unordered_set<std::uint64_t> m_players;
+    std::unordered_set<std::uint64_t> m_clients;
     entities::EntityMap m_entities;
     std::unordered_set<entities::Entity::IdType> m_reportThese;
 
@@ -29,6 +27,6 @@ class GameModel
     void removeEntity(entities::Entity::IdType entityId);
 
     void updateClients();
-    void handleJoin(std::uint64_t clientId, std::shared_ptr<messages::Join> message);
-    void handleInput(std::shared_ptr<messages::Input> message);
+    void handleJoin(std::uint64_t clientId);
+    void handleInput(std::shared_ptr<entities::Entity>& entity, shared::InputType type, std::chrono::milliseconds elapsedTime);
 };

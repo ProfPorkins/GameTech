@@ -7,7 +7,8 @@ namespace messages
 {
     // -----------------------------------------------------------------
     //
-    // This message is send from the server to join the game.
+    // This message is sent from the server to join the game.  There is
+    // no content in the messsage, because the message itself is the information.
     //
     // -----------------------------------------------------------------
     class Join : public Message

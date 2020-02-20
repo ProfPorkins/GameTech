@@ -20,6 +20,11 @@ namespace systems
     class System
     {
       public:
+        System() :
+            System({})
+        {
+        }
+
         System(const std::initializer_list<ctti::unnamed_type_id_t>& list) :
             m_interests(list)
         {
