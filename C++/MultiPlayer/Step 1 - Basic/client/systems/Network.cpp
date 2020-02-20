@@ -1,7 +1,12 @@
 #include "Network.hpp"
 
 #include "MessageQueueClient.hpp"
+#include "components/Movement.hpp"
+#include "components/Position.hpp"
 #include "messages/Join.hpp"
+#include "messages/UpdateEntity.hpp"
+
+#include <iostream>
 
 namespace systems
 {
@@ -12,14 +17,21 @@ namespace systems
     //
     // --------------------------------------------------------------
     Network::Network() :
-        System({})
+        System({ctti::unnamed_type_id<components::Position>()})
     {
         //
         // We know how to privately handle these messages
-        m_commandMap[messages::Type::ConnectAck] = [this](std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
-            // Not completely in love with having to do a static_pointer_case, but living with it for now
-            handleConnectAck(elapsedTime, std::static_pointer_cast<messages::ConnectAck>(message));
-        };
+        registerHandler(messages::Type::ConnectAck,
+                        [this](std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
+                            // Not completely in love with having to do a static_pointer_cast, but living with it for now
+                            handleConnectAck(elapsedTime, std::static_pointer_cast<messages::ConnectAck>(message));
+                        });
+
+        registerHandler(messages::Type::UpdateEntity,
+                        [this](std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
+                            (void)elapsedTime; // unused parameter
+                            handleUpdateEntity(std::static_pointer_cast<messages::UpdateEntity>(message));
+                        });
     }
 
     // --------------------------------------------------------------
@@ -65,6 +77,28 @@ namespace systems
         //
         // Now, send a Join message back to the server so we can get into the game!
         MessageQueueClient::instance().sendMessage(std::make_shared<messages::Join>());
+    }
+
+    // --------------------------------------------------------------
+    //
+    // Handler for the UpdateEntity message.  It checks to see if the client
+    // actually has the entity, and if it does, updates the components
+    // that are in common between the message and the entity.
+    //
+    // --------------------------------------------------------------
+    void Network::handleUpdateEntity(std::shared_ptr<messages::UpdateEntity> message)
+    {
+        auto& pbEntity = message->getPBEntity();
+        if (m_entities.find(pbEntity.id()) != m_entities.end())
+        {
+            auto entity = m_entities[pbEntity.id()];
+            if (entity->hasComponent<components::Position>() && pbEntity.has_position())
+            {
+                auto position = entity->getComponent<components::Position>();
+                position->set(sf::Vector2f(pbEntity.position().center().x(), pbEntity.position().center().y()));
+                position->setOrientation(pbEntity.position().orientation());
+            }
+        }
     }
 
 } // namespace systems

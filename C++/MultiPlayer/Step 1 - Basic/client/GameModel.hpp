@@ -9,7 +9,6 @@
 
 #include "entities/Entity.hpp"
 #include "messages/NewEntity.hpp"
-#include "messages/UpdateEntity.hpp"
 #include "systems/KeyboardInput.hpp"
 #include "systems/Network.hpp"
 #include "systems/Renderer.hpp"
@@ -47,5 +46,4 @@ class GameModel
     void removeEntity(entities::Entity::IdType entityId);
 
     void handleNewEntity(std::shared_ptr<messages::NewEntity> message);
-    void handleUpdateEntity(std::shared_ptr<messages::UpdateEntity> message);
 };

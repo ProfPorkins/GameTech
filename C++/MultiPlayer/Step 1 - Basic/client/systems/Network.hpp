@@ -2,6 +2,7 @@
 
 #include "messages/ConnectAck.hpp"
 #include "messages/Message.hpp"
+#include "messages/UpdateEntity.hpp"
 #include "systems/System.hpp"
 
 #include <SFML/Graphics.hpp>
@@ -33,5 +34,6 @@ namespace systems
         std::unordered_map<messages::Type, std::function<void(std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message>)>> m_commandMap;
 
         void handleConnectAck(std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::ConnectAck> message);
+        void handleUpdateEntity(std::shared_ptr<messages::UpdateEntity> message);
     };
 } // namespace systems

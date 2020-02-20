@@ -30,7 +30,7 @@ namespace systems
                     ctti::unnamed_type_id<components::Movement>()})
         {
             //
-            // Register out own join handler
+            // Register our own join handler
             registerHandler(messages::Type::Join,
                             [this](std::uint64_t clientId, std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
                                 (void)elapsedTime; // unused parameter

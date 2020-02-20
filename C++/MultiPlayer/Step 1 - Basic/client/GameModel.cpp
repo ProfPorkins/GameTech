@@ -34,12 +34,6 @@ bool GameModel::initialize(sf::Vector2f viewSize)
                                          handleNewEntity(std::static_pointer_cast<messages::NewEntity>(message));
                                      });
 
-    m_systemNetwork->registerHandler(messages::Type::UpdateEntity,
-                                     [this](std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
-                                         (void)elapsedTime; // unused parameter
-                                         handleUpdateEntity(std::static_pointer_cast<messages::UpdateEntity>(message));
-                                     });
-
     //
     // Initialize the keyboard input system.
     auto inputMapping = {
@@ -212,26 +206,4 @@ void GameModel::handleNewEntity(std::shared_ptr<messages::NewEntity> message)
 {
     auto entity = createEntity(message->getPBEntity());
     addEntity(entity);
-}
-
-// --------------------------------------------------------------
-//
-// Handler for the UpdateEntity message.  It checks to see if the client
-// actually has the entity, and if it does, updates the components
-// that are in common between the message and the entity.
-//
-// --------------------------------------------------------------
-void GameModel::handleUpdateEntity(std::shared_ptr<messages::UpdateEntity> message)
-{
-    auto& pbEntity = message->getPBEntity();
-    if (m_entities.find(pbEntity.id()) != m_entities.end())
-    {
-        auto entity = m_entities[pbEntity.id()];
-        if (entity->hasComponent<components::Position>() && pbEntity.has_position())
-        {
-            auto position = entity->getComponent<components::Position>();
-            position->set(sf::Vector2f(pbEntity.position().center().x(), pbEntity.position().center().y()));
-            position->setOrientation(pbEntity.position().orientation());
-        }
-    }
 }
