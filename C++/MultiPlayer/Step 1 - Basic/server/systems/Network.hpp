@@ -25,31 +25,7 @@ namespace systems
     class Network : public System
     {
       public:
-        Network() :
-            System({ctti::unnamed_type_id<components::Position>(),
-                    ctti::unnamed_type_id<components::Movement>()})
-        {
-            //
-            // Register our own join handler
-            registerHandler(messages::Type::Join,
-                            [this](std::uint64_t clientId, std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
-                                (void)elapsedTime; // unused parameter
-                                (void)message;     // unused parameter
-                                if (m_joinHandler)
-                                {
-                                    m_joinHandler(clientId);
-                                }
-                            });
-
-            //
-            // Register our own input handler
-            registerHandler(messages::Type::Input,
-                            [this](std::uint64_t clientId, std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
-                                (void)clientId;    // unused parameter
-                                (void)elapsedTime; // unused parameter
-                                handleInput(std::static_pointer_cast<messages::Input>(message));
-                            });
-        }
+        Network();
 
         void registerJoinHandler(std::function<void(std::uint64_t clientId)> handler) { m_joinHandler = handler; }
         void registerInputHandler(std::function<void(std::shared_ptr<entities::Entity>&, shared::InputType, std::chrono::milliseconds)> handler) { m_inputHandler = handler; }
