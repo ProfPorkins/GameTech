@@ -111,7 +111,7 @@ std::uint64_t MessageQueueServer::socketToId(sf::TcpSocket* socket)
 
 // --------------------------------------------------------------
 //
-// Listen fof incoming client connections.  As a connection is made
+// Listen for incoming client connections.  As a connection is made
 // remember it and begin listening for messages over that socket.
 //
 // --------------------------------------------------------------
@@ -220,7 +220,7 @@ void MessageQueueServer::initializeSender()
 
 // --------------------------------------------------------------
 //
-// Set's up a thread that listens for incoming messages on all
+// Sets up a thread that listens for incoming messages on all
 // known client sockets.  If there is something to receive on a
 // socket, the message is read, parsed, and added to the queue
 // of received messages.
@@ -284,6 +284,13 @@ void MessageQueueServer::initializeReceiver()
     });
 }
 
+// --------------------------------------------------------------
+//
+// For any clients that are no longer connected, they are removed
+// from the socket selector, along with being remove from the
+// list of active sockets maintained by this message queue.
+//
+// --------------------------------------------------------------
 void MessageQueueServer::removeDisconnected(std::unordered_set<std::uint64_t>& clients)
 {
     if (clients.size() > 0)
