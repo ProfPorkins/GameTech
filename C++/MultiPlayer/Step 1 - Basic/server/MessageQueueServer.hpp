@@ -13,6 +13,7 @@
 #include <thread>
 #include <tuple>
 #include <unordered_map>
+#include <unordered_set>
 
 // --------------------------------------------------------------
 //
@@ -71,4 +72,5 @@ class MessageQueueServer
     void initializeListener(std::uint16_t listenPort);
     void initializeSender();
     void initializeReceiver();
+    void removeDisconnected(std::unordered_set<std::uint64_t>& removeThese);
 };

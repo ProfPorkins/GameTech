@@ -143,6 +143,7 @@ void MessageQueueServer::initializeListener(std::uint16_t listenPort)
                     std::lock_guard<std::mutex> lock(m_mutexSockets);
                     m_sockets[clientId] = std::move(socket);
                 }
+                std::cout << "added: " << clientId << std::endl;
                 m_onClientConnected(clientId);
             }
         }
@@ -161,6 +162,7 @@ void MessageQueueServer::initializeListener(std::uint16_t listenPort)
 void MessageQueueServer::initializeSender()
 {
     m_threadSender = std::thread([this]() {
+        std::unordered_set<std::uint64_t> disconnectedClient;
         while (m_keepRunning)
         {
             auto item = m_sendMessages.dequeue();
@@ -168,29 +170,41 @@ void MessageQueueServer::initializeSender()
             {
                 // Destructure and send
                 auto& [clientId, message] = item.value();
-
-                std::lock_guard<std::mutex> lock(m_mutexSockets);
-                std::string serialized = message->serializeToString();
-
-                //
-                // Need to send a header before the message data that specifies
-                // the message type and the size of data to expect.
-                std::array<std::uint8_t, 5> header;
-                header[0] = static_cast<std::uint8_t>(message->getType());
-                std::uint32_t messageSize = htonl(static_cast<std::uint32_t>(serialized.size()));
-                std::uint8_t* ptrSize = reinterpret_cast<std::uint8_t*>(&messageSize);
-                header[1] = ptrSize[0];
-                header[2] = ptrSize[1];
-                header[3] = ptrSize[2];
-                header[4] = ptrSize[3];
-
-                // Send the header
-                m_sockets[clientId]->send(header.data(), header.size());
-                // Send the message body
-                if (serialized.size() > 0)
+                // Creating this scope so the m_mutexSockets is released, allowing the removeDisconnected function
+                // to be called, because it also wants to grab that mutex.
+                // Note: Might be able to use a recursive_mutex instead
                 {
-                    m_sockets[clientId]->send(static_cast<void*>(serialized.data()), serialized.size());
+                    std::lock_guard<std::mutex> lock(m_mutexSockets);
+                    if (m_sockets.find(clientId) != m_sockets.end())
+                    {
+                        std::string serialized = message->serializeToString();
+
+                        //
+                        // Need to send a header before the message data that specifies
+                        // the message type and the size of data to expect.
+                        std::array<std::uint8_t, 5> header;
+                        header[0] = static_cast<std::uint8_t>(message->getType());
+                        std::uint32_t messageSize = htonl(static_cast<std::uint32_t>(serialized.size()));
+                        std::uint8_t* ptrSize = reinterpret_cast<std::uint8_t*>(&messageSize);
+                        header[1] = ptrSize[0];
+                        header[2] = ptrSize[1];
+                        header[3] = ptrSize[2];
+                        header[4] = ptrSize[3];
+
+                        // Send the header
+                        m_sockets[clientId]->send(header.data(), header.size());
+                        // Send the message body
+                        if (serialized.size() > 0)
+                        {
+                            auto status = m_sockets[clientId]->send(static_cast<void*>(serialized.data()), serialized.size());
+                            if (status == sf::Socket::Disconnected)
+                            {
+                                disconnectedClient.insert(clientId);
+                            }
+                        }
+                    }
                 }
+                removeDisconnected(disconnectedClient);
             }
             else
             {
@@ -215,6 +229,7 @@ void MessageQueueServer::initializeSender()
 void MessageQueueServer::initializeReceiver()
 {
     m_threadReceiver = std::thread([this]() {
+        std::unordered_set<std::uint64_t> disconnectedClients;
         while (m_keepRunning)
         {
             if (m_selector.wait(sf::seconds(1.0f)))
@@ -239,12 +254,17 @@ void MessageQueueServer::initializeReceiver()
                                 {
                                     std::string data;
                                     data.resize(size[0]);
-                                    if (socket->receive(data.data(), size[0], received) == sf::Socket::Done)
+                                    auto status = socket->receive(data.data(), size[0], received);
+                                    if (status == sf::Socket::Done)
                                     {
                                         auto message = m_messageCommand[type[0]]();
                                         message->parseFromString(data);
                                         std::lock_guard<std::mutex> lock(m_mutexReceivedMessages);
                                         m_receivedMessages.push(std::make_tuple(socketToId(socket.get()), message));
+                                    }
+                                    else if (status == sf::Socket::Disconnected)
+                                    {
+                                        disconnectedClients.insert(clientId);
                                     }
                                 }
                                 else
@@ -258,6 +278,24 @@ void MessageQueueServer::initializeReceiver()
                     }
                 }
             }
+
+            removeDisconnected(disconnectedClients);
         }
     });
+}
+
+void MessageQueueServer::removeDisconnected(std::unordered_set<std::uint64_t>& clients)
+{
+    if (clients.size() > 0)
+    {
+        std::lock_guard<std::mutex> lock(m_mutexSockets);
+        for (auto clientId : clients)
+        {
+            std::cout << "Removing: " << clientId << std::endl;
+            auto& socket = m_sockets[clientId];
+            m_selector.remove(*socket);
+            m_sockets.erase(clientId);
+        }
+        clients.clear();
+    }
 }
