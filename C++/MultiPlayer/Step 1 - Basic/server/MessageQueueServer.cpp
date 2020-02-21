@@ -242,7 +242,8 @@ void MessageQueueServer::initializeReceiver()
                         std::array<messages::Type, 1> type;
                         std::array<uint32_t, 1> size;
                         std::size_t received;
-                        if (socket->receive(type.data(), 1, received) == sf::Socket::Done)
+                        auto status = socket->receive(type.data(), 1, received);
+                        if (status == sf::Socket::Done)
                         {
                             if (socket->receive(size.data(), sizeof(std::uint32_t), received) == sf::Socket::Done)
                             {
@@ -254,17 +255,12 @@ void MessageQueueServer::initializeReceiver()
                                 {
                                     std::string data;
                                     data.resize(size[0]);
-                                    auto status = socket->receive(data.data(), size[0], received);
-                                    if (status == sf::Socket::Done)
+                                    if (socket->receive(data.data(), size[0], received) == sf::Socket::Done)
                                     {
                                         auto message = m_messageCommand[type[0]]();
                                         message->parseFromString(data);
                                         std::lock_guard<std::mutex> lock(m_mutexReceivedMessages);
                                         m_receivedMessages.push(std::make_tuple(socketToId(socket.get()), message));
-                                    }
-                                    else if (status == sf::Socket::Disconnected)
-                                    {
-                                        disconnectedClients.insert(clientId);
                                     }
                                 }
                                 else
@@ -274,6 +270,10 @@ void MessageQueueServer::initializeReceiver()
                                     m_receivedMessages.push(std::make_tuple(socketToId(socket.get()), message));
                                 }
                             }
+                        }
+                        else if (status == sf::Socket::Disconnected)
+                        {
+                            disconnectedClients.insert(clientId);
                         }
                     }
                 }
