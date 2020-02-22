@@ -47,7 +47,7 @@ namespace messages
         const shared::Input& getPBInput() const { return m_pbInput; }
 
       private:
-        entities::Entity::IdType m_entityId;
+        entities::Entity::IdType m_entityId{0};
         std::vector<components::Input::Type> m_inputs;
         std::chrono::milliseconds m_elapsedTime;
 

@@ -1,5 +1,12 @@
 #pragma once
 
+//
+// Disable some compiler warnings that come from google protocol buffers
+#pragma warning(push)
+#pragma warning(disable : 4127)
+#include "Entity.pb.h"
+#pragma warning(pop)
+
 #include "entities/Entity.hpp"
 #include "systems/Network.hpp"
 
@@ -28,6 +35,8 @@ class GameModel
     void removeEntity(entities::Entity::IdType entityId);
 
     void updateClients();
+    void reportAllEntities(std::uint64_t clientId);
+    shared::Entity createPlayerPBEntity(std::shared_ptr<entities::Entity>& player);
 
     void handleConnect(std::uint64_t clientId);
     void handleDisconnect(std::uint64_t clientId);
