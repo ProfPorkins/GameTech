@@ -34,6 +34,12 @@ bool GameModel::initialize(sf::Vector2f viewSize)
                                          handleNewEntity(std::static_pointer_cast<messages::NewEntity>(message));
                                      });
 
+    m_systemNetwork->registerHandler(messages::Type::RemoveEntity,
+                                     [this](std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
+                                         (void)elapsedTime; // unused parameter
+                                         handleRemoveEntity(std::static_pointer_cast<messages::RemoveEntity>(message));
+                                     });
+
     //
     // Initialize the keyboard input system.
     auto inputMapping = {
@@ -206,4 +212,16 @@ void GameModel::handleNewEntity(std::shared_ptr<messages::NewEntity> message)
 {
     auto entity = createEntity(message->getPBEntity());
     addEntity(entity);
+}
+
+// --------------------------------------------------------------
+//
+// Handler for the RemoveEntity message.  It removes the entity from
+// the client game model (that's us!).
+//
+// --------------------------------------------------------------
+void GameModel::handleRemoveEntity(std::shared_ptr<messages::RemoveEntity> message)
+{
+    auto entityId = message->getPBEntity().id();
+    removeEntity(entityId);
 }

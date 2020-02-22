@@ -143,8 +143,7 @@ void MessageQueueServer::initializeListener(std::uint16_t listenPort)
                     std::lock_guard<std::mutex> lock(m_mutexSockets);
                     m_sockets[clientId] = std::move(socket);
                 }
-                std::cout << "added: " << clientId << std::endl;
-                m_onClientConnected(clientId);
+                m_connectHandler(clientId);
             }
         }
 
@@ -295,13 +294,24 @@ void MessageQueueServer::removeDisconnected(std::unordered_set<std::uint64_t>& c
 {
     if (clients.size() > 0)
     {
-        std::lock_guard<std::mutex> lock(m_mutexSockets);
+        {
+            std::lock_guard<std::mutex> lock(m_mutexSockets);
+            for (auto clientId : clients)
+            {
+                auto& socket = m_sockets[clientId];
+                m_selector.remove(*socket);
+                m_sockets.erase(clientId);
+            }
+        }
+        //
+        // Have to do this in a different scope from the mutex lock above
+        // because the disconnect handler calls back into the message queue
+        // to broadcast messages.  This is bad, bad, because it means this code
+        // knows something about the implementation of the disconnect handler.
+        // I'll keep thinking about this to find a better overall solution.
         for (auto clientId : clients)
         {
-            std::cout << "Removing: " << clientId << std::endl;
-            auto& socket = m_sockets[clientId];
-            m_selector.remove(*socket);
-            m_sockets.erase(clientId);
+            m_disconnectHandler(clientId);
         }
         clients.clear();
     }

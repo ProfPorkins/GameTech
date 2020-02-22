@@ -7,6 +7,7 @@ project(Shared)
 set(PROTOBUF_FILES
     messages/protos/ClientId.proto
     messages/protos/Entity.proto
+    messages/protos/EntityId.proto
     messages/protos/Input.proto
     messages/protos/InputComponent.proto
     messages/protos/MovementComponent.proto
@@ -24,12 +25,14 @@ set(SHARED_MESSAGES_HEADERS
     messages/Message.hpp
     messages/MessageTypes.hpp
     messages/NewEntity.hpp
+    messages/RemoveEntity.hpp
     messages/UpdateEntity.hpp
     )
 
 set(SHARED_MESSAGES_SOURCES
     messages/Input.cpp
     messages/NewEntity.cpp
+    messages/RemoveEntity.cpp
     messages/UpdateEntity.cpp
     )
 

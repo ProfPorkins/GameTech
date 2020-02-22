@@ -4,6 +4,7 @@
 #include "components/Movement.hpp"
 #include "components/Position.hpp"
 #include "messages/Join.hpp"
+#include "messages/RemoveEntity.hpp"
 #include "messages/UpdateEntity.hpp"
 
 #include <iostream>

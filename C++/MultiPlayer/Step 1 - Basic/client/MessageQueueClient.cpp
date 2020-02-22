@@ -2,6 +2,7 @@
 
 #include "messages/ConnectAck.hpp"
 #include "messages/NewEntity.hpp"
+#include "messages/RemoveEntity.hpp"
 #include "messages/UpdateEntity.hpp"
 
 #include <array>
@@ -41,6 +42,9 @@ bool MessageQueueClient::initialize(std::string serverIP, std::uint16_t serverPo
     };
     m_messageCommand[messages::Type::UpdateEntity] = []() {
         return std::make_shared<messages::UpdateEntity>();
+    };
+    m_messageCommand[messages::Type::RemoveEntity] = []() {
+        return std::make_shared<messages::RemoveEntity>();
     };
 
     initializeSender();

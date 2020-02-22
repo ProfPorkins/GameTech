@@ -8,6 +8,7 @@
 #include "entities/Player.hpp"
 #include "messages/ConnectAck.hpp"
 #include "messages/NewEntity.hpp"
+#include "messages/RemoveEntity.hpp"
 #include "messages/UpdateEntity.hpp"
 
 #include <cstdint>
@@ -49,7 +50,8 @@ bool GameModel::initialize()
     m_systemNetwork->registerJoinHandler(std::bind(&GameModel::handleJoin, this, std::placeholders::_1));
     m_systemNetwork->registerInputHandler(std::bind(&GameModel::handleInput, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
-    MessageQueueServer::instance().onClientConnected(std::bind(&GameModel::clientConnected, this, std::placeholders::_1));
+    MessageQueueServer::instance().registerConnectHandler(std::bind(&GameModel::handleConnect, this, std::placeholders::_1));
+    MessageQueueServer::instance().registerDisconnectHandler(std::bind(&GameModel::handleDisconnect, this, std::placeholders::_1));
     return true;
 }
 
@@ -69,11 +71,30 @@ void GameModel::shutdown()
 // the server simulation.
 //
 // --------------------------------------------------------------
-void GameModel::clientConnected(std::uint64_t clientId)
+void GameModel::handleConnect(std::uint64_t clientId)
 {
     m_clients.insert(clientId);
 
     MessageQueueServer::instance().sendMessage(clientId, std::make_shared<messages::ConnectAck>());
+}
+
+// --------------------------------------------------------------
+//
+// When a client disconnects, need to tell all the other clients
+// of the disconnect.
+//
+// --------------------------------------------------------------
+void GameModel::handleDisconnect(std::uint64_t clientId)
+{
+    m_clients.erase(clientId);
+
+    auto message = std::make_shared<messages::RemoveEntity>(m_clientToEntityId[clientId]);
+    MessageQueueServer::instance().broadcastMessage(message);
+    //
+    // Remove the player entity from the server simulation
+    removeEntity(m_clientToEntityId[clientId]);
+
+    m_clientToEntityId.erase(clientId);
 }
 
 // --------------------------------------------------------------
@@ -171,6 +192,7 @@ void GameModel::handleJoin(std::uint64_t clientId)
     // Generate a player, add to server simulation, and send to the client
     auto player = entities::createPlayer("playerShip1_Blue.png", sf::Vector2f(0.0f, 0.0f), 0.05f, 0.0002f, 180.0f / 1000);
     addEntity(player);
+    m_clientToEntityId[clientId] = player->getId();
 
     //
     // Build the protobuf represetnation and get it sent off to the client

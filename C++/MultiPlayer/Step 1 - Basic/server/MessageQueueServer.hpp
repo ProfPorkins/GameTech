@@ -39,7 +39,8 @@ class MessageQueueServer
 
     bool initialize(std::uint16_t listenPort);
     void shutdown();
-    void onClientConnected(std::function<void(std::uint64_t)> onClientConnected) { m_onClientConnected = onClientConnected; }
+    void registerConnectHandler(std::function<void(std::uint64_t)> handler) { m_connectHandler = handler; }
+    void registerDisconnectHandler(std::function<void(std::uint64_t)> handler) { m_disconnectHandler = handler; }
 
     void sendMessage(std::uint64_t clientId, std::shared_ptr<messages::Message> message);
     void broadcastMessage(std::shared_ptr<messages::Message> message);
@@ -63,7 +64,8 @@ class MessageQueueServer
 
     sf::SocketSelector m_selector;
     sf::TcpListener m_listener;
-    std::function<void(std::uint64_t)> m_onClientConnected;
+    std::function<void(std::uint64_t)> m_connectHandler;
+    std::function<void(std::uint64_t)> m_disconnectHandler;
     std::unordered_map<std::uint64_t, std::unique_ptr<sf::TcpSocket>> m_sockets;
     std::unique_ptr<sf::TcpSocket> m_socketServer;
     std::mutex m_mutexSockets;
