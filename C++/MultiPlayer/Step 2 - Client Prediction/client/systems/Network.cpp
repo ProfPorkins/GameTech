@@ -65,6 +65,7 @@ namespace systems
     // --------------------------------------------------------------
     void Network::update(std::chrono::milliseconds elapsedTime, std::queue<std::shared_ptr<messages::Message>> messages)
     {
+        std::uint32_t lastMessageId{0};
         while (!messages.empty())
         {
             auto message = messages.front();
@@ -75,7 +76,15 @@ namespace systems
                 auto& [type, handler] = *entry;
                 handler(elapsedTime, message);
             }
+            if (message->getMessageId().has_value())
+            {
+                lastMessageId = message->getMessageId().value();
+            }
         }
+        //
+        // After processing all the messages, perform server reconciliation by
+        // replaying any sent messages not yet reconcilied by the server
+        auto sent = MessageQueueClient::instance().getSendMessageHistory(lastMessageId);
     }
 
     // --------------------------------------------------------------
@@ -103,6 +112,7 @@ namespace systems
     void Network::handleUpdateEntity(std::shared_ptr<messages::UpdateEntity> message)
     {
         auto& pbEntity = message->getPBEntity();
+        auto x = pbEntity.messageid();
         if (m_entities.find(pbEntity.id()) != m_entities.end())
         {
             auto entity = m_entities[pbEntity.id()];

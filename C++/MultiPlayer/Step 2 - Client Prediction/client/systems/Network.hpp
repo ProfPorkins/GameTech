@@ -37,6 +37,7 @@ namespace systems
         std::unordered_map<messages::Type, std::function<void(std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message>)>> m_commandMap;
         std::function<void(entities::Entity::IdType)> m_removeEntityHandler = nullptr;
         std::function<void(const shared::Entity&)> m_newEntityHandler = nullptr;
+        std::uint32_t m_lastMessageId{0};
 
         void handleConnectAck(std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::ConnectAck> message);
         void handleUpdateEntity(std::shared_ptr<messages::UpdateEntity> message);

@@ -111,7 +111,7 @@ std::queue<std::shared_ptr<messages::Message>> MessageQueueClient::getMessages()
 // during server reconciliation.
 //
 // --------------------------------------------------------------
-auto MessageQueueClient::getSendMessageHistory(std::uint32_t lastMessageId)
+std::queue<std::shared_ptr<messages::Message>> MessageQueueClient::getSendMessageHistory(std::uint32_t lastMessageId)
 {
     //
     // Remove messages up to and including lastMessageId

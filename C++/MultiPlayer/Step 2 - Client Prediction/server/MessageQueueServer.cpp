@@ -66,6 +66,13 @@ void MessageQueueServer::sendMessage(std::uint64_t clientId, std::shared_ptr<mes
     m_eventSendMessages.notify_one();
 }
 
+// -----------------------------------------------------------------
+//
+// Some messages go back to the client with the id of the last message
+// processed by the server.  This is for use in client-side server
+// reconciliation.
+//
+// -----------------------------------------------------------------
 void MessageQueueServer::sendMessageWithLastId(std::uint64_t clientId, std::shared_ptr<messages::Message>& message)
 {
     message->setMessageId(m_clientLastMessageId[clientId]);

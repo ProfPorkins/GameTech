@@ -56,5 +56,7 @@ namespace systems
 
         std::unordered_map<components::Input::Type, sf::Keyboard::Key> m_typeToKeyMap;
         std::unordered_map<entities::Entity::IdType, KeyToType> m_keyToFunctionMap;
+
+        void predict(const components::Input::Type& type, const std::chrono::milliseconds& elapsedTime, const components::Movement* movement, components::Position* position);
     };
 } // namespace systems

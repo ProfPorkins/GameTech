@@ -40,7 +40,7 @@ class MessageQueueClient
     void sendMessage(std::shared_ptr<messages::Message> message);
     void sendMessageWithId(std::shared_ptr<messages::Message> message);
     std::queue<std::shared_ptr<messages::Message>> getMessages();
-    auto getSendMessageHistory(std::uint32_t lastMessageId);
+    std::queue<std::shared_ptr<messages::Message>> getSendMessageHistory(std::uint32_t lastMessageId);
 
   private:
     MessageQueueClient() {}

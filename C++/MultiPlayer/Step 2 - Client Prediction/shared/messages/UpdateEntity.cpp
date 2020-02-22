@@ -15,6 +15,8 @@ namespace messages
     {
         shared::Entity pbEntity;
 
+        pbEntity.mutable_messageid()->set_id(m_messageId.value());
+
         pbEntity.set_id(m_entity->getId());
 
         if (m_entity->hasComponent<components::Position>())
@@ -35,7 +37,9 @@ namespace messages
     // -----------------------------------------------------------------
     bool UpdateEntity::parseFromString(const std::string& source)
     {
-        return m_pbEntity.ParseFromString(source);
+        auto success = m_pbEntity.ParseFromString(source);
+        m_messageId = m_pbEntity.messageid().id();
+        return success;
     }
 
 } // namespace messages
