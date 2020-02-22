@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+import public "Input.proto";
+
+package shared;
+
+message InputComponent {
+    repeated InputType type = 1;
+}
