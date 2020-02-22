@@ -4,8 +4,8 @@
 #include "components/Movement.hpp"
 #include "components/Position.hpp"
 #include "messages/Join.hpp"
+#include "messages/NewEntity.hpp"
 #include "messages/RemoveEntity.hpp"
-#include "messages/UpdateEntity.hpp"
 
 #include <iostream>
 
@@ -28,11 +28,34 @@ namespace systems
                             handleConnectAck(elapsedTime, std::static_pointer_cast<messages::ConnectAck>(message));
                         });
 
+        registerHandler(messages::Type::NewEntity,
+                        [this](std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
+                            (void)elapsedTime; // unused parameter
+                            m_newEntityHandler(std::static_pointer_cast<messages::NewEntity>(message)->getPBEntity());
+                        });
+
         registerHandler(messages::Type::UpdateEntity,
                         [this](std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
                             (void)elapsedTime; // unused parameter
                             handleUpdateEntity(std::static_pointer_cast<messages::UpdateEntity>(message));
                         });
+
+        registerHandler(messages::Type::RemoveEntity,
+                        [this](std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
+                            (void)elapsedTime; // unused parameter
+                            auto entityId = std::static_pointer_cast<messages::RemoveEntity>(message)->getPBEntity().id();
+                            m_removeEntityHandler(entityId);
+                        });
+    }
+
+    // --------------------------------------------------------------
+    //
+    // Allow handlers for messages to be registered.
+    //
+    // --------------------------------------------------------------
+    void Network::registerHandler(messages::Type type, std::function<void(std::chrono::milliseconds, std::shared_ptr<messages::Message>)> handler)
+    {
+        m_commandMap[type] = handler;
     }
 
     // --------------------------------------------------------------
@@ -53,16 +76,6 @@ namespace systems
                 handler(elapsedTime, message);
             }
         }
-    }
-
-    // --------------------------------------------------------------
-    //
-    // Allow handlers for messages to be registered.
-    //
-    // --------------------------------------------------------------
-    void Network::registerHandler(messages::Type type, std::function<void(std::chrono::milliseconds, std::shared_ptr<messages::Message>)> handler)
-    {
-        m_commandMap[type] = handler;
     }
 
     // --------------------------------------------------------------
@@ -101,5 +114,4 @@ namespace systems
             }
         }
     }
-
 } // namespace systems

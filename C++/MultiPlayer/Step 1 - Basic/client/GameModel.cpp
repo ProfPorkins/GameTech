@@ -28,17 +28,8 @@ bool GameModel::initialize(sf::Vector2f viewSize)
     // messages the game model has responsibility.
     m_systemNetwork = std::make_unique<systems::Network>();
 
-    m_systemNetwork->registerHandler(messages::Type::NewEntity,
-                                     [this](std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
-                                         (void)elapsedTime; // unused parameter
-                                         handleNewEntity(std::static_pointer_cast<messages::NewEntity>(message));
-                                     });
-
-    m_systemNetwork->registerHandler(messages::Type::RemoveEntity,
-                                     [this](std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
-                                         (void)elapsedTime; // unused parameter
-                                         handleRemoveEntity(std::static_pointer_cast<messages::RemoveEntity>(message));
-                                     });
+    m_systemNetwork->registerNewEntityHandler(std::bind(&GameModel::handleNewEntity, this, std::placeholders::_1));
+    m_systemNetwork->registerRemoveEntityHandler(std::bind(&GameModel::handleRemoveEntity, this, std::placeholders::_1));
 
     //
     // Initialize the keyboard input system.
@@ -204,24 +195,17 @@ void GameModel::removeEntity(entities::Entity::IdType entityId)
 
 // --------------------------------------------------------------
 //
-// Handler for the NewEntity message.  It gets the entity built and
-// added to the client model.
-//
-// --------------------------------------------------------------
-void GameModel::handleNewEntity(std::shared_ptr<messages::NewEntity> message)
-{
-    auto entity = createEntity(message->getPBEntity());
-    addEntity(entity);
-}
-
-// --------------------------------------------------------------
-//
 // Handler for the RemoveEntity message.  It removes the entity from
 // the client game model (that's us!).
 //
 // --------------------------------------------------------------
-void GameModel::handleRemoveEntity(std::shared_ptr<messages::RemoveEntity> message)
+void GameModel::handleRemoveEntity(entities::Entity::IdType entityId)
 {
-    auto entityId = message->getPBEntity().id();
     removeEntity(entityId);
+}
+
+void GameModel::handleNewEntity(const shared::Entity& pbEntity)
+{
+    auto entity = createEntity(pbEntity);
+    addEntity(entity);
 }
