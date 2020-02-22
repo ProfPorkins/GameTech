@@ -76,6 +76,18 @@ void MessageQueueClient::sendMessage(std::shared_ptr<messages::Message> message)
     m_eventSendMessages.notify_one();
 }
 
+// -----------------------------------------------------------------
+//
+// Some messages need to be sent with a sequence number, when that
+// is needed, this send method is used.
+//
+// -----------------------------------------------------------------
+void MessageQueueClient::sendMessageWithId(std::shared_ptr<messages::Message> message)
+{
+    message->setMessageId(m_nextMessageId++);
+    sendMessage(message);
+}
+
 // --------------------------------------------------------------
 //
 // Returns the queue of all messages received since the last time

@@ -66,11 +66,17 @@ void MessageQueueServer::sendMessage(std::uint64_t clientId, std::shared_ptr<mes
     m_eventSendMessages.notify_one();
 }
 
+void MessageQueueServer::sendMessageWithLastId(std::uint64_t clientId, std::shared_ptr<messages::Message>& message)
+{
+    message->setMessageId(m_clientLastMessageId[clientId]);
+    sendMessage(clientId, message);
+}
+
 // -----------------------------------------------------------------
 //
 // Send the message to all connected clients.
 //
-//// -----------------------------------------------------------------
+// -----------------------------------------------------------------
 void MessageQueueServer::broadcastMessage(std::shared_ptr<messages::Message> message)
 {
     std::lock_guard<std::mutex> lock(m_mutexSockets);
@@ -78,6 +84,16 @@ void MessageQueueServer::broadcastMessage(std::shared_ptr<messages::Message> mes
     for (auto& [clientId, socket] : m_sockets)
     {
         sendMessage(clientId, message);
+    }
+}
+
+void MessageQueueServer::broadcastMessageWithLastId(std::shared_ptr<messages::Message> message)
+{
+    std::lock_guard<std::mutex> lock(m_mutexSockets);
+
+    for (auto& [clientId, socket] : m_sockets)
+    {
+        sendMessageWithLastId(clientId, message);
     }
 }
 
@@ -258,6 +274,10 @@ void MessageQueueServer::initializeReceiver()
                                     {
                                         auto message = m_messageCommand[type[0]]();
                                         message->parseFromString(data);
+                                        if (message->getMessageId())
+                                        {
+                                            m_clientLastMessageId[clientId] = message->getMessageId().value();
+                                        }
                                         std::lock_guard<std::mutex> lock(m_mutexReceivedMessages);
                                         m_receivedMessages.push(std::make_tuple(socketToId(socket.get()), message));
                                     }
@@ -301,6 +321,7 @@ void MessageQueueServer::removeDisconnected(std::unordered_set<std::uint64_t>& c
                 auto& socket = m_sockets[clientId];
                 m_selector.remove(*socket);
                 m_sockets.erase(clientId);
+                m_clientLastMessageId.erase(clientId);
             }
         }
         //

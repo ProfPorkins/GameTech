@@ -140,7 +140,7 @@ void GameModel::updateClients()
     {
         auto entity = m_entities[entityId];
         auto message = std::make_shared<messages::UpdateEntity>(entity);
-        MessageQueueServer::instance().broadcastMessage(message);
+        MessageQueueServer::instance().broadcastMessageWithLastId(message);
     }
 
     m_reportThese.clear();

@@ -14,6 +14,7 @@
 
 #include <SFML/Network.hpp>
 #include <chrono>
+#include <cstdint>
 #include <vector>
 
 namespace messages

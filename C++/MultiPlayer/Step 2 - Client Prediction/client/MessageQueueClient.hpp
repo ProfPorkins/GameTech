@@ -5,12 +5,12 @@
 
 #include <SFML/Network.hpp>
 #include <condition_variable>
+#include <cstdint>
 #include <functional>
 #include <mutex>
 #include <queue>
 #include <thread>
 #include <unordered_map>
-#include <cstdint>
 
 // --------------------------------------------------------------
 //
@@ -38,6 +38,7 @@ class MessageQueueClient
     void shutdown();
 
     void sendMessage(std::shared_ptr<messages::Message> message);
+    void sendMessageWithId(std::shared_ptr<messages::Message> message);
     std::queue<std::shared_ptr<messages::Message>> getMessages();
 
   private:
@@ -47,6 +48,7 @@ class MessageQueueClient
     sf::SocketSelector m_selector;
     std::unique_ptr<sf::TcpSocket> m_socketServer;
 
+    std::uint32_t m_nextMessageId{0};
     std::thread m_threadSender;
     ConcurrentQueue<std::shared_ptr<messages::Message>> m_sendMessages;
     std::condition_variable m_eventSendMessages;

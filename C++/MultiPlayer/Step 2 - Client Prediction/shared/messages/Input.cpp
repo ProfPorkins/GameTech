@@ -11,6 +11,8 @@ namespace messages
     {
         shared::Input pbInput;
 
+        pbInput.mutable_messageid()->set_id(m_messageId.value());
+
         pbInput.set_entityid(m_entityId);
         for (auto input : m_inputs)
         {
@@ -50,7 +52,9 @@ namespace messages
     // -----------------------------------------------------------------
     bool Input::parseFromString(const std::string& source)
     {
-        return m_pbInput.ParseFromString(source);
+        auto success = m_pbInput.ParseFromString(source);
+        m_messageId = m_pbInput.messageid().id();
+        return success;
     }
 
 } // namespace messages

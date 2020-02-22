@@ -64,7 +64,7 @@ namespace systems
             }
             if (!inputs.empty())
             {
-                MessageQueueClient::instance().sendMessage(std::make_shared<messages::Input>(id, inputs, elapsedTime));
+                MessageQueueClient::instance().sendMessageWithId(std::make_shared<messages::Input>(id, inputs, elapsedTime));
             }
         }
     }

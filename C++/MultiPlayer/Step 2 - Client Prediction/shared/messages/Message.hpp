@@ -22,10 +22,15 @@ namespace messages
         {
         }
 
+        void setMessageId(std::uint32_t messageId) { m_messageId = messageId; }
+        auto getMessageId() { return m_messageId; }
         Type getType() { return m_type; }
 
         virtual std::string serializeToString() const = 0;
         virtual bool parseFromString(const std::string& source) = 0;
+
+      protected:
+        std::optional<std::uint32_t> m_messageId;
 
       private:
         Type m_type;

@@ -43,7 +43,9 @@ class MessageQueueServer
     void registerDisconnectHandler(std::function<void(std::uint64_t)> handler) { m_disconnectHandler = handler; }
 
     void sendMessage(std::uint64_t clientId, std::shared_ptr<messages::Message> message);
+    void sendMessageWithLastId(std::uint64_t clientId, std::shared_ptr<messages::Message>& message);
     void broadcastMessage(std::shared_ptr<messages::Message> message);
+    void broadcastMessageWithLastId(std::shared_ptr<messages::Message> message);
     std::queue<std::tuple<std::uint64_t, std::shared_ptr<messages::Message>>> getMessages();
 
   private:
@@ -61,6 +63,7 @@ class MessageQueueServer
 
     std::queue<std::tuple<std::uint64_t, std::shared_ptr<messages::Message>>> m_receivedMessages;
     std::mutex m_mutexReceivedMessages;
+    std::unordered_map<std::uint64_t, std::uint32_t> m_clientLastMessageId;
 
     sf::SocketSelector m_selector;
     sf::TcpListener m_listener;
