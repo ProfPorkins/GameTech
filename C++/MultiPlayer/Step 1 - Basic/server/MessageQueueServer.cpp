@@ -176,13 +176,13 @@ void MessageQueueServer::initializeSender()
                     std::lock_guard<std::mutex> lock(m_mutexSockets);
                     if (m_sockets.find(clientId) != m_sockets.end())
                     {
-                        std::string serialized = message->serializeToString();
-
                         //
                         // Need to send a header before the message data that specifies
                         // the message type and the size of data to expect.
                         std::array<std::uint8_t, 5> header;
                         header[0] = static_cast<std::uint8_t>(message->getType());
+                        // Convert to network representation
+                        std::string serialized = message->serializeToString();
                         std::uint32_t messageSize = htonl(static_cast<std::uint32_t>(serialized.size()));
                         std::uint8_t* ptrSize = reinterpret_cast<std::uint8_t*>(&messageSize);
                         header[1] = ptrSize[0];

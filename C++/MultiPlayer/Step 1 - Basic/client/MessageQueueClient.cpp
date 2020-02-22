@@ -107,15 +107,13 @@ void MessageQueueClient::initializeSender()
             auto item = m_sendMessages.dequeue();
             if (item)
             {
-                // Destructure and send
-                std::string serialized = item.value()->serializeToString();
-
                 //
                 // Need to send a header before the message data that specifies
                 // the message type and the size of data to expect.
                 std::array<std::uint8_t, 5> header;
                 header[0] = static_cast<std::uint8_t>(item.value()->getType());
-                // Be sure to convert to network representation
+                // Convert to network representation
+                std::string serialized = item.value()->serializeToString();
                 std::uint32_t messageSize = htonl(static_cast<std::uint32_t>(serialized.size()));
                 std::uint8_t* ptrSize = reinterpret_cast<std::uint8_t*>(&messageSize);
                 header[1] = ptrSize[0];
