@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(Multiplayer-Step1-Basic)
+project(Multiplayer-Step2-ClientPrediction)
 
 #
 # ------------------------ Google Protocol Buffers ------------------------

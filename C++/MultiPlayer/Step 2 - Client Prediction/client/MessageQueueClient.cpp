@@ -106,6 +106,27 @@ std::queue<std::shared_ptr<messages::Message>> MessageQueueClient::getMessages()
 
 // --------------------------------------------------------------
 //
+// Removes all messages up to and including the lastMessageId, and
+// then returns a copy of the remaining messages.  This is used
+// during server reconciliation.
+//
+// --------------------------------------------------------------
+auto MessageQueueClient::getSendMessageHistory(std::uint32_t lastMessageId)
+{
+    //
+    // Remove messages up to and including lastMessageId
+    while (!m_sendHistory.empty() && m_sendHistory.front()->getMessageId().value() <= lastMessageId)
+    {
+        m_sendHistory.pop();
+    }
+
+    //
+    // Make a copy of the queue and return that
+    return std::queue<std::shared_ptr<messages::Message>>(m_sendHistory);
+}
+
+// --------------------------------------------------------------
+//
 // Prepares the message queue for sending of messages.  As messages
 // are added to the queue of messages to send, the thread created
 // in this method sends them as soon as it can.
@@ -119,15 +140,19 @@ void MessageQueueClient::initializeSender()
             auto item = m_sendMessages.dequeue();
             if (item)
             {
-                // Destructure and send
-                std::string serialized = item.value()->serializeToString();
+                // Need to track messages with a sequence number for server reconciliation
+                if (item.value()->getMessageId())
+                {
+                    m_sendHistory.push(item.value());
+                }
 
                 //
                 // Need to send a header before the message data that specifies
                 // the message type and the size of data to expect.
                 std::array<std::uint8_t, 5> header;
                 header[0] = static_cast<std::uint8_t>(item.value()->getType());
-                // Be sure to convert to network representation
+                // Convert to network representation
+                std::string serialized = item.value()->serializeToString();
                 std::uint32_t messageSize = htonl(static_cast<std::uint32_t>(serialized.size()));
                 std::uint8_t* ptrSize = reinterpret_cast<std::uint8_t*>(&messageSize);
                 header[1] = ptrSize[0];

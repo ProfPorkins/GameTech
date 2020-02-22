@@ -40,6 +40,7 @@ class MessageQueueClient
     void sendMessage(std::shared_ptr<messages::Message> message);
     void sendMessageWithId(std::shared_ptr<messages::Message> message);
     std::queue<std::shared_ptr<messages::Message>> getMessages();
+    auto getSendMessageHistory(std::uint32_t lastMessageId);
 
   private:
     MessageQueueClient() {}
@@ -51,6 +52,7 @@ class MessageQueueClient
     std::uint32_t m_nextMessageId{0};
     std::thread m_threadSender;
     ConcurrentQueue<std::shared_ptr<messages::Message>> m_sendMessages;
+    std::queue<std::shared_ptr<messages::Message>> m_sendHistory;
     std::condition_variable m_eventSendMessages;
     std::mutex m_mutexEventSendMessages;
 
