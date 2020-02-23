@@ -45,6 +45,12 @@ namespace messages
         virtual std::string serializeToString() const override;
         virtual bool parseFromString(const std::string& source) override;
 
+        // Client use only! Could make these friend only methods
+        entities::Entity::IdType getEntityId() { return m_entityId; }
+        const std::vector<components::Input::Type> getInputs() { return m_inputs; }
+        std::chrono::milliseconds getElapsedTime() { return m_elapsedTime; }
+
+        // Intended for server-side use
         const shared::Input& getPBInput() const { return m_pbInput; }
 
       private:

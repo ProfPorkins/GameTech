@@ -66,7 +66,7 @@ namespace systems
                     inputs.push_back(type);
 
                     // Client-side prediction of the input
-                    predict(type, elapsedTime, movement, position);
+                    m_predictionHandler(type, elapsedTime, movement, position);
                 }
             }
             if (!inputs.empty())
@@ -94,33 +94,6 @@ namespace systems
     {
         (void)elapsedTime; // currently unused, will use it soon
         m_keysPressed.erase(keyEvent.code);
-    }
-
-    void KeyboardInput::predict(const components::Input::Type& type, const std::chrono::milliseconds& elapsedTime, const components::Movement* movement, components::Position* position)
-    {
-        switch (type)
-        {
-            case components::Input::Type::Thrust:
-            {
-                const float PI = 3.14159f;
-                const float DEGREES_TO_RADIANS = PI / 180.0f;
-
-                auto vectorX = std::cos(position->getOrientation() * DEGREES_TO_RADIANS);
-                auto vectorY = std::sin(position->getOrientation() * DEGREES_TO_RADIANS);
-
-                auto current = position->get();
-                position->set(sf::Vector2f(
-                    current.x + vectorX * elapsedTime.count() * movement->getMoveRate(),
-                    current.y + vectorY * elapsedTime.count() * movement->getMoveRate()));
-            }
-            break;
-            case components::Input::Type::RotateLeft:
-                position->setOrientation(position->getOrientation() - movement->getRotateRate() * elapsedTime.count());
-                break;
-            case components::Input::Type::RotateRight:
-                position->setOrientation(position->getOrientation() + movement->getRotateRate() * elapsedTime.count());
-                break;
-        }
     }
 
 } // namespace systems

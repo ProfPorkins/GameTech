@@ -9,6 +9,7 @@
 #include <functional>
 #include <memory>
 #include <mutex>
+#include <optional>
 #include <queue>
 #include <thread>
 #include <tuple>
@@ -42,7 +43,7 @@ class MessageQueueServer
     void registerConnectHandler(std::function<void(std::uint64_t)> handler) { m_connectHandler = handler; }
     void registerDisconnectHandler(std::function<void(std::uint64_t)> handler) { m_disconnectHandler = handler; }
 
-    void sendMessage(std::uint64_t clientId, std::shared_ptr<messages::Message> message);
+    void sendMessage(std::uint64_t clientId, std::shared_ptr<messages::Message> message, std::optional<std::uint32_t> messageId = std::nullopt);
     void sendMessageWithLastId(std::uint64_t clientId, std::shared_ptr<messages::Message>& message);
     void broadcastMessage(std::shared_ptr<messages::Message> message);
     void broadcastMessageWithLastId(std::shared_ptr<messages::Message> message);
@@ -57,7 +58,7 @@ class MessageQueueServer
     std::thread m_threadReceiver;
     std::unordered_map<messages::Type, std::function<std::shared_ptr<messages::Message>(void)>> m_messageCommand;
 
-    ConcurrentQueue<std::tuple<std::uint64_t, std::shared_ptr<messages::Message>>> m_sendMessages;
+    ConcurrentQueue<std::tuple<std::uint64_t, std::optional<std::uint32_t>, std::shared_ptr<messages::Message>>> m_sendMessages;
     std::condition_variable m_eventSendMessages;
     std::mutex m_mutexEventSendMessages;
 

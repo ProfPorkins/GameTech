@@ -1,5 +1,8 @@
 #pragma once
 
+#include "components/Input.hpp"
+#include "components/Movement.hpp"
+#include "components/Position.hpp"
 #include "entities/Entity.hpp"
 #include "messages/ConnectAck.hpp"
 #include "messages/Message.hpp"
@@ -14,6 +17,7 @@
 #include <memory>
 #include <queue>
 #include <unordered_map>
+#include <unordered_set>
 
 namespace systems
 {
@@ -30,14 +34,17 @@ namespace systems
 
         void registerNewEntityHandler(std::function<void(const shared::Entity&)> handler) { m_newEntityHandler = handler; }
         void registerRemoveEntityHandler(std::function<void(entities::Entity::IdType)> handler) { m_removeEntityHandler = handler; }
+        void registerPredictionHandler(std::function<void(const components::Input::Type&, const std::chrono::milliseconds, const components::Movement*, components::Position*)> handler) { m_predictionHandler = handler; }
         void registerHandler(messages::Type type, std::function<void(std::chrono::milliseconds, std::shared_ptr<messages::Message>)> handler);
         void update(std::chrono::milliseconds elapsedTime, std::queue<std::shared_ptr<messages::Message>> messages);
 
       private:
         std::unordered_map<messages::Type, std::function<void(std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message>)>> m_commandMap;
-        std::function<void(entities::Entity::IdType)> m_removeEntityHandler = nullptr;
-        std::function<void(const shared::Entity&)> m_newEntityHandler = nullptr;
+        std::function<void(entities::Entity::IdType)> m_removeEntityHandler{nullptr};
+        std::function<void(const shared::Entity&)> m_newEntityHandler{nullptr};
+        std::function<void(const components::Input::Type&, const std::chrono::milliseconds, const components::Movement*, components::Position*)> m_predictionHandler{nullptr};
         std::uint32_t m_lastMessageId{0};
+        std::unordered_set<entities::Entity::IdType> m_updatedEntities;
 
         void handleConnectAck(std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::ConnectAck> message);
         void handleUpdateEntity(std::shared_ptr<messages::UpdateEntity> message);

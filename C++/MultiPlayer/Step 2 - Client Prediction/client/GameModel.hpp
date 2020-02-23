@@ -7,6 +7,8 @@
 #include "Entity.pb.h"
 #pragma warning(pop)
 
+#include "components/Movement.hpp"
+#include "components/Position.hpp"
 #include "entities/Entity.hpp"
 #include "systems/KeyboardInput.hpp"
 #include "systems/Network.hpp"
@@ -46,4 +48,6 @@ class GameModel
 
     void handleNewEntity(const shared::Entity& pbEntity);
     void handleRemoveEntity(entities::Entity::IdType entityId);
+
+    void predictEntity(const components::Input::Type& type, const std::chrono::milliseconds& elapsedTime, const components::Movement* movement, components::Position* position);
 };

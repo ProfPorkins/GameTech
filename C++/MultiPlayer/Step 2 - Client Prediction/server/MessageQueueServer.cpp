@@ -60,9 +60,16 @@ void MessageQueueServer::shutdown()
 //  2. Signal the thread that performs the sending that a new message is available
 //
 // -----------------------------------------------------------------
-void MessageQueueServer::sendMessage(std::uint64_t clientId, std::shared_ptr<messages::Message> message)
+void MessageQueueServer::sendMessage(std::uint64_t clientId, std::shared_ptr<messages::Message> message, std::optional<std::uint32_t> messageId)
 {
-    m_sendMessages.enqueue(std::make_tuple(clientId, message));
+    //
+    // The reason messageId is part of the tuple rather than directly setting it on
+    // the message at this point is that broadcast messages are not copies, but we
+    // want each message that goes out to a client to have the unique per-client
+    // last message sequence number attached to it.  Right before the message
+    // is sent in the sender thread, the messageId is set on the message, ensure
+    // the correct sequence number is sent to the client.
+    m_sendMessages.enqueue(std::make_tuple(clientId, messageId, message));
     m_eventSendMessages.notify_one();
 }
 
@@ -75,8 +82,7 @@ void MessageQueueServer::sendMessage(std::uint64_t clientId, std::shared_ptr<mes
 // -----------------------------------------------------------------
 void MessageQueueServer::sendMessageWithLastId(std::uint64_t clientId, std::shared_ptr<messages::Message>& message)
 {
-    message->setMessageId(m_clientLastMessageId[clientId]);
-    sendMessage(clientId, message);
+    sendMessage(clientId, message, m_clientLastMessageId[clientId]);
 }
 
 // -----------------------------------------------------------------
@@ -94,6 +100,12 @@ void MessageQueueServer::broadcastMessage(std::shared_ptr<messages::Message> mes
     }
 }
 
+// -----------------------------------------------------------------
+//
+// Send the message to all connected clients, but also including the
+// last message sequence number processed by the server.
+//
+// -----------------------------------------------------------------
 void MessageQueueServer::broadcastMessageWithLastId(std::shared_ptr<messages::Message> message)
 {
     std::lock_guard<std::mutex> lock(m_mutexSockets);
@@ -191,12 +203,18 @@ void MessageQueueServer::initializeSender()
             if (item)
             {
                 // Destructure and send
-                auto& [clientId, message] = item.value();
+                auto& [clientId, messageId, message] = item.value();
                 // Creating this scope so the m_mutexSockets is released, allowing the removeDisconnected function
                 // to be called, because it also wants to grab that mutex.
                 // Note: Might be able to use a recursive_mutex instead
                 {
                     std::lock_guard<std::mutex> lock(m_mutexSockets);
+                    // Some messages have a sequence number associated with them, if they do,
+                    // then set it on the message.
+                    if (messageId)
+                    {
+                        message->setMessageId(messageId.value());
+                    }
                     if (m_sockets.find(clientId) != m_sockets.end())
                     {
                         std::string serialized = message->serializeToString();
@@ -257,6 +275,7 @@ void MessageQueueServer::initializeReceiver()
             if (m_selector.wait(sf::seconds(1.0f)))
             {
                 // Have to iterate through all of them to find out which one(s) are ready
+                std::lock_guard<std::mutex> lockSockets(m_mutexSockets);
                 for (auto& [clientId, socket] : m_sockets)
                 {
                     if (m_selector.isReady(*socket))

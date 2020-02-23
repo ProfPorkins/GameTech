@@ -9,6 +9,7 @@
 #include <SFML/Window/Event.hpp>
 #include <SFML/Window/Keyboard.hpp>
 #include <chrono>
+#include <functional>
 #include <initializer_list>
 #include <tuple>
 #include <unordered_map>
@@ -36,6 +37,8 @@ namespace systems
             }
         }
 
+        void registerPredictionHandler(std::function<void(const components::Input::Type&, const std::chrono::milliseconds, const components::Movement*, components::Position*)> handler) { m_predictionHandler = handler; }
+
         virtual bool addEntity(std::shared_ptr<entities::Entity> entity) override;
         virtual void removeEntity(entities::Entity::IdType entityId) override;
 
@@ -51,12 +54,12 @@ namespace systems
             std::unordered_map<sf::Keyboard::Key, components::Input::Type> m_keyToType;
         };
 
+        std::function<void(const components::Input::Type&, const std::chrono::milliseconds, const components::Movement*, components::Position*)> m_predictionHandler{nullptr};
+
         std::unordered_map<sf::Keyboard::Key, sf::Event::KeyEvent> m_keysPressed;
         std::vector<components::Input::Type> m_inputEvents;
 
         std::unordered_map<components::Input::Type, sf::Keyboard::Key> m_typeToKeyMap;
         std::unordered_map<entities::Entity::IdType, KeyToType> m_keyToFunctionMap;
-
-        void predict(const components::Input::Type& type, const std::chrono::milliseconds& elapsedTime, const components::Movement* movement, components::Position* position);
     };
 } // namespace systems

@@ -30,6 +30,7 @@ bool GameModel::initialize(sf::Vector2f viewSize)
 
     m_systemNetwork->registerNewEntityHandler(std::bind(&GameModel::handleNewEntity, this, std::placeholders::_1));
     m_systemNetwork->registerRemoveEntityHandler(std::bind(&GameModel::handleRemoveEntity, this, std::placeholders::_1));
+    m_systemNetwork->registerPredictionHandler(std::bind(&GameModel::predictEntity, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 
     //
     // Initialize the keyboard input system.
@@ -38,6 +39,7 @@ bool GameModel::initialize(sf::Vector2f viewSize)
         std::make_tuple(components::Input::Type::RotateRight, sf::Keyboard::D),
         std::make_tuple(components::Input::Type::Thrust, sf::Keyboard::W)};
     m_systemKeyboardInput = std::make_unique<systems::KeyboardInput>(inputMapping);
+    m_systemKeyboardInput->registerPredictionHandler(std::bind(&GameModel::predictEntity, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
 
     //
     // Initialize the renderer system.
@@ -208,4 +210,39 @@ void GameModel::handleNewEntity(const shared::Entity& pbEntity)
 {
     auto entity = createEntity(pbEntity);
     addEntity(entity);
+}
+
+// --------------------------------------------------------------
+//
+// This method is used for both client prediction and server reconciliation,
+// which are handled in different systems.  Because of that, placing the
+// code in this one place and then binding it to appropriate handlers
+// on those systems.
+//
+// --------------------------------------------------------------
+void GameModel::predictEntity(const components::Input::Type& type, const std::chrono::milliseconds& elapsedTime, const components::Movement* movement, components::Position* position)
+{
+    switch (type)
+    {
+        case components::Input::Type::Thrust:
+        {
+            const float PI = 3.14159f;
+            const float DEGREES_TO_RADIANS = PI / 180.0f;
+
+            auto vectorX = std::cos(position->getOrientation() * DEGREES_TO_RADIANS);
+            auto vectorY = std::sin(position->getOrientation() * DEGREES_TO_RADIANS);
+
+            auto current = position->get();
+            position->set(sf::Vector2f(
+                current.x + vectorX * elapsedTime.count() * movement->getMoveRate(),
+                current.y + vectorY * elapsedTime.count() * movement->getMoveRate()));
+        }
+        break;
+        case components::Input::Type::RotateLeft:
+            position->setOrientation(position->getOrientation() - movement->getRotateRate() * elapsedTime.count());
+            break;
+        case components::Input::Type::RotateRight:
+            position->setOrientation(position->getOrientation() + movement->getRotateRate() * elapsedTime.count());
+            break;
+    }
 }

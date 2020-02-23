@@ -6,7 +6,7 @@
 #include <iostream>
 #include <thread>
 
-const auto SIMULATION_UPDATE_RATE_MS = std::chrono::milliseconds(100);
+const auto SIMULATION_UPDATE_RATE_MS = std::chrono::milliseconds(500);
 
 int main()
 {

@@ -3,11 +3,13 @@
 #include "MessageQueueClient.hpp"
 #include "components/Movement.hpp"
 #include "components/Position.hpp"
+#include "messages/Input.hpp"
 #include "messages/Join.hpp"
+#include "messages/MessageTypes.hpp"
 #include "messages/NewEntity.hpp"
 #include "messages/RemoveEntity.hpp"
 
-#include <iostream>
+#include <chrono>
 
 namespace systems
 {
@@ -65,7 +67,7 @@ namespace systems
     // --------------------------------------------------------------
     void Network::update(std::chrono::milliseconds elapsedTime, std::queue<std::shared_ptr<messages::Message>> messages)
     {
-        std::uint32_t lastMessageId{0};
+        m_updatedEntities.clear();
         while (!messages.empty())
         {
             auto message = messages.front();
@@ -78,13 +80,37 @@ namespace systems
             }
             if (message->getMessageId().has_value())
             {
-                lastMessageId = message->getMessageId().value();
+                m_lastMessageId = message->getMessageId().value();
             }
         }
+
         //
         // After processing all the messages, perform server reconciliation by
-        // replaying any sent messages not yet reconcilied by the server
-        auto sent = MessageQueueClient::instance().getSendMessageHistory(lastMessageId);
+        // resimulation the inputs from any sent messages not yet reconcilied by the server
+        auto sent = MessageQueueClient::instance().getSendMessageHistory(m_lastMessageId);
+        while (!sent.empty())
+        {
+            auto message = sent.front();
+            sent.pop();
+            if (message->getType() == messages::Type::Input)
+            {
+                auto* inputMessage = static_cast<messages::Input*>(message.get());
+                auto entity = m_entities[inputMessage->getEntityId()];
+                if (m_updatedEntities.find(entity->getId()) != m_updatedEntities.end())
+                {
+                    auto movement = entity->getComponent<components::Movement>();
+                    auto position = entity->getComponent<components::Position>();
+                    for (auto&& input : inputMessage->getInputs())
+                    {
+                        m_predictionHandler(
+                            input,
+                            inputMessage->getElapsedTime(),
+                            movement,
+                            position);
+                    }
+                }
+            }
+        }
     }
 
     // --------------------------------------------------------------
@@ -121,6 +147,8 @@ namespace systems
                 auto position = entity->getComponent<components::Position>();
                 position->set(sf::Vector2f(pbEntity.position().center().x(), pbEntity.position().center().y()));
                 position->setOrientation(pbEntity.position().orientation());
+
+                m_updatedEntities.insert(entity->getId());
             }
         }
     }
