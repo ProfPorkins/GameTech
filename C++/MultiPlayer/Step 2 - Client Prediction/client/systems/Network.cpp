@@ -8,6 +8,7 @@
 #include "messages/MessageTypes.hpp"
 #include "messages/NewEntity.hpp"
 #include "messages/RemoveEntity.hpp"
+#include "entities/Player.hpp"
 
 #include <chrono>
 
@@ -100,7 +101,18 @@ namespace systems
                 {
                     for (auto&& input : inputMessage->getInputs())
                     {
-                        m_predictionHandler(entity, input, inputMessage->getElapsedTime());
+                        switch (input)
+                        {
+                            case components::Input::Type::Thrust:
+                                entities::thrust(entity, elapsedTime);
+                                break;
+                            case components::Input::Type::RotateLeft:
+                                entities::rotateLeft(entity, elapsedTime);
+                                break;
+                            case components::Input::Type::RotateRight:
+                                entities::rotateRight(entity, elapsedTime);
+                                break;
+                        }
                     }
                 }
             }

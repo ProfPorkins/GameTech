@@ -6,7 +6,6 @@
 #include "components/Position.hpp"
 #include "components/Size.hpp"
 #include "components/Sprite.hpp"
-#include "entities/Player.hpp"
 
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -31,7 +30,6 @@ bool GameModel::initialize(sf::Vector2f viewSize)
 
     m_systemNetwork->registerNewEntityHandler(std::bind(&GameModel::handleNewEntity, this, std::placeholders::_1));
     m_systemNetwork->registerRemoveEntityHandler(std::bind(&GameModel::handleRemoveEntity, this, std::placeholders::_1));
-    m_systemNetwork->registerPredictionHandler(std::bind(&GameModel::predictEntity, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
     //
     // Initialize the keyboard input system.
@@ -40,7 +38,6 @@ bool GameModel::initialize(sf::Vector2f viewSize)
         std::make_tuple(components::Input::Type::RotateRight, sf::Keyboard::D),
         std::make_tuple(components::Input::Type::Thrust, sf::Keyboard::W)};
     m_systemKeyboardInput = std::make_unique<systems::KeyboardInput>(inputMapping);
-    m_systemKeyboardInput->registerPredictionHandler(std::bind(&GameModel::predictEntity, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
     //
     // Initialize the renderer system.
@@ -211,28 +208,4 @@ void GameModel::handleNewEntity(const shared::Entity& pbEntity)
 {
     auto entity = createEntity(pbEntity);
     addEntity(entity);
-}
-
-// --------------------------------------------------------------
-//
-// This method is used for both client prediction and server reconciliation,
-// which are handled in different systems.  Because of that, placing the
-// code in this one place and then binding it to appropriate handlers
-// on those systems.
-//
-// --------------------------------------------------------------
-void GameModel::predictEntity(entities::Entity* entity, const components::Input::Type& type, const std::chrono::milliseconds& elapsedTime)
-{
-    switch (type)
-    {
-        case components::Input::Type::Thrust:
-            entities::player::thrust(entity, elapsedTime);
-            break;
-        case components::Input::Type::RotateLeft:
-            entities::player::rotateLeft(entity, elapsedTime);
-            break;
-        case components::Input::Type::RotateRight:
-            entities::player::rotateRight(entity, elapsedTime);
-            break;
-    }
 }

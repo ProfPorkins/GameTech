@@ -2,6 +2,7 @@
 
 #include "MessageQueueClient.hpp"
 #include "messages/Input.hpp"
+#include "entities/Player.hpp"
 
 namespace systems
 {
@@ -62,7 +63,18 @@ namespace systems
                     inputs.push_back(type);
 
                     // Client-side prediction of the input
-                    m_predictionHandler(entity.get(), type, elapsedTime);
+                    switch (type)
+                    {
+                        case components::Input::Type::Thrust:
+                            entities::thrust(entity.get(), elapsedTime);
+                            break;
+                        case components::Input::Type::RotateLeft:
+                            entities::rotateLeft(entity.get(), elapsedTime);
+                            break;
+                        case components::Input::Type::RotateRight:
+                            entities::rotateRight(entity.get(), elapsedTime);
+                            break;
+                    }
                 }
             }
             if (!inputs.empty())

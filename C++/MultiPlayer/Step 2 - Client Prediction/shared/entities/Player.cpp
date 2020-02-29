@@ -33,14 +33,17 @@ namespace entities::player
 
         return entity;
     }
+} // namespace entities::player
 
-    // --------------------------------------------------------------
-    //
-    // The following functions are shared between the client and server,
-    // they are used to handle input on the player entity for either
-    // server or client simulation.
-    //
-    // --------------------------------------------------------------
+// --------------------------------------------------------------
+//
+// The following functions are shared between the client and server,
+// they are used to handle input on the player entity for either
+// server or client simulation.
+//
+// --------------------------------------------------------------
+namespace entities
+{
     void thrust(entities::Entity* entity, std::chrono::milliseconds elapsedTime)
     {
         const float PI = 3.14159f;
@@ -73,4 +76,4 @@ namespace entities::player
 
         position->setOrientation(position->getOrientation() + movement->getRotateRate() * elapsedTime.count());
     }
-} // namespace entities::player
+} // namespace entities

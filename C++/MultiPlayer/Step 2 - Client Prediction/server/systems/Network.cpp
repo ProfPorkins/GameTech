@@ -85,15 +85,15 @@ namespace systems
                 switch (input.type())
                 {
                     case shared::InputType::Thrust:
-                        entities::player::thrust(entity, std::chrono::milliseconds(input.elapsedtime()));
+                        entities::thrust(entity, std::chrono::milliseconds(input.elapsedtime()));
                         m_inputHandler(entity);
                         break;
                     case shared::InputType::RotateLeft:
-                        entities::player::rotateLeft(entity, std::chrono::milliseconds(input.elapsedtime()));
+                        entities::rotateLeft(entity, std::chrono::milliseconds(input.elapsedtime()));
                         m_inputHandler(entity);
                         break;
                     case shared::InputType::RotateRight:
-                        entities::player::rotateRight(entity, std::chrono::milliseconds(input.elapsedtime()));
+                        entities::rotateRight(entity, std::chrono::milliseconds(input.elapsedtime()));
                         m_inputHandler(entity);
                         break;
                 }
