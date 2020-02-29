@@ -62,7 +62,7 @@ namespace systems
                     inputs.push_back(type);
 
                     // Client-side prediction of the input
-                    m_predictionHandler(entity, type, elapsedTime);
+                    m_predictionHandler(entity.get(), type, elapsedTime);
                 }
             }
             if (!inputs.empty())

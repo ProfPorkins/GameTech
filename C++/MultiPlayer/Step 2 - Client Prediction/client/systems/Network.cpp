@@ -95,7 +95,7 @@ namespace systems
             if (message->getType() == messages::Type::Input)
             {
                 auto* inputMessage = static_cast<messages::Input*>(message.get());
-                auto entity = m_entities[inputMessage->getEntityId()];
+                auto entity = m_entities[inputMessage->getEntityId()].get();
                 if (m_updatedEntities.find(entity->getId()) != m_updatedEntities.end())
                 {
                     for (auto&& input : inputMessage->getInputs())

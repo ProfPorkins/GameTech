@@ -37,7 +37,7 @@ namespace systems
             }
         }
 
-        void registerPredictionHandler(std::function<void(std::shared_ptr<entities::Entity>&, const components::Input::Type&, const std::chrono::milliseconds)> handler) { m_predictionHandler = handler; }
+        void registerPredictionHandler(std::function<void(entities::Entity*, const components::Input::Type&, const std::chrono::milliseconds)> handler) { m_predictionHandler = handler; }
 
         virtual bool addEntity(std::shared_ptr<entities::Entity> entity) override;
         virtual void removeEntity(entities::Entity::IdType entityId) override;
@@ -54,7 +54,7 @@ namespace systems
             std::unordered_map<sf::Keyboard::Key, components::Input::Type> m_keyToType;
         };
 
-        std::function<void(std::shared_ptr<entities::Entity>&, const components::Input::Type&, const std::chrono::milliseconds)> m_predictionHandler{nullptr};
+        std::function<void(entities::Entity*, const components::Input::Type&, const std::chrono::milliseconds)> m_predictionHandler{nullptr};
 
         std::unordered_map<sf::Keyboard::Key, sf::Event::KeyEvent> m_keysPressed;
         std::vector<components::Input::Type> m_inputEvents;

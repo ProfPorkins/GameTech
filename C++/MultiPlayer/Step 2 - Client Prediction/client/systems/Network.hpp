@@ -34,7 +34,7 @@ namespace systems
 
         void registerNewEntityHandler(std::function<void(const shared::Entity&)> handler) { m_newEntityHandler = handler; }
         void registerRemoveEntityHandler(std::function<void(entities::Entity::IdType)> handler) { m_removeEntityHandler = handler; }
-        void registerPredictionHandler(std::function<void(std::shared_ptr<entities::Entity>&, const components::Input::Type&, const std::chrono::milliseconds)> handler) { m_predictionHandler = handler; }
+        void registerPredictionHandler(std::function<void(entities::Entity*, const components::Input::Type&, const std::chrono::milliseconds)> handler) { m_predictionHandler = handler; }
         void registerHandler(messages::Type type, std::function<void(std::chrono::milliseconds, std::shared_ptr<messages::Message>)> handler);
         void update(std::chrono::milliseconds elapsedTime, std::queue<std::shared_ptr<messages::Message>> messages);
 
@@ -42,7 +42,7 @@ namespace systems
         std::unordered_map<messages::Type, std::function<void(std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message>)>> m_commandMap;
         std::function<void(entities::Entity::IdType)> m_removeEntityHandler{nullptr};
         std::function<void(const shared::Entity&)> m_newEntityHandler{nullptr};
-        std::function<void(std::shared_ptr<entities::Entity>&, const components::Input::Type&, const std::chrono::milliseconds)> m_predictionHandler{ nullptr };
+        std::function<void(entities::Entity*, const components::Input::Type&, const std::chrono::milliseconds)> m_predictionHandler{ nullptr };
         std::uint32_t m_lastMessageId{0};
         std::unordered_set<entities::Entity::IdType> m_updatedEntities;
 

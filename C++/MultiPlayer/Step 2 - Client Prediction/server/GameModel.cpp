@@ -278,7 +278,7 @@ void GameModel::handleJoin(std::uint64_t clientId)
 // any other connected clients.
 //
 // --------------------------------------------------------------
-void GameModel::handleInput(std::shared_ptr<entities::Entity>& entity, shared::InputType type, std::chrono::milliseconds elapsedTime)
+void GameModel::handleInput(entities::Entity* entity, shared::InputType type, std::chrono::milliseconds elapsedTime)
 {
     switch (type)
     {

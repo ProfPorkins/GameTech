@@ -221,7 +221,7 @@ void GameModel::handleNewEntity(const shared::Entity& pbEntity)
 // on those systems.
 //
 // --------------------------------------------------------------
-void GameModel::predictEntity(std::shared_ptr<entities::Entity>& entity, const components::Input::Type& type, const std::chrono::milliseconds& elapsedTime)
+void GameModel::predictEntity(entities::Entity* entity, const components::Input::Type& type, const std::chrono::milliseconds& elapsedTime)
 {
     switch (type)
     {

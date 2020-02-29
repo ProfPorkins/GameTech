@@ -41,7 +41,7 @@ namespace entities::player
     // server or client simulation.
     //
     // --------------------------------------------------------------
-    void thrust(std::shared_ptr<entities::Entity>& entity, std::chrono::milliseconds elapsedTime)
+    void thrust(entities::Entity* entity, std::chrono::milliseconds elapsedTime)
     {
         const float PI = 3.14159f;
         const float DEGREES_TO_RADIANS = PI / 180.0f;
@@ -58,7 +58,7 @@ namespace entities::player
             current.y + vectorY * elapsedTime.count() * movement->getMoveRate()));
     }
 
-    void rotateLeft(std::shared_ptr<entities::Entity>& entity, std::chrono::milliseconds elapsedTime)
+    void rotateLeft(entities::Entity* entity, std::chrono::milliseconds elapsedTime)
     {
         auto position = entity->getComponent<components::Position>();
         auto movement = entity->getComponent<components::Movement>();
@@ -66,7 +66,7 @@ namespace entities::player
         position->setOrientation(position->getOrientation() - movement->getRotateRate() * elapsedTime.count());
     }
 
-    void rotateRight(std::shared_ptr<entities::Entity>& entity, std::chrono::milliseconds elapsedTime)
+    void rotateRight(entities::Entity* entity, std::chrono::milliseconds elapsedTime)
     {
         auto position = entity->getComponent<components::Position>();
         auto movement = entity->getComponent<components::Movement>();
