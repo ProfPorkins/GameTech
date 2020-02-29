@@ -41,5 +41,5 @@ class GameModel
     void handleConnect(std::uint64_t clientId);
     void handleDisconnect(std::uint64_t clientId);
     void handleJoin(std::uint64_t clientId);
-    void handleInput(std::shared_ptr<entities::Entity>& entity, shared::InputType type, std::chrono::milliseconds elapsedTime);
+    void handleInput(entities::Entity* entity, shared::InputType type, std::chrono::milliseconds elapsedTime);
 };

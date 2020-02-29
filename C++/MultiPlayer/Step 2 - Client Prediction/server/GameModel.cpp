@@ -17,7 +17,9 @@
 
 // --------------------------------------------------------------
 //
-//
+// This is where the server-side simulation takes place.  Messages
+// from the network are processed and then any necessary client
+// updates are sent out.
 //
 // --------------------------------------------------------------
 void GameModel::update(const std::chrono::milliseconds elapsedTime)
@@ -29,6 +31,7 @@ void GameModel::update(const std::chrono::milliseconds elapsedTime)
 
     //
     // Send game state updates back out to connected clients
+    // Question: Should this be expressed in a system instead?
     updateClients();
 }
 
@@ -236,7 +239,7 @@ void GameModel::handleJoin(std::uint64_t clientId)
     //         it to the newly joined client
 
     // Generate a player, add to server simulation, and send to the client
-    auto player = entities::createPlayer("playerShip1_Blue.png", sf::Vector2f(0.0f, 0.0f), 0.05f, 0.0002f, 180.0f / 1000);
+    auto player = entities::player::create("playerShip1_Blue.png", sf::Vector2f(0.0f, 0.0f), 0.05f, 0.0002f, 180.0f / 1000);
     addEntity(player);
     m_clientToEntityId[clientId] = player->getId();
 
@@ -278,34 +281,20 @@ void GameModel::handleJoin(std::uint64_t clientId)
 // any other connected clients.
 //
 // --------------------------------------------------------------
-void GameModel::handleInput(std::shared_ptr<entities::Entity>& entity, shared::InputType type, std::chrono::milliseconds elapsedTime)
+void GameModel::handleInput(entities::Entity* entity, shared::InputType type, std::chrono::milliseconds elapsedTime)
 {
-    auto position = entity->getComponent<components::Position>();
-    auto movement = entity->getComponent<components::Movement>();
     switch (type)
     {
         case shared::InputType::Thrust:
-        {
-            const float PI = 3.14159f;
-            const float DEGREES_TO_RADIANS = PI / 180.0f;
-
-            auto vectorX = std::cos(position->getOrientation() * DEGREES_TO_RADIANS);
-            auto vectorY = std::sin(position->getOrientation() * DEGREES_TO_RADIANS);
-
-            auto current = position->get();
-            position->set(sf::Vector2f(
-                current.x + vectorX * elapsedTime.count() * movement->getMoveRate(),
-                current.y + vectorY * elapsedTime.count() * movement->getMoveRate()));
-
+            entities::player::thrust(entity, elapsedTime);
             m_reportThese.insert(entity->getId());
-        }
-        break;
+            break;
         case shared::InputType::RotateLeft:
-            position->setOrientation(position->getOrientation() - movement->getRotateRate() * elapsedTime.count());
+            entities::player::rotateLeft(entity, elapsedTime);
             m_reportThese.insert(entity->getId());
             break;
         case shared::InputType::RotateRight:
-            position->setOrientation(position->getOrientation() + movement->getRotateRate() * elapsedTime.count());
+            entities::player::rotateRight(entity, elapsedTime);
             m_reportThese.insert(entity->getId());
             break;
     }

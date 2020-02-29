@@ -86,7 +86,7 @@ namespace systems
 
         //
         // After processing all the messages, perform server reconciliation by
-        // resimulation the inputs from any sent messages not yet reconcilied by the server
+        // resimulating the inputs from any sent messages not yet acknowledged by the server.
         auto sent = MessageQueueClient::instance().getSendMessageHistory(m_lastMessageId);
         while (!sent.empty())
         {
@@ -95,18 +95,12 @@ namespace systems
             if (message->getType() == messages::Type::Input)
             {
                 auto* inputMessage = static_cast<messages::Input*>(message.get());
-                auto entity = m_entities[inputMessage->getEntityId()];
+                auto entity = m_entities[inputMessage->getEntityId()].get();
                 if (m_updatedEntities.find(entity->getId()) != m_updatedEntities.end())
                 {
-                    auto movement = entity->getComponent<components::Movement>();
-                    auto position = entity->getComponent<components::Position>();
                     for (auto&& input : inputMessage->getInputs())
                     {
-                        m_predictionHandler(
-                            input,
-                            inputMessage->getElapsedTime(),
-                            movement,
-                            position);
+                        m_predictionHandler(entity, input, inputMessage->getElapsedTime());
                     }
                 }
             }

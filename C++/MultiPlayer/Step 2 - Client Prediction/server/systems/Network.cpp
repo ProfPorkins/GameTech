@@ -81,7 +81,7 @@ namespace systems
 
             for (auto&& input : message->getPBInput().input())
             {
-                m_inputHandler(entity, input.type(), std::chrono::milliseconds(input.elapsedtime()));
+                m_inputHandler(entity.get(), input.type(), std::chrono::milliseconds(input.elapsedtime()));
             }
         }
     }

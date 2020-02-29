@@ -49,5 +49,5 @@ class GameModel
     void handleNewEntity(const shared::Entity& pbEntity);
     void handleRemoveEntity(entities::Entity::IdType entityId);
 
-    void predictEntity(const components::Input::Type& type, const std::chrono::milliseconds& elapsedTime, const components::Movement* movement, components::Position* position);
+    void predictEntity(entities::Entity* entity, const components::Input::Type& type, const std::chrono::milliseconds& elapsedTime);
 };
