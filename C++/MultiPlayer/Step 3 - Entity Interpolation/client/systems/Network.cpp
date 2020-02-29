@@ -3,6 +3,7 @@
 #include "MessageQueueClient.hpp"
 #include "components/Movement.hpp"
 #include "components/Position.hpp"
+#include "entities/Player.hpp"
 #include "messages/Input.hpp"
 #include "messages/Join.hpp"
 #include "messages/MessageTypes.hpp"
@@ -100,7 +101,18 @@ namespace systems
                 {
                     for (auto&& input : inputMessage->getInputs())
                     {
-                        m_predictionHandler(entity, input, inputMessage->getElapsedTime());
+                        switch (input)
+                        {
+                            case components::Input::Type::Thrust:
+                                entities::thrust(entity, elapsedTime);
+                                break;
+                            case components::Input::Type::RotateLeft:
+                                entities::rotateLeft(entity, elapsedTime);
+                                break;
+                            case components::Input::Type::RotateRight:
+                                entities::rotateRight(entity, elapsedTime);
+                                break;
+                        }
                     }
                 }
             }

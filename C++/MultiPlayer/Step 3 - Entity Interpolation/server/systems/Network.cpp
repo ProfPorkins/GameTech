@@ -1,6 +1,7 @@
 #include "Network.hpp"
 
 #include "MessageQueueServer.hpp"
+#include "entities/Player.hpp"
 
 namespace systems
 {
@@ -77,11 +78,25 @@ namespace systems
         if (m_inputHandler)
         {
             auto entityId = message->getPBInput().entityid();
-            auto& entity = m_entities[entityId];
+            auto entity = m_entities[entityId].get();
 
             for (auto&& input : message->getPBInput().input())
             {
-                m_inputHandler(entity.get(), input.type(), std::chrono::milliseconds(input.elapsedtime()));
+                switch (input.type())
+                {
+                    case shared::InputType::Thrust:
+                        entities::thrust(entity, std::chrono::milliseconds(input.elapsedtime()));
+                        m_inputHandler(entity);
+                        break;
+                    case shared::InputType::RotateLeft:
+                        entities::rotateLeft(entity, std::chrono::milliseconds(input.elapsedtime()));
+                        m_inputHandler(entity);
+                        break;
+                    case shared::InputType::RotateRight:
+                        entities::rotateRight(entity, std::chrono::milliseconds(input.elapsedtime()));
+                        m_inputHandler(entity);
+                        break;
+                }
             }
         }
     }
