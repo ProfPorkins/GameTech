@@ -17,7 +17,9 @@
 
 // --------------------------------------------------------------
 //
-//
+// This is where the server-side simulation takes place.  Messages
+// from the network are processed and then any necessary client
+// updates are sent out.
 //
 // --------------------------------------------------------------
 void GameModel::update(const std::chrono::milliseconds elapsedTime)
@@ -29,6 +31,7 @@ void GameModel::update(const std::chrono::milliseconds elapsedTime)
 
     //
     // Send game state updates back out to connected clients
+    // Question: Should this be expressed in a system instead?
     updateClients();
 }
 
