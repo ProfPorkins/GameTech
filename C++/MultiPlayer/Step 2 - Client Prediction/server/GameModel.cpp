@@ -51,7 +51,7 @@ bool GameModel::initialize()
     // Initialize the various systems
     m_systemNetwork = std::make_unique<systems::Network>();
     m_systemNetwork->registerJoinHandler(std::bind(&GameModel::handleJoin, this, std::placeholders::_1));
-    m_systemNetwork->registerInputHandler(std::bind(&GameModel::handleInput, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+    m_systemNetwork->registerInputHandler(std::bind(&GameModel::handleInput, this, std::placeholders::_1));
 
     MessageQueueServer::instance().registerConnectHandler(std::bind(&GameModel::handleConnect, this, std::placeholders::_1));
     MessageQueueServer::instance().registerDisconnectHandler(std::bind(&GameModel::handleDisconnect, this, std::placeholders::_1));
@@ -281,21 +281,7 @@ void GameModel::handleJoin(std::uint64_t clientId)
 // in the next set of client updates.
 //
 // --------------------------------------------------------------
-void GameModel::handleInput(entities::Entity* entity, shared::InputType type, std::chrono::milliseconds elapsedTime)
+void GameModel::handleInput(entities::Entity* entity)
 {
-    switch (type)
-    {
-        case shared::InputType::Thrust:
-            entities::player::thrust(entity, elapsedTime);
-            m_reportThese.insert(entity->getId());
-            break;
-        case shared::InputType::RotateLeft:
-            entities::player::rotateLeft(entity, elapsedTime);
-            m_reportThese.insert(entity->getId());
-            break;
-        case shared::InputType::RotateRight:
-            entities::player::rotateRight(entity, elapsedTime);
-            m_reportThese.insert(entity->getId());
-            break;
-    }
+    m_reportThese.insert(entity->getId());
 }
