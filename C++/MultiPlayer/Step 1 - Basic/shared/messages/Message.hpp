@@ -2,7 +2,6 @@
 
 #include "MessageTypes.hpp"
 
-#include <optional>
 #include <string>
 
 namespace messages
