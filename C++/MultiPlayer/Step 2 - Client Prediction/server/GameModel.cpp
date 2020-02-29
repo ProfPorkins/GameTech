@@ -277,8 +277,8 @@ void GameModel::handleJoin(std::uint64_t clientId)
 // --------------------------------------------------------------
 //
 // Handler for the Input message.  It updates the player model based
-// on the input and sends the updated state back to the player and
-// any other connected clients.
+// on the input and identifies the entity and needing to be reported
+// in the next set of client updates.
 //
 // --------------------------------------------------------------
 void GameModel::handleInput(entities::Entity* entity, shared::InputType type, std::chrono::milliseconds elapsedTime)
