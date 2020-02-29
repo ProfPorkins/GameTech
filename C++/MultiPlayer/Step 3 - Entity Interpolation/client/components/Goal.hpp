@@ -23,8 +23,8 @@ namespace components
         {
         }
 
-        auto getStartPosition() { return m_startPosition;  }
-        auto getGoalPosition() { return m_goalPosition;  }
+        auto getStartPosition() { return m_startPosition; }
+        auto getGoalPosition() { return m_goalPosition; }
         auto getStartOrientation() { return m_startOrientation; }
         auto getGoalOrientation() { return m_goalOrientation; }
         auto getUpdateWindow() { return m_updateWindow; }

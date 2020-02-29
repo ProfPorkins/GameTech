@@ -1,9 +1,9 @@
 #include "Network.hpp"
 
 #include "MessageQueueClient.hpp"
+#include "components/Goal.hpp"
 #include "components/Movement.hpp"
 #include "components/Position.hpp"
-#include "components/Goal.hpp"
 #include "entities/Player.hpp"
 #include "messages/Input.hpp"
 #include "messages/Join.hpp"
