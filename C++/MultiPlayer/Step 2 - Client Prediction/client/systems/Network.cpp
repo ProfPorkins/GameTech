@@ -3,12 +3,12 @@
 #include "MessageQueueClient.hpp"
 #include "components/Movement.hpp"
 #include "components/Position.hpp"
+#include "entities/Player.hpp"
 #include "messages/Input.hpp"
 #include "messages/Join.hpp"
 #include "messages/MessageTypes.hpp"
 #include "messages/NewEntity.hpp"
 #include "messages/RemoveEntity.hpp"
-#include "entities/Player.hpp"
 
 #include <chrono>
 
