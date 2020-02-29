@@ -6,6 +6,7 @@
 #include "components/Position.hpp"
 #include "components/Size.hpp"
 #include "components/Sprite.hpp"
+#include "entities/Player.hpp"
 
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -30,7 +31,7 @@ bool GameModel::initialize(sf::Vector2f viewSize)
 
     m_systemNetwork->registerNewEntityHandler(std::bind(&GameModel::handleNewEntity, this, std::placeholders::_1));
     m_systemNetwork->registerRemoveEntityHandler(std::bind(&GameModel::handleRemoveEntity, this, std::placeholders::_1));
-    m_systemNetwork->registerPredictionHandler(std::bind(&GameModel::predictEntity, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_systemNetwork->registerPredictionHandler(std::bind(&GameModel::predictEntity, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
     //
     // Initialize the keyboard input system.
@@ -39,7 +40,7 @@ bool GameModel::initialize(sf::Vector2f viewSize)
         std::make_tuple(components::Input::Type::RotateRight, sf::Keyboard::D),
         std::make_tuple(components::Input::Type::Thrust, sf::Keyboard::W)};
     m_systemKeyboardInput = std::make_unique<systems::KeyboardInput>(inputMapping);
-    m_systemKeyboardInput->registerPredictionHandler(std::bind(&GameModel::predictEntity, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4));
+    m_systemKeyboardInput->registerPredictionHandler(std::bind(&GameModel::predictEntity, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
 
     //
     // Initialize the renderer system.
@@ -220,29 +221,18 @@ void GameModel::handleNewEntity(const shared::Entity& pbEntity)
 // on those systems.
 //
 // --------------------------------------------------------------
-void GameModel::predictEntity(const components::Input::Type& type, const std::chrono::milliseconds& elapsedTime, const components::Movement* movement, components::Position* position)
+void GameModel::predictEntity(std::shared_ptr<entities::Entity>& entity, const components::Input::Type& type, const std::chrono::milliseconds& elapsedTime)
 {
     switch (type)
     {
         case components::Input::Type::Thrust:
-        {
-            const float PI = 3.14159f;
-            const float DEGREES_TO_RADIANS = PI / 180.0f;
-
-            auto vectorX = std::cos(position->getOrientation() * DEGREES_TO_RADIANS);
-            auto vectorY = std::sin(position->getOrientation() * DEGREES_TO_RADIANS);
-
-            auto current = position->get();
-            position->set(sf::Vector2f(
-                current.x + vectorX * elapsedTime.count() * movement->getMoveRate(),
-                current.y + vectorY * elapsedTime.count() * movement->getMoveRate()));
-        }
+            entities::player::thrust(entity, elapsedTime);
         break;
         case components::Input::Type::RotateLeft:
-            position->setOrientation(position->getOrientation() - movement->getRotateRate() * elapsedTime.count());
+            entities::player::rotateLeft(entity, elapsedTime);
             break;
         case components::Input::Type::RotateRight:
-            position->setOrientation(position->getOrientation() + movement->getRotateRate() * elapsedTime.count());
+            entities::player::rotateRight(entity, elapsedTime);
             break;
     }
 }

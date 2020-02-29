@@ -1,7 +1,6 @@
 #include "KeyboardInput.hpp"
 
 #include "MessageQueueClient.hpp"
-#include "entities/Entity.hpp"
 #include "messages/Input.hpp"
 
 namespace systems
@@ -54,9 +53,6 @@ namespace systems
     {
         for (auto&& [id, entity] : m_entities)
         {
-            auto position = entity->getComponent<components::Position>();
-            auto movement = entity->getComponent<components::Movement>();
-
             std::vector<components::Input::Type> inputs;
             for (auto&& [key, keyEvent] : m_keysPressed)
             {
@@ -66,7 +62,7 @@ namespace systems
                     inputs.push_back(type);
 
                     // Client-side prediction of the input
-                    m_predictionHandler(type, elapsedTime, movement, position);
+                    m_predictionHandler(entity, type, elapsedTime);
                 }
             }
             if (!inputs.empty())

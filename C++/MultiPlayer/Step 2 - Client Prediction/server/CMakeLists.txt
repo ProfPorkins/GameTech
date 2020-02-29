@@ -15,14 +15,11 @@ set(SERVER_HEADER_FILES
     )
 
 set(SERVER_ENTITY_HEADERS
-    entities/Player.hpp
     )
 set(SERVER_ENTITY_SOURCES
-    entities/Player.cpp
     )
 
 set(SERVER_COMPONENTS_HEADERS
-    components/Appearance.hpp
     )
 set(SERVER_COMPONENTS_SOURCES
     )

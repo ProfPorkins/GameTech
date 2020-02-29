@@ -39,12 +39,15 @@ set(SHARED_MESSAGES_SOURCES
 
 set(SHARED_ENTITY_HEADERS
     entities/Entity.hpp
+    entities/Player.hpp
     )
 set(SHARED_ENTITY_SOURCES
     entities/Entity.cpp
+    entities/Player.cpp
     )
 
 set(SHARED_COMPONENTS_HEADERS
+    components/Appearance.hpp
     components/Component.hpp
     components/Input.hpp
     components/Movement.hpp
