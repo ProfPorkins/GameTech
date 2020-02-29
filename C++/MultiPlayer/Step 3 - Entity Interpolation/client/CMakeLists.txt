@@ -15,6 +15,7 @@ set(CLIENT_HEADER_FILES
     )
 
 set(CLIENT_COMPONENTS_HEADERS
+    components/Goal.hpp
     components/Sprite.hpp
     )
 set(CLIENT_COMPONENTS_SOURCES
@@ -22,11 +23,13 @@ set(CLIENT_COMPONENTS_SOURCES
 
 set(CLIENT_SYSTEMS_HEADERS
     systems/KeyboardInput.hpp
+    systems/Interpolation.hpp
     systems/Network.hpp
     systems/Renderer.hpp
     )
 set(CLIENT_SYSTEMS_SOURCES
     systems/KeyboardInput.cpp
+    systems/Interpolation.cpp
     systems/Network.cpp
     systems/Renderer.cpp
     )

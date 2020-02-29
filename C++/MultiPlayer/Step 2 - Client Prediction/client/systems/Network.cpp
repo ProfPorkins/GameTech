@@ -144,7 +144,6 @@ namespace systems
     void Network::handleUpdateEntity(std::shared_ptr<messages::UpdateEntity> message)
     {
         auto& pbEntity = message->getPBEntity();
-        auto x = pbEntity.messageid();
         if (m_entities.find(pbEntity.id()) != m_entities.end())
         {
             auto entity = m_entities[pbEntity.id()];

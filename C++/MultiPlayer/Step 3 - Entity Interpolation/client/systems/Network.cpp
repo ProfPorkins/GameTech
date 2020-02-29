@@ -3,6 +3,7 @@
 #include "MessageQueueClient.hpp"
 #include "components/Movement.hpp"
 #include "components/Position.hpp"
+#include "components/Goal.hpp"
 #include "entities/Player.hpp"
 #include "messages/Input.hpp"
 #include "messages/Join.hpp"
@@ -144,11 +145,24 @@ namespace systems
     void Network::handleUpdateEntity(std::shared_ptr<messages::UpdateEntity> message)
     {
         auto& pbEntity = message->getPBEntity();
-        auto x = pbEntity.messageid();
         if (m_entities.find(pbEntity.id()) != m_entities.end())
         {
             auto entity = m_entities[pbEntity.id()];
-            if (entity->hasComponent<components::Position>() && pbEntity.has_position())
+            if (entity->hasComponent<components::Goal>() && pbEntity.has_position())
+            {
+                // If it has a Goal, it has a Position
+                auto position = entity->getComponent<components::Position>();
+                auto goal = entity->getComponent<components::Goal>();
+
+                goal->setUpdateWindow(std::chrono::milliseconds(pbEntity.updatewindow()));
+                goal->setUpdatedTime(std::chrono::milliseconds(0));
+                goal->setGoalPosition(sf::Vector2f(pbEntity.position().center().x(), pbEntity.position().center().y()));
+                goal->setGoalOrientation(pbEntity.position().orientation());
+
+                goal->setStartPosition(position->get());
+                goal->setStartOrientation(position->getOrientation());
+            }
+            else if (entity->hasComponent<components::Position>() && pbEntity.has_position())
             {
                 auto position = entity->getComponent<components::Position>();
                 position->set(sf::Vector2f(pbEntity.position().center().x(), pbEntity.position().center().y()));

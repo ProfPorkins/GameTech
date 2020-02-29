@@ -40,6 +40,10 @@ bool GameModel::initialize(sf::Vector2f viewSize)
     m_systemKeyboardInput = std::make_unique<systems::KeyboardInput>(inputMapping);
 
     //
+    // Initialize the client interpolation system.
+    m_systemInterpolation = std::make_unique<systems::Interpolation>();
+
+    //
     // Initialize the renderer system.
     m_systemRender = std::make_unique<systems::Renderer>();
 
@@ -70,9 +74,8 @@ void GameModel::update(const std::chrono::milliseconds elapsedTime, std::shared_
     // be processed early.
     m_systemNetwork->update(elapsedTime, MessageQueueClient::instance().getMessages());
 
-    //
-    // Only have two systems right now, KeyboardInput and Rendering
     m_systemKeyboardInput->update(elapsedTime);
+    m_systemInterpolation->update(elapsedTime);
 
     //
     // Rendering must always be done last
@@ -176,6 +179,7 @@ void GameModel::addEntity(std::shared_ptr<entities::Entity> entity)
     m_systemKeyboardInput->addEntity(entity);
     m_systemRender->addEntity(entity);
     m_systemNetwork->addEntity(entity);
+    m_systemInterpolation->addEntity(entity);
 }
 
 // --------------------------------------------------------------

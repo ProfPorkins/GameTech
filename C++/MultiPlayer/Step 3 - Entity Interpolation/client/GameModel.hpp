@@ -10,6 +10,7 @@
 #include "components/Movement.hpp"
 #include "components/Position.hpp"
 #include "entities/Entity.hpp"
+#include "systems/Interpolation.hpp"
 #include "systems/KeyboardInput.hpp"
 #include "systems/Network.hpp"
 #include "systems/Renderer.hpp"
@@ -40,6 +41,7 @@ class GameModel
 
     std::unique_ptr<systems::Network> m_systemNetwork;
     std::unique_ptr<systems::KeyboardInput> m_systemKeyboardInput;
+    std::unique_ptr<systems::Interpolation> m_systemInterpolation;
     std::unique_ptr<systems::Renderer> m_systemRender;
 
     std::shared_ptr<entities::Entity> createEntity(const shared::Entity& pbEntity);

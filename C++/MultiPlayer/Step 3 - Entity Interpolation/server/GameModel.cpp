@@ -181,6 +181,7 @@ void GameModel::reportAllEntities(std::uint64_t clientId)
             pbEntity.mutable_size()->mutable_size()->set_x(entity->getComponent<components::Size>()->get().x);
             pbEntity.mutable_size()->mutable_size()->set_y(entity->getComponent<components::Size>()->get().y);
         }
+        pbEntity.set_updatewindow(0);
 
         auto entityMessage = std::make_shared<messages::NewEntity>(pbEntity);
         MessageQueueServer::instance().sendMessage(clientId, entityMessage);

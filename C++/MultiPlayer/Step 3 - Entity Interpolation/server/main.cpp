@@ -6,7 +6,7 @@
 #include <iostream>
 #include <thread>
 
-const auto SIMULATION_UPDATE_RATE_MS = std::chrono::milliseconds(500);
+const auto SIMULATION_UPDATE_RATE_MS = std::chrono::milliseconds(100);
 
 int main()
 {
@@ -51,6 +51,9 @@ int main()
             std::this_thread::sleep_for(sleepTime);
         }
 
+        // Recompute elapsed time after doing the sleep, to get an accurate time duration
+        currentTime = std::chrono::steady_clock::now();
+        elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - previousTime);
         previousTime = currentTime;
 
         //
