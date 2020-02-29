@@ -77,7 +77,7 @@ namespace systems
         if (m_inputHandler)
         {
             auto entityId = message->getPBInput().entityid();
-            auto entity = m_entities[entityId];
+            auto& entity = m_entities[entityId];
 
             for (auto&& input : message->getPBInput().input())
             {

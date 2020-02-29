@@ -44,7 +44,7 @@ namespace messages
 
       private:
         std::shared_ptr<entities::Entity> m_entity;
-        std::chrono::milliseconds m_updateWindow;
+        std::chrono::milliseconds m_updateWindow{0};
         shared::Entity m_pbEntity;
     };
 } // namespace messages
