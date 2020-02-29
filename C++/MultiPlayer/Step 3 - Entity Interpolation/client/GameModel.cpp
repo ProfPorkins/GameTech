@@ -227,7 +227,7 @@ void GameModel::predictEntity(entities::Entity* entity, const components::Input:
     {
         case components::Input::Type::Thrust:
             entities::player::thrust(entity, elapsedTime);
-        break;
+            break;
         case components::Input::Type::RotateLeft:
             entities::player::rotateLeft(entity, elapsedTime);
             break;

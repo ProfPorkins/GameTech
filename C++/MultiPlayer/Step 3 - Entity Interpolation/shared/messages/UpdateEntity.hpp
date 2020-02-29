@@ -11,8 +11,8 @@
 #include "MessageTypes.hpp"
 #include "entities/Entity.hpp"
 
-#include <memory>
 #include <chrono>
+#include <memory>
 
 namespace messages
 {
