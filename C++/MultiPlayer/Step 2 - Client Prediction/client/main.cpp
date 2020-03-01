@@ -15,14 +15,14 @@ std::shared_ptr<sf::RenderWindow> prepareWindow()
     sf::ContextSettings settings;
 
     // Landscape windows
-    //auto window = std::make_shared<sf::RenderWindow>(sf::VideoMode(640, 480), "Multiplayer - Step 0: ECS", sf::Style::Titlebar | sf::Style::Close, settings);
-    //auto window = std::make_shared<sf::RenderWindow>(sf::VideoMode(800, 600), "Multiplayer - Step 0: ECS", sf::Style::Titlebar | sf::Style::Close, settings);
-    //auto window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1024, 768), "Multiplayer - Step 0: ECS", sf::Style::Titlebar | sf::Style::Close, settings);
-    auto window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "Multiplayer - Step 0: ECS", sf::Style::Titlebar | sf::Style::Close, settings);
+    //auto window = std::make_shared<sf::RenderWindow>(sf::VideoMode(640, 480), "Multiplayer - Step 2: Client Prediction", sf::Style::Titlebar | sf::Style::Close, settings);
+    //auto window = std::make_shared<sf::RenderWindow>(sf::VideoMode(800, 600), "Multiplayer - Step 2: Client Prediction", sf::Style::Titlebar | sf::Style::Close, settings);
+    //auto window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1024, 768), "Multiplayer - Step 2: Client Prediction", sf::Style::Titlebar | sf::Style::Close, settings);
+    auto window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "Multiplayer - Step 2: Client Prediction", sf::Style::Titlebar | sf::Style::Close, settings);
 
     // Vertical windows
-    //auto window = std::make_shared<sf::RenderWindow>(sf::VideoMode(600, 800), "Multiplayer - Step 0: ECS", sf::Style::Titlebar | sf::Style::Close, settings);
-    //auto window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1080, 1920), "Multiplayer - Step 0: ECS", sf::Style::Titlebar | sf::Style::Close, settings);
+    //auto window = std::make_shared<sf::RenderWindow>(sf::VideoMode(600, 800), "Multiplayer - Step 2: Client Prediction", sf::Style::Titlebar | sf::Style::Close, settings);
+    //auto window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1080, 1920), "Multiplayer - Step 2: Client Prediction", sf::Style::Titlebar | sf::Style::Close, settings);
 
     window->setVerticalSyncEnabled(true);
 
