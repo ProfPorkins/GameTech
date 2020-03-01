@@ -249,7 +249,7 @@ void MessageQueueServer::initializeSender()
             else
             {
                 //
-                // If no messages available to sent, then wait until an event
+                // If no messages available to send, then wait until an event
                 // is fired letting us know one is now ready to send.
                 std::unique_lock<std::mutex> lock(m_mutexEventSendMessages);
                 m_eventSendMessages.wait(lock);
@@ -321,6 +321,19 @@ void MessageQueueServer::initializeReceiver()
                             disconnectedClients.insert(clientId);
                         }
                     }
+                }
+            }
+            else
+            {
+                //
+                // If there aren't any active sockets, the selector.wait falls through immediately
+                // causing a very busy wait loop.  To cut down on the business of the loop, going
+                // to sleep for a bit.  I know a condition_variable could be used to be even more
+                // efficient, but I didn't do that because it adds complexity for a benefit that
+                // isn't necessary.
+                if (m_sockets.size() == 0)
+                {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(500));
                 }
             }
 
