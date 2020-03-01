@@ -176,6 +176,13 @@ void GameModel::reportAllEntities(std::uint64_t clientId)
             pbEntity.mutable_position()->set_orientation(entity->getComponent<components::Position>()->getOrientation());
         }
 
+        if (entity->hasComponent<components::Movement>())
+        {
+            auto movement = entity->getComponent<components::Movement>();
+            pbEntity.mutable_movement()->set_moverate(movement->getMoveRate());
+            pbEntity.mutable_movement()->set_rotaterate(movement->getRotateRate());
+        }
+
         if (entity->hasComponent<components::Size>())
         {
             pbEntity.mutable_size()->mutable_size()->set_x(entity->getComponent<components::Size>()->get().x);
@@ -261,10 +268,9 @@ void GameModel::handleJoin(std::uint64_t clientId)
     pbEntity.mutable_appearance()->set_texture(player->getComponent<components::Appearance>()->get());
 
     //
-    // Remove components not needed by them to preapre it for sending to
+    // Remove components not needed on the client by them to preapre it for sending to
     // all other connected clients
     pbEntity.release_input();
-    pbEntity.release_movement();
     auto entityMessage = std::make_shared<messages::NewEntity>(pbEntity);
     for (auto otherId : m_clients)
     {

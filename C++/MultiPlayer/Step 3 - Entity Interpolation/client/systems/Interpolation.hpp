@@ -1,5 +1,6 @@
 #pragma once
 
+#include "components/Movement.hpp"
 #include "components/Position.hpp"
 #include "entities/Entity.hpp"
 #include "systems/System.hpp"
@@ -19,7 +20,8 @@ namespace systems
     {
       public:
         Interpolation() :
-            System({ctti::unnamed_type_id<components::Position>()})
+            System({ctti::unnamed_type_id<components::Position>(),
+                    ctti::unnamed_type_id<components::Movement>()})
         {
         }
 
