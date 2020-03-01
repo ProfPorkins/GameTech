@@ -1,4 +1,4 @@
-#include "Interpolation.hpp"
+#include "Movement.hpp"
 
 #include "components/Goal.hpp"
 #include "components/Input.hpp"
@@ -16,7 +16,7 @@ namespace systems
     // entity's state during the update stage.
     //
     // --------------------------------------------------------------
-    bool Interpolation::addEntity(std::shared_ptr<entities::Entity> entity)
+    bool Movement::addEntity(std::shared_ptr<entities::Entity> entity)
     {
         bool interested = false;
         if (System::addEntity(entity))
@@ -37,7 +37,7 @@ namespace systems
     // Move each entity close to its goal.
     //
     // --------------------------------------------------------------
-    void Interpolation::update(std::chrono::milliseconds elapsedTime)
+    void Movement::update(std::chrono::milliseconds elapsedTime)
     {
         for (auto&& [id, entity] : m_entities)
         {

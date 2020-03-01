@@ -41,7 +41,7 @@ bool GameModel::initialize(sf::Vector2f viewSize)
 
     //
     // Initialize the client interpolation system.
-    m_systemInterpolation = std::make_unique<systems::Interpolation>();
+    m_systemMovement = std::make_unique<systems::Movement>();
 
     //
     // Initialize the renderer system.
@@ -75,7 +75,7 @@ void GameModel::update(const std::chrono::milliseconds elapsedTime, std::shared_
     m_systemNetwork->update(elapsedTime, MessageQueueClient::instance().getMessages());
 
     m_systemKeyboardInput->update(elapsedTime);
-    m_systemInterpolation->update(elapsedTime);
+    m_systemMovement->update(elapsedTime);
 
     //
     // Rendering must always be done last
@@ -182,7 +182,7 @@ void GameModel::addEntity(std::shared_ptr<entities::Entity> entity)
     m_systemKeyboardInput->addEntity(entity);
     m_systemRender->addEntity(entity);
     m_systemNetwork->addEntity(entity);
-    m_systemInterpolation->addEntity(entity);
+    m_systemMovement->addEntity(entity);
 }
 
 // --------------------------------------------------------------
@@ -198,7 +198,7 @@ void GameModel::removeEntity(entities::Entity::IdType entityId)
     // Let each of the systems know to remove the entity
     m_systemKeyboardInput->removeEntity(entityId);
     m_systemNetwork->removeEntity(entityId);
-    m_systemInterpolation->removeEntity(entityId);
+    m_systemMovement->removeEntity(entityId);
     m_systemRender->removeEntity(entityId);
 }
 

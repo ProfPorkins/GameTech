@@ -13,13 +13,14 @@ namespace systems
 {
     // --------------------------------------------------------------
     //
-    // This system is used perform entity interpolation.
+    // This system is used perform entity movement, which includes
+    // entity interpolation and entity prediction.
     //
     // --------------------------------------------------------------
-    class Interpolation : public System
+    class Movement : public System
     {
       public:
-        Interpolation() :
+        Movement() :
             System({ctti::unnamed_type_id<components::Position>(),
                     ctti::unnamed_type_id<components::Movement>()})
         {
