@@ -9,6 +9,7 @@
 
 #include "entities/Entity.hpp"
 #include "systems/Network.hpp"
+#include "systems/Movement.hpp"
 
 #include <SFML/Network.hpp>
 #include <chrono>
@@ -30,6 +31,7 @@ class GameModel
     std::unordered_set<entities::Entity::IdType> m_reportThese;
 
     std::unique_ptr<systems::Network> m_systemNetwork;
+    std::unique_ptr<systems::Movement> m_systemMovement;
 
     void addEntity(std::shared_ptr<entities::Entity> entity);
     void removeEntity(entities::Entity::IdType entityId);

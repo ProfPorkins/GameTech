@@ -197,6 +197,8 @@ void GameModel::removeEntity(entities::Entity::IdType entityId)
     //
     // Let each of the systems know to remove the entity
     m_systemKeyboardInput->removeEntity(entityId);
+    m_systemNetwork->removeEntity(entityId);
+    m_systemInterpolation->removeEntity(entityId);
     m_systemRender->removeEntity(entityId);
 }
 

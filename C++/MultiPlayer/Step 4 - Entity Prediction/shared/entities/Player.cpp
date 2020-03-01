@@ -55,10 +55,10 @@ namespace entities
         auto vectorX = std::cos(position->getOrientation() * DEGREES_TO_RADIANS);
         auto vectorY = std::sin(position->getOrientation() * DEGREES_TO_RADIANS);
 
-        auto current = position->get();
-        position->set(sf::Vector2f(
-            current.x + vectorX * elapsedTime.count() * movement->getThrustRate(),
-            current.y + vectorY * elapsedTime.count() * movement->getThrustRate()));
+        auto current = movement->getMomentum();
+        movement->setMomentum(sf::Vector2f(
+            current.x + vectorX * movement->getThrustRate() * elapsedTime.count(),
+            current.y + vectorY * movement->getThrustRate() * elapsedTime.count()));
     }
 
     void rotateLeft(entities::Entity* entity, std::chrono::milliseconds elapsedTime)

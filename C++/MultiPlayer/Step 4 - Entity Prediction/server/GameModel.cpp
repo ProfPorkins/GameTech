@@ -29,6 +29,8 @@ void GameModel::update(const std::chrono::milliseconds elapsedTime)
     // be processed early on.
     m_systemNetwork->update(elapsedTime, MessageQueueServer::instance().getMessages());
 
+    m_systemMovement->update(elapsedTime);
+
     //
     // Send game state updates back out to connected clients
     // Question: Should this be expressed in a system instead?
@@ -52,6 +54,8 @@ bool GameModel::initialize()
     m_systemNetwork = std::make_unique<systems::Network>();
     m_systemNetwork->registerJoinHandler(std::bind(&GameModel::handleJoin, this, std::placeholders::_1));
     m_systemNetwork->registerInputHandler(std::bind(&GameModel::handleInput, this, std::placeholders::_1));
+
+    m_systemMovement = std::make_unique<systems::Movement>();
 
     MessageQueueServer::instance().registerConnectHandler(std::bind(&GameModel::handleConnect, this, std::placeholders::_1));
     MessageQueueServer::instance().registerDisconnectHandler(std::bind(&GameModel::handleDisconnect, this, std::placeholders::_1));
@@ -115,6 +119,7 @@ void GameModel::addEntity(std::shared_ptr<entities::Entity> entity)
     m_entities[entity->getId()] = entity;
 
     m_systemNetwork->addEntity(entity);
+    m_systemMovement->addEntity(entity);
 }
 
 // --------------------------------------------------------------
@@ -129,6 +134,7 @@ void GameModel::removeEntity(entities::Entity::IdType entityId)
     //
     // Let each of the systems know to remove the entity
     m_systemNetwork->removeEntity(entityId);
+    m_systemMovement->removeEntity(entityId);
 }
 
 // --------------------------------------------------------------
@@ -247,7 +253,7 @@ void GameModel::handleJoin(std::uint64_t clientId)
     //         it to the newly joined client
 
     // Generate a player, add to server simulation, and send to the client
-    auto player = entities::player::create("playerShip1_Blue.png", {0.0f, 0.0f}, 0.05f, 0.0002f, 180.0f / 1000, {0, 0});
+    auto player = entities::player::create("playerShip1_Blue.png", {0.0f, 0.0f}, 0.05f, 0.0000002f, 180.0f / 1000, {0, 0});
     addEntity(player);
     m_clientToEntityId[clientId] = player->getId();
 

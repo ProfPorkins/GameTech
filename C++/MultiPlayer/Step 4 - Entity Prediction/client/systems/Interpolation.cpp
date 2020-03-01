@@ -33,7 +33,7 @@ namespace systems
 
     // --------------------------------------------------------------
     //
-    // Process all outstanding messages since the last update.
+    // Move each entity close to its goal.
     //
     // --------------------------------------------------------------
     void Interpolation::update(std::chrono::milliseconds elapsedTime)
