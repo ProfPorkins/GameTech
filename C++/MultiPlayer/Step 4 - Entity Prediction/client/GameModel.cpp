@@ -135,7 +135,10 @@ std::shared_ptr<entities::Entity> GameModel::createEntity(const shared::Entity& 
 
     if (pbEntity.has_movement())
     {
-        entity->addComponent(std::make_unique<components::Movement>(pbEntity.movement().moverate(), pbEntity.movement().rotaterate()));
+        entity->addComponent(std::make_unique<components::Movement>(
+            pbEntity.movement().thrustrate(),
+            pbEntity.movement().rotaterate(),
+            sf::Vector2f(pbEntity.movement().momentum().x(), pbEntity.movement().momentum().y())));
     }
 
     if (pbEntity.has_input())

@@ -27,6 +27,13 @@ namespace messages
             pbEntity.mutable_position()->set_orientation(m_entity->getComponent<components::Position>()->getOrientation());
         }
 
+        if (m_entity->hasComponent<components::Movement>())
+        {
+            auto movement = m_entity->getComponent<components::Movement>();
+            pbEntity.mutable_movement()->mutable_momentum()->set_x(movement->getMomentum().x);
+            pbEntity.mutable_movement()->mutable_momentum()->set_y(movement->getMomentum().y);
+        }
+
         pbEntity.set_updatewindow(static_cast<std::uint32_t>(m_updateWindow.count()));
 
         return pbEntity.SerializeAsString();

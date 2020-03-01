@@ -179,7 +179,7 @@ void GameModel::reportAllEntities(std::uint64_t clientId)
         if (entity->hasComponent<components::Movement>())
         {
             auto movement = entity->getComponent<components::Movement>();
-            pbEntity.mutable_movement()->set_moverate(movement->getMoveRate());
+            pbEntity.mutable_movement()->set_thrustrate(movement->getThrustRate());
             pbEntity.mutable_movement()->set_rotaterate(movement->getRotateRate());
         }
 
@@ -223,7 +223,7 @@ shared::Entity GameModel::createPlayerPBEntity(std::shared_ptr<entities::Entity>
     pbEntity.mutable_size()->mutable_size()->set_x(player->getComponent<components::Size>()->get().x);
     pbEntity.mutable_size()->mutable_size()->set_y(player->getComponent<components::Size>()->get().y);
 
-    pbEntity.mutable_movement()->set_moverate(player->getComponent<components::Movement>()->getMoveRate());
+    pbEntity.mutable_movement()->set_thrustrate(player->getComponent<components::Movement>()->getThrustRate());
     pbEntity.mutable_movement()->set_rotaterate(player->getComponent<components::Movement>()->getRotateRate());
 
     return pbEntity;
@@ -247,7 +247,7 @@ void GameModel::handleJoin(std::uint64_t clientId)
     //         it to the newly joined client
 
     // Generate a player, add to server simulation, and send to the client
-    auto player = entities::player::create("playerShip1_Blue.png", sf::Vector2f(0.0f, 0.0f), 0.05f, 0.0002f, 180.0f / 1000);
+    auto player = entities::player::create("playerShip1_Blue.png", {0.0f, 0.0f}, 0.05f, 0.0002f, 180.0f / 1000, {0, 0});
     addEntity(player);
     m_clientToEntityId[clientId] = player->getId();
 

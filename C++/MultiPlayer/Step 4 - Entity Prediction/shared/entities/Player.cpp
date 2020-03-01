@@ -13,7 +13,7 @@ namespace entities::player
     // Server-side function to create a new player entity.
     //
     // --------------------------------------------------------------
-    std::shared_ptr<Entity> create(std::string texture, sf::Vector2f position, float size, float speed, float rotateRate)
+    std::shared_ptr<Entity> create(std::string texture, sf::Vector2f position, float size, float thrustRate, float rotateRate, sf::Vector2f momentum)
     {
         std::shared_ptr<Entity> entity = std::make_shared<Entity>();
 
@@ -23,7 +23,7 @@ namespace entities::player
         // A player ship has the following components
         entity->addComponent(std::make_unique<components::Position>(position));
         entity->addComponent(std::make_unique<components::Size>(sf::Vector2f(size, size)));
-        entity->addComponent(std::make_unique<components::Movement>(speed, rotateRate));
+        entity->addComponent(std::make_unique<components::Movement>(thrustRate, rotateRate, momentum));
 
         auto inputs = {
             components::Input::Type::Thrust,
@@ -57,8 +57,8 @@ namespace entities
 
         auto current = position->get();
         position->set(sf::Vector2f(
-            current.x + vectorX * elapsedTime.count() * movement->getMoveRate(),
-            current.y + vectorY * elapsedTime.count() * movement->getMoveRate()));
+            current.x + vectorX * elapsedTime.count() * movement->getThrustRate(),
+            current.y + vectorY * elapsedTime.count() * movement->getThrustRate()));
     }
 
     void rotateLeft(entities::Entity* entity, std::chrono::milliseconds elapsedTime)

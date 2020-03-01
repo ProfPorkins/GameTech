@@ -15,7 +15,7 @@
 // --------------------------------------------------------------
 namespace entities::player
 {
-    std::shared_ptr<Entity> create(std::string texture, sf::Vector2f position, float size, float speed, float rotateRate);
+    std::shared_ptr<Entity> create(std::string texture, sf::Vector2f position, float size, float thrustRate, float rotateRate, sf::Vector2f momentum);
 }
 
 namespace entities
