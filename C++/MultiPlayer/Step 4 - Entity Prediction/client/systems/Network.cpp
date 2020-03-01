@@ -170,6 +170,12 @@ namespace systems
 
                 m_updatedEntities.insert(entity->getId());
             }
+
+            if (entity->hasComponent<components::Movement>())
+            {
+                auto movement = entity->getComponent<components::Movement>();
+                movement->setMomentum(sf::Vector2f(pbEntity.movement().momentum().x(), pbEntity.movement().momentum().y()));
+            }
         }
     }
 } // namespace systems

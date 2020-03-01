@@ -19,7 +19,7 @@ namespace systems
     class Movement : public System
     {
       public:
-          Movement() :
+        Movement() :
             System({ctti::unnamed_type_id<components::Position>(),
                     ctti::unnamed_type_id<components::Movement>()})
         {

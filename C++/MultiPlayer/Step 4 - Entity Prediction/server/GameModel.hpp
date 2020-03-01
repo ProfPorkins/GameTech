@@ -8,8 +8,8 @@
 #pragma warning(pop)
 
 #include "entities/Entity.hpp"
-#include "systems/Network.hpp"
 #include "systems/Movement.hpp"
+#include "systems/Network.hpp"
 
 #include <SFML/Network.hpp>
 #include <chrono>

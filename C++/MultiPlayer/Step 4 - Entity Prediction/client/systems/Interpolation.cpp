@@ -4,6 +4,7 @@
 #include "components/Input.hpp"
 
 #include <SFML/System/Vector2.hpp>
+#include <iostream>
 
 namespace systems
 {
@@ -18,11 +19,11 @@ namespace systems
     bool Interpolation::addEntity(std::shared_ptr<entities::Entity> entity)
     {
         bool interested = false;
-        if (!entity->hasComponent<components::Input>())
+        if (System::addEntity(entity))
         {
-            if (System::addEntity(entity))
+            interested = true;
+            if (!entity->hasComponent<components::Input>())
             {
-                interested = true;
                 auto position = entity->getComponent<components::Position>();
                 entity->addComponent(std::make_unique<components::Goal>(position->get(), position->getOrientation()));
             }
@@ -40,27 +41,43 @@ namespace systems
     {
         for (auto&& [id, entity] : m_entities)
         {
-            auto position = entity->getComponent<components::Position>();
-            auto goal = entity->getComponent<components::Goal>();
-
-            //
-            // Make sure we have something to do, and also protect against divide by 0
-            if (goal->getUpdateWindow().count() > 0 && goal->getUpdatedTime() < goal->getUpdateWindow())
+            bool floating = true;
+            if (entity->hasComponent<components::Goal>())
             {
-                goal->setUpdatedTime(goal->getUpdatedTime() + elapsedTime);
-                auto updateFraction = static_cast<float>(elapsedTime.count()) / goal->getUpdateWindow().count();
+                auto goal = entity->getComponent<components::Goal>();
+                //
+                // Protect against divide by 0 in addition to checking for remaining update window time
+                if (goal->getUpdateWindow().count() != 0 && goal->getUpdatedTime() < goal->getUpdateWindow())
+                {
+                    floating = false;
+                    auto position = entity->getComponent<components::Position>();
 
-                //
-                // Turn first
-                position->setOrientation(position->getOrientation() - (goal->getStartOrientation() - goal->getGoalOrientation()) * updateFraction);
-                //
-                // Then move
-                position->set(
-                    sf::Vector2f(
-                        position->get().x - (goal->getStartPosition().x - goal->getGoalPosition().x) * updateFraction,
-                        position->get().y - (goal->getStartPosition().y - goal->getGoalPosition().y) * updateFraction));
+                    goal->setUpdatedTime(goal->getUpdatedTime() + elapsedTime);
+                    auto updateFraction = static_cast<float>(elapsedTime.count()) / goal->getUpdateWindow().count();
+
+                    //
+                    // Turn first
+                    position->setOrientation(position->getOrientation() - (goal->getStartOrientation() - goal->getGoalOrientation()) * updateFraction);
+                    //
+                    // Then move
+                    position->set(
+                        sf::Vector2f(
+                            position->get().x - (goal->getStartPosition().x - goal->getGoalPosition().x) * updateFraction,
+                            position->get().y - (goal->getStartPosition().y - goal->getGoalPosition().y) * updateFraction));
+                }
+            }
+            if (floating)
+            {
+                // Just floating along based on momentum
+                auto position = entity->getComponent<components::Position>();
+                auto movement = entity->getComponent<components::Movement>();
+
+                auto current = position->get();
+                position->set(sf::Vector2f(
+                    current.x + movement->getMomentum().x * elapsedTime.count(),
+                    current.y + movement->getMomentum().y * elapsedTime.count()));
             }
         }
-    }
+    } // namespace systems
 
 } // namespace systems
