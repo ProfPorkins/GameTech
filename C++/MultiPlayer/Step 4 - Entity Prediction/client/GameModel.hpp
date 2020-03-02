@@ -10,8 +10,8 @@
 #include "components/Movement.hpp"
 #include "components/Position.hpp"
 #include "entities/Entity.hpp"
-#include "systems/Movement.hpp"
 #include "systems/KeyboardInput.hpp"
+#include "systems/Movement.hpp"
 #include "systems/Network.hpp"
 #include "systems/Renderer.hpp"
 

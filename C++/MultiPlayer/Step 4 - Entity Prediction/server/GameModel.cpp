@@ -9,7 +9,6 @@
 #include "messages/ConnectAck.hpp"
 #include "messages/NewEntity.hpp"
 #include "messages/RemoveEntity.hpp"
-#include "messages/UpdateEntity.hpp"
 
 #include <cstdint>
 #include <functional>
@@ -27,14 +26,11 @@ void GameModel::update(const std::chrono::milliseconds elapsedTime)
     //
     // Process the network system first, it is like local input, so should
     // be processed early on.
+    // Note: It now has to be processed before movement because the elapsedTime
+    //       for movement simulation may get modified during the network update.
     m_systemNetwork->update(elapsedTime, MessageQueueServer::instance().getMessages());
 
     m_systemMovement->update(elapsedTime);
-
-    //
-    // Send game state updates back out to connected clients
-    // Question: Should this be expressed in a system instead?
-    updateClients(elapsedTime);
 }
 
 // --------------------------------------------------------------
@@ -53,12 +49,12 @@ bool GameModel::initialize()
     // Initialize the various systems
     m_systemNetwork = std::make_unique<systems::Network>();
     m_systemNetwork->registerJoinHandler(std::bind(&GameModel::handleJoin, this, std::placeholders::_1));
-    m_systemNetwork->registerInputHandler(std::bind(&GameModel::handleInput, this, std::placeholders::_1));
 
     m_systemMovement = std::make_unique<systems::Movement>();
 
     MessageQueueServer::instance().registerConnectHandler(std::bind(&GameModel::handleConnect, this, std::placeholders::_1));
     MessageQueueServer::instance().registerDisconnectHandler(std::bind(&GameModel::handleDisconnect, this, std::placeholders::_1));
+
     return true;
 }
 
@@ -139,24 +135,6 @@ void GameModel::removeEntity(entities::Entity::IdType entityId)
 
 // --------------------------------------------------------------
 //
-// For the entities that have updates, send those updates to all
-// connected clients.
-//
-// --------------------------------------------------------------
-void GameModel::updateClients(const std::chrono::milliseconds elapsedTime)
-{
-    for (auto entityId : m_reportThese)
-    {
-        auto entity = m_entities[entityId];
-        auto message = std::make_shared<messages::UpdateEntity>(entity, elapsedTime);
-        MessageQueueServer::instance().broadcastMessageWithLastId(message);
-    }
-
-    m_reportThese.clear();
-}
-
-// --------------------------------------------------------------
-//
 // For the indicated client, sends messages for all other entities
 // currently in the game simulation.
 //
@@ -187,6 +165,8 @@ void GameModel::reportAllEntities(std::uint64_t clientId)
             auto movement = entity->getComponent<components::Movement>();
             pbEntity.mutable_movement()->set_thrustrate(movement->getThrustRate());
             pbEntity.mutable_movement()->set_rotaterate(movement->getRotateRate());
+            pbEntity.mutable_movement()->mutable_momentum()->set_x(movement->getMomentum().x);
+            pbEntity.mutable_movement()->mutable_momentum()->set_y(movement->getMomentum().y);
         }
 
         if (entity->hasComponent<components::Size>())
@@ -231,6 +211,8 @@ shared::Entity GameModel::createPlayerPBEntity(std::shared_ptr<entities::Entity>
 
     pbEntity.mutable_movement()->set_thrustrate(player->getComponent<components::Movement>()->getThrustRate());
     pbEntity.mutable_movement()->set_rotaterate(player->getComponent<components::Movement>()->getRotateRate());
+    pbEntity.mutable_movement()->mutable_momentum()->set_x(player->getComponent<components::Movement>()->getMomentum().x);
+    pbEntity.mutable_movement()->mutable_momentum()->set_y(player->getComponent<components::Movement>()->getMomentum().y);
 
     return pbEntity;
 }
@@ -285,16 +267,4 @@ void GameModel::handleJoin(std::uint64_t clientId)
             MessageQueueServer::instance().sendMessage(otherId, entityMessage);
         }
     }
-}
-
-// --------------------------------------------------------------
-//
-// Handler for the Input message.  It updates the player model based
-// on the input and identifies the entity and needing to be reported
-// in the next set of client updates.
-//
-// --------------------------------------------------------------
-void GameModel::handleInput(entities::Entity* entity)
-{
-    m_reportThese.insert(entity->getId());
 }

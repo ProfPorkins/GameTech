@@ -18,8 +18,9 @@ namespace systems
 
             auto current = position->get();
             position->set(sf::Vector2f(
-                current.x + movement->getMomentum().x * elapsedTime.count(),
-                current.y + movement->getMomentum().y * elapsedTime.count()));
+                current.x + movement->getMomentum().x * (elapsedTime - movement->getUpdateDiff()).count(),
+                current.y + movement->getMomentum().y * (elapsedTime - movement->getUpdateDiff()).count()));
+            movement->setUpdateDiff(std::chrono::milliseconds(0));
         }
     }
 

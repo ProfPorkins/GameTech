@@ -2,6 +2,7 @@
 
 #include "MessageQueueServer.hpp"
 #include "entities/Player.hpp"
+#include "messages/UpdateEntity.hpp"
 
 namespace systems
 {
@@ -35,6 +36,12 @@ namespace systems
                             (void)elapsedTime; // unused parameter
                             handleInput(std::static_pointer_cast<messages::Input>(message));
                         });
+
+        //
+        // We use startup time as the initial client last update...it doesn't matter
+        // that much because no messages "should" be received before the update
+        // loop gets going.
+        m_lastClientUpdateTime = std::chrono::system_clock::now();
     }
 
     // --------------------------------------------------------------
@@ -55,6 +62,10 @@ namespace systems
                 handler(clientId, elapsedTime, message);
             }
         }
+
+        //
+        // Send updated game state updates back out to connected clients
+        updateClients(elapsedTime);
     }
 
     // --------------------------------------------------------------
@@ -75,29 +86,63 @@ namespace systems
     // --------------------------------------------------------------
     void Network::handleInput(std::shared_ptr<messages::Input> message)
     {
-        if (m_inputHandler)
-        {
-            auto entityId = message->getPBInput().entityid();
-            auto entity = m_entities[entityId].get();
+        auto entityId = message->getPBInput().entityid();
+        auto entity = m_entities[entityId].get();
 
-            for (auto&& input : message->getPBInput().input())
+        for (auto&& input : message->getPBInput().input())
+        {
+            switch (input.type())
             {
-                switch (input.type())
-                {
-                    case shared::InputType::Thrust:
-                        entities::thrust(entity, std::chrono::milliseconds(input.elapsedtime()));
-                        m_inputHandler(entity);
-                        break;
-                    case shared::InputType::RotateLeft:
-                        entities::rotateLeft(entity, std::chrono::milliseconds(input.elapsedtime()));
-                        m_inputHandler(entity);
-                        break;
-                    case shared::InputType::RotateRight:
-                        entities::rotateRight(entity, std::chrono::milliseconds(input.elapsedtime()));
-                        m_inputHandler(entity);
-                        break;
-                }
+                case shared::InputType::Thrust:
+                    auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(message->getReceiveTime() - m_lastClientUpdateTime);
+                    m_lastClientUpdateTime = message->getReceiveTime();
+                    auto leftover = std::chrono::milliseconds(input.elapsedtime()) - diff;
+                    //std::cout << "et: " << input.elapsedtime() << " - diff: " << diff.count() << " - leftover: " << leftover.count() << std::endl;
+
+                    //
+                    // Simulate the momentum before the thrust, then add the thrust
+                    {
+                        auto position = entity->getComponent<components::Position>();
+                        auto movement = entity->getComponent<components::Movement>();
+                        auto current = position->get();
+                        position->set(sf::Vector2f(
+                            current.x + movement->getMomentum().x * diff.count(),
+                            current.y + movement->getMomentum().y * diff.count()));
+                        movement->setUpdateDiff(movement->getUpdateDiff() + diff);
+                    }
+
+                    entities::thrust(entity, std::chrono::milliseconds(input.elapsedtime()));
+                    m_reportThese.insert(entityId);
+                    break;
+                case shared::InputType::RotateLeft:
+                    entities::rotateLeft(entity, std::chrono::milliseconds(input.elapsedtime()));
+                    m_reportThese.insert(entityId);
+                    break;
+                case shared::InputType::RotateRight:
+                    entities::rotateRight(entity, std::chrono::milliseconds(input.elapsedtime()));
+                    m_reportThese.insert(entityId);
+                    break;
             }
         }
+    }
+
+    // --------------------------------------------------------------
+    //
+    // For the entities that have updates, send those updates to all
+    // connected clients.
+    //
+    // --------------------------------------------------------------
+    void Network::updateClients(const std::chrono::milliseconds elapsedTime)
+    {
+        for (auto entityId : m_reportThese)
+        {
+            auto entity = m_entities[entityId];
+            auto message = std::make_shared<messages::UpdateEntity>(entity, elapsedTime);
+            MessageQueueServer::instance().broadcastMessageWithLastId(message);
+        }
+
+        m_reportThese.clear();
+
+        m_lastClientUpdateTime = std::chrono::system_clock::now();
     }
 } // namespace systems
