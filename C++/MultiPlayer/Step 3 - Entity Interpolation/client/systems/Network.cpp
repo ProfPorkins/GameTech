@@ -105,13 +105,13 @@ namespace systems
                         switch (input)
                         {
                             case components::Input::Type::Thrust:
-                                entities::thrust(entity, elapsedTime);
+                                entities::thrust(entity, inputMessage->getElapsedTime());
                                 break;
                             case components::Input::Type::RotateLeft:
-                                entities::rotateLeft(entity, elapsedTime);
+                                entities::rotateLeft(entity, inputMessage->getElapsedTime());
                                 break;
                             case components::Input::Type::RotateRight:
-                                entities::rotateRight(entity, elapsedTime);
+                                entities::rotateRight(entity, inputMessage->getElapsedTime());
                                 break;
                         }
                     }
