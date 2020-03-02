@@ -42,6 +42,7 @@ namespace systems
         for (auto&& [id, entity] : m_entities)
         {
             bool floating = true;
+            auto floatingTime = elapsedTime;
             if (entity->hasComponent<components::Goal>())
             {
                 auto goal = entity->getComponent<components::Goal>();
@@ -52,8 +53,18 @@ namespace systems
                     floating = false;
                     auto position = entity->getComponent<components::Position>();
 
-                    goal->setUpdatedTime(goal->getUpdatedTime() + elapsedTime);
-                    auto updateFraction = static_cast<float>(elapsedTime.count()) / goal->getUpdateWindow().count();
+                    // Don't want to interpolate longer than the update window
+                    auto howMuch = elapsedTime;
+                    if (goal->getUpdatedTime() + elapsedTime > goal->getUpdateWindow())
+                    {
+                        auto diff = (goal->getUpdatedTime() + elapsedTime) - goal->getUpdateWindow();
+                        howMuch -= diff;
+                        floating = true;    // Need to float for the rest of the time
+                        floatingTime = diff;
+                    }
+
+                    goal->setUpdatedTime(goal->getUpdatedTime() + howMuch);
+                    auto updateFraction = static_cast<float>(howMuch.count()) / goal->getUpdateWindow().count();
 
                     //
                     // Turn first
@@ -74,8 +85,8 @@ namespace systems
 
                 auto current = position->get();
                 position->set(sf::Vector2f(
-                    current.x + movement->getMomentum().x * elapsedTime.count(),
-                    current.y + movement->getMomentum().y * elapsedTime.count()));
+                    current.x + movement->getMomentum().x * floatingTime.count(),
+                    current.y + movement->getMomentum().y * floatingTime.count()));
             }
         }
     } // namespace systems

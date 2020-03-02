@@ -26,8 +26,8 @@ void GameModel::update(const std::chrono::milliseconds elapsedTime)
     //
     // Process the network system first, it is like local input, so should
     // be processed early on.
-    // Note: It now has to be processed before movement because the elapsedTime
-    //       for movement simulation may get modified during the network update.
+    // Note: It now has to be processed before movement in order to correctly
+    //       match the order of KeyboardInput before movement on the client.
     m_systemNetwork->update(elapsedTime, MessageQueueServer::instance().getMessages());
 
     m_systemMovement->update(elapsedTime);

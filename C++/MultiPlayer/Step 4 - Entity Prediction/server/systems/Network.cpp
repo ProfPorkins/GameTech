@@ -36,12 +36,6 @@ namespace systems
                             (void)elapsedTime; // unused parameter
                             handleInput(std::static_pointer_cast<messages::Input>(message));
                         });
-
-        //
-        // We use startup time as the initial client last update...it doesn't matter
-        // that much because no messages "should" be received before the update
-        // loop gets going.
-        m_lastClientUpdateTime = std::chrono::system_clock::now();
     }
 
     // --------------------------------------------------------------
@@ -83,6 +77,20 @@ namespace systems
     // Handler for the Input message.  This simply passes the responsibility
     // to the registered input handler.
     //
+    // BIG HUGE IMPORTANT NOTE
+    // The client runs at a different simulation rate from the server.  The client
+    // runs at whatever frame rate it runs at.  As long as the player holds down
+    // the thrust, for example, thrust is applied for that frame and movement is
+    // applied during that same frame at the new momentum.  At the server, all of
+    // the thrust messages are applied, resulting in a new momentum.  Then after
+    // those are applied, momentum is simulated at the final thrust, rather than
+    // at each of the different momentum levels in the same way the client performed
+    // the simulation.  This leads to a difference in position between the client
+    // and server.  Some solutions include...
+    //  1.  Having the server (this system) simulate in a way similar to the client
+    //  2.  Run the server simulation at a faster rate, but sending out client updates at a slower rate than the simulation
+    //  3.  Send out a game state snapshot for each client update, rather than sending out update for only those clients who have new inputs
+    //
     // --------------------------------------------------------------
     void Network::handleInput(std::shared_ptr<messages::Input> message)
     {
@@ -94,23 +102,6 @@ namespace systems
             switch (input.type())
             {
                 case shared::InputType::Thrust:
-                    auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(message->getReceiveTime() - m_lastClientUpdateTime);
-                    m_lastClientUpdateTime = message->getReceiveTime();
-                    auto leftover = std::chrono::milliseconds(input.elapsedtime()) - diff;
-                    //std::cout << "et: " << input.elapsedtime() << " - diff: " << diff.count() << " - leftover: " << leftover.count() << std::endl;
-
-                    //
-                    // Simulate the momentum before the thrust, then add the thrust
-                    {
-                        auto position = entity->getComponent<components::Position>();
-                        auto movement = entity->getComponent<components::Movement>();
-                        auto current = position->get();
-                        position->set(sf::Vector2f(
-                            current.x + movement->getMomentum().x * diff.count(),
-                            current.y + movement->getMomentum().y * diff.count()));
-                        movement->setUpdateDiff(movement->getUpdateDiff() + diff);
-                    }
-
                     entities::thrust(entity, std::chrono::milliseconds(input.elapsedtime()));
                     m_reportThese.insert(entityId);
                     break;
@@ -140,9 +131,16 @@ namespace systems
             auto message = std::make_shared<messages::UpdateEntity>(entity, elapsedTime);
             MessageQueueServer::instance().broadcastMessageWithLastId(message);
         }
-
         m_reportThese.clear();
 
-        m_lastClientUpdateTime = std::chrono::system_clock::now();
+        //
+        // Alternative approach to reduce discrepences between server and client
+        // is to update the client with everything everytime.
+        /*for (auto& [entityId, entity] : m_entities)
+        {
+            auto message = std::make_shared<messages::UpdateEntity>(entity, elapsedTime);
+            MessageQueueServer::instance().broadcastMessageWithLastId(message);
+        }*/
+
     }
 } // namespace systems

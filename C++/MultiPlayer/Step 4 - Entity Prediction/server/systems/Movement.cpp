@@ -6,7 +6,7 @@ namespace systems
 {
     // --------------------------------------------------------------
     //
-    // Process all outstanding messages since the last update.
+    // Move all entities.
     //
     // --------------------------------------------------------------
     void Movement::update(std::chrono::milliseconds elapsedTime)
