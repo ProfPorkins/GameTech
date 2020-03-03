@@ -40,6 +40,7 @@ namespace messages
         virtual std::string serializeToString() const override;
         virtual bool parseFromString(const std::string& source) override;
 
+        auto getEntity() { return m_entity; }
         const shared::Entity& getPBEntity() const { return m_pbEntity; }
 
       private:

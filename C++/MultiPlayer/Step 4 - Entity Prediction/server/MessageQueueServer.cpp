@@ -1,7 +1,9 @@
 #include "MessageQueueServer.hpp"
 
+#include "components/Position.hpp"
 #include "messages/Input.hpp"
 #include "messages/Join.hpp"
+#include "messages/UpdateEntity.hpp"
 
 #include <array>
 #include <cstdint>
@@ -209,14 +211,20 @@ void MessageQueueServer::initializeSender()
                 // Note: Might be able to use a recursive_mutex instead
                 {
                     std::lock_guard<std::mutex> lock(m_mutexSockets);
-                    // Some messages have a sequence number associated with them, if they do,
-                    // then set it on the message.
-                    if (messageId)
-                    {
-                        message->setMessageId(messageId.value());
-                    }
                     if (m_sockets.find(clientId) != m_sockets.end())
                     {
+                        // Some messages have a sequence number associated with them, if they do,
+                        // then set it on the message.
+                        if (messageId)
+                        {
+                            if (message->getType() == messages::Type::UpdateEntity)
+                            {
+                                message->setMessageId(messageId.value());
+                                auto ue = std::static_pointer_cast<messages::UpdateEntity>(message);
+                                auto position = ue->getEntity()->getComponent<components::Position>();
+                                std::cout << "id: " << message->getMessageId().value() << " : (" << position->get().x << ", " << position->get().y << ")" << std::endl;
+                            }
+                        }
                         std::string serialized = message->serializeToString();
 
                         //

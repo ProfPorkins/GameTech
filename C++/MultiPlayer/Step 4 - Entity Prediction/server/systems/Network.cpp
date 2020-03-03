@@ -89,7 +89,7 @@ namespace systems
     // and server.  Some solutions include...
     //  1.  Having the server (this system) simulate in a way similar to the client
     //  2.  Run the server simulation at a faster rate, but sending out client updates at a slower rate than the simulation
-    //  3.  Send out a game state snapshot for each client update, rather than sending out update for only those clients who have new inputs
+    //  3.  Send out a game state snapshot to each client, rather than sending out updates for only those clients who have new inputs
     //
     // --------------------------------------------------------------
     void Network::handleInput(std::shared_ptr<messages::Input> message)
@@ -102,9 +102,24 @@ namespace systems
             switch (input.type())
             {
                 case shared::InputType::Thrust:
+                {
                     entities::thrust(entity, std::chrono::milliseconds(input.elapsedtime()));
+                    //
+                    // Simulate movement for this same amount of time to match what the client is doing.
+                    // Then we have to subtract this amount of time from the entity so it doesn't get
+                    // simulated in the movement system...yuck!
+                    auto movement = entity->getComponent<components::Movement>();
+                    auto position = entity->getComponent<components::Position>();
+
+                    auto current = position->get();
+                    position->set(sf::Vector2f(
+                        current.x + movement->getMomentum().x * input.elapsedtime(),
+                        current.y + movement->getMomentum().y * input.elapsedtime()));
+                    movement->setUpdateDiff(movement->getUpdateDiff() + std::chrono::milliseconds(input.elapsedtime()));
+
                     m_reportThese.insert(entityId);
-                    break;
+                }
+                break;
                 case shared::InputType::RotateLeft:
                     entities::rotateLeft(entity, std::chrono::milliseconds(input.elapsedtime()));
                     m_reportThese.insert(entityId);
@@ -141,6 +156,5 @@ namespace systems
             auto message = std::make_shared<messages::UpdateEntity>(entity, elapsedTime);
             MessageQueueServer::instance().broadcastMessageWithLastId(message);
         }*/
-
     }
 } // namespace systems

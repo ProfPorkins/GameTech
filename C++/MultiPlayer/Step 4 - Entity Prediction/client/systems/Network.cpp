@@ -167,6 +167,7 @@ namespace systems
                 auto position = entity->getComponent<components::Position>();
                 position->set(sf::Vector2f(pbEntity.position().center().x(), pbEntity.position().center().y()));
                 position->setOrientation(pbEntity.position().orientation());
+                std::cout << "id: " << message->getMessageId().value() << " : (" << pbEntity.position().center().x() << ", " << pbEntity.position().center().y() << ")" << std::endl;
 
                 m_updatedEntities.insert(entity->getId());
             }

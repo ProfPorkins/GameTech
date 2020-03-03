@@ -59,7 +59,7 @@ namespace systems
                     {
                         auto diff = (goal->getUpdatedTime() + elapsedTime) - goal->getUpdateWindow();
                         howMuch -= diff;
-                        floating = true;    // Need to float for the rest of the time
+                        floating = true; // Need to float for the rest of the time
                         floatingTime = diff;
                     }
 
