@@ -54,6 +54,7 @@ namespace systems
     {
         for (auto&& [id, entity] : m_entities)
         {
+            auto input = entity->getComponent<components::Input>();
             std::vector<components::Input::Type> inputs;
             for (auto&& [key, keyEvent] : m_keysPressed)
             {
@@ -67,12 +68,15 @@ namespace systems
                     {
                         case components::Input::Type::Thrust:
                             entities::thrust(entity.get(), elapsedTime);
+                            input->setLastPredictTime(std::chrono::system_clock::now());
                             break;
                         case components::Input::Type::RotateLeft:
                             entities::rotateLeft(entity.get(), elapsedTime);
+                            input->setLastPredictTime(std::chrono::system_clock::now());
                             break;
                         case components::Input::Type::RotateRight:
                             entities::rotateRight(entity.get(), elapsedTime);
+                            input->setLastPredictTime(std::chrono::system_clock::now());
                             break;
                     }
                 }

@@ -111,6 +111,7 @@ namespace systems
                     auto movement = entity->getComponent<components::Movement>();
                     auto position = entity->getComponent<components::Position>();
 
+                    std::cout << "network: " << input.elapsedtime() << std::endl;
                     auto current = position->get();
                     position->set(sf::Vector2f(
                         current.x + movement->getMomentum().x * input.elapsedtime(),
@@ -140,21 +141,21 @@ namespace systems
     // --------------------------------------------------------------
     void Network::updateClients(const std::chrono::milliseconds elapsedTime)
     {
-        for (auto entityId : m_reportThese)
+        /*for (auto entityId : m_reportThese)
         {
             auto entity = m_entities[entityId];
             auto message = std::make_shared<messages::UpdateEntity>(entity, elapsedTime);
             MessageQueueServer::instance().broadcastMessageWithLastId(message);
-        }
+        }*/
         m_reportThese.clear();
 
         //
         // Alternative approach to reduce discrepences between server and client
         // is to update the client with everything everytime.
-        /*for (auto& [entityId, entity] : m_entities)
+        for (auto& [entityId, entity] : m_entities)
         {
             auto message = std::make_shared<messages::UpdateEntity>(entity, elapsedTime);
             MessageQueueServer::instance().broadcastMessageWithLastId(message);
-        }*/
+        }
     }
 } // namespace systems

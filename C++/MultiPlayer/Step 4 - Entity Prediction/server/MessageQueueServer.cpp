@@ -222,7 +222,7 @@ void MessageQueueServer::initializeSender()
                                 message->setMessageId(messageId.value());
                                 auto ue = std::static_pointer_cast<messages::UpdateEntity>(message);
                                 auto position = ue->getEntity()->getComponent<components::Position>();
-                                std::cout << "id: " << message->getMessageId().value() << " : (" << position->get().x << ", " << position->get().y << ")" << std::endl;
+                                //std::cout << "id: " << message->getMessageId().value() << " : (" << position->get().x << ", " << position->get().y << ")" << std::endl;
                             }
                         }
                         std::string serialized = message->serializeToString();

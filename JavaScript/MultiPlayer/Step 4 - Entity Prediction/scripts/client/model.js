@@ -125,6 +125,9 @@ Demo.model = (function(input, components, renderer) {
     //
     //------------------------------------------------------------------
     function updatePlayerSelf(data) {
+        let diffX = Math.abs(playerSelf.center.x - data.center.x);
+        let diffY = Math.abs(playerSelf.center.y - data.center.y);
+        console.log(`(${diffX}, ${diffY}) : (${playerSelf.center.x}, ${playerSelf.center.y}) --> (${data.center.x}, ${data.center.y})`);
         playerSelf.momentum.x = data.momentum.x;
         playerSelf.momentum.y = data.momentum.y;
         playerSelf.center.x = data.center.x;

@@ -42,6 +42,8 @@ namespace systems
         std::function<void(entities::Entity::IdType)> m_removeEntityHandler{nullptr};
         std::function<void(const shared::Entity&)> m_newEntityHandler{nullptr};
         std::uint32_t m_lastMessageId{0};
+
+
         std::unordered_set<entities::Entity::IdType> m_updatedEntities;
 
         void handleConnectAck(std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::ConnectAck> message);

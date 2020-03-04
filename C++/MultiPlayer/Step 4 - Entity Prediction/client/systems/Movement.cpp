@@ -87,6 +87,8 @@ namespace systems
                 position->set(sf::Vector2f(
                     current.x + movement->getMomentum().x * floatingTime.count(),
                     current.y + movement->getMomentum().y * floatingTime.count()));
+
+                movement->setPredictionTime(movement->getPredictionTime() + floatingTime);
             }
         }
     } // namespace systems
