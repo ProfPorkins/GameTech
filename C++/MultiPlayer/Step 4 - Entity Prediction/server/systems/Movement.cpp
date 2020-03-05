@@ -2,7 +2,6 @@
 
 #include <SFML/System/Vector2.hpp>
 #include <chrono>
-#include <iostream>
 
 namespace systems
 {
