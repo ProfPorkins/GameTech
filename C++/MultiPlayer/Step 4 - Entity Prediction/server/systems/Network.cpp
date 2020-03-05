@@ -74,22 +74,8 @@ namespace systems
 
     // --------------------------------------------------------------
     //
-    // Handler for the Input message.  This simply passes the responsibility
-    // to the registered input handler.
-    //
-    // BIG HUGE IMPORTANT NOTE
-    // The client runs at a different simulation rate from the server.  The client
-    // runs at whatever frame rate it runs at.  As long as the player holds down
-    // the thrust, for example, thrust is applied for that frame and movement is
-    // applied during that same frame at the new momentum.  At the server, all of
-    // the thrust messages are applied, resulting in a new momentum.  Then after
-    // those are applied, momentum is simulated at the final thrust, rather than
-    // at each of the different momentum levels in the same way the client performed
-    // the simulation.  This leads to a difference in position between the client
-    // and server.  Some solutions include...
-    //  1.  Having the server (this system) simulate in a way similar to the client
-    //  2.  Run the server simulation at a faster rate, but sending out client updates at a slower rate than the simulation
-    //  3.  Send out a game state snapshot to each client, rather than sending out updates for only those clients who have new inputs
+    // Handler for the Input message.  Finds out the input type and then
+    // hands off the processing of the input to the appropriate entity method.
     //
     // --------------------------------------------------------------
     void Network::handleInput(std::shared_ptr<messages::Input> message)
@@ -102,25 +88,9 @@ namespace systems
             switch (input.type())
             {
                 case shared::InputType::Thrust:
-                {
                     entities::thrust(entity, std::chrono::milliseconds(input.elapsedtime()));
-                    //
-                    // Simulate movement for this same amount of time to match what the client is doing.
-                    // Then we have to subtract this amount of time from the entity so it doesn't get
-                    // simulated in the movement system...yuck!
-                    auto movement = entity->getComponent<components::Movement>();
-                    auto position = entity->getComponent<components::Position>();
-
-                    std::cout << "network: " << input.elapsedtime() << std::endl;
-                    auto current = position->get();
-                    position->set(sf::Vector2f(
-                        current.x + movement->getMomentum().x * input.elapsedtime(),
-                        current.y + movement->getMomentum().y * input.elapsedtime()));
-                    movement->setUpdateDiff(movement->getUpdateDiff() + std::chrono::milliseconds(input.elapsedtime()));
-
                     m_reportThese.insert(entityId);
-                }
-                break;
+                    break;
                 case shared::InputType::RotateLeft:
                     entities::rotateLeft(entity, std::chrono::milliseconds(input.elapsedtime()));
                     m_reportThese.insert(entityId);
@@ -157,5 +127,9 @@ namespace systems
             auto message = std::make_shared<messages::UpdateEntity>(entity, elapsedTime);
             MessageQueueServer::instance().broadcastMessageWithLastId(message);
         }
+        //
+        // Better approach (not coded yet)
+        // Send a single message with a snapshot of the game state to each client
+        // rather than individual entity update messages.
     }
 } // namespace systems

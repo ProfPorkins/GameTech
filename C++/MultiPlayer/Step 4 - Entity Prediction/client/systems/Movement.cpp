@@ -4,7 +4,6 @@
 #include "components/Input.hpp"
 
 #include <SFML/System/Vector2.hpp>
-#include <iostream>
 
 namespace systems
 {
@@ -34,7 +33,7 @@ namespace systems
 
     // --------------------------------------------------------------
     //
-    // Move each entity close to its goal.
+    // Move each entity closer to its goal.
     //
     // --------------------------------------------------------------
     void Movement::update(std::chrono::milliseconds elapsedTime)
@@ -83,12 +82,24 @@ namespace systems
                 auto position = entity->getComponent<components::Position>();
                 auto movement = entity->getComponent<components::Movement>();
 
-                auto current = position->get();
-                position->set(sf::Vector2f(
-                    current.x + movement->getMomentum().x * floatingTime.count(),
-                    current.y + movement->getMomentum().y * floatingTime.count()));
+                if (position->getNeedsEntityPrediction())
+                {
+                    auto howLong = std::chrono::duration_cast<std::chrono::milliseconds>(position->getLastServerUpdate() - position->getLastClientUpdate());
+                    auto current = position->get();
+                    position->set(sf::Vector2f(
+                        current.x + movement->getMomentum().x * howLong.count(),
+                        current.y + movement->getMomentum().y * howLong.count()));
+                    position->resetEntityPrediction();
+                }
+                //else  // TODO: Still not sure if this should be an else
+                {
 
-                movement->setPredictionTime(movement->getPredictionTime() + floatingTime);
+                    auto current = position->get();
+                    position->set(sf::Vector2f(
+                        current.x + movement->getMomentum().x * floatingTime.count(),
+                        current.y + movement->getMomentum().y * floatingTime.count()));
+                    position->setLastClientUpdate();
+                }
             }
         }
     } // namespace systems

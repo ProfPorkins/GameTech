@@ -6,6 +6,8 @@
 #include "components/Position.hpp"
 #include "components/Size.hpp"
 
+#include <iostream>
+
 namespace entities::player
 {
     // --------------------------------------------------------------

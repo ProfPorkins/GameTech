@@ -2,9 +2,9 @@
 
 #include "MessageQueueClient.hpp"
 #include "components/Goal.hpp"
+#include "components/Input.hpp"
 #include "components/Movement.hpp"
 #include "components/Position.hpp"
-#include "components/Input.hpp"
 #include "entities/Player.hpp"
 #include "messages/Input.hpp"
 #include "messages/Join.hpp"
@@ -102,7 +102,6 @@ namespace systems
 
                 if (m_updatedEntities.find(entity->getId()) != m_updatedEntities.end())
                 {
-                    std::cout << "reconciling: " << message->getMessageId().value() << std::endl;
                     for (auto&& input : inputMessage->getInputs())
                     {
                         switch (input)
@@ -119,28 +118,6 @@ namespace systems
                         }
                     }
                 }
-            }
-        }
-        if (!m_updatedEntities.empty())
-        {
-            for (auto entityId : m_updatedEntities)
-            {
-                auto entity = m_entities[entityId];
-                auto input = entity->getComponent<components::Input>();
-                auto position = entity->getComponent<components::Position>();
-                auto movement = entity->getComponent<components::Movement>();
-
-                //auto predictTime = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now() - input->getLastInputTime());
-                auto predictTime = movement->getPredictionTime();
-                std::cout << "predict time: " << predictTime.count() << std::endl;
-                movement->setPredictionTime(std::chrono::milliseconds(0));
-
-                auto current = position->get();
-                position->set(sf::Vector2f(
-                    current.x + movement->getMomentum().x * predictTime.count(),
-                    current.y + movement->getMomentum().y * predictTime.count()));
-        //        input->setLastPredictTime(std::chrono::system_clock::now());
-        //        std::cout << "predict: (" << position->get().x << ", " << position->get().y << ")" << std::endl;
             }
         }
     }
@@ -193,7 +170,7 @@ namespace systems
 
                 position->set(sf::Vector2f(pbEntity.position().center().x(), pbEntity.position().center().y()));
                 position->setOrientation(pbEntity.position().orientation());
-                std::cout << "update: (" << pbEntity.position().center().x() << ", " << pbEntity.position().center().y() << ")" << std::endl;
+                position->setLastServerUpdate();
             }
 
             //
@@ -202,10 +179,7 @@ namespace systems
             {
                 auto movement = entity->getComponent<components::Movement>();
                 movement->setMomentum(sf::Vector2f(pbEntity.movement().momentum().x(), pbEntity.movement().momentum().y()));
-
                 m_updatedEntities.insert(entity->getId());
-
-                std::cout << "--- Updating Momentum ---" << std::endl;
             }
         }
     }

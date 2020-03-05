@@ -2,10 +2,10 @@
 
 #include "components/Component.hpp"
 
+#include <chrono>
 #include <cstdint>
 #include <initializer_list>
 #include <unordered_set>
-#include <chrono>
 
 // --------------------------------------------------------------
 //
@@ -36,11 +36,8 @@ namespace components
         }
 
         const auto& getInputs() { return m_inputs; }
-        void setLastPredictTime(std::chrono::system_clock::time_point time) { m_lastPredictTime = time; }
-        auto getLastInputTime() { return m_lastPredictTime; }
 
       private:
         std::unordered_set<Type> m_inputs;
-        std::chrono::system_clock::time_point m_lastPredictTime{ std::chrono::system_clock::now() };
     };
 } // namespace components
