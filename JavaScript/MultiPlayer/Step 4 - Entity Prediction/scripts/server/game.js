@@ -10,7 +10,7 @@ let Player = require('./player');
 let NetworkIds = require('../shared/network-ids');
 let Queue = require('../shared/queue.js');
 
-const UPDATE_RATE_MS = 2000; // How often to update the game model
+const UPDATE_RATE_MS = 100; // How often to update the game model
 let quit = false;
 let activeClients = {};
 let inputQueue = Queue.create();
