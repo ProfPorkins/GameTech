@@ -88,8 +88,19 @@ namespace systems
             switch (input.type())
             {
                 case shared::InputType::Thrust:
+                {
+                    //
+                    // The client applies thrust and then drifts in a single update.  Therefore,
+                    // at the server, when a thrust input is seen, the entity must also drift
+                    // for that amount of time at that thrust level in order to match with the
+                    // client.  This amount of time must also be later subtracted during the movement
+                    // system because that drift time was simulated here.
                     entities::thrust(entity, std::chrono::milliseconds(input.elapsedtime()));
+                    entities::drift(entity, std::chrono::milliseconds(input.elapsedtime()));
+                    auto movement = entity->getComponent<components::Movement>();
+                    movement->updateIntraMovementTime(std::chrono::milliseconds(input.elapsedtime()));
                     m_reportThese.insert(entityId);
+                }
                     break;
                 case shared::InputType::RotateLeft:
                     entities::rotateLeft(entity, std::chrono::milliseconds(input.elapsedtime()));

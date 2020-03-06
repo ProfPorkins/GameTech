@@ -4,6 +4,8 @@
 #include <SFML/System/Vector2.hpp>
 #include <chrono>
 
+#include <iostream> 
+
 namespace systems
 {
     // --------------------------------------------------------------
@@ -15,7 +17,13 @@ namespace systems
     {
         for (auto&& [id, entity] : m_entities)
         {
-            drift(entity.get(), elapsedTime);
+            //
+            // If the entity already has some drift computed due to network
+            // thrust, that amount of time must be subtracted from the server's
+            // update window.
+            auto movement = entity->getComponent<components::Movement>();
+            drift(entity.get(), elapsedTime - movement->getIntraMovementTime());
+            movement->resetIntraMovementTime();
         }
     }
 

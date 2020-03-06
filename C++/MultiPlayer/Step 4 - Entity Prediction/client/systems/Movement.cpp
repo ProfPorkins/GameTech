@@ -83,8 +83,8 @@ namespace systems
                 auto position = entity->getComponent<components::Position>();
                 if (position->getNeedsEntityPrediction())
                 {
-                    auto howLong = std::chrono::duration_cast<std::chrono::milliseconds>(position->getLastServerUpdate() - position->getLastClientUpdate());
-                    entities::drift(entity.get(), howLong);
+                    auto preditLength = std::chrono::duration_cast<std::chrono::milliseconds>(position->getLastServerUpdate() - position->getLastClientUpdate());
+                    entities::drift(entity.get(), preditLength);
                     position->resetEntityPrediction();
                 }
                 //else  // TODO: Still not sure if this should be an else
