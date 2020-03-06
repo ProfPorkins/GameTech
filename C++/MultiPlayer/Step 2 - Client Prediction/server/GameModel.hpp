@@ -27,19 +27,16 @@ class GameModel
     std::unordered_set<std::uint64_t> m_clients;
     std::unordered_map<std::uint64_t, entities::Entity::IdType> m_clientToEntityId;
     entities::EntityMap m_entities;
-    std::unordered_set<entities::Entity::IdType> m_reportThese;
 
     std::unique_ptr<systems::Network> m_systemNetwork;
 
     void addEntity(std::shared_ptr<entities::Entity> entity);
     void removeEntity(entities::Entity::IdType entityId);
 
-    void updateClients();
     void reportAllEntities(std::uint64_t clientId);
     shared::Entity createPlayerPBEntity(std::shared_ptr<entities::Entity>& player);
 
     void handleConnect(std::uint64_t clientId);
     void handleDisconnect(std::uint64_t clientId);
     void handleJoin(std::uint64_t clientId);
-    void handleInput(entities::Entity* entity);
 };

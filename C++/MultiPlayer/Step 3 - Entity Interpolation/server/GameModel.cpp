@@ -9,7 +9,6 @@
 #include "messages/ConnectAck.hpp"
 #include "messages/NewEntity.hpp"
 #include "messages/RemoveEntity.hpp"
-#include "messages/UpdateEntity.hpp"
 
 #include <cstdint>
 #include <functional>
@@ -28,11 +27,6 @@ void GameModel::update(const std::chrono::milliseconds elapsedTime)
     // Process the network system first, it is like local input, so should
     // be processed early on.
     m_systemNetwork->update(elapsedTime, MessageQueueServer::instance().getMessages());
-
-    //
-    // Send game state updates back out to connected clients
-    // Question: Should this be expressed in a system instead?
-    updateClients(elapsedTime);
 }
 
 // --------------------------------------------------------------
@@ -51,7 +45,6 @@ bool GameModel::initialize()
     // Initialize the various systems
     m_systemNetwork = std::make_unique<systems::Network>();
     m_systemNetwork->registerJoinHandler(std::bind(&GameModel::handleJoin, this, std::placeholders::_1));
-    m_systemNetwork->registerInputHandler(std::bind(&GameModel::handleInput, this, std::placeholders::_1));
 
     MessageQueueServer::instance().registerConnectHandler(std::bind(&GameModel::handleConnect, this, std::placeholders::_1));
     MessageQueueServer::instance().registerDisconnectHandler(std::bind(&GameModel::handleDisconnect, this, std::placeholders::_1));
@@ -129,24 +122,6 @@ void GameModel::removeEntity(entities::Entity::IdType entityId)
     //
     // Let each of the systems know to remove the entity
     m_systemNetwork->removeEntity(entityId);
-}
-
-// --------------------------------------------------------------
-//
-// For the entities that have updates, send those updates to all
-// connected clients.
-//
-// --------------------------------------------------------------
-void GameModel::updateClients(const std::chrono::milliseconds elapsedTime)
-{
-    for (auto entityId : m_reportThese)
-    {
-        auto entity = m_entities[entityId];
-        auto message = std::make_shared<messages::UpdateEntity>(entity, elapsedTime);
-        MessageQueueServer::instance().broadcastMessageWithLastId(message);
-    }
-
-    m_reportThese.clear();
 }
 
 // --------------------------------------------------------------
@@ -279,16 +254,4 @@ void GameModel::handleJoin(std::uint64_t clientId)
             MessageQueueServer::instance().sendMessage(otherId, entityMessage);
         }
     }
-}
-
-// --------------------------------------------------------------
-//
-// Handler for the Input message.  It updates the player model based
-// on the input and identifies the entity and needing to be reported
-// in the next set of client updates.
-//
-// --------------------------------------------------------------
-void GameModel::handleInput(entities::Entity* entity)
-{
-    m_reportThese.insert(entity->getId());
 }

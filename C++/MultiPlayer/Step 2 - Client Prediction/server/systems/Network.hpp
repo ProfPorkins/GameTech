@@ -28,15 +28,16 @@ namespace systems
         Network();
 
         void registerJoinHandler(std::function<void(std::uint64_t clientId)> handler) { m_joinHandler = handler; }
-        void registerInputHandler(std::function<void(entities::Entity*)> handler) { m_inputHandler = handler; }
         void update(std::chrono::milliseconds elapsedTime, std::queue<std::tuple<std::uint64_t, std::shared_ptr<messages::Message>>> messages);
 
       private:
         std::unordered_map<messages::Type, std::function<void(std::uint64_t, std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message>)>> m_commandMap;
         std::function<void(std::uint64_t)> m_joinHandler{nullptr};
         std::function<void(entities::Entity*)> m_inputHandler{nullptr};
+        std::unordered_set<entities::Entity::IdType> m_reportThese;
 
         void registerHandler(messages::Type type, std::function<void(std::uint64_t, std::chrono::milliseconds, std::shared_ptr<messages::Message>)> handler);
         void handleInput(std::shared_ptr<messages::Input> message);
+        void updateClients();
     };
 } // namespace systems

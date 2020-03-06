@@ -2,6 +2,7 @@
 
 #include "MessageQueueServer.hpp"
 #include "entities/Player.hpp"
+#include "messages/UpdateEntity.hpp"
 
 namespace systems
 {
@@ -55,6 +56,10 @@ namespace systems
                 handler(clientId, elapsedTime, message);
             }
         }
+
+        //
+        // Send updated game state updates back out to connected clients
+        updateClients();
     }
 
     // --------------------------------------------------------------
@@ -86,18 +91,36 @@ namespace systems
                 {
                     case shared::InputType::Thrust:
                         entities::thrust(entity, std::chrono::milliseconds(input.elapsedtime()));
-                        m_inputHandler(entity);
+                        m_reportThese.insert(entity->getId());
                         break;
                     case shared::InputType::RotateLeft:
                         entities::rotateLeft(entity, std::chrono::milliseconds(input.elapsedtime()));
-                        m_inputHandler(entity);
+                        m_reportThese.insert(entity->getId());
                         break;
                     case shared::InputType::RotateRight:
                         entities::rotateRight(entity, std::chrono::milliseconds(input.elapsedtime()));
-                        m_inputHandler(entity);
+                        m_reportThese.insert(entity->getId());
                         break;
                 }
             }
         }
+    }
+
+    // --------------------------------------------------------------
+    //
+    // For the entities that have updates, send those updates to all
+    // connected clients.
+    //
+    // --------------------------------------------------------------
+    void Network::updateClients()
+    {
+        for (auto entityId : m_reportThese)
+        {
+            auto entity = m_entities[entityId];
+            auto message = std::make_shared<messages::UpdateEntity>(entity);
+            MessageQueueServer::instance().broadcastMessageWithLastId(message);
+        }
+
+        m_reportThese.clear();
     }
 } // namespace systems
