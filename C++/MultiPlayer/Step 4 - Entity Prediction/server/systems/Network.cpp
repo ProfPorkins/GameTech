@@ -75,7 +75,7 @@ namespace systems
     // --------------------------------------------------------------
     //
     // Handler for the Input message.  Finds out the input type and then
-    // hands off the processing of the input to the appropriate entity method.
+    // hands off the processing of the input to the appropriate entity function.
     //
     // --------------------------------------------------------------
     void Network::handleInput(std::shared_ptr<messages::Input> message)
@@ -101,7 +101,7 @@ namespace systems
                     movement->updateIntraMovementTime(std::chrono::milliseconds(input.elapsedtime()));
                     m_reportThese.insert(entityId);
                 }
-                    break;
+                break;
                 case shared::InputType::RotateLeft:
                     entities::rotateLeft(entity, std::chrono::milliseconds(input.elapsedtime()));
                     m_reportThese.insert(entityId);

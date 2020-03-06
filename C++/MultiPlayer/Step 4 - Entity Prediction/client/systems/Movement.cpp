@@ -34,7 +34,8 @@ namespace systems
 
     // --------------------------------------------------------------
     //
-    // Move each entity closer to its goal.
+    // Update each entitiy's postion.  Some entities move based on a goal
+    // provided by the server.  Some require entity (clien) prediction.
     //
     // --------------------------------------------------------------
     void Movement::update(std::chrono::milliseconds elapsedTime)
@@ -83,8 +84,8 @@ namespace systems
                 auto position = entity->getComponent<components::Position>();
                 if (position->getNeedsEntityPrediction())
                 {
-                    auto preditLength = std::chrono::duration_cast<std::chrono::milliseconds>(position->getLastServerUpdate() - position->getLastClientUpdate());
-                    entities::drift(entity.get(), preditLength);
+                    auto predictLength = std::chrono::duration_cast<std::chrono::milliseconds>(position->getLastServerUpdate() - position->getLastClientUpdate());
+                    entities::drift(entity.get(), predictLength);
                     position->resetEntityPrediction();
                 }
                 //else  // TODO: Still not sure if this should be an else

@@ -26,7 +26,8 @@ namespace components
         const float getRotateRate() const { return m_rotateRate; }
         const sf::Vector2f getMomentum() const { return m_momentum; }
         void setMomentum(sf::Vector2f momentum) { m_momentum = momentum; }
-        void resetIntraMovementTime() { m_intraMovementTime = { 0 }; }
+
+        void resetIntraMovementTime() { m_intraMovementTime = {0}; }
         auto getIntraMovementTime() { return m_intraMovementTime; }
         void updateIntraMovementTime(std::chrono::milliseconds howMuch) { m_intraMovementTime += howMuch; }
 
@@ -34,6 +35,6 @@ namespace components
         float m_thrustRate;      // unit distance per millisecond
         float m_rotateRate;      // degrees per millisecond
         sf::Vector2f m_momentum; // units per millisecond
-        std::chrono::milliseconds m_intraMovementTime{ 0 };
+        std::chrono::milliseconds m_intraMovementTime{0};
     };
 } // namespace components

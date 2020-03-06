@@ -1,10 +1,9 @@
 #include "Movement.hpp"
+
 #include "entities/Player.hpp"
 
 #include <SFML/System/Vector2.hpp>
 #include <chrono>
-
-#include <iostream> 
 
 namespace systems
 {
@@ -22,7 +21,7 @@ namespace systems
             // thrust, that amount of time must be subtracted from the server's
             // update window.
             auto movement = entity->getComponent<components::Movement>();
-            drift(entity.get(), elapsedTime - movement->getIntraMovementTime());
+            entities::drift(entity.get(), elapsedTime - movement->getIntraMovementTime());
             movement->resetIntraMovementTime();
         }
     }
