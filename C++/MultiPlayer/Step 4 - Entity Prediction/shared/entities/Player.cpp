@@ -44,7 +44,7 @@ namespace entities::player
 // --------------------------------------------------------------
 namespace entities
 {
-    void thrust(entities::Entity* entity, std::chrono::milliseconds elapsedTime)
+    void thrust(entities::Entity* entity, std::chrono::milliseconds howLong)
     {
         const float PI = 3.14159f;
         const float DEGREES_TO_RADIANS = PI / 180.0f;
@@ -57,23 +57,34 @@ namespace entities
 
         auto current = movement->getMomentum();
         movement->setMomentum(sf::Vector2f(
-            current.x + vectorX * movement->getThrustRate() * elapsedTime.count(),
-            current.y + vectorY * movement->getThrustRate() * elapsedTime.count()));
+            current.x + vectorX * movement->getThrustRate() * howLong.count(),
+            current.y + vectorY * movement->getThrustRate() * howLong.count()));
     }
 
-    void rotateLeft(entities::Entity* entity, std::chrono::milliseconds elapsedTime)
+    void rotateLeft(entities::Entity* entity, std::chrono::milliseconds howLong)
     {
         auto position = entity->getComponent<components::Position>();
         auto movement = entity->getComponent<components::Movement>();
 
-        position->setOrientation(position->getOrientation() - movement->getRotateRate() * elapsedTime.count());
+        position->setOrientation(position->getOrientation() - movement->getRotateRate() * howLong.count());
     }
 
-    void rotateRight(entities::Entity* entity, std::chrono::milliseconds elapsedTime)
+    void rotateRight(entities::Entity* entity, std::chrono::milliseconds howLong)
     {
         auto position = entity->getComponent<components::Position>();
         auto movement = entity->getComponent<components::Movement>();
 
-        position->setOrientation(position->getOrientation() + movement->getRotateRate() * elapsedTime.count());
+        position->setOrientation(position->getOrientation() + movement->getRotateRate() * howLong.count());
+    }
+
+    void drift(entities::Entity* entity, std::chrono::milliseconds howLong)
+    {
+        auto position = entity->getComponent<components::Position>();
+        auto movement = entity->getComponent<components::Movement>();
+
+        auto current = position->get();
+        position->set(sf::Vector2f(
+            current.x + movement->getMomentum().x * howLong.count(),
+            current.y + movement->getMomentum().y * howLong.count()));
     }
 } // namespace entities

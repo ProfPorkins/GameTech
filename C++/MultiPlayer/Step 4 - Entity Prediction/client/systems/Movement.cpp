@@ -2,6 +2,7 @@
 
 #include "components/Goal.hpp"
 #include "components/Input.hpp"
+#include "entities/Player.hpp"
 
 #include <SFML/System/Vector2.hpp>
 
@@ -80,24 +81,15 @@ namespace systems
             {
                 // Just floating along based on momentum
                 auto position = entity->getComponent<components::Position>();
-                auto movement = entity->getComponent<components::Movement>();
-
                 if (position->getNeedsEntityPrediction())
                 {
                     auto howLong = std::chrono::duration_cast<std::chrono::milliseconds>(position->getLastServerUpdate() - position->getLastClientUpdate());
-                    auto current = position->get();
-                    position->set(sf::Vector2f(
-                        current.x + movement->getMomentum().x * howLong.count(),
-                        current.y + movement->getMomentum().y * howLong.count()));
+                    entities::drift(entity.get(), howLong);
                     position->resetEntityPrediction();
                 }
                 //else  // TODO: Still not sure if this should be an else
                 {
-
-                    auto current = position->get();
-                    position->set(sf::Vector2f(
-                        current.x + movement->getMomentum().x * floatingTime.count(),
-                        current.y + movement->getMomentum().y * floatingTime.count()));
+                    entities::drift(entity.get(), floatingTime);
                     position->setLastClientUpdate();
                 }
             }

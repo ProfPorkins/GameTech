@@ -20,7 +20,8 @@ namespace entities::player
 
 namespace entities
 {
-    void thrust(entities::Entity* entity, std::chrono::milliseconds elapsedTime);
-    void rotateLeft(entities::Entity* entity, std::chrono::milliseconds elapsedTime);
-    void rotateRight(entities::Entity* entity, std::chrono::milliseconds elapsedTime);
+    void thrust(entities::Entity* entity, std::chrono::milliseconds howLong);
+    void rotateLeft(entities::Entity* entity, std::chrono::milliseconds howLong);
+    void rotateRight(entities::Entity* entity, std::chrono::milliseconds howLong);
+    void drift(entities::Entity* entity, std::chrono::milliseconds howLong);
 } // namespace entities
