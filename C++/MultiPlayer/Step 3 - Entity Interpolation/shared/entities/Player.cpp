@@ -44,7 +44,7 @@ namespace entities::player
 // --------------------------------------------------------------
 namespace entities
 {
-    void thrust(entities::Entity* entity, std::chrono::milliseconds elapsedTime)
+    void thrust(entities::Entity* entity, std::chrono::milliseconds howLong)
     {
         const float PI = 3.14159f;
         const float DEGREES_TO_RADIANS = PI / 180.0f;
@@ -57,23 +57,23 @@ namespace entities
 
         auto current = position->get();
         position->set(sf::Vector2f(
-            current.x + vectorX * elapsedTime.count() * movement->getMoveRate(),
-            current.y + vectorY * elapsedTime.count() * movement->getMoveRate()));
+            current.x + vectorX * howLong.count() * movement->getMoveRate(),
+            current.y + vectorY * howLong.count() * movement->getMoveRate()));
     }
 
-    void rotateLeft(entities::Entity* entity, std::chrono::milliseconds elapsedTime)
+    void rotateLeft(entities::Entity* entity, std::chrono::milliseconds howLong)
     {
         auto position = entity->getComponent<components::Position>();
         auto movement = entity->getComponent<components::Movement>();
 
-        position->setOrientation(position->getOrientation() - movement->getRotateRate() * elapsedTime.count());
+        position->setOrientation(position->getOrientation() - movement->getRotateRate() * howLong.count());
     }
 
-    void rotateRight(entities::Entity* entity, std::chrono::milliseconds elapsedTime)
+    void rotateRight(entities::Entity* entity, std::chrono::milliseconds howLong)
     {
         auto position = entity->getComponent<components::Position>();
         auto movement = entity->getComponent<components::Movement>();
 
-        position->setOrientation(position->getOrientation() + movement->getRotateRate() * elapsedTime.count());
+        position->setOrientation(position->getOrientation() + movement->getRotateRate() * howLong.count());
     }
 } // namespace entities
