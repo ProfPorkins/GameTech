@@ -20,7 +20,7 @@
 class GameModel
 {
   public:
-    void update(const std::chrono::milliseconds elapsedTime);
+    void update(const std::chrono::microseconds elapsedTime);
     bool initialize();
     void shutdown();
 

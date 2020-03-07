@@ -13,7 +13,7 @@ namespace entities::player
     // Server-side function to create a new player entity.
     //
     // --------------------------------------------------------------
-    std::shared_ptr<Entity> create(std::string texture, sf::Vector2f position, float size, float thrustRate, float rotateRate, sf::Vector2f momentum)
+    std::shared_ptr<Entity> create(std::string texture, math::Vector2f position, float size, double thrustRate, float rotateRate, math::Vector2f momentum)
     {
         std::shared_ptr<Entity> entity = std::make_shared<Entity>();
 
@@ -22,7 +22,7 @@ namespace entities::player
         //
         // A player ship has the following components
         entity->addComponent(std::make_unique<components::Position>(position));
-        entity->addComponent(std::make_unique<components::Size>(sf::Vector2f(size, size)));
+        entity->addComponent(std::make_unique<components::Size>(math::Vector2f(size, size)));
         entity->addComponent(std::make_unique<components::Movement>(thrustRate, rotateRate, momentum));
 
         auto inputs = {
@@ -44,7 +44,7 @@ namespace entities::player
 // --------------------------------------------------------------
 namespace entities
 {
-    void thrust(entities::Entity* entity, std::chrono::milliseconds howLong)
+    void thrust(entities::Entity* entity, std::chrono::microseconds howLong)
     {
         const float PI = 3.14159f;
         const float DEGREES_TO_RADIANS = PI / 180.0f;
@@ -56,12 +56,12 @@ namespace entities
         auto vectorY = std::sin(position->getOrientation() * DEGREES_TO_RADIANS);
 
         auto current = movement->getMomentum();
-        movement->setMomentum(sf::Vector2f(
-            current.x + vectorX * movement->getThrustRate() * howLong.count(),
-            current.y + vectorY * movement->getThrustRate() * howLong.count()));
+        movement->setMomentum(math::Vector2f(
+            current.x + static_cast<float>(vectorX * movement->getThrustRate() * howLong.count()),
+            current.y + static_cast<float>(vectorY * movement->getThrustRate() * howLong.count())));
     }
 
-    void rotateLeft(entities::Entity* entity, std::chrono::milliseconds howLong)
+    void rotateLeft(entities::Entity* entity, std::chrono::microseconds howLong)
     {
         auto position = entity->getComponent<components::Position>();
         auto movement = entity->getComponent<components::Movement>();
@@ -69,7 +69,7 @@ namespace entities
         position->setOrientation(position->getOrientation() - movement->getRotateRate() * howLong.count());
     }
 
-    void rotateRight(entities::Entity* entity, std::chrono::milliseconds howLong)
+    void rotateRight(entities::Entity* entity, std::chrono::microseconds howLong)
     {
         auto position = entity->getComponent<components::Position>();
         auto movement = entity->getComponent<components::Movement>();
@@ -77,13 +77,13 @@ namespace entities
         position->setOrientation(position->getOrientation() + movement->getRotateRate() * howLong.count());
     }
 
-    void drift(entities::Entity* entity, std::chrono::milliseconds howLong)
+    void drift(entities::Entity* entity, std::chrono::microseconds howLong)
     {
         auto position = entity->getComponent<components::Position>();
         auto movement = entity->getComponent<components::Movement>();
 
         auto current = position->get();
-        position->set(sf::Vector2f(
+        position->set(math::Vector2f(
             current.x + movement->getMomentum().x * howLong.count(),
             current.y + movement->getMomentum().y * howLong.count()));
     }

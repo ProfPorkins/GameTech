@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(Multiplayer-Step5-Weapons)
+project(Multiplayer-Step4-EntityPrediction)
 
 #
 # ------------------------ Google Protocol Buffers ------------------------

@@ -20,9 +20,10 @@
 // loading the art assets.
 //
 // --------------------------------------------------------------
-bool GameModel::initialize(sf::Vector2f viewSize)
+bool GameModel::initialize(math::Vector2f viewSize)
 {
     m_viewSize = viewSize;
+    ;
     //
     // Initialize the network system, including registering handlers for
     // messages the game model has responsibility.
@@ -50,12 +51,12 @@ bool GameModel::initialize(sf::Vector2f viewSize)
     return true;
 }
 
-void GameModel::signalKeyPressed(sf::Event::KeyEvent event, std::chrono::milliseconds elapsedTime)
+void GameModel::signalKeyPressed(sf::Event::KeyEvent event, std::chrono::microseconds elapsedTime)
 {
     m_systemKeyboardInput->keyPressed(event, elapsedTime);
 }
 
-void GameModel::signalKeyReleased(sf::Event::KeyEvent event, std::chrono::milliseconds elapsedTime)
+void GameModel::signalKeyReleased(sf::Event::KeyEvent event, std::chrono::microseconds elapsedTime)
 {
     m_systemKeyboardInput->keyReleased(event, elapsedTime);
 }
@@ -67,7 +68,7 @@ void GameModel::signalKeyReleased(sf::Event::KeyEvent event, std::chrono::millis
 // must complete before rendering can start.
 //
 // --------------------------------------------------------------
-void GameModel::update(const std::chrono::milliseconds elapsedTime, std::shared_ptr<sf::RenderTarget> renderTarget)
+void GameModel::update(const std::chrono::microseconds elapsedTime, std::shared_ptr<sf::RenderTarget> renderTarget)
 {
     //
     // Process the network system first, it is like local input, so should
@@ -124,7 +125,7 @@ std::shared_ptr<entities::Entity> GameModel::createEntity(const shared::Entity& 
     if (pbEntity.has_position())
     {
         entity->addComponent(std::make_unique<components::Position>(
-            sf::Vector2f(pbEntity.position().center().x(), pbEntity.position().center().y()),
+            math::Vector2f(pbEntity.position().center().x(), pbEntity.position().center().y()),
             pbEntity.position().orientation()));
     }
 
@@ -138,7 +139,7 @@ std::shared_ptr<entities::Entity> GameModel::createEntity(const shared::Entity& 
         entity->addComponent(std::make_unique<components::Movement>(
             pbEntity.movement().thrustrate(),
             pbEntity.movement().rotaterate(),
-            sf::Vector2f(pbEntity.movement().momentum().x(), pbEntity.movement().momentum().y())));
+            math::Vector2f(pbEntity.movement().momentum().x(), pbEntity.movement().momentum().y())));
     }
 
     if (pbEntity.has_input())

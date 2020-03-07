@@ -27,7 +27,7 @@ namespace systems
         }
 
         virtual bool addEntity(std::shared_ptr<entities::Entity> entity) override;
-        virtual void update(std::chrono::milliseconds elapsedTime) override;
+        virtual void update(std::chrono::microseconds elapsedTime) override;
 
       private:
     };

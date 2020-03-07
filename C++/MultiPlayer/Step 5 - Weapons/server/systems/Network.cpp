@@ -19,7 +19,7 @@ namespace systems
         //
         // Register our own join handler
         registerHandler(messages::Type::Join,
-                        [this](std::uint64_t clientId, std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
+                        [this](std::uint64_t clientId, std::chrono::microseconds elapsedTime, std::shared_ptr<messages::Message> message) {
                             (void)elapsedTime; // unused parameter
                             (void)message;     // unused parameter
                             if (m_joinHandler)
@@ -31,7 +31,7 @@ namespace systems
         //
         // Register our own input handler
         registerHandler(messages::Type::Input,
-                        [this](std::uint64_t clientId, std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
+                        [this](std::uint64_t clientId, std::chrono::microseconds elapsedTime, std::shared_ptr<messages::Message> message) {
                             (void)clientId;    // unused parameter
                             (void)elapsedTime; // unused parameter
                             handleInput(std::static_pointer_cast<messages::Input>(message));
@@ -43,7 +43,7 @@ namespace systems
     // Process all outstanding messages since the last update.
     //
     // --------------------------------------------------------------
-    void Network::update(std::chrono::milliseconds elapsedTime, std::queue<std::tuple<std::uint64_t, std::shared_ptr<messages::Message>>> messages)
+    void Network::update(std::chrono::microseconds elapsedTime, std::queue<std::tuple<std::uint64_t, std::shared_ptr<messages::Message>>> messages)
     {
         while (!messages.empty())
         {
@@ -67,7 +67,7 @@ namespace systems
     // Allow message handlers to be registered.
     //
     // --------------------------------------------------------------
-    void Network::registerHandler(messages::Type type, std::function<void(std::uint64_t, std::chrono::milliseconds, std::shared_ptr<messages::Message>)> handler)
+    void Network::registerHandler(messages::Type type, std::function<void(std::uint64_t, std::chrono::microseconds, std::shared_ptr<messages::Message>)> handler)
     {
         m_commandMap[type] = handler;
     }
@@ -95,19 +95,19 @@ namespace systems
                     // for that amount of time at that thrust level in order to match with the
                     // client.  This amount of time must also be later subtracted during the movement
                     // system because that drift time was simulated here.
-                    entities::thrust(entity, std::chrono::milliseconds(input.elapsedtime()));
-                    entities::drift(entity, std::chrono::milliseconds(input.elapsedtime()));
+                    entities::thrust(entity, std::chrono::microseconds(input.elapsedtime()));
+                    entities::drift(entity, std::chrono::microseconds(input.elapsedtime()));
                     auto movement = entity->getComponent<components::Movement>();
-                    movement->updateIntraMovementTime(std::chrono::milliseconds(input.elapsedtime()));
+                    movement->updateIntraMovementTime(std::chrono::microseconds(input.elapsedtime()));
                     m_reportThese.insert(entityId);
                 }
                 break;
                 case shared::InputType::RotateLeft:
-                    entities::rotateLeft(entity, std::chrono::milliseconds(input.elapsedtime()));
+                    entities::rotateLeft(entity, std::chrono::microseconds(input.elapsedtime()));
                     m_reportThese.insert(entityId);
                     break;
                 case shared::InputType::RotateRight:
-                    entities::rotateRight(entity, std::chrono::milliseconds(input.elapsedtime()));
+                    entities::rotateRight(entity, std::chrono::microseconds(input.elapsedtime()));
                     m_reportThese.insert(entityId);
                     break;
             }
@@ -120,7 +120,7 @@ namespace systems
     // connected clients.
     //
     // --------------------------------------------------------------
-    void Network::updateClients(const std::chrono::milliseconds elapsedTime)
+    void Network::updateClients(const std::chrono::microseconds elapsedTime)
     {
         /*for (auto entityId : m_reportThese)
         {

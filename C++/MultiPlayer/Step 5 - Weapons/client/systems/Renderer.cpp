@@ -16,7 +16,7 @@ namespace systems
     // I'll eventually find a better home for it.
     //
     // --------------------------------------------------------------
-    void Renderer::update(std::chrono::milliseconds elapsedTime, std::shared_ptr<sf::RenderTarget> renderTarget)
+    void Renderer::update(std::chrono::microseconds elapsedTime, std::shared_ptr<sf::RenderTarget> renderTarget)
     {
         (void)elapsedTime; // Ignore the compiler warning
 
@@ -34,7 +34,7 @@ namespace systems
             auto position = entity->getComponent<components::Position>();
             auto ship = entity->getComponent<components::Sprite>();
 
-            ship->get()->setPosition(position->get());
+            ship->get()->setPosition({position->get().x, position->get().y});
             ship->get()->setRotation(position->getOrientation());
 
             renderTarget->draw(*ship->get());

@@ -12,7 +12,7 @@ namespace systems
     // Move all entities.
     //
     // --------------------------------------------------------------
-    void Movement::update(std::chrono::milliseconds elapsedTime)
+    void Movement::update(std::chrono::microseconds elapsedTime)
     {
         for (auto&& [id, entity] : m_entities)
         {

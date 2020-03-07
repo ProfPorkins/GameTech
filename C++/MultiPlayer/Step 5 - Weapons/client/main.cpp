@@ -15,14 +15,14 @@ std::shared_ptr<sf::RenderWindow> prepareWindow()
     sf::ContextSettings settings;
 
     // Landscape windows
-    //auto window = std::make_shared<sf::RenderWindow>(sf::VideoMode(640, 480), "Multiplayer - Step 5: Weapons", sf::Style::Titlebar | sf::Style::Close, settings);
-    //auto window = std::make_shared<sf::RenderWindow>(sf::VideoMode(800, 600), "Multiplayer - Step 5: Weapons", sf::Style::Titlebar | sf::Style::Close, settings);
-    //auto window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1024, 768), "Multiplayer - Step 5: Weapons", sf::Style::Titlebar | sf::Style::Close, settings);
-    auto window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "Multiplayer - Step 5: Weapons", sf::Style::Titlebar | sf::Style::Close, settings);
+    //auto window = std::make_shared<sf::RenderWindow>(sf::VideoMode(640, 480), "Multiplayer - Step 4: Entity Prediction", sf::Style::Titlebar | sf::Style::Close, settings);
+    //auto window = std::make_shared<sf::RenderWindow>(sf::VideoMode(800, 600), "Multiplayer - Step 4: Entity Prediction", sf::Style::Titlebar | sf::Style::Close, settings);
+    //auto window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1024, 768), "Multiplayer - Step 4: Entity Prediction", sf::Style::Titlebar | sf::Style::Close, settings);
+    auto window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1920, 1080), "Multiplayer - Step 4: Entity Prediction", sf::Style::Titlebar | sf::Style::Close, settings);
 
     // Vertical windows
-    //auto window = std::make_shared<sf::RenderWindow>(sf::VideoMode(600, 800), "Multiplayer - Step 5: Weapons", sf::Style::Titlebar | sf::Style::Close, settings);
-    //auto window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1080, 1920), "Multiplayer - Step 5: Weapons", sf::Style::Titlebar | sf::Style::Close, settings);
+    //auto window = std::make_shared<sf::RenderWindow>(sf::VideoMode(600, 800), "Multiplayer - Step 4: Entity Prediction", sf::Style::Titlebar | sf::Style::Close, settings);
+    //auto window = std::make_shared<sf::RenderWindow>(sf::VideoMode(1080, 1920), "Multiplayer - Step 4: Entity Prediction", sf::Style::Titlebar | sf::Style::Close, settings);
 
     window->setVerticalSyncEnabled(true);
 
@@ -69,7 +69,7 @@ int main()
     //
     // Get the game model initialized and ready to run
     GameModel model;
-    if (!model.initialize(window->getView().getSize()))
+    if (!model.initialize({window->getView().getSize().x, window->getView().getSize().y}))
     {
         std::cout << "Game model failed to initialize, terminating..." << std::endl;
         exit(0);
@@ -85,10 +85,10 @@ int main()
     while (running)
     {
         //
-        // Figure out the elapsed time in milliseconds.  Need this to pass on to
+        // Figure out the elapsed time in microseconds.  Need this to pass on to
         // the game model.
         auto currentTime = std::chrono::steady_clock::now();
-        auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - previousTime);
+        auto elapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(currentTime - previousTime);
         previousTime = currentTime;
 
         // Handle all pending Windows events

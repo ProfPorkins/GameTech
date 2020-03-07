@@ -3,8 +3,7 @@
 #include "components/Goal.hpp"
 #include "components/Input.hpp"
 #include "entities/Player.hpp"
-
-#include <SFML/System/Vector2.hpp>
+#include "misc/math.hpp"
 
 namespace systems
 {
@@ -38,7 +37,7 @@ namespace systems
     // provided by the server.  Some require entity (clien) prediction.
     //
     // --------------------------------------------------------------
-    void Movement::update(std::chrono::milliseconds elapsedTime)
+    void Movement::update(std::chrono::microseconds elapsedTime)
     {
         for (auto&& [id, entity] : m_entities)
         {
@@ -73,7 +72,7 @@ namespace systems
                     //
                     // Then move
                     position->set(
-                        sf::Vector2f(
+                        math::Vector2f(
                             position->get().x - (goal->getStartPosition().x - goal->getGoalPosition().x) * updateFraction,
                             position->get().y - (goal->getStartPosition().y - goal->getGoalPosition().y) * updateFraction));
                 }
@@ -84,7 +83,7 @@ namespace systems
                 auto position = entity->getComponent<components::Position>();
                 if (position->getNeedsEntityPrediction())
                 {
-                    auto predictLength = std::chrono::duration_cast<std::chrono::milliseconds>(position->getLastServerUpdate() - position->getLastClientUpdate());
+                    auto predictLength = std::chrono::duration_cast<std::chrono::microseconds>(position->getLastServerUpdate() - position->getLastClientUpdate());
                     entities::drift(entity.get(), predictLength);
                     position->resetEntityPrediction();
                 }

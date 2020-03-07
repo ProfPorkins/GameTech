@@ -6,11 +6,15 @@
 #include <iostream>
 #include <thread>
 
-const auto SIMULATION_UPDATE_RATE_MS = std::chrono::milliseconds(100);
+//
+// Doing this so I can think in milliseconds, but everything else is
+// needed in microseconds.
+const auto SIMULATION_UPDATE_RATE_US = std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::milliseconds(100));
 
 int main()
 {
     GOOGLE_PROTOBUF_VERIFY_VERSION;
+
     //
     // Get the network messaging service and game model initialized and ready to run
     if (!MessageQueueServer::instance().initialize(3000))
@@ -38,22 +42,22 @@ int main()
     while (running)
     {
         //
-        // Figure out the elapsed time in milliseconds.  Need this to pass on to
+        // Figure out the elapsed time in microseconds.  Need this to pass on to
         // the game model.
         auto currentTime = std::chrono::steady_clock::now();
-        auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - previousTime);
+        auto elapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(currentTime - previousTime);
         //
         // If we are running faster than the simulate update rate, then go
         // to sleep for a bit so we don't burn up the CPU unnecessarily.
-        auto sleepTime = SIMULATION_UPDATE_RATE_MS - elapsedTime;
-        if (sleepTime > std::chrono::milliseconds(0))
+        auto sleepTime = SIMULATION_UPDATE_RATE_US - elapsedTime;
+        if (sleepTime > std::chrono::microseconds(0))
         {
             std::this_thread::sleep_for(sleepTime);
         }
 
         // Recompute elapsed time after doing the sleep, to get an accurate time duration
         currentTime = std::chrono::steady_clock::now();
-        elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - previousTime);
+        elapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(currentTime - previousTime);
         previousTime = currentTime;
 
         //
