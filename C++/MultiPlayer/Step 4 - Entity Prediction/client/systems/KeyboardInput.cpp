@@ -50,7 +50,7 @@ namespace systems
     // update based upon the current keyboard state.
     //
     // --------------------------------------------------------------
-    void KeyboardInput::update(std::chrono::milliseconds elapsedTime)
+    void KeyboardInput::update(std::chrono::microseconds elapsedTime)
     {
         for (auto&& [id, entity] : m_entities)
         {
@@ -93,12 +93,12 @@ namespace systems
     // keys and asking if they are pressed.
     //
     // --------------------------------------------------------------
-    void KeyboardInput::keyPressed(sf::Event::KeyEvent keyEvent, std::chrono::milliseconds elapsedTime)
+    void KeyboardInput::keyPressed(sf::Event::KeyEvent keyEvent, std::chrono::microseconds elapsedTime)
     {
         (void)elapsedTime; // currently unused, will use it soon
         m_keysPressed[keyEvent.code] = keyEvent;
     }
-    void KeyboardInput::keyReleased(sf::Event::KeyEvent keyEvent, std::chrono::milliseconds elapsedTime)
+    void KeyboardInput::keyReleased(sf::Event::KeyEvent keyEvent, std::chrono::microseconds elapsedTime)
     {
         (void)elapsedTime; // currently unused, will use it soon
         m_keysPressed.erase(keyEvent.code);

@@ -85,10 +85,10 @@ int main()
     while (running)
     {
         //
-        // Figure out the elapsed time in milliseconds.  Need this to pass on to
+        // Figure out the elapsed time in microseconds.  Need this to pass on to
         // the game model.
         auto currentTime = std::chrono::steady_clock::now();
-        auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - previousTime);
+        auto elapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(currentTime - previousTime);
         previousTime = currentTime;
 
         // Handle all pending Windows events

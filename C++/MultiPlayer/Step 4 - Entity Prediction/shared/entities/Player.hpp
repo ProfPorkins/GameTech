@@ -15,13 +15,13 @@
 // --------------------------------------------------------------
 namespace entities::player
 {
-    std::shared_ptr<Entity> create(std::string texture, math::Vector2f position, float size, float thrustRate, float rotateRate, math::Vector2f momentum);
+    std::shared_ptr<Entity> create(std::string texture, math::Vector2f position, float size, double thrustRate, float rotateRate, math::Vector2f momentum);
 }
 
 namespace entities
 {
-    void thrust(entities::Entity* entity, std::chrono::milliseconds howLong);
-    void rotateLeft(entities::Entity* entity, std::chrono::milliseconds howLong);
-    void rotateRight(entities::Entity* entity, std::chrono::milliseconds howLong);
-    void drift(entities::Entity* entity, std::chrono::milliseconds howLong);
+    void thrust(entities::Entity* entity, std::chrono::microseconds howLong);
+    void rotateLeft(entities::Entity* entity, std::chrono::microseconds howLong);
+    void rotateRight(entities::Entity* entity, std::chrono::microseconds howLong);
+    void drift(entities::Entity* entity, std::chrono::microseconds howLong);
 } // namespace entities

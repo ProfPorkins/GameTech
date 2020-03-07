@@ -34,15 +34,15 @@ namespace components
         void setGoalPosition(math::Vector2f position) { m_goalPosition = position; }
         void setStartOrientation(float orientation) { m_startOrientation = orientation; }
         void setGoalOrientation(float orientation) { m_goalOrientation = orientation; }
-        void setUpdateWindow(std::chrono::milliseconds updateWindow) { m_updateWindow = updateWindow; }
-        void setUpdatedTime(std::chrono::milliseconds updatedTime) { m_updatedTime = updatedTime; }
+        void setUpdateWindow(std::chrono::microseconds updateWindow) { m_updateWindow = updateWindow; }
+        void setUpdatedTime(std::chrono::microseconds updatedTime) { m_updatedTime = updatedTime; }
 
       private:
         math::Vector2f m_startPosition;
         math::Vector2f m_goalPosition;
         float m_startOrientation;
         float m_goalOrientation;
-        std::chrono::milliseconds m_updateWindow{0};
-        std::chrono::milliseconds m_updatedTime{0};
+        std::chrono::microseconds m_updateWindow{0};
+        std::chrono::microseconds m_updatedTime{0};
     };
 } // namespace components

@@ -27,9 +27,9 @@ class GameModel
   public:
     bool initialize(math::Vector2f viewSize);
 
-    void signalKeyPressed(sf::Event::KeyEvent event, std::chrono::milliseconds elapsedTime);
-    void signalKeyReleased(sf::Event::KeyEvent event, std::chrono::milliseconds elapsedTime);
-    void update(const std::chrono::milliseconds elapsedTime, std::shared_ptr<sf::RenderTarget> renderTarget);
+    void signalKeyPressed(sf::Event::KeyEvent event, std::chrono::microseconds elapsedTime);
+    void signalKeyReleased(sf::Event::KeyEvent event, std::chrono::microseconds elapsedTime);
+    void update(const std::chrono::microseconds elapsedTime, std::shared_ptr<sf::RenderTarget> renderTarget);
 
   private:
     // The purpose of this is to have a container that keeps the textures alive throughout the program

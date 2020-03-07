@@ -21,7 +21,7 @@
 // updates are sent out.
 //
 // --------------------------------------------------------------
-void GameModel::update(const std::chrono::milliseconds elapsedTime)
+void GameModel::update(const std::chrono::microseconds elapsedTime)
 {
     //
     // Process the network system first, it is like local input, so should
@@ -235,7 +235,7 @@ void GameModel::handleJoin(std::uint64_t clientId)
     //         it to the newly joined client
 
     // Generate a player, add to server simulation, and send to the client
-    auto player = entities::player::create("playerShip1_Blue.png", {0.0f, 0.0f}, 0.05f, 0.0000002f, 180.0f / 1000, {0, 0});
+    auto player = entities::player::create("playerShip1_Blue.png", {0.0f, 0.0f}, 0.05f, 0.0000000000002, 180.0f / 1000000, {0, 0});
     addEntity(player);
     m_clientToEntityId[clientId] = player->getId();
 

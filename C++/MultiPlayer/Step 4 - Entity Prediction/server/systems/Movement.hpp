@@ -25,7 +25,7 @@ namespace systems
         {
         }
 
-        virtual void update(std::chrono::milliseconds elapsedTime) override;
+        virtual void update(std::chrono::microseconds elapsedTime) override;
 
       private:
     };

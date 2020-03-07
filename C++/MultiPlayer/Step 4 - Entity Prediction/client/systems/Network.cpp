@@ -29,25 +29,25 @@ namespace systems
         //
         // We know how to privately handle these messages
         registerHandler(messages::Type::ConnectAck,
-                        [this](std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
+                        [this](std::chrono::microseconds elapsedTime, std::shared_ptr<messages::Message> message) {
                             // Not completely in love with having to do a static_pointer_cast, but living with it for now
                             handleConnectAck(elapsedTime, std::static_pointer_cast<messages::ConnectAck>(message));
                         });
 
         registerHandler(messages::Type::NewEntity,
-                        [this](std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
+                        [this](std::chrono::microseconds elapsedTime, std::shared_ptr<messages::Message> message) {
                             (void)elapsedTime; // unused parameter
                             m_newEntityHandler(std::static_pointer_cast<messages::NewEntity>(message)->getPBEntity());
                         });
 
         registerHandler(messages::Type::UpdateEntity,
-                        [this](std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
+                        [this](std::chrono::microseconds elapsedTime, std::shared_ptr<messages::Message> message) {
                             (void)elapsedTime; // unused parameter
                             handleUpdateEntity(std::static_pointer_cast<messages::UpdateEntity>(message));
                         });
 
         registerHandler(messages::Type::RemoveEntity,
-                        [this](std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::Message> message) {
+                        [this](std::chrono::microseconds elapsedTime, std::shared_ptr<messages::Message> message) {
                             (void)elapsedTime; // unused parameter
                             auto entityId = std::static_pointer_cast<messages::RemoveEntity>(message)->getPBEntity().id();
                             m_removeEntityHandler(entityId);
@@ -59,7 +59,7 @@ namespace systems
     // Allow handlers for messages to be registered.
     //
     // --------------------------------------------------------------
-    void Network::registerHandler(messages::Type type, std::function<void(std::chrono::milliseconds, std::shared_ptr<messages::Message>)> handler)
+    void Network::registerHandler(messages::Type type, std::function<void(std::chrono::microseconds, std::shared_ptr<messages::Message>)> handler)
     {
         m_commandMap[type] = handler;
     }
@@ -69,7 +69,7 @@ namespace systems
     // Process all outstanding messages since the last update.
     //
     // --------------------------------------------------------------
-    void Network::update(std::chrono::milliseconds elapsedTime, std::queue<std::shared_ptr<messages::Message>> messages)
+    void Network::update(std::chrono::microseconds elapsedTime, std::queue<std::shared_ptr<messages::Message>> messages)
     {
         m_updatedEntities.clear();
         while (!messages.empty())
@@ -130,7 +130,7 @@ namespace systems
     // to join the game.
     //
     // --------------------------------------------------------------
-    void Network::handleConnectAck(std::chrono::milliseconds elapsedTime, std::shared_ptr<messages::ConnectAck> message)
+    void Network::handleConnectAck(std::chrono::microseconds elapsedTime, std::shared_ptr<messages::ConnectAck> message)
     {
         (void)elapsedTime;
         //
@@ -157,8 +157,8 @@ namespace systems
                 auto position = entity->getComponent<components::Position>();
                 auto goal = entity->getComponent<components::Goal>();
 
-                goal->setUpdateWindow(std::chrono::milliseconds(pbEntity.updatewindow()));
-                goal->setUpdatedTime(std::chrono::milliseconds(0));
+                goal->setUpdateWindow(std::chrono::microseconds(pbEntity.updatewindow()));
+                goal->setUpdatedTime(std::chrono::microseconds(0));
                 goal->setGoalPosition(math::Vector2f(pbEntity.position().center().x(), pbEntity.position().center().y()));
                 goal->setGoalOrientation(pbEntity.position().orientation());
 

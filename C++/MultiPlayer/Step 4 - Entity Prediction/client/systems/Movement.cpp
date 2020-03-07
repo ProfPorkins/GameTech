@@ -37,7 +37,7 @@ namespace systems
     // provided by the server.  Some require entity (clien) prediction.
     //
     // --------------------------------------------------------------
-    void Movement::update(std::chrono::milliseconds elapsedTime)
+    void Movement::update(std::chrono::microseconds elapsedTime)
     {
         for (auto&& [id, entity] : m_entities)
         {
@@ -83,7 +83,7 @@ namespace systems
                 auto position = entity->getComponent<components::Position>();
                 if (position->getNeedsEntityPrediction())
                 {
-                    auto predictLength = std::chrono::duration_cast<std::chrono::milliseconds>(position->getLastServerUpdate() - position->getLastClientUpdate());
+                    auto predictLength = std::chrono::duration_cast<std::chrono::microseconds>(position->getLastServerUpdate() - position->getLastClientUpdate());
                     entities::drift(entity.get(), predictLength);
                     position->resetEntityPrediction();
                 }

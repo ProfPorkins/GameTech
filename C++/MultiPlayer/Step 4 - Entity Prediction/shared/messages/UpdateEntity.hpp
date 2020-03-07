@@ -25,7 +25,7 @@ namespace messages
     class UpdateEntity : public Message
     {
       public:
-        UpdateEntity(std::shared_ptr<entities::Entity> entity, const std::chrono::milliseconds updateWindow) :
+        UpdateEntity(std::shared_ptr<entities::Entity> entity, const std::chrono::microseconds updateWindow) :
             Message(Type::UpdateEntity),
             m_entity(entity),
             m_updateWindow(updateWindow)
@@ -45,7 +45,7 @@ namespace messages
 
       private:
         std::shared_ptr<entities::Entity> m_entity;
-        std::chrono::milliseconds m_updateWindow{0};
+        std::chrono::microseconds m_updateWindow{0};
         shared::Entity m_pbEntity;
     };
 } // namespace messages

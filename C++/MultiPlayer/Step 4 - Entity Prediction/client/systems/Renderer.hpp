@@ -26,7 +26,7 @@ namespace systems
         {
         }
 
-        void update(std::chrono::milliseconds elapsedTime, std::shared_ptr<sf::RenderTarget> renderTarget);
+        void update(std::chrono::microseconds elapsedTime, std::shared_ptr<sf::RenderTarget> renderTarget);
 
       private:
     };

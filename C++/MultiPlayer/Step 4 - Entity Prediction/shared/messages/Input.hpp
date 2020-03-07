@@ -28,7 +28,7 @@ namespace messages
     class Input : public Message
     {
       public:
-        Input(entities::Entity::IdType id, std::vector<components::Input::Type> inputs, std::chrono::milliseconds elapsedTime) :
+        Input(entities::Entity::IdType id, std::vector<components::Input::Type> inputs, std::chrono::microseconds elapsedTime) :
             Message(Type::Input),
             m_entityId(id),
             m_inputs(inputs),
@@ -48,7 +48,7 @@ namespace messages
         // Client use only! Could make these friend only methods
         entities::Entity::IdType getEntityId() { return m_entityId; }
         const std::vector<components::Input::Type> getInputs() { return m_inputs; }
-        std::chrono::milliseconds getElapsedTime() { return m_elapsedTime; }
+        std::chrono::microseconds getElapsedTime() { return m_elapsedTime; }
 
         // Intended for server-side use
         const shared::Input& getPBInput() const { return m_pbInput; }
@@ -56,7 +56,7 @@ namespace messages
       private:
         entities::Entity::IdType m_entityId{0};
         std::vector<components::Input::Type> m_inputs;
-        std::chrono::milliseconds m_elapsedTime;
+        std::chrono::microseconds m_elapsedTime;
 
         shared::Input m_pbInput;
     };

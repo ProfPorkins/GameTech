@@ -338,7 +338,7 @@ void MessageQueueServer::initializeReceiver()
                 // isn't necessary.
                 if (m_sockets.size() == 0)
                 {
-                    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+                    std::this_thread::sleep_for(std::chrono::microseconds(500000));
                 }
             }
 

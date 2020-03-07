@@ -15,26 +15,26 @@ namespace components
     class Movement : public Component
     {
       public:
-        Movement(float thrustRate, float rotateRate, math::Vector2f momentum) :
+        Movement(double thrustRate, float rotateRate, math::Vector2f momentum) :
             m_thrustRate(thrustRate),
             m_rotateRate(rotateRate),
             m_momentum(momentum)
         {
         }
 
-        const float getThrustRate() const { return m_thrustRate; }
+        const double getThrustRate() const { return m_thrustRate; }
         const float getRotateRate() const { return m_rotateRate; }
         const math::Vector2f getMomentum() const { return m_momentum; }
         void setMomentum(math::Vector2f momentum) { m_momentum = momentum; }
 
         void resetIntraMovementTime() { m_intraMovementTime = {0}; }
         auto getIntraMovementTime() { return m_intraMovementTime; }
-        void updateIntraMovementTime(std::chrono::milliseconds howMuch) { m_intraMovementTime += howMuch; }
+        void updateIntraMovementTime(std::chrono::microseconds howMuch) { m_intraMovementTime += howMuch; }
 
       private:
-        float m_thrustRate;        // unit distance per millisecond
-        float m_rotateRate;        // degrees per millisecond
-        math::Vector2f m_momentum; // units per millisecond
-        std::chrono::milliseconds m_intraMovementTime{0};
+        double m_thrustRate;       // unit distance per microsecond
+        float m_rotateRate;        // degrees per microsecond
+        math::Vector2f m_momentum; // units per microsecond
+        std::chrono::microseconds m_intraMovementTime{0};
     };
 } // namespace components

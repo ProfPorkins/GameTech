@@ -51,12 +51,12 @@ bool GameModel::initialize(math::Vector2f viewSize)
     return true;
 }
 
-void GameModel::signalKeyPressed(sf::Event::KeyEvent event, std::chrono::milliseconds elapsedTime)
+void GameModel::signalKeyPressed(sf::Event::KeyEvent event, std::chrono::microseconds elapsedTime)
 {
     m_systemKeyboardInput->keyPressed(event, elapsedTime);
 }
 
-void GameModel::signalKeyReleased(sf::Event::KeyEvent event, std::chrono::milliseconds elapsedTime)
+void GameModel::signalKeyReleased(sf::Event::KeyEvent event, std::chrono::microseconds elapsedTime)
 {
     m_systemKeyboardInput->keyReleased(event, elapsedTime);
 }
@@ -68,7 +68,7 @@ void GameModel::signalKeyReleased(sf::Event::KeyEvent event, std::chrono::millis
 // must complete before rendering can start.
 //
 // --------------------------------------------------------------
-void GameModel::update(const std::chrono::milliseconds elapsedTime, std::shared_ptr<sf::RenderTarget> renderTarget)
+void GameModel::update(const std::chrono::microseconds elapsedTime, std::shared_ptr<sf::RenderTarget> renderTarget)
 {
     //
     // Process the network system first, it is like local input, so should

@@ -13,7 +13,7 @@ namespace entities::player
     // Server-side function to create a new player entity.
     //
     // --------------------------------------------------------------
-    std::shared_ptr<Entity> create(std::string texture, math::Vector2f position, float size, float thrustRate, float rotateRate, math::Vector2f momentum)
+    std::shared_ptr<Entity> create(std::string texture, math::Vector2f position, float size, double thrustRate, float rotateRate, math::Vector2f momentum)
     {
         std::shared_ptr<Entity> entity = std::make_shared<Entity>();
 
@@ -44,7 +44,7 @@ namespace entities::player
 // --------------------------------------------------------------
 namespace entities
 {
-    void thrust(entities::Entity* entity, std::chrono::milliseconds howLong)
+    void thrust(entities::Entity* entity, std::chrono::microseconds howLong)
     {
         const float PI = 3.14159f;
         const float DEGREES_TO_RADIANS = PI / 180.0f;
@@ -57,11 +57,11 @@ namespace entities
 
         auto current = movement->getMomentum();
         movement->setMomentum(math::Vector2f(
-            current.x + vectorX * movement->getThrustRate() * howLong.count(),
-            current.y + vectorY * movement->getThrustRate() * howLong.count()));
+            current.x + static_cast<float>(vectorX * movement->getThrustRate() * howLong.count()),
+            current.y + static_cast<float>(vectorY * movement->getThrustRate() * howLong.count())));
     }
 
-    void rotateLeft(entities::Entity* entity, std::chrono::milliseconds howLong)
+    void rotateLeft(entities::Entity* entity, std::chrono::microseconds howLong)
     {
         auto position = entity->getComponent<components::Position>();
         auto movement = entity->getComponent<components::Movement>();
@@ -69,7 +69,7 @@ namespace entities
         position->setOrientation(position->getOrientation() - movement->getRotateRate() * howLong.count());
     }
 
-    void rotateRight(entities::Entity* entity, std::chrono::milliseconds howLong)
+    void rotateRight(entities::Entity* entity, std::chrono::microseconds howLong)
     {
         auto position = entity->getComponent<components::Position>();
         auto movement = entity->getComponent<components::Movement>();
@@ -77,7 +77,7 @@ namespace entities
         position->setOrientation(position->getOrientation() + movement->getRotateRate() * howLong.count());
     }
 
-    void drift(entities::Entity* entity, std::chrono::milliseconds howLong)
+    void drift(entities::Entity* entity, std::chrono::microseconds howLong)
     {
         auto position = entity->getComponent<components::Position>();
         auto movement = entity->getComponent<components::Movement>();
