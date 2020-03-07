@@ -69,7 +69,7 @@ int main()
     //
     // Get the game model initialized and ready to run
     GameModel model;
-    if (!model.initialize(window->getView().getSize()))
+    if (!model.initialize({window->getView().getSize().x, window->getView().getSize().y}))
     {
         std::cout << "Game model failed to initialize, terminating..." << std::endl;
         exit(0);

@@ -64,6 +64,13 @@ set(SHARED_SYSTEMS_SOURCES
     systems/System.cpp
     )
 
+set(SHARED_MISC_HEADERS
+    misc/math.hpp
+    )
+
+set(SHARED_MISC_SOURCES
+    )
+
 #
 # Generate the Protobuf source files
 #
@@ -76,6 +83,9 @@ endif()
 #
 # Organize the files into some logical groups
 #
+source_group("Misc\\Header Files" FILES ${SHARED_MISC_HEADERS})
+source_group("Misc\\Source Files" FILES ${SHARED_MISC_SOURCES})
+
 source_group("Components\\Header Files" FILES ${SHARED_COMPONENTS_HEADERS})
 source_group("Components\\Source Files" FILES ${SHARED_COMPONENTS_SOURCES})
 
@@ -96,6 +106,8 @@ source_group("ProtoBuf\\Source Files" FILES ${PROTOBUF_SOURCES})
 # Need a list of all code files for convenience
 #
 set(SHARED_CODE_FILES
+    ${SHARED_MISC_HEADERS}
+    ${SHARED_MISC_SOURCES}
     ${SHARED_COMPONENTS_HEADERS}
     ${SHARED_COMPONENTS_SOURCES}
     ${SHARED_ENTITY_HEADERS}

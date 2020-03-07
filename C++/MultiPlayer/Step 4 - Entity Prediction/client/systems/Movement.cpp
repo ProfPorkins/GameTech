@@ -3,8 +3,7 @@
 #include "components/Goal.hpp"
 #include "components/Input.hpp"
 #include "entities/Player.hpp"
-
-#include <SFML/System/Vector2.hpp>
+#include "misc/math.hpp"
 
 namespace systems
 {
@@ -73,7 +72,7 @@ namespace systems
                     //
                     // Then move
                     position->set(
-                        sf::Vector2f(
+                        math::Vector2f(
                             position->get().x - (goal->getStartPosition().x - goal->getGoalPosition().x) * updateFraction,
                             position->get().y - (goal->getStartPosition().y - goal->getGoalPosition().y) * updateFraction));
                 }

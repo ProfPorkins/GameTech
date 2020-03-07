@@ -34,7 +34,7 @@ namespace systems
             auto position = entity->getComponent<components::Position>();
             auto ship = entity->getComponent<components::Sprite>();
 
-            ship->get()->setPosition(position->get());
+            ship->get()->setPosition({position->get().x, position->get().y});
             ship->get()->setRotation(position->getOrientation());
 
             renderTarget->draw(*ship->get());

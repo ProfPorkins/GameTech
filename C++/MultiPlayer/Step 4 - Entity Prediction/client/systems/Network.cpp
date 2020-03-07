@@ -11,6 +11,7 @@
 #include "messages/MessageTypes.hpp"
 #include "messages/NewEntity.hpp"
 #include "messages/RemoveEntity.hpp"
+#include "misc/math.hpp"
 
 #include <chrono>
 
@@ -158,7 +159,7 @@ namespace systems
 
                 goal->setUpdateWindow(std::chrono::milliseconds(pbEntity.updatewindow()));
                 goal->setUpdatedTime(std::chrono::milliseconds(0));
-                goal->setGoalPosition(sf::Vector2f(pbEntity.position().center().x(), pbEntity.position().center().y()));
+                goal->setGoalPosition(math::Vector2f(pbEntity.position().center().x(), pbEntity.position().center().y()));
                 goal->setGoalOrientation(pbEntity.position().orientation());
 
                 goal->setStartPosition(position->get());
@@ -168,7 +169,7 @@ namespace systems
             {
                 auto position = entity->getComponent<components::Position>();
 
-                position->set(sf::Vector2f(pbEntity.position().center().x(), pbEntity.position().center().y()));
+                position->set(math::Vector2f(pbEntity.position().center().x(), pbEntity.position().center().y()));
                 position->setOrientation(pbEntity.position().orientation());
                 position->setLastServerUpdate();
             }
@@ -178,7 +179,7 @@ namespace systems
             if (entity->hasComponent<components::Movement>())
             {
                 auto movement = entity->getComponent<components::Movement>();
-                movement->setMomentum(sf::Vector2f(pbEntity.movement().momentum().x(), pbEntity.movement().momentum().y()));
+                movement->setMomentum(math::Vector2f(pbEntity.movement().momentum().x(), pbEntity.movement().momentum().y()));
                 m_updatedEntities.insert(entity->getId());
             }
         }

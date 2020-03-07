@@ -10,6 +10,7 @@
 #include "components/Movement.hpp"
 #include "components/Position.hpp"
 #include "entities/Entity.hpp"
+#include "misc/math.hpp"
 #include "systems/KeyboardInput.hpp"
 #include "systems/Movement.hpp"
 #include "systems/Network.hpp"
@@ -24,7 +25,7 @@
 class GameModel
 {
   public:
-    bool initialize(sf::Vector2f viewSize);
+    bool initialize(math::Vector2f viewSize);
 
     void signalKeyPressed(sf::Event::KeyEvent event, std::chrono::milliseconds elapsedTime);
     void signalKeyReleased(sf::Event::KeyEvent event, std::chrono::milliseconds elapsedTime);
@@ -33,7 +34,7 @@ class GameModel
   private:
     // The purpose of this is to have a container that keeps the textures alive throughout the program
     std::unordered_set<std::shared_ptr<sf::Texture>> m_textures;
-    sf::Vector2f m_viewSize;
+    math::Vector2f m_viewSize;
 
     entities::EntityMap m_entities;
     entities::EntityMap m_entitiesKeyboardInput;

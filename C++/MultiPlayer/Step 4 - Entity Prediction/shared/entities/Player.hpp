@@ -1,8 +1,8 @@
 #pragma once
 
 #include "entities/Entity.hpp"
+#include "misc/math.hpp"
 
-#include <SFML/System/Vector2.hpp>
 #include <chrono>
 #include <memory>
 #include <string>
@@ -15,7 +15,7 @@
 // --------------------------------------------------------------
 namespace entities::player
 {
-    std::shared_ptr<Entity> create(std::string texture, sf::Vector2f position, float size, float thrustRate, float rotateRate, sf::Vector2f momentum);
+    std::shared_ptr<Entity> create(std::string texture, math::Vector2f position, float size, float thrustRate, float rotateRate, math::Vector2f momentum);
 }
 
 namespace entities
