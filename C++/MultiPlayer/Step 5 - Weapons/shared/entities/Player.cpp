@@ -13,8 +13,12 @@ namespace entities::player
     // Server-side function to create a new player entity.
     //
     // --------------------------------------------------------------
-    std::shared_ptr<Entity> create(std::string texture, math::Vector2f position, float size, double thrustRate, float rotateRate, math::Vector2f momentum)
+    std::shared_ptr<Entity> create(std::string texture, math::Vector2f position, float size, float thrustRate, float rotateRate, math::Vector2f momentum)
     {
+        //
+        // Have to convert momentum to microseconds from milliseconds
+        constexpr float MS_TO_US = static_cast<float>(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::milliseconds(1)).count());
+
         std::shared_ptr<Entity> entity = std::make_shared<Entity>();
 
         entity->addComponent(std::make_unique<components::Appearance>(texture));
@@ -23,7 +27,10 @@ namespace entities::player
         // A player ship has the following components
         entity->addComponent(std::make_unique<components::Position>(position));
         entity->addComponent(std::make_unique<components::Size>(math::Vector2f(size, size)));
-        entity->addComponent(std::make_unique<components::Movement>(thrustRate, rotateRate, momentum));
+        entity->addComponent(std::make_unique<components::Movement>(
+            thrustRate / MS_TO_US, // thrustRate comes in per milliecond
+            rotateRate / MS_TO_US, // rotateRate comes in per millisecond
+            momentum));
 
         auto inputs = {
             components::Input::Type::Thrust,
