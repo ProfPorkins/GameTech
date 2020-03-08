@@ -1,5 +1,6 @@
 syntax = "proto3";
 
+import public "AnimatedAppearanceComponent.proto";
 import public "AppearanceComponent.proto";
 import public "InputComponent.proto";
 import public "MessageId.proto";
@@ -12,10 +13,11 @@ package shared;
 message Entity {
     MessageId messageId = 1;
     uint32 id = 2;
-    AppearanceComponent appearance = 3;
-    PositionComponent position = 4;
-    SizeComponent size = 5;
-    MovementComponent movement = 6;
-    InputComponent input = 7;
-    uint32 updateWindow = 8;    // time in milliseconds
+    AnimatedAppearanceComponent animatedAppearance = 3;
+    AppearanceComponent appearance = 4;
+    PositionComponent position = 5;
+    SizeComponent size = 6;
+    MovementComponent movement = 7;
+    InputComponent input = 8;
+    uint32 updateWindow = 9;    // time in milliseconds
 }

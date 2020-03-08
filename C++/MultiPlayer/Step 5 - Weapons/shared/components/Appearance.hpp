@@ -19,8 +19,7 @@ namespace components
         {
         }
 
-        auto get() { return m_texture; }
-        void set(std::string texture) { m_texture = texture; }
+        auto getTexture() { return m_texture; }
 
       private:
         std::string m_texture;

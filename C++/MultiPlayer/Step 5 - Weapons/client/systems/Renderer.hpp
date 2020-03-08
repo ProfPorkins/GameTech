@@ -1,5 +1,6 @@
 #pragma once
 
+#include "components/AnimatedSprite.hpp"
 #include "components/Position.hpp"
 #include "components/Size.hpp"
 #include "components/Sprite.hpp"
@@ -20,13 +21,15 @@ namespace systems
     {
       public:
         Renderer() :
-            System({ctti::unnamed_type_id<components::Sprite>(),
-                    ctti::unnamed_type_id<components::Position>(),
+            System({ctti::unnamed_type_id<components::Position>(),
                     ctti::unnamed_type_id<components::Size>()})
         {
         }
 
         void update(std::chrono::microseconds elapsedTime, std::shared_ptr<sf::RenderTarget> renderTarget);
+
+      protected:
+        virtual bool isInterested(entities::Entity* entity);
 
       private:
     };

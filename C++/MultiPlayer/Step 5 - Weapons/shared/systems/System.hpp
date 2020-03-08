@@ -39,7 +39,7 @@ namespace systems
       protected:
         entities::EntityMap m_entities;
 
-        bool isInterested(entities::Entity* entity);
+        virtual bool isInterested(entities::Entity* entity);
 
       private:
         std::unordered_set<ctti::unnamed_type_id_t> m_interests;

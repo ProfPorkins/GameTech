@@ -32,7 +32,7 @@ namespace components
         void updateIntraMovementTime(std::chrono::microseconds howMuch) { m_intraMovementTime += howMuch; }
 
       private:
-        float m_thrustRate;       // unit distance per millisecond
+        float m_thrustRate;        // unit distance per millisecond
         float m_rotateRate;        // degrees per millisecond
         math::Vector2f m_momentum; // units per millisecond
         std::chrono::microseconds m_intraMovementTime{0};

@@ -36,7 +36,7 @@ class GameModel
     void removeEntity(entities::Entity::IdType entityId);
 
     void reportAllEntities(std::uint64_t clientId);
-    shared::Entity createPlayerPBEntity(std::shared_ptr<entities::Entity>& player);
+    shared::Entity createPBEntity(std::shared_ptr<entities::Entity>& entity);
 
     void handleConnect(std::uint64_t clientId);
     void handleDisconnect(std::uint64_t clientId);

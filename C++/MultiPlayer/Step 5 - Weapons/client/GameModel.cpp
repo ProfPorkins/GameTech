@@ -1,6 +1,7 @@
 #include "GameModel.hpp"
 
 #include "MessageQueueClient.hpp"
+#include "components/AnimatedSprite.hpp"
 #include "components/Input.hpp"
 #include "components/Movement.hpp"
 #include "components/Position.hpp"
@@ -94,6 +95,46 @@ std::shared_ptr<entities::Entity> GameModel::createEntity(const shared::Entity& 
     // Server provided the entity id, so use it
     std::shared_ptr<entities::Entity> entity = std::make_shared<entities::Entity>(pbEntity.id());
 
+    if (pbEntity.has_animatedappearance())
+    {
+        //
+        // Get the associated texture (sprite sheet) loaded first
+        auto textureSheet = std::make_shared<sf::Texture>();
+        m_textures.insert(textureSheet);
+        if (!textureSheet->loadFromFile("assets/" + pbEntity.animatedappearance().texture()))
+        {
+            return nullptr;
+        }
+
+        //
+        // Extract the frame times and create SFML sprites at the same timeyy
+        std::vector<std::chrono::milliseconds> spriteTime;
+        std::vector<std::shared_ptr<sf::Sprite>> sprites;
+        auto spriteSizeX = textureSheet->getSize().x / pbEntity.animatedappearance().spritetime().size();
+        for (auto time : pbEntity.animatedappearance().spritetime())
+        {
+            spriteTime.push_back(std::chrono::milliseconds(time));
+
+            auto spriteX = sprites.size() * spriteSizeX;
+            auto spriteAnim = std::make_shared<sf::Sprite>(*textureSheet, sf::IntRect(static_cast<int>(spriteX), 0, spriteSizeX, textureSheet->getSize().y));
+            // This sets the point about which rotation takes place - center of the sprite/texture
+            spriteAnim->setOrigin({spriteSizeX / 2.0f, spriteAnim->getTexture()->getSize().y / 2.0f});
+
+            //
+            // Original inspiration: https://en.sfml-dev.org/forums/index.php?topic=15755.0
+            // Define a scaling that converts from the texture size in pixels to unit coordinates
+            // that match the view.  This makes the texture have the same size/shape as the view.
+            sf::Vector2f scaleToUnitSize(m_viewSize.x / spriteSizeX, m_viewSize.y / spriteAnim->getTexture()->getSize().y);
+
+            // Now, set the actual render size based on the size provided in the entity description
+            spriteAnim->setScale(pbEntity.size().size().x() * scaleToUnitSize.x, pbEntity.size().size().x() * scaleToUnitSize.y);
+
+            sprites.push_back(spriteAnim);
+        }
+
+        entity->addComponent(std::make_unique<components::AnimatedSprite>(sprites, spriteTime));
+    }
+
     if (pbEntity.has_appearance())
     {
         //
@@ -105,10 +146,10 @@ std::shared_ptr<entities::Entity> GameModel::createEntity(const shared::Entity& 
             return nullptr;
         }
 
-        auto spriteShip = std::make_shared<sf::Sprite>();
-        spriteShip->setTexture(*texture);
+        auto sprite = std::make_shared<sf::Sprite>();
+        sprite->setTexture(*texture);
         // This sets the point about which rotation takes place - center of the sprite/texture
-        spriteShip->setOrigin({texture->getSize().x / 2.0f, texture->getSize().y / 2.0f});
+        sprite->setOrigin({texture->getSize().x / 2.0f, texture->getSize().y / 2.0f});
 
         //
         // Original inspiration: https://en.sfml-dev.org/forums/index.php?topic=15755.0
@@ -116,10 +157,10 @@ std::shared_ptr<entities::Entity> GameModel::createEntity(const shared::Entity& 
         // that match the view.  This makes the texture have the same size/shape as the view.
         sf::Vector2f scaleToUnitSize(m_viewSize.x / texture->getSize().x, m_viewSize.y / texture->getSize().y);
 
-        // Now, set the actual size of the ship based on the size passed in through the parameter
-        spriteShip->setScale(pbEntity.size().size().x() * scaleToUnitSize.x, pbEntity.size().size().x() * scaleToUnitSize.y);
+        // Now, set the actual render size based on the size provided in the entity description
+        sprite->setScale(pbEntity.size().size().x() * scaleToUnitSize.x, pbEntity.size().size().x() * scaleToUnitSize.y);
 
-        entity->addComponent(std::make_unique<components::Sprite>(spriteShip));
+        entity->addComponent(std::make_unique<components::Sprite>(sprite));
     }
 
     if (pbEntity.has_position())

@@ -21,10 +21,10 @@ namespace entities::player
 
         std::shared_ptr<Entity> entity = std::make_shared<Entity>();
 
-        entity->addComponent(std::make_unique<components::Appearance>(texture));
-
         //
         // A player ship has the following components
+        entity->addComponent(std::make_unique<components::Appearance>(texture));
+
         entity->addComponent(std::make_unique<components::Position>(position));
         entity->addComponent(std::make_unique<components::Size>(math::Vector2f(size, size)));
         entity->addComponent(std::make_unique<components::Movement>(

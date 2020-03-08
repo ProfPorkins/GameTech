@@ -15,6 +15,7 @@ set(PROTOBUF_FILES
     messages/protos/PositionComponent.proto
     messages/protos/SizeComponent.proto
     messages/protos/AppearanceComponent.proto
+    messages/protos/AnimatedAppearanceComponent.proto
     messages/protos/Vector2f.proto
     )
 
@@ -39,14 +40,17 @@ set(SHARED_MESSAGES_SOURCES
 
 set(SHARED_ENTITY_HEADERS
     entities/Entity.hpp
+    entities/Explosion.hpp
     entities/Player.hpp
     )
 set(SHARED_ENTITY_SOURCES
     entities/Entity.cpp
+    entities/Explosion.cpp
     entities/Player.cpp
     )
 
 set(SHARED_COMPONENTS_HEADERS
+    components/AnimatedAppearance.hpp
     components/Appearance.hpp
     components/Component.hpp
     components/Input.hpp

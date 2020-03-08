@@ -31,13 +31,46 @@ namespace systems
         // Render each of the entities
         for (auto&& [id, entity] : m_entities)
         {
+            //
+            // I know having these if statements isn't great for performance, but for this demo
+            // code (for now), I'm okay with it.
             auto position = entity->getComponent<components::Position>();
-            auto ship = entity->getComponent<components::Sprite>();
+            if (entity->hasComponent<components::Sprite>())
+            {
+                auto sprite = entity->getComponent<components::Sprite>();
+                sprite->get()->setPosition({position->get().x, position->get().y});
+                sprite->get()->setRotation(position->getOrientation());
 
-            ship->get()->setPosition({position->get().x, position->get().y});
-            ship->get()->setRotation(position->getOrientation());
+                renderTarget->draw(*sprite->get());
+            }
+            else if (entity->hasComponent<components::AnimatedSprite>())
+            {
+                auto sprite = entity->getComponent<components::AnimatedSprite>();
+                sprite->update(elapsedTime);
+                sprite->get()->setPosition({position->get().x, position->get().y});
+                sprite->get()->setRotation(position->getOrientation());
 
-            renderTarget->draw(*ship->get());
+                renderTarget->draw(*sprite->get());
+            }
         }
+    }
+
+    // --------------------------------------------------------------
+    //
+    // This system can accept entities with either Sprite or AnimatedSprite
+    // components.
+    //
+    // --------------------------------------------------------------
+    bool Renderer::isInterested(entities::Entity* entity)
+    {
+        if (System::isInterested(entity))
+        {
+            if (entity->hasComponent<components::Sprite>() || entity->hasComponent<components::AnimatedSprite>())
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 } // namespace systems
