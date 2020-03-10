@@ -39,6 +39,13 @@ namespace messages
                     pair->set_elapsedtime(static_cast<std::uint32_t>(m_elapsedTime.count()));
                 }
                 break;
+                case components::Input::Type::FireWeapon:
+                {
+                    auto pair = pbInput.add_input();
+                    pair->set_type(shared::InputType::FireWeapon);
+                    pair->set_elapsedtime(0); // time doesn't matter
+                }
+                break;
             }
         }
 

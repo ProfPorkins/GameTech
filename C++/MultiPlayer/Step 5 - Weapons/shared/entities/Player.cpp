@@ -37,7 +37,8 @@ namespace entities::player
         auto inputs = {
             components::Input::Type::Thrust,
             components::Input::Type::RotateLeft,
-            components::Input::Type::RotateRight};
+            components::Input::Type::RotateRight,
+            components::Input::Type::FireWeapon};
         entity->addComponent(std::make_unique<components::Input>(inputs));
 
         return entity;

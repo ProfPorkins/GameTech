@@ -111,6 +111,9 @@ namespace systems
                     entities::rotateRight(entity, std::chrono::microseconds(input.elapsedtime()));
                     m_reportThese.insert(entityId);
                     break;
+                case shared::InputType::FireWeapon:
+                    std::cout << "weapon fired" << std::endl;
+                    break;
             }
         }
     }

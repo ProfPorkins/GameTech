@@ -217,9 +217,24 @@ shared::Entity GameModel::createPBEntity(std::shared_ptr<entities::Entity>& enti
 
     if (entity->hasComponent<components::Input>())
     {
-        pbEntity.mutable_input()->add_type(shared::InputType::Thrust);
-        pbEntity.mutable_input()->add_type(shared::InputType::RotateLeft);
-        pbEntity.mutable_input()->add_type(shared::InputType::RotateRight);
+        for (auto input : entity->getComponent<components::Input>()->getInputs())
+        {
+            switch (input)
+            {
+                case components::Input::Type::Thrust:
+                    pbEntity.mutable_input()->add_type(shared::InputType::Thrust);
+                    break;
+                case components::Input::Type::RotateLeft:
+                    pbEntity.mutable_input()->add_type(shared::InputType::RotateLeft);
+                    break;
+                case components::Input::Type::RotateRight:
+                    pbEntity.mutable_input()->add_type(shared::InputType::RotateRight);
+                    break;
+                case components::Input::Type::FireWeapon:
+                    pbEntity.mutable_input()->add_type(shared::InputType::FireWeapon);
+                    break;
+            }
+        }
     }
 
     if (entity->hasComponent<components::Position>())

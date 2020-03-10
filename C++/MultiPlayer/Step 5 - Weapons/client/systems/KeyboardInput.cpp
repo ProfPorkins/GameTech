@@ -74,6 +74,10 @@ namespace systems
                         case components::Input::Type::RotateRight:
                             entities::rotateRight(entity.get(), elapsedTime);
                             break;
+                        case components::Input::Type::FireWeapon:
+                            // Not going to client predict this, firing rate, and movement
+                            // isn't fast enough to make client prediction essential.
+                            break;
                     }
                 }
             }

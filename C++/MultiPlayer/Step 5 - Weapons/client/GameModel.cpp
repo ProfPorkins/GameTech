@@ -39,7 +39,8 @@ bool GameModel::initialize(math::Vector2f viewSize)
     auto inputMapping = {
         std::make_tuple(components::Input::Type::RotateLeft, sf::Keyboard::A),
         std::make_tuple(components::Input::Type::RotateRight, sf::Keyboard::D),
-        std::make_tuple(components::Input::Type::Thrust, sf::Keyboard::W)};
+        std::make_tuple(components::Input::Type::Thrust, sf::Keyboard::W),
+        std::make_tuple(components::Input::Type::FireWeapon, sf::Keyboard::Space)};
     m_systemKeyboardInput = std::make_unique<systems::KeyboardInput>(inputMapping);
 
     //
@@ -204,6 +205,9 @@ std::shared_ptr<entities::Entity> GameModel::createEntity(const shared::Entity& 
                     break;
                 case shared::InputType::RotateRight:
                     inputs.push_back(components::Input::Type::RotateRight);
+                    break;
+                case shared::InputType::FireWeapon:
+                    inputs.push_back(components::Input::Type::FireWeapon);
                     break;
             }
         }
