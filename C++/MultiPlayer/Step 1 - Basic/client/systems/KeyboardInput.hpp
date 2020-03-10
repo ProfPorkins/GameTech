@@ -1,8 +1,6 @@
 #pragma once
 
 #include "components/Input.hpp"
-#include "components/Movement.hpp"
-#include "components/Position.hpp"
 #include "entities/Entity.hpp"
 #include "systems/System.hpp"
 
@@ -26,9 +24,7 @@ namespace systems
     {
       public:
         KeyboardInput(const std::initializer_list<std::tuple<components::Input::Type, sf::Keyboard::Key>>& mapping) :
-            System({ctti::unnamed_type_id<components::Input>(),
-                    ctti::unnamed_type_id<components::Position>(),
-                    ctti::unnamed_type_id<components::Movement>()})
+            System({ctti::unnamed_type_id<components::Input>()})
         {
             for (auto&& input : mapping)
             {
