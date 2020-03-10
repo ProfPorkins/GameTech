@@ -11,7 +11,7 @@ namespace entities::explosion
     // Server-side function to create a new explosion entity.
     //
     // --------------------------------------------------------------
-    std::shared_ptr<Entity> create(std::string texture, math::Vector2f position, float size, std::vector<std::chrono::milliseconds> spriteTime, math::Vector2f momentum)
+    std::shared_ptr<Entity> create(std::string texture, math::Vector2f position, float size, std::vector<std::chrono::milliseconds> spriteTime)
     {
         std::shared_ptr<Entity> entity = std::make_shared<Entity>();
 

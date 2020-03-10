@@ -4,6 +4,7 @@
 #include "components/AnimatedSprite.hpp"
 #include "components/Input.hpp"
 #include "components/Movement.hpp"
+#include "components/Momentum.hpp"
 #include "components/Position.hpp"
 #include "components/Size.hpp"
 #include "components/Sprite.hpp"
@@ -179,8 +180,13 @@ std::shared_ptr<entities::Entity> GameModel::createEntity(const shared::Entity& 
     {
         entity->addComponent(std::make_unique<components::Movement>(
             pbEntity.movement().thrustrate(),
-            pbEntity.movement().rotaterate(),
-            math::Vector2f(pbEntity.movement().momentum().x(), pbEntity.movement().momentum().y())));
+            pbEntity.movement().rotaterate()));
+    }
+
+    if (pbEntity.has_momentum())
+    {
+        entity->addComponent(std::make_unique<components::Momentum>(
+            math::Vector2f(pbEntity.momentum().momentum().x(), pbEntity.momentum().momentum().y())));
     }
 
     if (pbEntity.has_input())

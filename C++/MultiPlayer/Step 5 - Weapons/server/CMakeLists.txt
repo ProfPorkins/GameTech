@@ -25,11 +25,11 @@ set(SERVER_COMPONENTS_SOURCES
     )
 
 set(SERVER_SYSTEMS_HEADERS
-    systems/Movement.hpp
+    systems/Momentum.hpp
     systems/Network.hpp
     )
 set(SERVER_SYSTEMS_SOURCES
-    systems/Movement.cpp
+    systems/Momentum.cpp
     systems/Network.cpp
     )
 

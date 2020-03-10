@@ -3,6 +3,7 @@
 #include "components/Appearance.hpp"
 #include "components/Input.hpp"
 #include "components/Movement.hpp"
+#include "components/Momentum.hpp"
 #include "components/Position.hpp"
 #include "components/Size.hpp"
 
@@ -29,8 +30,9 @@ namespace entities::player
         entity->addComponent(std::make_unique<components::Size>(math::Vector2f(size, size)));
         entity->addComponent(std::make_unique<components::Movement>(
             thrustRate / MS_TO_US, // thrustRate comes in per milliecond
-            rotateRate / MS_TO_US, // rotateRate comes in per millisecond
-            momentum));
+            rotateRate / MS_TO_US));// rotateRate comes in per millisecond
+
+        entity->addComponent(std::make_unique<components::Momentum>(momentum));
 
         auto inputs = {
             components::Input::Type::Thrust,
@@ -58,12 +60,13 @@ namespace entities
 
         auto position = entity->getComponent<components::Position>();
         auto movement = entity->getComponent<components::Movement>();
+        auto momentum = entity->getComponent<components::Momentum>();
 
         auto vectorX = std::cos(position->getOrientation() * DEGREES_TO_RADIANS);
         auto vectorY = std::sin(position->getOrientation() * DEGREES_TO_RADIANS);
 
-        auto current = movement->getMomentum();
-        movement->setMomentum(math::Vector2f(
+        auto current = momentum->get();
+        momentum->set(math::Vector2f(
             current.x + static_cast<float>(vectorX * movement->getThrustRate() * howLong.count()),
             current.y + static_cast<float>(vectorY * movement->getThrustRate() * howLong.count())));
     }
@@ -87,11 +90,11 @@ namespace entities
     void drift(entities::Entity* entity, std::chrono::microseconds howLong)
     {
         auto position = entity->getComponent<components::Position>();
-        auto movement = entity->getComponent<components::Movement>();
+        auto momentum = entity->getComponent<components::Momentum>();
 
         auto current = position->get();
         position->set(math::Vector2f(
-            current.x + movement->getMomentum().x * howLong.count(),
-            current.y + movement->getMomentum().y * howLong.count()));
+            current.x + momentum->get().x * howLong.count(),
+            current.y + momentum->get().y * howLong.count()));
     }
 } // namespace entities

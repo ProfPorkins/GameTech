@@ -34,6 +34,8 @@ namespace systems
             //
             // I know having these if statements isn't great for performance, but for this demo
             // code (for now), I'm okay with it.
+            // Could bucket entities into Sprite and AnimatedSprite collections and render
+            // them from those.
             auto position = entity->getComponent<components::Position>();
             if (entity->hasComponent<components::Sprite>())
             {

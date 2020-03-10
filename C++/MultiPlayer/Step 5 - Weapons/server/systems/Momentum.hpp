@@ -1,6 +1,6 @@
 #pragma once
 
-#include "components/Movement.hpp"
+#include "components/Momentum.hpp"
 #include "components/Position.hpp"
 #include "entities/Entity.hpp"
 #include "systems/System.hpp"
@@ -13,15 +13,15 @@ namespace systems
 {
     // --------------------------------------------------------------
     //
-    // This system is used perform entity movement.
+    // This system is used move entities based on their momentum.
     //
     // --------------------------------------------------------------
-    class Movement : public System
+    class Momentum : public System
     {
       public:
-        Movement() :
+        Momentum() :
             System({ctti::unnamed_type_id<components::Position>(),
-                    ctti::unnamed_type_id<components::Movement>()})
+                    ctti::unnamed_type_id<components::Momentum>()})
         {
         }
 

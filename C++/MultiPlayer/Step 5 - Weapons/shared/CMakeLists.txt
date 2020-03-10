@@ -11,6 +11,7 @@ set(PROTOBUF_FILES
     messages/protos/Input.proto
     messages/protos/InputComponent.proto
     messages/protos/MessageId.proto
+    messages/protos/MomentumComponent.proto
     messages/protos/MovementComponent.proto
     messages/protos/PositionComponent.proto
     messages/protos/SizeComponent.proto
@@ -54,6 +55,7 @@ set(SHARED_COMPONENTS_HEADERS
     components/Appearance.hpp
     components/Component.hpp
     components/Input.hpp
+    components/Momentum.hpp
     components/Movement.hpp
     components/Position.hpp
     components/Size.hpp

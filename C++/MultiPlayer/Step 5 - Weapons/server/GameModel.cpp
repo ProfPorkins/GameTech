@@ -4,6 +4,7 @@
 #include "components/AnimatedAppearance.hpp"
 #include "components/Appearance.hpp"
 #include "components/Movement.hpp"
+#include "components/Momentum.hpp"
 #include "components/Position.hpp"
 #include "components/Size.hpp"
 #include "entities/Explosion.hpp"
@@ -53,7 +54,7 @@ bool GameModel::initialize()
     m_systemNetwork = std::make_unique<systems::Network>();
     m_systemNetwork->registerJoinHandler(std::bind(&GameModel::handleJoin, this, std::placeholders::_1));
 
-    m_systemMovement = std::make_unique<systems::Movement>();
+    m_systemMovement = std::make_unique<systems::Momentum>();
 
     MessageQueueServer::instance().registerConnectHandler(std::bind(&GameModel::handleConnect, this, std::placeholders::_1));
     MessageQueueServer::instance().registerDisconnectHandler(std::bind(&GameModel::handleDisconnect, this, std::placeholders::_1));
@@ -168,8 +169,13 @@ void GameModel::reportAllEntities(std::uint64_t clientId)
             auto movement = entity->getComponent<components::Movement>();
             pbEntity.mutable_movement()->set_thrustrate(movement->getThrustRate());
             pbEntity.mutable_movement()->set_rotaterate(movement->getRotateRate());
-            pbEntity.mutable_movement()->mutable_momentum()->set_x(movement->getMomentum().x);
-            pbEntity.mutable_movement()->mutable_momentum()->set_y(movement->getMomentum().y);
+        }
+
+        if (entity->hasComponent<components::Momentum>())
+        {
+            auto momentum = entity->getComponent<components::Momentum>();
+            pbEntity.mutable_momentum()->mutable_momentum()->set_x(momentum->get().x);
+            pbEntity.mutable_momentum()->mutable_momentum()->set_y(momentum->get().y);
         }
 
         if (entity->hasComponent<components::Size>())
@@ -234,8 +240,12 @@ shared::Entity GameModel::createPBEntity(std::shared_ptr<entities::Entity>& enti
     {
         pbEntity.mutable_movement()->set_thrustrate(entity->getComponent<components::Movement>()->getThrustRate());
         pbEntity.mutable_movement()->set_rotaterate(entity->getComponent<components::Movement>()->getRotateRate());
-        pbEntity.mutable_movement()->mutable_momentum()->set_x(entity->getComponent<components::Movement>()->getMomentum().x);
-        pbEntity.mutable_movement()->mutable_momentum()->set_y(entity->getComponent<components::Movement>()->getMomentum().y);
+    }
+
+    if (entity->hasComponent<components::Momentum>())
+    {
+        pbEntity.mutable_momentum()->mutable_momentum()->set_x(entity->getComponent<components::Momentum>()->get().x);
+        pbEntity.mutable_momentum()->mutable_momentum()->set_y(entity->getComponent<components::Momentum>()->get().y);
     }
 
     return pbEntity;
@@ -255,7 +265,7 @@ void GameModel::handleJoin(std::uint64_t clientId)
     reportAllEntities(clientId);
 
     auto frameTimes = {std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50)};
-    auto explosion = entities::explosion::create("explosion.png", {0.0f, 0.25f}, 0.07f, frameTimes, {0.0f, 0.0f});
+    auto explosion = entities::explosion::create("explosion.png", {0.0f, 0.25f}, 0.07f, frameTimes);
     addEntity(explosion);
     shared::Entity pbExplosion = createPBEntity(explosion);
     MessageQueueServer::instance().sendMessage(clientId, std::make_shared<messages::NewEntity>(pbExplosion));

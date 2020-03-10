@@ -1,6 +1,6 @@
 #include "UpdateEntity.hpp"
 
-#include "components/Movement.hpp"
+#include "components/Momentum.hpp"
 #include "components/Position.hpp"
 #include "components/Size.hpp"
 
@@ -27,11 +27,11 @@ namespace messages
             pbEntity.mutable_position()->set_orientation(m_entity->getComponent<components::Position>()->getOrientation());
         }
 
-        if (m_entity->hasComponent<components::Movement>())
+        if (m_entity->hasComponent<components::Momentum>())
         {
-            auto movement = m_entity->getComponent<components::Movement>();
-            pbEntity.mutable_movement()->mutable_momentum()->set_x(movement->getMomentum().x);
-            pbEntity.mutable_movement()->mutable_momentum()->set_y(movement->getMomentum().y);
+            auto momentum = m_entity->getComponent<components::Momentum>();
+            pbEntity.mutable_momentum()->mutable_momentum()->set_x(momentum->get().x);
+            pbEntity.mutable_momentum()->mutable_momentum()->set_y(momentum->get().y);
         }
 
         pbEntity.set_updatewindow(static_cast<std::uint32_t>(m_updateWindow.count()));

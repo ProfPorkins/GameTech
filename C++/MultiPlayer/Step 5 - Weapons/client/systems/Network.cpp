@@ -4,6 +4,7 @@
 #include "components/Goal.hpp"
 #include "components/Input.hpp"
 #include "components/Movement.hpp"
+#include "components/Momentum.hpp"
 #include "components/Position.hpp"
 #include "entities/Player.hpp"
 #include "messages/Input.hpp"
@@ -175,11 +176,11 @@ namespace systems
             }
 
             //
-            // If it has Movement, it has Position, and that was updated above
-            if (entity->hasComponent<components::Movement>())
+            // If it has Momentum, it has Position, and that was updated above
+            if (entity->hasComponent<components::Momentum>())
             {
-                auto movement = entity->getComponent<components::Movement>();
-                movement->setMomentum(math::Vector2f(pbEntity.movement().momentum().x(), pbEntity.movement().momentum().y()));
+                auto momentum = entity->getComponent<components::Momentum>();
+                momentum->set(math::Vector2f(pbEntity.momentum().momentum().x(), pbEntity.momentum().momentum().y()));
                 m_updatedEntities.insert(entity->getId());
             }
         }

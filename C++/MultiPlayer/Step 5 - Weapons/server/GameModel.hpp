@@ -8,7 +8,7 @@
 #pragma warning(pop)
 
 #include "entities/Entity.hpp"
-#include "systems/Movement.hpp"
+#include "systems/Momentum.hpp"
 #include "systems/Network.hpp"
 
 #include <SFML/Network.hpp>
@@ -30,7 +30,7 @@ class GameModel
     entities::EntityMap m_entities;
 
     std::unique_ptr<systems::Network> m_systemNetwork;
-    std::unique_ptr<systems::Movement> m_systemMovement;
+    std::unique_ptr<systems::Momentum> m_systemMovement;
 
     void addEntity(std::shared_ptr<entities::Entity> entity);
     void removeEntity(entities::Entity::IdType entityId);

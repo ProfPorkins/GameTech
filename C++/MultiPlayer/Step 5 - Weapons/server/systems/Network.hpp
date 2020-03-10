@@ -1,6 +1,5 @@
 #pragma once
 
-#include "components/Movement.hpp"
 #include "components/Position.hpp"
 #include "messages/Input.hpp"
 #include "messages/Join.hpp"

@@ -3,6 +3,7 @@
 #include "MessageQueueServer.hpp"
 #include "entities/Player.hpp"
 #include "messages/UpdateEntity.hpp"
+#include "components/Momentum.hpp"
 
 namespace systems
 {
@@ -14,7 +15,7 @@ namespace systems
     // --------------------------------------------------------------
     Network::Network() :
         System({ctti::unnamed_type_id<components::Position>(),
-                ctti::unnamed_type_id<components::Movement>()})
+                ctti::unnamed_type_id<components::Momentum>()})
     {
         //
         // Register our own join handler
@@ -97,8 +98,8 @@ namespace systems
                     // system because that drift time was simulated here.
                     entities::thrust(entity, std::chrono::microseconds(input.elapsedtime()));
                     entities::drift(entity, std::chrono::microseconds(input.elapsedtime()));
-                    auto movement = entity->getComponent<components::Movement>();
-                    movement->updateIntraMovementTime(std::chrono::microseconds(input.elapsedtime()));
+                    auto momentum = entity->getComponent<components::Momentum>();
+                    momentum->updateIntraMovementTime(std::chrono::microseconds(input.elapsedtime()));
                     m_reportThese.insert(entityId);
                 }
                 break;

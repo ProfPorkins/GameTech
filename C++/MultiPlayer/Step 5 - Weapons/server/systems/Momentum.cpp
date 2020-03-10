@@ -1,4 +1,4 @@
-#include "Movement.hpp"
+#include "Momentum.hpp"
 
 #include "entities/Player.hpp"
 
@@ -12,7 +12,7 @@ namespace systems
     // Move all entities.
     //
     // --------------------------------------------------------------
-    void Movement::update(std::chrono::microseconds elapsedTime)
+    void Momentum::update(std::chrono::microseconds elapsedTime)
     {
         for (auto&& [id, entity] : m_entities)
         {
@@ -20,9 +20,9 @@ namespace systems
             // If the entity already has some drift computed due to network
             // thrust, that amount of time must be subtracted from the server's
             // update window.
-            auto movement = entity->getComponent<components::Movement>();
-            entities::drift(entity.get(), elapsedTime - movement->getIntraMovementTime());
-            movement->resetIntraMovementTime();
+            auto momentum = entity->getComponent<components::Momentum>();
+            entities::drift(entity.get(), elapsedTime - momentum->getIntraMovementTime());
+            momentum->resetIntraMovementTime();
         }
     }
 

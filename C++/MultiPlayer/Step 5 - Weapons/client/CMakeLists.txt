@@ -25,13 +25,13 @@ set(CLIENT_COMPONENTS_SOURCES
 
 set(CLIENT_SYSTEMS_HEADERS
     systems/KeyboardInput.hpp
-    systems/Movement.hpp
+    systems/Momentum.hpp
     systems/Network.hpp
     systems/Renderer.hpp
     )
 set(CLIENT_SYSTEMS_SOURCES
     systems/KeyboardInput.cpp
-    systems/Movement.cpp
+    systems/Momentum.cpp
     systems/Network.cpp
     systems/Renderer.cpp
     )

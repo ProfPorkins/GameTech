@@ -4,6 +4,7 @@ import public "AnimatedAppearanceComponent.proto";
 import public "AppearanceComponent.proto";
 import public "InputComponent.proto";
 import public "MessageId.proto";
+import public "MomentumComponent.proto";
 import public "MovementComponent.proto";
 import public "PositionComponent.proto";
 import public "SizeComponent.proto";
@@ -17,7 +18,8 @@ message Entity {
     AppearanceComponent appearance = 4;
     PositionComponent position = 5;
     SizeComponent size = 6;
-    MovementComponent movement = 7;
-    InputComponent input = 8;
-    uint32 updateWindow = 9;    // time in milliseconds
+    MomentumComponent momentum = 7;
+    MovementComponent movement = 8;
+    InputComponent input = 9;
+    uint32 updateWindow = 10;    // time in milliseconds
 }
