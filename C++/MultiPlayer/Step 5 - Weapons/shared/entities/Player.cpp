@@ -2,8 +2,8 @@
 
 #include "components/Appearance.hpp"
 #include "components/Input.hpp"
-#include "components/Movement.hpp"
 #include "components/Momentum.hpp"
+#include "components/Movement.hpp"
 #include "components/Position.hpp"
 #include "components/Size.hpp"
 
@@ -29,8 +29,8 @@ namespace entities::player
         entity->addComponent(std::make_unique<components::Position>(position));
         entity->addComponent(std::make_unique<components::Size>(math::Vector2f(size, size)));
         entity->addComponent(std::make_unique<components::Movement>(
-            thrustRate / MS_TO_US, // thrustRate comes in per milliecond
-            rotateRate / MS_TO_US));// rotateRate comes in per millisecond
+            thrustRate / MS_TO_US,   // thrustRate comes in per milliecond
+            rotateRate / MS_TO_US)); // rotateRate comes in per millisecond
 
         entity->addComponent(std::make_unique<components::Momentum>(momentum));
 

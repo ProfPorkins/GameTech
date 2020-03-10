@@ -1,9 +1,9 @@
 #include "Network.hpp"
 
 #include "MessageQueueServer.hpp"
+#include "components/Momentum.hpp"
 #include "entities/Player.hpp"
 #include "messages/UpdateEntity.hpp"
-#include "components/Momentum.hpp"
 
 namespace systems
 {

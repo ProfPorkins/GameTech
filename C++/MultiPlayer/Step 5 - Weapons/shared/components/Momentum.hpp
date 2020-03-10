@@ -15,7 +15,7 @@ namespace components
     class Momentum : public Component
     {
       public:
-          Momentum(math::Vector2f momentum) :
+        Momentum(math::Vector2f momentum) :
             m_momentum(momentum)
         {
         }

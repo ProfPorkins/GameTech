@@ -25,7 +25,7 @@ namespace components
         const float getRotateRate() const { return m_rotateRate; }
 
       private:
-        float m_thrustRate;        // unit distance per millisecond
-        float m_rotateRate;        // degrees per millisecond
+        float m_thrustRate; // unit distance per millisecond
+        float m_rotateRate; // degrees per millisecond
     };
 } // namespace components

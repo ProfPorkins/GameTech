@@ -3,8 +3,8 @@
 #include "MessageQueueServer.hpp"
 #include "components/AnimatedAppearance.hpp"
 #include "components/Appearance.hpp"
-#include "components/Movement.hpp"
 #include "components/Momentum.hpp"
+#include "components/Movement.hpp"
 #include "components/Position.hpp"
 #include "components/Size.hpp"
 #include "entities/Explosion.hpp"
@@ -264,11 +264,15 @@ void GameModel::handleJoin(std::uint64_t clientId)
     // Step 1: Tell the newly connected player about all other entities
     reportAllEntities(clientId);
 
-    auto frameTimes = {std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50), std::chrono::milliseconds(50)};
-    auto explosion = entities::explosion::create("explosion.png", {0.0f, 0.25f}, 0.07f, frameTimes);
-    addEntity(explosion);
-    shared::Entity pbExplosion = createPBEntity(explosion);
-    MessageQueueServer::instance().sendMessage(clientId, std::make_shared<messages::NewEntity>(pbExplosion));
+    //
+    // This was just temporary while I worked on the animated sprite component
+    // for explosions.
+    //auto fiftyMS = std::chrono::milliseconds(50);
+    //auto frameTimes = {fiftyMS, fiftyMS, fiftyMS, fiftyMS, fiftyMS, fiftyMS, fiftyMS, fiftyMS, fiftyMS, fiftyMS, fiftyMS, fiftyMS, fiftyMS, fiftyMS, fiftyMS, fiftyMS};
+    //auto explosion = entities::explosion::create("explosion.png", {0.0f, 0.25f}, 0.07f, frameTimes);
+    //addEntity(explosion);
+    //shared::Entity pbExplosion = createPBEntity(explosion);
+    //MessageQueueServer::instance().sendMessage(clientId, std::make_shared<messages::NewEntity>(pbExplosion));
 
     //
     // Step 2: Create an entity for the newly joined player and send
