@@ -20,7 +20,7 @@ namespace systems
     class Momentum : public System
     {
       public:
-          Momentum() :
+        Momentum() :
             System({ctti::unnamed_type_id<components::Position>(),
                     ctti::unnamed_type_id<components::Momentum>()})
         {

@@ -2,6 +2,7 @@
 
 #include "MessageQueueServer.hpp"
 #include "components/Momentum.hpp"
+#include "components/Movement.hpp"
 #include "entities/Player.hpp"
 #include "messages/UpdateEntity.hpp"
 
@@ -15,6 +16,7 @@ namespace systems
     // --------------------------------------------------------------
     Network::Network() :
         System({ctti::unnamed_type_id<components::Position>(),
+                ctti::unnamed_type_id<components::Movement>(),
                 ctti::unnamed_type_id<components::Momentum>()})
     {
         //

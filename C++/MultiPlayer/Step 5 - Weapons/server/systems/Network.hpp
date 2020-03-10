@@ -33,7 +33,7 @@ namespace systems
 
       private:
         std::unordered_map<messages::Type, std::function<void(std::uint64_t, std::chrono::microseconds elapsedTime, std::shared_ptr<messages::Message>)>> m_commandMap;
-        std::function<void(std::shared_ptr<entities::Entity>)> m_newEntityHandler{ nullptr };
+        std::function<void(std::shared_ptr<entities::Entity>)> m_newEntityHandler{nullptr};
         std::function<void(std::uint64_t)> m_joinHandler{nullptr};
         std::unordered_set<entities::Entity::IdType> m_reportThese;
 
