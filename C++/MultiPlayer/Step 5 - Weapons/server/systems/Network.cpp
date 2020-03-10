@@ -112,7 +112,8 @@ namespace systems
                     m_reportThese.insert(entityId);
                     break;
                 case shared::InputType::FireWeapon:
-                    std::cout << "weapon fired" << std::endl;
+                    auto missile = entities::fireWeapon(entity);
+                    m_newEntityHandler(missile);
                     break;
             }
         }

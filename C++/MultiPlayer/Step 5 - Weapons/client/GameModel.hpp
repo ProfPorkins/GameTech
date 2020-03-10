@@ -42,7 +42,7 @@ class GameModel
 
     std::unique_ptr<systems::Network> m_systemNetwork;
     std::unique_ptr<systems::KeyboardInput> m_systemKeyboardInput;
-    std::unique_ptr<systems::Movement> m_systemMovement;
+    std::unique_ptr<systems::Momentum> m_systemMomentum;
     std::unique_ptr<systems::Renderer> m_systemRender;
 
     std::shared_ptr<entities::Entity> createEntity(const shared::Entity& pbEntity);

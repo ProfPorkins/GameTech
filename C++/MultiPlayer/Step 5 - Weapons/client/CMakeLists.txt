@@ -97,6 +97,7 @@ endif()
 #
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/assets/playerShip1_blue.png ${CMAKE_CURRENT_BINARY_DIR}/assets/playerShip1_blue.png COPYONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/assets/playerShip1_red.png ${CMAKE_CURRENT_BINARY_DIR}/assets/playerShip1_red.png COPYONLY)
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/assets/missile.png ${CMAKE_CURRENT_BINARY_DIR}/assets/missile.png COPYONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/assets/explosion.png ${CMAKE_CURRENT_BINARY_DIR}/assets/explosion.png COPYONLY)
 
 target_link_libraries(Client Shared sfml-main sfml-graphics sfml-audio sfml-system sfml-window sfml-network ${SOCKET_LIBRARY})

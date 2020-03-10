@@ -15,7 +15,7 @@ namespace systems
     // entity's state during the update stage.
     //
     // --------------------------------------------------------------
-    bool Movement::addEntity(std::shared_ptr<entities::Entity> entity)
+    bool Momentum::addEntity(std::shared_ptr<entities::Entity> entity)
     {
         bool interested = false;
         if (System::addEntity(entity))
@@ -37,7 +37,7 @@ namespace systems
     // provided by the server.  Some require entity (clien) prediction.
     //
     // --------------------------------------------------------------
-    void Movement::update(std::chrono::microseconds elapsedTime)
+    void Momentum::update(std::chrono::microseconds elapsedTime)
     {
         for (auto&& [id, entity] : m_entities)
         {
@@ -94,6 +94,6 @@ namespace systems
                 }
             }
         }
-    } // namespace systems
+    }
 
-} // namespace systems
+}

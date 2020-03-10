@@ -56,9 +56,6 @@ namespace entities
 {
     void thrust(entities::Entity* entity, std::chrono::microseconds howLong)
     {
-        const float PI = 3.14159f;
-        const float DEGREES_TO_RADIANS = PI / 180.0f;
-
         auto position = entity->getComponent<components::Position>();
         auto movement = entity->getComponent<components::Movement>();
         auto momentum = entity->getComponent<components::Momentum>();
@@ -86,6 +83,24 @@ namespace entities
         auto movement = entity->getComponent<components::Movement>();
 
         position->setOrientation(position->getOrientation() + movement->getRotateRate() * howLong.count());
+    }
+
+    std::shared_ptr<Entity> fireWeapon(entities::Entity* entity)
+    {
+        auto position = entity->getComponent<components::Position>();
+        auto momentum = entity->getComponent<components::Momentum>();
+
+        auto missile = std::make_shared<entities::Entity>();
+        missile->addComponent(std::make_unique<components::Appearance>("missile.png"));
+        missile->addComponent(std::make_unique<components::Position>(position->get()));
+        missile->addComponent(std::make_unique<components::Size>(math::Vector2f(0.01f, 0.01f)));
+
+        auto vectorX = std::cos(position->getOrientation() * DEGREES_TO_RADIANS);
+        auto vectorY = std::sin(position->getOrientation() * DEGREES_TO_RADIANS);
+        auto missileMomentum = math::Vector2f(momentum->get().x + vectorX * 0.0000003f, momentum->get().y + vectorY * 0.0000003f);
+        missile->addComponent(std::make_unique<components::Momentum>(missileMomentum));
+
+        return missile;
     }
 
     void drift(entities::Entity* entity, std::chrono::microseconds howLong)

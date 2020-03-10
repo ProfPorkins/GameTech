@@ -1,6 +1,6 @@
 #pragma once
 
-#include "components/Movement.hpp"
+#include "components/Momentum.hpp"
 #include "components/Position.hpp"
 #include "entities/Entity.hpp"
 #include "systems/System.hpp"
@@ -17,12 +17,12 @@ namespace systems
     // entity interpolation and entity prediction.
     //
     // --------------------------------------------------------------
-    class Movement : public System
+    class Momentum : public System
     {
       public:
-        Movement() :
+          Momentum() :
             System({ctti::unnamed_type_id<components::Position>(),
-                    ctti::unnamed_type_id<components::Movement>()})
+                    ctti::unnamed_type_id<components::Momentum>()})
         {
         }
 

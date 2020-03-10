@@ -30,7 +30,7 @@ class GameModel
     entities::EntityMap m_entities;
 
     std::unique_ptr<systems::Network> m_systemNetwork;
-    std::unique_ptr<systems::Momentum> m_systemMovement;
+    std::unique_ptr<systems::Momentum> m_systemMomentum;
 
     void addEntity(std::shared_ptr<entities::Entity> entity);
     void removeEntity(entities::Entity::IdType entityId);
@@ -41,4 +41,5 @@ class GameModel
     void handleConnect(std::uint64_t clientId);
     void handleDisconnect(std::uint64_t clientId);
     void handleJoin(std::uint64_t clientId);
+    void handleNewEntity(std::shared_ptr<entities::Entity> entity);
 };

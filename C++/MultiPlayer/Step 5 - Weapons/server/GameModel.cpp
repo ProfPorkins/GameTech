@@ -34,7 +34,7 @@ void GameModel::update(const std::chrono::microseconds elapsedTime)
     //       match the order of KeyboardInput before movement on the client.
     m_systemNetwork->update(elapsedTime, MessageQueueServer::instance().getMessages());
 
-    m_systemMovement->update(elapsedTime);
+    m_systemMomentum->update(elapsedTime);
 }
 
 // --------------------------------------------------------------
@@ -52,9 +52,10 @@ bool GameModel::initialize()
     //
     // Initialize the various systems
     m_systemNetwork = std::make_unique<systems::Network>();
+    m_systemNetwork->registerNewEntityHandler(std::bind(&GameModel::handleNewEntity, this, std::placeholders::_1));
     m_systemNetwork->registerJoinHandler(std::bind(&GameModel::handleJoin, this, std::placeholders::_1));
 
-    m_systemMovement = std::make_unique<systems::Momentum>();
+    m_systemMomentum = std::make_unique<systems::Momentum>();
 
     MessageQueueServer::instance().registerConnectHandler(std::bind(&GameModel::handleConnect, this, std::placeholders::_1));
     MessageQueueServer::instance().registerDisconnectHandler(std::bind(&GameModel::handleDisconnect, this, std::placeholders::_1));
@@ -119,7 +120,7 @@ void GameModel::addEntity(std::shared_ptr<entities::Entity> entity)
     m_entities[entity->getId()] = entity;
 
     m_systemNetwork->addEntity(entity);
-    m_systemMovement->addEntity(entity);
+    m_systemMomentum->addEntity(entity);
 }
 
 // --------------------------------------------------------------
@@ -134,7 +135,7 @@ void GameModel::removeEntity(entities::Entity::IdType entityId)
     //
     // Let each of the systems know to remove the entity
     m_systemNetwork->removeEntity(entityId);
-    m_systemMovement->removeEntity(entityId);
+    m_systemMomentum->removeEntity(entityId);
 }
 
 // --------------------------------------------------------------
@@ -327,4 +328,13 @@ void GameModel::handleJoin(std::uint64_t clientId)
             MessageQueueServer::instance().sendMessage(otherId, entityMessage);
         }
     }
+}
+
+void GameModel::handleNewEntity(std::shared_ptr<entities::Entity> entity)
+{
+    addEntity(entity);
+    //
+    // Build the protobuf representation and get it sent off to the client
+    shared::Entity pbEntity = createPBEntity(entity);
+    MessageQueueServer::instance().broadcastMessage(std::make_shared<messages::NewEntity>(pbEntity));
 }

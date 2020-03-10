@@ -20,8 +20,12 @@ namespace entities::player
 
 namespace entities
 {
+    const float PI = 3.14159f;
+    const float DEGREES_TO_RADIANS = PI / 180.0f;
+
     void thrust(entities::Entity* entity, std::chrono::microseconds howLong);
     void rotateLeft(entities::Entity* entity, std::chrono::microseconds howLong);
     void rotateRight(entities::Entity* entity, std::chrono::microseconds howLong);
+    std::shared_ptr<Entity> fireWeapon(entities::Entity* entity);
     void drift(entities::Entity* entity, std::chrono::microseconds howLong);
 } // namespace entities
