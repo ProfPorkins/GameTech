@@ -93,7 +93,7 @@ namespace entities
         auto missile = std::make_shared<entities::Entity>();
         missile->addComponent(std::make_unique<components::Appearance>("missile.png"));
         missile->addComponent(std::make_unique<components::Position>(position->get()));
-        missile->addComponent(std::make_unique<components::Size>(math::Vector2f(0.01f, 0.01f)));
+        missile->addComponent(std::make_unique<components::Size>(math::Vector2f(0.005f, 0.005f)));
 
         auto vectorX = std::cos(position->getOrientation() * DEGREES_TO_RADIANS);
         auto vectorY = std::sin(position->getOrientation() * DEGREES_TO_RADIANS);
