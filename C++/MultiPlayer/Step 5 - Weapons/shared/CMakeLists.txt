@@ -10,6 +10,7 @@ set(PROTOBUF_FILES
     messages/protos/EntityId.proto
     messages/protos/Input.proto
     messages/protos/InputComponent.proto
+    messages/protos/LifetimeComponent.proto
     messages/protos/MessageId.proto
     messages/protos/MomentumComponent.proto
     messages/protos/MovementComponent.proto
@@ -55,6 +56,7 @@ set(SHARED_COMPONENTS_HEADERS
     components/Appearance.hpp
     components/Component.hpp
     components/Input.hpp
+    components/Lifetime.hpp
     components/Momentum.hpp
     components/Movement.hpp
     components/Position.hpp

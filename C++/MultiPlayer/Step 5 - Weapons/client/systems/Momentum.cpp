@@ -5,8 +5,6 @@
 #include "entities/Player.hpp"
 #include "misc/math.hpp"
 
-#include <iostream>
-
 namespace systems
 {
     // --------------------------------------------------------------
@@ -47,7 +45,6 @@ namespace systems
             auto floatingTime = elapsedTime;
             if (entity->hasComponent<components::Goal>())
             {
-                std::cout << "has goal" << std::endl;
                 auto goal = entity->getComponent<components::Goal>();
                 //
                 // Protect against divide by 0 in addition to checking for remaining update window time

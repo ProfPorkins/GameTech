@@ -15,6 +15,7 @@
 #include "systems/Momentum.hpp"
 #include "systems/Network.hpp"
 #include "systems/Renderer.hpp"
+#include "systems/Lifetime.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window/Event.hpp>
@@ -37,12 +38,12 @@ class GameModel
     math::Vector2f m_viewSize;
 
     entities::EntityMap m_entities;
-    entities::EntityMap m_entitiesKeyboardInput;
-    entities::EntityMap m_entitiesRenderable;
+    std::unordered_set<entities::Entity::IdType> m_removeEntities;
 
-    std::unique_ptr<systems::Network> m_systemNetwork;
     std::unique_ptr<systems::KeyboardInput> m_systemKeyboardInput;
+    std::unique_ptr<systems::Lifetime> m_systemLifetime;
     std::unique_ptr<systems::Momentum> m_systemMomentum;
+    std::unique_ptr<systems::Network> m_systemNetwork;
     std::unique_ptr<systems::Renderer> m_systemRender;
 
     std::shared_ptr<entities::Entity> createEntity(const shared::Entity& pbEntity);

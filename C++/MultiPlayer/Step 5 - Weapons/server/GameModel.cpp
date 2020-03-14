@@ -7,6 +7,7 @@
 #include "components/Movement.hpp"
 #include "components/Position.hpp"
 #include "components/Size.hpp"
+#include "components/Lifetime.hpp"
 #include "entities/Explosion.hpp"
 #include "entities/Player.hpp"
 #include "messages/ConnectAck.hpp"
@@ -262,6 +263,12 @@ shared::Entity GameModel::createPBEntity(std::shared_ptr<entities::Entity>& enti
     {
         pbEntity.mutable_momentum()->mutable_momentum()->set_x(entity->getComponent<components::Momentum>()->get().x);
         pbEntity.mutable_momentum()->mutable_momentum()->set_y(entity->getComponent<components::Momentum>()->get().y);
+    }
+
+    if (entity->hasComponent<components::Lifetime>())
+    {
+        auto lifetime = entity->getComponent<components::Lifetime>();
+        pbEntity.mutable_lifetime()->set_howlong(static_cast<std::uint32_t>(lifetime->get().count()));
     }
 
     return pbEntity;

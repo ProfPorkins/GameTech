@@ -8,6 +8,7 @@
 #include "components/Position.hpp"
 #include "components/Size.hpp"
 #include "components/Sprite.hpp"
+#include "components/Lifetime.hpp"
 
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -48,6 +49,10 @@ bool GameModel::initialize(math::Vector2f viewSize)
     m_systemMomentum = std::make_unique<systems::Momentum>();
 
     //
+    // Initialize the lifeftime system.
+    m_systemLifetime = std::make_unique < systems::Lifetime>(std::bind(&GameModel::handleRemoveEntity, this, std::placeholders::_1));
+
+    //
     // Initialize the renderer system.
     m_systemRender = std::make_unique<systems::Renderer>();
 
@@ -74,12 +79,21 @@ void GameModel::signalKeyReleased(sf::Event::KeyEvent event, std::chrono::micros
 void GameModel::update(const std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now, std::shared_ptr<sf::RenderTarget> renderTarget)
 {
     //
-    // Process the network system first, it is like local input, so should
+    // Remove any entties we've been notified to get rid of first
+    for (auto&& id : m_removeEntities)
+    {
+        removeEntity(id);
+    }
+    m_removeEntities.clear();
+
+    //
+    // Then, process the network system before anything else, it is like local input, so should
     // be processed early.
     m_systemNetwork->update(elapsedTime, now, MessageQueueClient::instance().getMessages());
 
     m_systemKeyboardInput->update(elapsedTime, now);
     m_systemMomentum->update(elapsedTime, now);
+    m_systemLifetime->update(elapsedTime, now);
 
     //
     // Rendering must always be done last
@@ -215,6 +229,12 @@ std::shared_ptr<entities::Entity> GameModel::createEntity(const shared::Entity& 
         entity->addComponent(std::make_unique<components::Input>(inputs));
     }
 
+    if (pbEntity.has_lifetime())
+    {
+        auto howLong = std::chrono::microseconds(pbEntity.lifetime().howlong());
+        entity->addComponent(std::make_unique<components::Lifetime>(howLong));
+    }
+
     return entity;
 }
 
@@ -235,6 +255,7 @@ void GameModel::addEntity(std::shared_ptr<entities::Entity> entity)
     m_systemRender->addEntity(entity);
     m_systemNetwork->addEntity(entity);
     m_systemMomentum->addEntity(entity);
+    m_systemLifetime->addEntity(entity);
 }
 
 // --------------------------------------------------------------
@@ -252,6 +273,7 @@ void GameModel::removeEntity(entities::Entity::IdType entityId)
     m_systemNetwork->removeEntity(entityId);
     m_systemMomentum->removeEntity(entityId);
     m_systemRender->removeEntity(entityId);
+    m_systemLifetime->removeEntity(entityId);
 }
 
 // --------------------------------------------------------------
@@ -262,7 +284,7 @@ void GameModel::removeEntity(entities::Entity::IdType entityId)
 // --------------------------------------------------------------
 void GameModel::handleRemoveEntity(entities::Entity::IdType entityId)
 {
-    removeEntity(entityId);
+    m_removeEntities.insert(entityId);
 }
 
 void GameModel::handleNewEntity(const shared::Entity& pbEntity)
