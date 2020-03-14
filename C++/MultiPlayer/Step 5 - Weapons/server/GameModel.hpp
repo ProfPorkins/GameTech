@@ -11,6 +11,7 @@
 #include "systems/Lifetime.hpp"
 #include "systems/Momentum.hpp"
 #include "systems/Network.hpp"
+#include "systems/Damage.hpp"
 
 #include <SFML/Network.hpp>
 #include <chrono>
@@ -29,8 +30,9 @@ class GameModel
     std::unordered_set<std::uint64_t> m_clients;
     std::unordered_map<std::uint64_t, entities::Entity::IdType> m_clientToEntityId;
     entities::EntityMap m_entities;
-    std::unordered_set<entities::Entity::IdType> m_removeEntities;
+    entities::EntitySet m_removeEntities;
 
+    std::unique_ptr<systems::Damage> m_systemDamage;
     std::unique_ptr<systems::Lifetime> m_systemLifetime;
     std::unique_ptr<systems::Momentum> m_systemMomentum;
     std::unique_ptr<systems::Network> m_systemNetwork;

@@ -29,7 +29,7 @@ namespace systems
         void update(std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now, std::shared_ptr<sf::RenderTarget> renderTarget);
 
       protected:
-        virtual bool isInterested(entities::Entity* entity);
+        virtual bool isInterested(entities::Entity* entity) override;
 
       private:
     };

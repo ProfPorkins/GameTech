@@ -7,6 +7,7 @@
 #include <ctti/type_id.hpp>
 #include <memory>
 #include <unordered_map>
+#include <unordered_set>
 
 //
 // Want to allow the server game model to set the starting point for the Entity
@@ -69,6 +70,7 @@ namespace entities
 
     // Convenience type alias for use throughout the framework
     using EntityMap = std::unordered_map<Entity::IdType, std::shared_ptr<Entity>>;
+    using EntitySet = std::unordered_set<Entity::IdType>;
 
     // --------------------------------------------------------------
     //

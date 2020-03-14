@@ -25,10 +25,12 @@ set(SERVER_COMPONENTS_SOURCES
     )
 
 set(SERVER_SYSTEMS_HEADERS
+    systems/Damage.hpp
     systems/Momentum.hpp
     systems/Network.hpp
     )
 set(SERVER_SYSTEMS_SOURCES
+    systems/Damage.cpp
     systems/Momentum.cpp
     systems/Network.cpp
     )

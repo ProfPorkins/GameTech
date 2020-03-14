@@ -2,9 +2,6 @@
 
 #include "entities/Player.hpp"
 
-#include <SFML/System/Vector2.hpp>
-#include <chrono>
-
 namespace systems
 {
     // --------------------------------------------------------------

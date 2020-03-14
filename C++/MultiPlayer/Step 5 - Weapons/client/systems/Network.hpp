@@ -43,7 +43,7 @@ namespace systems
         std::function<void(const shared::Entity&)> m_newEntityHandler{nullptr};
         std::uint32_t m_lastMessageId{0};
 
-        std::unordered_set<entities::Entity::IdType> m_updatedEntities;
+        entities::EntitySet m_updatedEntities;
 
         void handleConnectAck(std::shared_ptr<messages::ConnectAck> message);
         void handleUpdateEntity(std::shared_ptr<messages::UpdateEntity> message, const std::chrono::system_clock::time_point now);

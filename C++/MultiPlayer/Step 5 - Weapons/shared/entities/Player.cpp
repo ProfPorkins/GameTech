@@ -7,6 +7,8 @@
 #include "components/Movement.hpp"
 #include "components/Position.hpp"
 #include "components/Size.hpp"
+#include "components/Weapon.hpp"
+#include "components/Health.hpp"
 
 #include <iostream>
 
@@ -17,7 +19,7 @@ namespace entities::player
     // Server-side function to create a new player entity.
     //
     // --------------------------------------------------------------
-    std::shared_ptr<Entity> create(std::string texture, math::Vector2f position, float size, float thrustRate, float rotateRate, math::Vector2f momentum)
+    std::shared_ptr<Entity> create(std::string texture, math::Vector2f position, float size, float thrustRate, float rotateRate, math::Vector2f momentum, float health)
     {
         //
         // Have to convert momentum to microseconds from milliseconds
@@ -36,6 +38,7 @@ namespace entities::player
             rotateRate / MS_TO_US)); // rotateRate comes in per millisecond
 
         entity->addComponent(std::make_unique<components::Momentum>(momentum));
+        entity->addComponent(std::make_unique<components::Health>(health));
 
         auto inputs = {
             components::Input::Type::Thrust,
@@ -103,6 +106,7 @@ namespace entities
         auto vectorY = std::sin(position->getOrientation() * DEGREES_TO_RADIANS);
         auto missileMomentum = math::Vector2f(momentum->get().x + vectorX * 0.0000003f, momentum->get().y + vectorY * 0.0000003f);
         missile->addComponent(std::make_unique<components::Momentum>(missileMomentum));
+        missile->addComponent(std::make_unique<components::Weapon>(50.0f));
 
         return missile;
     }

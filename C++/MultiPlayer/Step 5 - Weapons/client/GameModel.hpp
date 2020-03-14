@@ -38,7 +38,7 @@ class GameModel
     math::Vector2f m_viewSize;
 
     entities::EntityMap m_entities;
-    std::unordered_set<entities::Entity::IdType> m_removeEntities;
+    entities::EntitySet m_removeEntities;
 
     std::unique_ptr<systems::KeyboardInput> m_systemKeyboardInput;
     std::unique_ptr<systems::Lifetime> m_systemLifetime;

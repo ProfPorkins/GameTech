@@ -45,6 +45,7 @@ void GameModel::update(const std::chrono::microseconds elapsedTime, const std::c
 
     m_systemMomentum->update(elapsedTime, now);
     m_systemLifetime->update(elapsedTime, now);
+    m_systemDamage->update(elapsedTime, now);
 }
 
 // --------------------------------------------------------------
@@ -67,6 +68,7 @@ bool GameModel::initialize()
 
     m_systemMomentum = std::make_unique<systems::Momentum>();
     m_systemLifetime = std::make_unique<systems::Lifetime>(std::bind(&GameModel::handleRemoveEntity, this, std::placeholders::_1));
+    m_systemDamage = std::make_unique<systems::Damage>();
 
     MessageQueueServer::instance().registerConnectHandler(std::bind(&GameModel::handleConnect, this, std::placeholders::_1));
     MessageQueueServer::instance().registerDisconnectHandler(std::bind(&GameModel::handleDisconnect, this, std::placeholders::_1));
@@ -133,6 +135,7 @@ void GameModel::addEntity(std::shared_ptr<entities::Entity> entity)
     m_systemNetwork->addEntity(entity);
     m_systemMomentum->addEntity(entity);
     m_systemLifetime->addEntity(entity);
+    m_systemDamage->addEntity(entity);
 }
 
 // --------------------------------------------------------------
@@ -149,6 +152,7 @@ void GameModel::removeEntity(entities::Entity::IdType entityId)
     m_systemNetwork->removeEntity(entityId);
     m_systemMomentum->removeEntity(entityId);
     m_systemLifetime->removeEntity(entityId);
+    m_systemDamage->removeEntity(entityId);
 }
 
 // --------------------------------------------------------------
@@ -314,7 +318,7 @@ void GameModel::handleJoin(std::uint64_t clientId)
     //         it to the newly joined client
 
     // Generate a player, add to server simulation, and send to the client
-    auto player = entities::player::create("playerShip1_Blue.png", {0.0f, 0.0f}, 0.05f, 0.0000000002f, 180.0f / 1000, {0, 0});
+    auto player = entities::player::create("playerShip1_Blue.png", {0.0f, 0.0f}, 0.05f, 0.0000000002f, 180.0f / 1000, {0, 0}, 100.0f);
     addEntity(player);
     m_clientToEntityId[clientId] = player->getId();
 

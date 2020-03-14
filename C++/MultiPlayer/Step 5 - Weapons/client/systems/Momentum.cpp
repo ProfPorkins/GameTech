@@ -5,8 +5,6 @@
 #include "entities/Player.hpp"
 #include "misc/math.hpp"
 
-#include <iostream>
-
 namespace systems
 {
     // --------------------------------------------------------------

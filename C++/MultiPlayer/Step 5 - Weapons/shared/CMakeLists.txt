@@ -55,12 +55,14 @@ set(SHARED_COMPONENTS_HEADERS
     components/AnimatedAppearance.hpp
     components/Appearance.hpp
     components/Component.hpp
+    components/Health.hpp
     components/Input.hpp
     components/Lifetime.hpp
     components/Momentum.hpp
     components/Movement.hpp
     components/Position.hpp
     components/Size.hpp
+    components/Weapon.hpp
     )
 set(SHARED_COMPONENTS_SOURCES
     )
