@@ -10,8 +10,7 @@ namespace systems
 {
     // --------------------------------------------------------------
     //
-    // This system is used to manage entities whose lifetime is controlled
-    // at the client.
+    // This system is used to manage entities that have a lifetime.
     //
     // --------------------------------------------------------------
     class Lifetime : public System
