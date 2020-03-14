@@ -35,8 +35,6 @@ class GameModel
     sf::Vector2f m_viewSize;
 
     entities::EntityMap m_entities;
-    entities::EntityMap m_entitiesKeyboardInput;
-    entities::EntityMap m_entitiesRenderable;
 
     std::unique_ptr<systems::Network> m_systemNetwork;
     std::unique_ptr<systems::KeyboardInput> m_systemKeyboardInput;

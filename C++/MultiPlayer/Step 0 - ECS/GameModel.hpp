@@ -23,8 +23,6 @@ class GameModel
     std::unordered_set<std::shared_ptr<sf::Texture>> m_textures;
 
     entities::EntityMap m_entities;
-    entities::EntityMap m_entitiesKeyboardInput;
-    entities::EntityMap m_entitiesRenderable;
 
     std::unique_ptr<systems::KeyboardInput> m_systemKeyboardInput;
     std::unique_ptr<systems::Renderer> m_systemRender;
