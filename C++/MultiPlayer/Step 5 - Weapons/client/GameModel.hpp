@@ -12,10 +12,10 @@
 #include "entities/Entity.hpp"
 #include "misc/math.hpp"
 #include "systems/KeyboardInput.hpp"
+#include "systems/Lifetime.hpp"
 #include "systems/Momentum.hpp"
 #include "systems/Network.hpp"
 #include "systems/Renderer.hpp"
-#include "systems/Lifetime.hpp"
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Window/Event.hpp>

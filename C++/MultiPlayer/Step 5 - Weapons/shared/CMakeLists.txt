@@ -66,9 +66,11 @@ set(SHARED_COMPONENTS_SOURCES
     )
 
 set(SHARED_SYSTEMS_HEADERS
+    systems/Lifetime.hpp
     systems/System.hpp
     )
 set(SHARED_SYSTEMS_SOURCES
+    systems/Lifetime.cpp
     systems/System.cpp
     )
 

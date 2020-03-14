@@ -3,12 +3,12 @@
 #include "MessageQueueClient.hpp"
 #include "components/AnimatedSprite.hpp"
 #include "components/Input.hpp"
+#include "components/Lifetime.hpp"
 #include "components/Momentum.hpp"
 #include "components/Movement.hpp"
 #include "components/Position.hpp"
 #include "components/Size.hpp"
 #include "components/Sprite.hpp"
-#include "components/Lifetime.hpp"
 
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/System/Vector2.hpp>
@@ -50,7 +50,7 @@ bool GameModel::initialize(math::Vector2f viewSize)
 
     //
     // Initialize the lifeftime system.
-    m_systemLifetime = std::make_unique < systems::Lifetime>(std::bind(&GameModel::handleRemoveEntity, this, std::placeholders::_1));
+    m_systemLifetime = std::make_unique<systems::Lifetime>(std::bind(&GameModel::handleRemoveEntity, this, std::placeholders::_1));
 
     //
     // Initialize the renderer system.
@@ -79,7 +79,7 @@ void GameModel::signalKeyReleased(sf::Event::KeyEvent event, std::chrono::micros
 void GameModel::update(const std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now, std::shared_ptr<sf::RenderTarget> renderTarget)
 {
     //
-    // Remove any entties we've been notified to get rid of first
+    // Remove any entites we've been notified to get rid of first
     for (auto&& id : m_removeEntities)
     {
         removeEntity(id);

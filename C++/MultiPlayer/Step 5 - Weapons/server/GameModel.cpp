@@ -3,11 +3,11 @@
 #include "MessageQueueServer.hpp"
 #include "components/AnimatedAppearance.hpp"
 #include "components/Appearance.hpp"
+#include "components/Lifetime.hpp"
 #include "components/Momentum.hpp"
 #include "components/Movement.hpp"
 #include "components/Position.hpp"
 #include "components/Size.hpp"
-#include "components/Lifetime.hpp"
 #include "entities/Explosion.hpp"
 #include "entities/Player.hpp"
 #include "messages/ConnectAck.hpp"
@@ -29,13 +29,22 @@
 void GameModel::update(const std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now)
 {
     //
-    // Process the network system first, it is like local input, so should
-    // be processed early on.
+    // Remove any entites we've been notified to get rid of first
+    for (auto&& id : m_removeEntities)
+    {
+        removeEntity(id);
+    }
+    m_removeEntities.clear();
+
+    //
+    // Then, process the network system before anything else, it is like local input, so should
+    // be processed early.
     // Note: It now has to be processed before movement in order to correctly
     //       match the order of KeyboardInput before movement on the client.
     m_systemNetwork->update(elapsedTime, now, MessageQueueServer::instance().getMessages());
 
     m_systemMomentum->update(elapsedTime, now);
+    m_systemLifetime->update(elapsedTime, now);
 }
 
 // --------------------------------------------------------------
@@ -57,6 +66,7 @@ bool GameModel::initialize()
     m_systemNetwork->registerJoinHandler(std::bind(&GameModel::handleJoin, this, std::placeholders::_1));
 
     m_systemMomentum = std::make_unique<systems::Momentum>();
+    m_systemLifetime = std::make_unique<systems::Lifetime>(std::bind(&GameModel::handleRemoveEntity, this, std::placeholders::_1));
 
     MessageQueueServer::instance().registerConnectHandler(std::bind(&GameModel::handleConnect, this, std::placeholders::_1));
     MessageQueueServer::instance().registerDisconnectHandler(std::bind(&GameModel::handleDisconnect, this, std::placeholders::_1));
@@ -122,6 +132,7 @@ void GameModel::addEntity(std::shared_ptr<entities::Entity> entity)
 
     m_systemNetwork->addEntity(entity);
     m_systemMomentum->addEntity(entity);
+    m_systemLifetime->addEntity(entity);
 }
 
 // --------------------------------------------------------------
@@ -137,6 +148,7 @@ void GameModel::removeEntity(entities::Entity::IdType entityId)
     // Let each of the systems know to remove the entity
     m_systemNetwork->removeEntity(entityId);
     m_systemMomentum->removeEntity(entityId);
+    m_systemLifetime->removeEntity(entityId);
 }
 
 // --------------------------------------------------------------
@@ -344,4 +356,14 @@ void GameModel::handleNewEntity(std::shared_ptr<entities::Entity> entity)
     // Build the protobuf representation and get it sent off to the client
     shared::Entity pbEntity = createPBEntity(entity);
     MessageQueueServer::instance().broadcastMessage(std::make_shared<messages::NewEntity>(pbEntity));
+}
+
+// --------------------------------------------------------------
+//
+// Used to build up the list of entities to remove in the next update.
+//
+// --------------------------------------------------------------
+void GameModel::handleRemoveEntity(entities::Entity::IdType entityId)
+{
+    m_removeEntities.insert(entityId);
 }

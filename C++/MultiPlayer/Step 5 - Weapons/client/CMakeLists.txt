@@ -25,14 +25,12 @@ set(CLIENT_COMPONENTS_SOURCES
 
 set(CLIENT_SYSTEMS_HEADERS
     systems/KeyboardInput.hpp
-    systems/Lifetime.hpp
     systems/Momentum.hpp
     systems/Network.hpp
     systems/Renderer.hpp
     )
 set(CLIENT_SYSTEMS_SOURCES
     systems/KeyboardInput.cpp
-    systems/Lifetime.cpp
     systems/Momentum.cpp
     systems/Network.cpp
     systems/Renderer.cpp

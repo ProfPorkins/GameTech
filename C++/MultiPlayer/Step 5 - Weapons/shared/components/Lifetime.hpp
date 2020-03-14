@@ -14,7 +14,7 @@ namespace components
     class Lifetime : public Component
     {
       public:
-          Lifetime(std::chrono::microseconds howLong) :
+        Lifetime(std::chrono::microseconds howLong) :
             m_howLong(howLong)
         {
         }
@@ -23,6 +23,6 @@ namespace components
         void update(std::chrono::microseconds howMuch) { m_howLong -= howMuch; }
 
       private:
-          std::chrono::microseconds m_howLong;
+        std::chrono::microseconds m_howLong;
     };
 } // namespace components

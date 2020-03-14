@@ -2,11 +2,13 @@
 
 #include "components/Appearance.hpp"
 #include "components/Input.hpp"
+#include "components/Lifetime.hpp"
 #include "components/Momentum.hpp"
 #include "components/Movement.hpp"
 #include "components/Position.hpp"
 #include "components/Size.hpp"
-#include "components/Lifetime.hpp"
+
+#include <iostream>
 
 namespace entities::player
 {
@@ -95,7 +97,7 @@ namespace entities
         missile->addComponent(std::make_unique<components::Appearance>("missile.png"));
         missile->addComponent(std::make_unique<components::Position>(position->get()));
         missile->addComponent(std::make_unique<components::Size>(math::Vector2f(0.005f, 0.005f)));
-        missile->addComponent(std::make_unique<components::Lifetime>(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::milliseconds(4000))));
+        missile->addComponent(std::make_unique<components::Lifetime>(std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::milliseconds(2000))));
 
         auto vectorX = std::cos(position->getOrientation() * DEGREES_TO_RADIANS);
         auto vectorY = std::sin(position->getOrientation() * DEGREES_TO_RADIANS);

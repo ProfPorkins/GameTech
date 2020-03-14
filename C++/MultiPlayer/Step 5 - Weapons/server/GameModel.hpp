@@ -8,6 +8,7 @@
 #pragma warning(pop)
 
 #include "entities/Entity.hpp"
+#include "systems/Lifetime.hpp"
 #include "systems/Momentum.hpp"
 #include "systems/Network.hpp"
 
@@ -28,9 +29,11 @@ class GameModel
     std::unordered_set<std::uint64_t> m_clients;
     std::unordered_map<std::uint64_t, entities::Entity::IdType> m_clientToEntityId;
     entities::EntityMap m_entities;
+    std::unordered_set<entities::Entity::IdType> m_removeEntities;
 
-    std::unique_ptr<systems::Network> m_systemNetwork;
+    std::unique_ptr<systems::Lifetime> m_systemLifetime;
     std::unique_ptr<systems::Momentum> m_systemMomentum;
+    std::unique_ptr<systems::Network> m_systemNetwork;
 
     void addEntity(std::shared_ptr<entities::Entity> entity);
     void removeEntity(entities::Entity::IdType entityId);
@@ -42,4 +45,5 @@ class GameModel
     void handleDisconnect(std::uint64_t clientId);
     void handleJoin(std::uint64_t clientId);
     void handleNewEntity(std::shared_ptr<entities::Entity> entity);
+    void handleRemoveEntity(entities::Entity::IdType entityId);
 };

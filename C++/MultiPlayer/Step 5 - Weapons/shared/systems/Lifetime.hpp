@@ -17,15 +17,15 @@ namespace systems
     class Lifetime : public System
     {
       public:
-          Lifetime(std::function<void(entities::Entity::IdType entityId)> notifyRemove) :
+        Lifetime(std::function<void(entities::Entity::IdType entityId)> notifyRemove) :
             System({ctti::unnamed_type_id<components::Lifetime>()}),
-              m_notifyRemove(notifyRemove)
+            m_notifyRemove(notifyRemove)
         {
         }
 
         void update(std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now) override;
 
-    private:
+      private:
         std::function<void(entities::Entity::IdType entityId)> m_notifyRemove;
     };
 } // namespace systems
