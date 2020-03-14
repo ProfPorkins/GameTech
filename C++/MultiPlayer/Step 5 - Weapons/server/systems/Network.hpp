@@ -29,7 +29,7 @@ namespace systems
 
         void registerNewEntityHandler(std::function<void(std::shared_ptr<entities::Entity>)> handler) { m_newEntityHandler = handler; }
         void registerJoinHandler(std::function<void(std::uint64_t clientId)> handler) { m_joinHandler = handler; }
-        void update(std::chrono::microseconds elapsedTime, std::queue<std::tuple<std::uint64_t, std::shared_ptr<messages::Message>>> messages);
+        void update(std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now, std::queue<std::tuple<std::uint64_t, std::shared_ptr<messages::Message>>> messages);
 
       private:
         std::unordered_map<messages::Type, std::function<void(std::uint64_t, std::chrono::microseconds elapsedTime, std::shared_ptr<messages::Message>)>> m_commandMap;

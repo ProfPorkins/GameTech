@@ -71,19 +71,19 @@ void GameModel::signalKeyReleased(sf::Event::KeyEvent event, std::chrono::micros
 // must complete before rendering can start.
 //
 // --------------------------------------------------------------
-void GameModel::update(const std::chrono::microseconds elapsedTime, std::shared_ptr<sf::RenderTarget> renderTarget)
+void GameModel::update(const std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now, std::shared_ptr<sf::RenderTarget> renderTarget)
 {
     //
     // Process the network system first, it is like local input, so should
     // be processed early.
-    m_systemNetwork->update(elapsedTime, MessageQueueClient::instance().getMessages());
+    m_systemNetwork->update(elapsedTime, now, MessageQueueClient::instance().getMessages());
 
-    m_systemKeyboardInput->update(elapsedTime);
-    m_systemMomentum->update(elapsedTime);
+    m_systemKeyboardInput->update(elapsedTime, now);
+    m_systemMomentum->update(elapsedTime, now);
 
     //
     // Rendering must always be done last
-    m_systemRender->update(elapsedTime, renderTarget);
+    m_systemRender->update(elapsedTime, now, renderTarget);
 }
 
 // --------------------------------------------------------------

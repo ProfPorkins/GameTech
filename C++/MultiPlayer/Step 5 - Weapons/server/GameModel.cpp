@@ -25,16 +25,16 @@
 // updates are sent out.
 //
 // --------------------------------------------------------------
-void GameModel::update(const std::chrono::microseconds elapsedTime)
+void GameModel::update(const std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now)
 {
     //
     // Process the network system first, it is like local input, so should
     // be processed early on.
     // Note: It now has to be processed before movement in order to correctly
     //       match the order of KeyboardInput before movement on the client.
-    m_systemNetwork->update(elapsedTime, MessageQueueServer::instance().getMessages());
+    m_systemNetwork->update(elapsedTime, now, MessageQueueServer::instance().getMessages());
 
-    m_systemMomentum->update(elapsedTime);
+    m_systemMomentum->update(elapsedTime, now);
 }
 
 // --------------------------------------------------------------

@@ -30,26 +30,30 @@ namespace systems
         //
         // We know how to privately handle these messages
         registerHandler(messages::Type::ConnectAck,
-                        [this](std::chrono::microseconds elapsedTime, std::shared_ptr<messages::Message> message) {
+                        [this](std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now, std::shared_ptr<messages::Message> message) {
+            (void)elapsedTime;
+            (void)now;
                             // Not completely in love with having to do a static_pointer_cast, but living with it for now
-                            handleConnectAck(elapsedTime, std::static_pointer_cast<messages::ConnectAck>(message));
+                            handleConnectAck(std::static_pointer_cast<messages::ConnectAck>(message));
                         });
 
         registerHandler(messages::Type::NewEntity,
-                        [this](std::chrono::microseconds elapsedTime, std::shared_ptr<messages::Message> message) {
+                        [this](std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now, std::shared_ptr<messages::Message> message) {
                             (void)elapsedTime; // unused parameter
+                            (void)now;
                             m_newEntityHandler(std::static_pointer_cast<messages::NewEntity>(message)->getPBEntity());
                         });
 
         registerHandler(messages::Type::UpdateEntity,
-                        [this](std::chrono::microseconds elapsedTime, std::shared_ptr<messages::Message> message) {
+                        [this](std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now, std::shared_ptr<messages::Message> message) {
                             (void)elapsedTime; // unused parameter
-                            handleUpdateEntity(std::static_pointer_cast<messages::UpdateEntity>(message));
+                            handleUpdateEntity(std::static_pointer_cast<messages::UpdateEntity>(message), now);
                         });
 
         registerHandler(messages::Type::RemoveEntity,
-                        [this](std::chrono::microseconds elapsedTime, std::shared_ptr<messages::Message> message) {
+                        [this](std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now, std::shared_ptr<messages::Message> message) {
                             (void)elapsedTime; // unused parameter
+                            (void)now;
                             auto entityId = std::static_pointer_cast<messages::RemoveEntity>(message)->getPBEntity().id();
                             m_removeEntityHandler(entityId);
                         });
@@ -60,7 +64,7 @@ namespace systems
     // Allow handlers for messages to be registered.
     //
     // --------------------------------------------------------------
-    void Network::registerHandler(messages::Type type, std::function<void(std::chrono::microseconds, std::shared_ptr<messages::Message>)> handler)
+    void Network::registerHandler(messages::Type type, std::function<void(std::chrono::microseconds, const std::chrono::system_clock::time_point, std::shared_ptr<messages::Message>)> handler)
     {
         m_commandMap[type] = handler;
     }
@@ -70,8 +74,9 @@ namespace systems
     // Process all outstanding messages since the last update.
     //
     // --------------------------------------------------------------
-    void Network::update(std::chrono::microseconds elapsedTime, std::queue<std::shared_ptr<messages::Message>> messages)
+    void Network::update(std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now, std::queue<std::shared_ptr<messages::Message>> messages)
     {
+        (void)now;
         m_updatedEntities.clear();
         while (!messages.empty())
         {
@@ -81,7 +86,7 @@ namespace systems
             if (entry != m_commandMap.end())
             {
                 auto& [type, handler] = *entry;
-                handler(elapsedTime, message);
+                handler(elapsedTime, now, message);
             }
             if (message->getMessageId().has_value())
             {
@@ -117,6 +122,9 @@ namespace systems
                             case components::Input::Type::RotateRight:
                                 entities::rotateRight(entity, inputMessage->getElapsedTime());
                                 break;
+                            case components::Input::Type::FireWeapon:
+                                // Not resimulated, we just wait for the server to handle it and respond
+                                break;
                         }
                     }
                 }
@@ -131,9 +139,8 @@ namespace systems
     // to join the game.
     //
     // --------------------------------------------------------------
-    void Network::handleConnectAck(std::chrono::microseconds elapsedTime, std::shared_ptr<messages::ConnectAck> message)
+    void Network::handleConnectAck(std::shared_ptr<messages::ConnectAck> message)
     {
-        (void)elapsedTime;
         //
         // Now, send a Join message back to the server so we can get into the game!
         MessageQueueClient::instance().sendMessage(std::make_shared<messages::Join>());
@@ -146,7 +153,7 @@ namespace systems
     // that are in common between the message and the entity.
     //
     // --------------------------------------------------------------
-    void Network::handleUpdateEntity(std::shared_ptr<messages::UpdateEntity> message)
+    void Network::handleUpdateEntity(std::shared_ptr<messages::UpdateEntity> message, const std::chrono::system_clock::time_point now)
     {
         auto& pbEntity = message->getPBEntity();
         if (m_entities.find(pbEntity.id()) != m_entities.end())
@@ -172,7 +179,7 @@ namespace systems
 
                 position->set(math::Vector2f(pbEntity.position().center().x(), pbEntity.position().center().y()));
                 position->setOrientation(pbEntity.position().orientation());
-                position->setLastServerUpdate();
+                position->setLastServerUpdate(now);
             }
 
             //

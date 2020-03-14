@@ -16,9 +16,10 @@ namespace systems
     // I'll eventually find a better home for it.
     //
     // --------------------------------------------------------------
-    void Renderer::update(std::chrono::microseconds elapsedTime, std::shared_ptr<sf::RenderTarget> renderTarget)
+    void Renderer::update(std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now, std::shared_ptr<sf::RenderTarget> renderTarget)
     {
         (void)elapsedTime; // Ignore the compiler warning
+        (void)now;
 
         // Draw the blue background
         sf::RectangleShape square({1.0f, 1.0f});

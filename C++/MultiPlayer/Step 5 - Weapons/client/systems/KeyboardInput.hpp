@@ -36,7 +36,7 @@ namespace systems
         virtual bool addEntity(std::shared_ptr<entities::Entity> entity) override;
         virtual void removeEntity(entities::Entity::IdType entityId) override;
 
-        virtual void update(std::chrono::microseconds elapsedTime) override;
+        virtual void update(std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now) override;
 
         void keyPressed(sf::Event::KeyEvent keyEvent, std::chrono::microseconds elapsedTime);
         void keyReleased(sf::Event::KeyEvent keyEvent, std::chrono::microseconds elapsedTime);

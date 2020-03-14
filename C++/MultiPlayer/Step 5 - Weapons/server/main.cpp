@@ -34,7 +34,7 @@ int main()
 
     //
     // Grab an initial time-stamp to get the elapsed time working
-    auto previousTime = std::chrono::steady_clock::now();
+    auto previousTime = std::chrono::system_clock::now();
 
     //
     // Get the server loop running.  The game loop runs inside of this loop
@@ -44,7 +44,7 @@ int main()
         //
         // Figure out the elapsed time in microseconds.  Need this to pass on to
         // the game model.
-        auto currentTime = std::chrono::steady_clock::now();
+        auto currentTime = std::chrono::system_clock::now();
         auto elapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(currentTime - previousTime);
         //
         // If we are running faster than the simulate update rate, then go
@@ -56,13 +56,13 @@ int main()
         }
 
         // Recompute elapsed time after doing the sleep, to get an accurate time duration
-        currentTime = std::chrono::steady_clock::now();
+        currentTime = std::chrono::system_clock::now();
         elapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(currentTime - previousTime);
         previousTime = currentTime;
 
         //
         // Execute the game loop steps.  Because this is an ECS model, there is only an update.
-        model.update(elapsedTime);
+        model.update(elapsedTime, currentTime);
     }
 
     //

@@ -46,8 +46,9 @@ namespace systems
     // Process all outstanding messages since the last update.
     //
     // --------------------------------------------------------------
-    void Network::update(std::chrono::microseconds elapsedTime, std::queue<std::tuple<std::uint64_t, std::shared_ptr<messages::Message>>> messages)
+    void Network::update(std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now, std::queue<std::tuple<std::uint64_t, std::shared_ptr<messages::Message>>> messages)
     {
+        (void)now;
         while (!messages.empty())
         {
             auto [clientId, message] = messages.front();

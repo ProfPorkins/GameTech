@@ -29,7 +29,7 @@ class GameModel
 
     void signalKeyPressed(sf::Event::KeyEvent event, std::chrono::microseconds elapsedTime);
     void signalKeyReleased(sf::Event::KeyEvent event, std::chrono::microseconds elapsedTime);
-    void update(const std::chrono::microseconds elapsedTime, std::shared_ptr<sf::RenderTarget> renderTarget);
+    void update(const std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now, std::shared_ptr<sf::RenderTarget> renderTarget);
 
   private:
     // The purpose of this is to have a container that keeps the textures alive throughout the program

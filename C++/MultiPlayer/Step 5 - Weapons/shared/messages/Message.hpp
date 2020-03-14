@@ -19,15 +19,13 @@ namespace messages
     {
       public:
         Message(Type type) :
-            m_type(type),
-            m_timeStamp(std::chrono::system_clock::now())
+            m_type(type)
         {
         }
 
         void setMessageId(std::uint32_t messageId) { m_messageId = messageId; }
         auto getMessageId() { return m_messageId; }
         Type getType() { return m_type; }
-        auto getTimeStamp() { return m_timeStamp; }
 
         virtual std::string serializeToString() const = 0;
         virtual bool parseFromString(const std::string& source) = 0;
@@ -37,6 +35,5 @@ namespace messages
 
       private:
         Type m_type;
-        std::chrono::system_clock::time_point m_timeStamp;
     };
 } // namespace messages

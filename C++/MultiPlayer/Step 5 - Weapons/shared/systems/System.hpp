@@ -34,7 +34,7 @@ namespace systems
         virtual void removeEntity(entities::Entity::IdType entityId);
 
         // The (void)elapsedTime is a technique to silence an unused parameter warning
-        virtual void update(std::chrono::microseconds elapsedTime) { (void)elapsedTime; }
+        virtual void update(std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now) { (void)elapsedTime; (void)now; }
 
       protected:
         entities::EntityMap m_entities;

@@ -5,6 +5,8 @@
 #include "entities/Player.hpp"
 #include "misc/math.hpp"
 
+#include <iostream>
+
 namespace systems
 {
     // --------------------------------------------------------------
@@ -37,7 +39,7 @@ namespace systems
     // provided by the server.  Some require entity (clien) prediction.
     //
     // --------------------------------------------------------------
-    void Momentum::update(std::chrono::microseconds elapsedTime)
+    void Momentum::update(std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now)
     {
         for (auto&& [id, entity] : m_entities)
         {
@@ -45,6 +47,7 @@ namespace systems
             auto floatingTime = elapsedTime;
             if (entity->hasComponent<components::Goal>())
             {
+                std::cout << "has goal" << std::endl;
                 auto goal = entity->getComponent<components::Goal>();
                 //
                 // Protect against divide by 0 in addition to checking for remaining update window time
@@ -90,7 +93,7 @@ namespace systems
                 //else  // TODO: Still not sure if this should be an else
                 {
                     entities::drift(entity.get(), floatingTime);
-                    position->setLastClientUpdate();
+                    position->setLastClientUpdate(now);
                 }
             }
         }

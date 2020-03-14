@@ -28,13 +28,13 @@ namespace components
 
         void resetEntityPrediction() { m_needsEntityPrediction = false; }
         auto getNeedsEntityPrediction() { return m_needsEntityPrediction; }
-        void setLastServerUpdate()
+        void setLastServerUpdate(const std::chrono::system_clock::time_point now)
         {
-            m_lastServerUpdate = std::chrono::system_clock::now();
+            m_lastServerUpdate = now;
             m_needsEntityPrediction = true;
         }
         auto getLastServerUpdate() { return m_lastServerUpdate; }
-        void setLastClientUpdate() { m_lastClientUpdate = std::chrono::system_clock::now(); }
+        void setLastClientUpdate(const std::chrono::system_clock::time_point now) { m_lastClientUpdate = now; }
         auto getLastClientUpdate() { return m_lastClientUpdate; }
 
       private:

@@ -77,7 +77,7 @@ int main()
 
     //
     // Grab an initial time-stamp to get the elapsed time working
-    auto previousTime = std::chrono::steady_clock::now();
+    auto previousTime = std::chrono::system_clock::now();
 
     //
     // Get the Window loop running.  The game loop runs inside of this loop
@@ -87,7 +87,7 @@ int main()
         //
         // Figure out the elapsed time in microseconds.  Need this to pass on to
         // the game model.
-        auto currentTime = std::chrono::steady_clock::now();
+        auto currentTime = std::chrono::system_clock::now();
         auto elapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(currentTime - previousTime);
         previousTime = currentTime;
 
@@ -115,7 +115,7 @@ int main()
         // Execute the game loop steps.  Because this is an ECS model, there is
         // only an update.  The typical processInput and render stages are turned
         // into systems, and those are updated during the model.update.
-        model.update(elapsedTime, window);
+        model.update(elapsedTime, currentTime, window);
 
         //
         // BUT, we still wait until here to display the window...this is what actually

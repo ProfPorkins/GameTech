@@ -12,8 +12,9 @@ namespace systems
     // Move all entities.
     //
     // --------------------------------------------------------------
-    void Momentum::update(std::chrono::microseconds elapsedTime)
+    void Momentum::update(std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now)
     {
+        (void)now;
         for (auto&& [id, entity] : m_entities)
         {
             //
