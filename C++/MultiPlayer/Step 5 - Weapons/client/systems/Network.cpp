@@ -31,8 +31,8 @@ namespace systems
         // We know how to privately handle these messages
         registerHandler(messages::Type::ConnectAck,
                         [this](std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now, std::shared_ptr<messages::Message> message) {
-            (void)elapsedTime;
-            (void)now;
+                            (void)elapsedTime;
+                            (void)now;
                             // Not completely in love with having to do a static_pointer_cast, but living with it for now
                             handleConnectAck(std::static_pointer_cast<messages::ConnectAck>(message));
                         });
