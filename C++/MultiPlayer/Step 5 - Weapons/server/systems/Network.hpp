@@ -38,7 +38,7 @@ namespace systems
         entities::EntitySet m_reportThese;
 
         void registerHandler(messages::Type type, std::function<void(std::uint64_t, std::chrono::microseconds, std::shared_ptr<messages::Message>)> handler);
-        void handleInput(std::shared_ptr<messages::Input> message);
+        void handleInput(std::shared_ptr<messages::Input> message, std::chrono::microseconds);
         void updateClients(const std::chrono::microseconds elapsedTime);
     };
 } // namespace systems

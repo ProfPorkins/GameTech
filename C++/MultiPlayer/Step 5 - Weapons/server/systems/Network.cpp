@@ -37,7 +37,7 @@ namespace systems
                         [this](std::uint64_t clientId, std::chrono::microseconds elapsedTime, std::shared_ptr<messages::Message> message) {
                             (void)clientId;    // unused parameter
                             (void)elapsedTime; // unused parameter
-                            handleInput(std::static_pointer_cast<messages::Input>(message));
+                            handleInput(std::static_pointer_cast<messages::Input>(message), elapsedTime);
                         });
     }
 
@@ -82,7 +82,7 @@ namespace systems
     // hands off the processing of the input to the appropriate entity function.
     //
     // --------------------------------------------------------------
-    void Network::handleInput(std::shared_ptr<messages::Input> message)
+    void Network::handleInput(std::shared_ptr<messages::Input> message, std::chrono::microseconds elapsedTime)
     {
         auto entityId = message->getPBInput().entityid();
         auto entity = m_entities[entityId].get();
@@ -115,7 +115,7 @@ namespace systems
                     m_reportThese.insert(entityId);
                     break;
                 case shared::InputType::FireWeapon:
-                    auto missile = entities::fireWeapon(entity);
+                    auto missile = entities::fireWeapon(entity, elapsedTime);
                     m_newEntityHandler(missile);
                     break;
             }

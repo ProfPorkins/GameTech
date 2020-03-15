@@ -91,7 +91,7 @@ namespace entities
         position->setOrientation(position->getOrientation() + movement->getRotateRate() * howLong.count());
     }
 
-    std::shared_ptr<Entity> fireWeapon(entities::Entity* entity)
+    std::shared_ptr<Entity> fireWeapon(entities::Entity* entity, std::chrono::microseconds elapsedTime)
     {
         auto position = entity->getComponent<components::Position>();
         auto momentum = entity->getComponent<components::Momentum>();
@@ -107,6 +107,11 @@ namespace entities
         auto missileMomentum = math::Vector2f(momentum->get().x + vectorX * 0.0000003f, momentum->get().y + vectorY * 0.0000003f);
         missile->addComponent(std::make_unique<components::Momentum>(missileMomentum));
         missile->addComponent(std::make_unique<components::Weapon>(50.0f, entity->getId()));
+
+        //
+        // simulate the missle movement for the time already spent at the server so that it shows up
+        // looking somewhat correct at the client
+        drift(missile.get(), elapsedTime);
 
         return missile;
     }

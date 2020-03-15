@@ -26,6 +26,6 @@ namespace entities
     void thrust(entities::Entity* entity, std::chrono::microseconds howLong);
     void rotateLeft(entities::Entity* entity, std::chrono::microseconds howLong);
     void rotateRight(entities::Entity* entity, std::chrono::microseconds howLong);
-    std::shared_ptr<Entity> fireWeapon(entities::Entity* entity);
+    std::shared_ptr<Entity> fireWeapon(entities::Entity* entity, std::chrono::microseconds elapsedTime);
     void drift(entities::Entity* entity, std::chrono::microseconds howLong);
 } // namespace entities
