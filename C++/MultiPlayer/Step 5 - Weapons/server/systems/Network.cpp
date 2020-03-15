@@ -27,10 +27,7 @@ namespace systems
                         [this](std::uint64_t clientId, std::chrono::microseconds elapsedTime, std::shared_ptr<messages::Message> message) {
                             (void)elapsedTime; // unused parameter
                             (void)message;     // unused parameter
-                            if (m_joinHandler)
-                            {
-                                m_joinHandler(clientId);
-                            }
+                            m_joinHandler(clientId);
                         });
 
         //
