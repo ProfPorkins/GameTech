@@ -12,14 +12,15 @@ namespace components
     class Health : public Component
     {
       public:
-          Health(float health) :
+        Health(float health) :
             m_health(health)
         {
         }
 
         auto get() { return m_health; }
+        void update(float howMuch) { m_health += howMuch; }
 
       private:
-          float m_health;
+        float m_health;
     };
 } // namespace components

@@ -1,6 +1,7 @@
 #include "Player.hpp"
 
 #include "components/Appearance.hpp"
+#include "components/Health.hpp"
 #include "components/Input.hpp"
 #include "components/Lifetime.hpp"
 #include "components/Momentum.hpp"
@@ -8,7 +9,6 @@
 #include "components/Position.hpp"
 #include "components/Size.hpp"
 #include "components/Weapon.hpp"
-#include "components/Health.hpp"
 
 #include <iostream>
 
@@ -106,7 +106,7 @@ namespace entities
         auto vectorY = std::sin(position->getOrientation() * DEGREES_TO_RADIANS);
         auto missileMomentum = math::Vector2f(momentum->get().x + vectorX * 0.0000003f, momentum->get().y + vectorY * 0.0000003f);
         missile->addComponent(std::make_unique<components::Momentum>(missileMomentum));
-        missile->addComponent(std::make_unique<components::Weapon>(50.0f));
+        missile->addComponent(std::make_unique<components::Weapon>(50.0f, entity->getId()));
 
         return missile;
     }

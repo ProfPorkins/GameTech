@@ -8,10 +8,10 @@
 #pragma warning(pop)
 
 #include "entities/Entity.hpp"
+#include "systems/Damage.hpp"
 #include "systems/Lifetime.hpp"
 #include "systems/Momentum.hpp"
 #include "systems/Network.hpp"
-#include "systems/Damage.hpp"
 
 #include <SFML/Network.hpp>
 #include <chrono>
@@ -41,7 +41,6 @@ class GameModel
     void removeEntity(entities::Entity::IdType entityId);
 
     void reportAllEntities(std::uint64_t clientId);
-    shared::Entity createPBEntity(std::shared_ptr<entities::Entity>& entity);
 
     void handleConnect(std::uint64_t clientId);
     void handleDisconnect(std::uint64_t clientId);

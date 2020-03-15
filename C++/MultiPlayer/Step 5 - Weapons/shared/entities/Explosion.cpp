@@ -1,8 +1,11 @@
 #include "Explosion.hpp"
 
 #include "components/AnimatedAppearance.hpp"
+#include "components/Lifetime.hpp"
 #include "components/Position.hpp"
 #include "components/Size.hpp"
+
+#include <numeric>
 
 namespace entities::explosion
 {
@@ -20,6 +23,10 @@ namespace entities::explosion
         entity->addComponent(std::make_unique<components::Position>(position));
         entity->addComponent(std::make_unique<components::Size>(math::Vector2f(size, size)));
         entity->addComponent(std::make_unique<components::AnimatedAppearance>(texture, spriteTime));
+        //
+        // Add all the sprite frame times to get the total lifetime of the explosion
+        auto totalFrametime = std::accumulate(spriteTime.begin(), spriteTime.end(), std::chrono::milliseconds(0));
+        entity->addComponent(std::make_unique<components::Lifetime>(totalFrametime));
 
         return entity;
     }

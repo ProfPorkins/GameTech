@@ -1,18 +1,17 @@
 #include "GameModel.hpp"
 
 #include "MessageQueueServer.hpp"
-#include "components/AnimatedAppearance.hpp"
 #include "components/Appearance.hpp"
 #include "components/Lifetime.hpp"
 #include "components/Momentum.hpp"
 #include "components/Movement.hpp"
 #include "components/Position.hpp"
 #include "components/Size.hpp"
-#include "entities/Explosion.hpp"
 #include "entities/Player.hpp"
 #include "messages/ConnectAck.hpp"
 #include "messages/NewEntity.hpp"
 #include "messages/RemoveEntity.hpp"
+#include "messages/Utility.hpp"
 
 #include <cstdint>
 #include <functional>
@@ -69,6 +68,7 @@ bool GameModel::initialize()
     m_systemMomentum = std::make_unique<systems::Momentum>();
     m_systemLifetime = std::make_unique<systems::Lifetime>(std::bind(&GameModel::handleRemoveEntity, this, std::placeholders::_1));
     m_systemDamage = std::make_unique<systems::Damage>();
+    m_systemDamage->registerRemoveEntity(std::bind(&GameModel::handleRemoveEntity, this, std::placeholders::_1));
 
     MessageQueueServer::instance().registerConnectHandler(std::bind(&GameModel::handleConnect, this, std::placeholders::_1));
     MessageQueueServer::instance().registerDisconnectHandler(std::bind(&GameModel::handleDisconnect, this, std::placeholders::_1));
@@ -165,129 +165,10 @@ void GameModel::reportAllEntities(std::uint64_t clientId)
 {
     for (auto& [entityId, entity] : m_entities)
     {
-        shared::Entity pbEntity;
-
-        pbEntity.set_id(entity->getId());
-
-        if (entity->hasComponent<components::Appearance>())
-        {
-            pbEntity.mutable_appearance()->set_texture(entity->getComponent<components::Appearance>()->getTexture());
-        }
-
-        if (entity->hasComponent<components::Position>())
-        {
-            auto position = entity->getComponent<components::Position>();
-            pbEntity.mutable_position()->mutable_center()->set_x(position->get().x);
-            pbEntity.mutable_position()->mutable_center()->set_y(position->get().y);
-            pbEntity.mutable_position()->set_orientation(entity->getComponent<components::Position>()->getOrientation());
-        }
-
-        if (entity->hasComponent<components::Movement>())
-        {
-            auto movement = entity->getComponent<components::Movement>();
-            pbEntity.mutable_movement()->set_thrustrate(movement->getThrustRate());
-            pbEntity.mutable_movement()->set_rotaterate(movement->getRotateRate());
-        }
-
-        if (entity->hasComponent<components::Momentum>())
-        {
-            auto momentum = entity->getComponent<components::Momentum>();
-            pbEntity.mutable_momentum()->mutable_momentum()->set_x(momentum->get().x);
-            pbEntity.mutable_momentum()->mutable_momentum()->set_y(momentum->get().y);
-        }
-
-        if (entity->hasComponent<components::Size>())
-        {
-            pbEntity.mutable_size()->mutable_size()->set_x(entity->getComponent<components::Size>()->get().x);
-            pbEntity.mutable_size()->mutable_size()->set_y(entity->getComponent<components::Size>()->get().y);
-        }
-        pbEntity.set_updatewindow(0);
-
+        auto pbEntity = messages::createReportablePBEntity(entity);
         auto entityMessage = std::make_shared<messages::NewEntity>(pbEntity);
         MessageQueueServer::instance().sendMessage(clientId, entityMessage);
     }
-}
-
-// --------------------------------------------------------------
-//
-// Used to create a protobuf representation of an entity.
-//
-// --------------------------------------------------------------
-shared::Entity GameModel::createPBEntity(std::shared_ptr<entities::Entity>& entity)
-{
-    shared::Entity pbEntity;
-
-    pbEntity.set_id(entity->getId());
-
-    if (entity->hasComponent<components::AnimatedAppearance>())
-    {
-        pbEntity.mutable_animatedappearance()->set_texture(entity->getComponent<components::AnimatedAppearance>()->getTexture());
-        for (auto&& time : entity->getComponent<components::AnimatedAppearance>()->getSpriteTime())
-        {
-            pbEntity.mutable_animatedappearance()->add_spritetime(static_cast<std::uint32_t>(time.count()));
-        }
-    }
-
-    if (entity->hasComponent<components::Appearance>())
-    {
-        pbEntity.mutable_appearance()->set_texture(entity->getComponent<components::Appearance>()->getTexture());
-    }
-
-    if (entity->hasComponent<components::Input>())
-    {
-        for (auto input : entity->getComponent<components::Input>()->getInputs())
-        {
-            switch (input)
-            {
-                case components::Input::Type::Thrust:
-                    pbEntity.mutable_input()->add_type(shared::InputType::Thrust);
-                    break;
-                case components::Input::Type::RotateLeft:
-                    pbEntity.mutable_input()->add_type(shared::InputType::RotateLeft);
-                    break;
-                case components::Input::Type::RotateRight:
-                    pbEntity.mutable_input()->add_type(shared::InputType::RotateRight);
-                    break;
-                case components::Input::Type::FireWeapon:
-                    pbEntity.mutable_input()->add_type(shared::InputType::FireWeapon);
-                    break;
-            }
-        }
-    }
-
-    if (entity->hasComponent<components::Position>())
-    {
-        auto position = entity->getComponent<components::Position>();
-        pbEntity.mutable_position()->mutable_center()->set_x(position->get().x);
-        pbEntity.mutable_position()->mutable_center()->set_y(position->get().y);
-        pbEntity.mutable_position()->set_orientation(position->getOrientation());
-    }
-
-    if (entity->hasComponent<components::Size>())
-    {
-        pbEntity.mutable_size()->mutable_size()->set_x(entity->getComponent<components::Size>()->get().x);
-        pbEntity.mutable_size()->mutable_size()->set_y(entity->getComponent<components::Size>()->get().y);
-    }
-
-    if (entity->hasComponent<components::Movement>())
-    {
-        pbEntity.mutable_movement()->set_thrustrate(entity->getComponent<components::Movement>()->getThrustRate());
-        pbEntity.mutable_movement()->set_rotaterate(entity->getComponent<components::Movement>()->getRotateRate());
-    }
-
-    if (entity->hasComponent<components::Momentum>())
-    {
-        pbEntity.mutable_momentum()->mutable_momentum()->set_x(entity->getComponent<components::Momentum>()->get().x);
-        pbEntity.mutable_momentum()->mutable_momentum()->set_y(entity->getComponent<components::Momentum>()->get().y);
-    }
-
-    if (entity->hasComponent<components::Lifetime>())
-    {
-        auto lifetime = entity->getComponent<components::Lifetime>();
-        pbEntity.mutable_lifetime()->set_howlong(static_cast<std::uint32_t>(lifetime->get().count()));
-    }
-
-    return pbEntity;
 }
 
 // --------------------------------------------------------------
@@ -304,16 +185,6 @@ void GameModel::handleJoin(std::uint64_t clientId)
     reportAllEntities(clientId);
 
     //
-    // This was just temporary while I worked on the animated sprite component
-    // for explosions.
-    //auto fiftyMS = std::chrono::milliseconds(50);
-    //auto frameTimes = {fiftyMS, fiftyMS, fiftyMS, fiftyMS, fiftyMS, fiftyMS, fiftyMS, fiftyMS, fiftyMS, fiftyMS, fiftyMS, fiftyMS, fiftyMS, fiftyMS, fiftyMS, fiftyMS};
-    //auto explosion = entities::explosion::create("explosion.png", {0.0f, 0.25f}, 0.07f, frameTimes);
-    //addEntity(explosion);
-    //shared::Entity pbExplosion = createPBEntity(explosion);
-    //MessageQueueServer::instance().sendMessage(clientId, std::make_shared<messages::NewEntity>(pbExplosion));
-
-    //
     // Step 2: Create an entity for the newly joined player and send
     //         it to the newly joined client
 
@@ -324,7 +195,7 @@ void GameModel::handleJoin(std::uint64_t clientId)
 
     //
     // Build the protobuf representation and get it sent off to the client
-    shared::Entity pbEntity = createPBEntity(player);
+    shared::Entity pbEntity = messages::createPBEntity(player);
 
     //
     // Step 3: Send the new player entity to the newly joined client.
@@ -358,7 +229,7 @@ void GameModel::handleNewEntity(std::shared_ptr<entities::Entity> entity)
     addEntity(entity);
     //
     // Build the protobuf representation and get it sent off to the client
-    shared::Entity pbEntity = createPBEntity(entity);
+    shared::Entity pbEntity = messages::createPBEntity(entity);
     MessageQueueServer::instance().broadcastMessage(std::make_shared<messages::NewEntity>(pbEntity));
 }
 
