@@ -79,6 +79,14 @@ void GameModel::signalKeyReleased(sf::Event::KeyEvent event, std::chrono::micros
 void GameModel::update(const std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now, std::shared_ptr<sf::RenderTarget> renderTarget)
 {
     //
+    // Add any new entities we've been notified about
+    for (auto&& entity : m_newEntities)
+    {
+        addEntity(entity);
+    }
+    m_newEntities.clear();
+
+    //
     // Remove any entites we've been notified to get rid of first
     for (auto&& id : m_removeEntities)
     {
@@ -284,6 +292,16 @@ void GameModel::removeEntity(entities::Entity::IdType entityId)
 
 // --------------------------------------------------------------
 //
+// Used to build up the list of entities to add in the next update.
+//
+// --------------------------------------------------------------
+void GameModel::handleNewEntity(const shared::Entity& pbEntity)
+{
+    m_newEntities.push_back(createEntity(pbEntity));
+}
+
+// --------------------------------------------------------------
+//
 // Handler for the RemoveEntity message.  It removes the entity from
 // the client game model (that's us!).
 //
@@ -291,10 +309,4 @@ void GameModel::removeEntity(entities::Entity::IdType entityId)
 void GameModel::handleRemoveEntity(entities::Entity::IdType entityId)
 {
     m_removeEntities.insert(entityId);
-}
-
-void GameModel::handleNewEntity(const shared::Entity& pbEntity)
-{
-    auto entity = createEntity(pbEntity);
-    addEntity(entity);
 }

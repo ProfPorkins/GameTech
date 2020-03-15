@@ -14,6 +14,6 @@ The following are some of the additions I plan on adding to this repository over
 * (JavaScript - completed 1/18/2020) Add an Entity-Component-System example.
 * (C++ - completed 1/30/2020) Add an Entity-Component-System example.
 * (C++ - completed 3/15/2020) Add a set of multiplayer network examples.
-* (C++ - in progress) Document the JavaScript and C++ multiplayer network examples.
+* (Both - in progress) Document the JavaScript and C++ multiplayer network examples.
 
 The C++ multiplayer network examples have been written using the ECS model.

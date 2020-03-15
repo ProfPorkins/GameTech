@@ -1,7 +1,7 @@
 #include "KeyboardInput.hpp"
 
 #include "MessageQueueClient.hpp"
-#include "entities/Player.hpp"
+#include "entities/Update.hpp"
 #include "messages/Input.hpp"
 
 namespace systems

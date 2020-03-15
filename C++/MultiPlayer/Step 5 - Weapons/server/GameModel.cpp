@@ -7,7 +7,7 @@
 #include "components/Movement.hpp"
 #include "components/Position.hpp"
 #include "components/Size.hpp"
-#include "entities/Player.hpp"
+#include "entities/Create.hpp"
 #include "messages/ConnectAck.hpp"
 #include "messages/NewEntity.hpp"
 #include "messages/RemoveEntity.hpp"

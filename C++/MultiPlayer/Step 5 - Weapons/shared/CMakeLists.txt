@@ -43,14 +43,14 @@ set(SHARED_MESSAGES_SOURCES
     )
 
 set(SHARED_ENTITY_HEADERS
+    entities/Create.hpp
     entities/Entity.hpp
-    entities/Explosion.hpp
-    entities/Player.hpp
+    entities/Update.hpp
     )
 set(SHARED_ENTITY_SOURCES
+    entities/Create.cpp
     entities/Entity.cpp
-    entities/Explosion.cpp
-    entities/Player.cpp
+    entities/Update.cpp
     )
 
 set(SHARED_COMPONENTS_HEADERS

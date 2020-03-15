@@ -6,7 +6,7 @@
 #include "components/Momentum.hpp"
 #include "components/Movement.hpp"
 #include "components/Position.hpp"
-#include "entities/Player.hpp"
+#include "entities/Update.hpp"
 #include "messages/Input.hpp"
 #include "messages/Join.hpp"
 #include "messages/MessageTypes.hpp"

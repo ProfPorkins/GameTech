@@ -3,7 +3,7 @@
 #include "MessageQueueServer.hpp"
 #include "components/Health.hpp"
 #include "components/Weapon.hpp"
-#include "entities/Explosion.hpp"
+#include "entities/Create.hpp"
 #include "messages/NewEntity.hpp"
 #include "messages/RemoveEntity.hpp"
 #include "messages/Utility.hpp"

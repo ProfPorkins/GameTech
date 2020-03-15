@@ -3,7 +3,7 @@
 #include "MessageQueueServer.hpp"
 #include "components/Momentum.hpp"
 #include "components/Movement.hpp"
-#include "entities/Player.hpp"
+#include "entities/Update.hpp"
 #include "messages/NewEntity.hpp"
 #include "messages/UpdateEntity.hpp"
 #include "messages/Utility.hpp"

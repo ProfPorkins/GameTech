@@ -6,12 +6,19 @@
 #include <chrono>
 #include <memory>
 #include <string>
-#include <vector>
 
 // --------------------------------------------------------------
 //
-// This is an explosion factory, creating an entity and assigning
-// the appropiate components to it.
+// Function to create a player entity
+//
+// --------------------------------------------------------------
+namespace entities::player
+{
+    std::shared_ptr<Entity> create(std::string texture, math::Vector2f position, float size, float thrustRate, float rotateRate, math::Vector2f momentum, float health);
+}
+// --------------------------------------------------------------
+//
+// Function to create an explosion entity
 //
 // --------------------------------------------------------------
 namespace entities::explosion

@@ -2,7 +2,7 @@
 
 #include "components/Goal.hpp"
 #include "components/Input.hpp"
-#include "entities/Player.hpp"
+#include "entities/Update.hpp"
 #include "misc/math.hpp"
 
 namespace systems
