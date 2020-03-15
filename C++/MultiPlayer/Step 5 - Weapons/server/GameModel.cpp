@@ -16,7 +16,6 @@
 #include <cstdint>
 #include <functional>
 #include <limits>
-#include <vector>
 
 // --------------------------------------------------------------
 //
@@ -27,6 +26,14 @@
 // --------------------------------------------------------------
 void GameModel::update(const std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now)
 {
+    //
+    // Add any new entities we've been notified about
+    for (auto&& entity : m_newEntities)
+    {
+        addEntity(entity);
+    }
+    m_newEntities.clear();
+
     //
     // Remove any entites we've been notified to get rid of first
     for (auto&& id : m_removeEntities)
@@ -68,7 +75,7 @@ bool GameModel::initialize()
     m_systemMomentum = std::make_unique<systems::Momentum>();
     m_systemLifetime = std::make_unique<systems::Lifetime>(std::bind(&GameModel::handleRemoveEntity, this, std::placeholders::_1));
     m_systemDamage = std::make_unique<systems::Damage>();
-    m_systemDamage->registerRemoveEntity(std::bind(&GameModel::handleRemoveEntity, this, std::placeholders::_1));
+    m_systemDamage->registerRemoveEntityHandler(std::bind(&GameModel::handleRemoveEntity, this, std::placeholders::_1));
 
     MessageQueueServer::instance().registerConnectHandler(std::bind(&GameModel::handleConnect, this, std::placeholders::_1));
     MessageQueueServer::instance().registerDisconnectHandler(std::bind(&GameModel::handleDisconnect, this, std::placeholders::_1));
@@ -224,13 +231,14 @@ void GameModel::handleJoin(std::uint64_t clientId)
     }
 }
 
+// --------------------------------------------------------------
+//
+// Used to build up the list of entities to add in the next update.
+//
+// --------------------------------------------------------------
 void GameModel::handleNewEntity(std::shared_ptr<entities::Entity> entity)
 {
-    addEntity(entity);
-    //
-    // Build the protobuf representation and get it sent off to the client
-    shared::Entity pbEntity = messages::createPBEntity(entity);
-    MessageQueueServer::instance().broadcastMessage(std::make_shared<messages::NewEntity>(pbEntity));
+    m_newEntities.push_back(entity);
 }
 
 // --------------------------------------------------------------

@@ -4,7 +4,9 @@
 #include "components/Momentum.hpp"
 #include "components/Movement.hpp"
 #include "entities/Player.hpp"
+#include "messages/NewEntity.hpp"
 #include "messages/UpdateEntity.hpp"
+#include "messages/Utility.hpp"
 
 namespace systems
 {
@@ -90,6 +92,21 @@ namespace systems
 
     // --------------------------------------------------------------
     //
+    // Tell all connected clients about this entity and also the local
+    // server model.
+    //
+    // --------------------------------------------------------------
+    void Network::handleNewEntity(std::shared_ptr<entities::Entity> entity)
+    {
+        m_newEntityHandler(entity);
+        //
+        // Build the protobuf representation and get it sent off to the client
+        shared::Entity pbEntity = messages::createPBEntity(entity);
+        MessageQueueServer::instance().broadcastMessage(std::make_shared<messages::NewEntity>(pbEntity));
+    }
+
+    // --------------------------------------------------------------
+    //
     // Handler for the Input message.  Finds out the input type and then
     // hands off the processing of the input to the appropriate entity function.
     //
@@ -132,7 +149,7 @@ namespace systems
                     if (entityInput->getLimitTime()[components::Input::Type::FireWeapon].count() <= 0)
                     {
                         auto missile = entities::fireWeapon(entity, elapsedTime);
-                        m_newEntityHandler(missile);
+                        handleNewEntity(missile);
                         entityInput->resetLimit(components::Input::Type::FireWeapon);
                     }
                 }

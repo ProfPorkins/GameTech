@@ -25,7 +25,7 @@ namespace systems
         {
         }
 
-        void registerRemoveEntity(std::function<void(entities::Entity::IdType)> handler) { m_handlerRemoveEntity = handler; }
+        void registerRemoveEntityHandler(std::function<void(entities::Entity::IdType)> handler) { m_handlerRemoveEntity = handler; }
         virtual void removeEntity(entities::Entity::IdType entityId) override;
         virtual void update(std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now) override;
 

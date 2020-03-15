@@ -1,6 +1,7 @@
 #pragma once
 
 #include "components/Position.hpp"
+#include "entities/Entity.hpp"
 #include "messages/Input.hpp"
 #include "messages/Join.hpp"
 #include "messages/Message.hpp"
@@ -38,6 +39,7 @@ namespace systems
         entities::EntitySet m_reportThese;
 
         void registerHandler(messages::Type type, std::function<void(std::uint64_t, std::chrono::microseconds, std::shared_ptr<messages::Message>)> handler);
+        void handleNewEntity(std::shared_ptr<entities::Entity> entity);
         void handleInput(std::shared_ptr<messages::Input> message, std::chrono::microseconds);
         void updateClients(const std::chrono::microseconds elapsedTime);
     };
