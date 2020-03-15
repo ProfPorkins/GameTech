@@ -31,7 +31,7 @@ class GameModel
     std::unordered_set<std::uint64_t> m_clients;
     std::unordered_map<std::uint64_t, entities::Entity::IdType> m_clientToEntityId;
     entities::EntityMap m_entities;
-    std::vector<std::shared_ptr<entities::Entity>> m_newEntities;
+    entities::EntityVector m_newEntities;
     entities::EntitySet m_removeEntities;
 
     std::unique_ptr<systems::Damage> m_systemDamage;

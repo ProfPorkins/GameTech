@@ -39,7 +39,7 @@ class GameModel
     math::Vector2f m_viewSize;
 
     entities::EntityMap m_entities;
-    std::vector<std::shared_ptr<entities::Entity>> m_newEntities;
+    entities::EntityVector m_newEntities;
     entities::EntitySet m_removeEntities;
 
     std::unique_ptr<systems::KeyboardInput> m_systemKeyboardInput;
