@@ -80,28 +80,25 @@ namespace systems
     // --------------------------------------------------------------
     void Network::handleInput(std::shared_ptr<messages::Input> message)
     {
-        if (m_inputHandler)
-        {
-            auto entityId = message->getPBInput().entityid();
-            auto entity = m_entities[entityId].get();
+        auto entityId = message->getPBInput().entityid();
+        auto entity = m_entities[entityId].get();
 
-            for (auto&& input : message->getPBInput().input())
+        for (auto&& input : message->getPBInput().input())
+        {
+            switch (input.type())
             {
-                switch (input.type())
-                {
-                    case shared::InputType::Thrust:
-                        entities::thrust(entity, std::chrono::milliseconds(input.elapsedtime()));
-                        m_reportThese.insert(entity->getId());
-                        break;
-                    case shared::InputType::RotateLeft:
-                        entities::rotateLeft(entity, std::chrono::milliseconds(input.elapsedtime()));
-                        m_reportThese.insert(entity->getId());
-                        break;
-                    case shared::InputType::RotateRight:
-                        entities::rotateRight(entity, std::chrono::milliseconds(input.elapsedtime()));
-                        m_reportThese.insert(entity->getId());
-                        break;
-                }
+                case shared::InputType::Thrust:
+                    entities::thrust(entity, std::chrono::milliseconds(input.elapsedtime()));
+                    m_reportThese.insert(entity->getId());
+                    break;
+                case shared::InputType::RotateLeft:
+                    entities::rotateLeft(entity, std::chrono::milliseconds(input.elapsedtime()));
+                    m_reportThese.insert(entity->getId());
+                    break;
+                case shared::InputType::RotateRight:
+                    entities::rotateRight(entity, std::chrono::milliseconds(input.elapsedtime()));
+                    m_reportThese.insert(entity->getId());
+                    break;
             }
         }
     }

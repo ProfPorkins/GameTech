@@ -27,6 +27,7 @@ set(SHARED_MESSAGES_HEADERS
     messages/NewEntity.hpp
     messages/RemoveEntity.hpp
     messages/UpdateEntity.hpp
+    messages/Utility.hpp
     )
 
 set(SHARED_MESSAGES_SOURCES
@@ -34,6 +35,7 @@ set(SHARED_MESSAGES_SOURCES
     messages/NewEntity.cpp
     messages/RemoveEntity.cpp
     messages/UpdateEntity.cpp
+    messages/Utility.cpp
     )
 
 set(SHARED_ENTITY_HEADERS
@@ -44,6 +46,7 @@ set(SHARED_ENTITY_SOURCES
     )
 
 set(SHARED_COMPONENTS_HEADERS
+    components/Appearance.hpp
     components/Component.hpp
     components/Input.hpp
     components/Movement.hpp
