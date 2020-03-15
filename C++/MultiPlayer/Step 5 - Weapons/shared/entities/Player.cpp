@@ -10,7 +10,8 @@
 #include "components/Size.hpp"
 #include "components/Weapon.hpp"
 
-#include <iostream>
+#include <memory>
+#include <utility>
 
 namespace entities::player
 {
@@ -41,10 +42,10 @@ namespace entities::player
         entity->addComponent(std::make_unique<components::Health>(health));
 
         auto inputs = {
-            components::Input::Type::Thrust,
-            components::Input::Type::RotateLeft,
-            components::Input::Type::RotateRight,
-            components::Input::Type::FireWeapon};
+            std::make_pair(components::Input::Type::Thrust, std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::milliseconds(0))),
+            std::make_pair(components::Input::Type::RotateLeft, std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::milliseconds(0))),
+            std::make_pair(components::Input::Type::RotateRight, std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::milliseconds(0))),
+            std::make_pair(components::Input::Type::FireWeapon, std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::milliseconds(250)))};
         entity->addComponent(std::make_unique<components::Input>(inputs));
 
         return entity;

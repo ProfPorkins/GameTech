@@ -26,6 +26,7 @@ namespace entities::explosion
         //
         // Add all the sprite frame times to get the total lifetime of the explosion
         auto totalFrametime = std::accumulate(spriteTime.begin(), spriteTime.end(), std::chrono::milliseconds(0));
+        totalFrametime -= spriteTime.back();
         entity->addComponent(std::make_unique<components::Lifetime>(totalFrametime));
 
         return entity;

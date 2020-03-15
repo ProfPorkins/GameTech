@@ -38,7 +38,7 @@ namespace messages
 
         if (entity->hasComponent<components::Input>())
         {
-            for (auto input : entity->getComponent<components::Input>()->getInputs())
+            for (auto& [input, time] : entity->getComponent<components::Input>()->getInputs())
             {
                 switch (input)
                 {

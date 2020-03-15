@@ -25,7 +25,7 @@ namespace systems
         // can invoke for those inputs.  This allows those functions to be directly
         // called when the keyboard inputs are seen.
         KeyToType map;
-        for (auto&& input : entity->getComponent<components::Input>()->getInputs())
+        for (auto& [input, time] : entity->getComponent<components::Input>()->getInputs())
         {
             map.m_keyToType[m_typeToKeyMap[input]] = input;
         }

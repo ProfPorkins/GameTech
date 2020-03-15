@@ -62,6 +62,18 @@ namespace systems
         }
 
         //
+        // The rate limits for inputs are updated here.
+        // Could/should create an Input system at the server that has responsibility
+        // to do this, but have decided to not do that for now.
+        for (auto& [id, entity] : m_entities)
+        {
+            if (entity->hasComponent<components::Input>())
+            {
+                entity->getComponent<components::Input>()->updateLimits(elapsedTime);
+            }
+        }
+
+        //
         // Send updated game state updates back out to connected clients
         updateClients(elapsedTime);
     }
@@ -115,9 +127,16 @@ namespace systems
                     m_reportThese.insert(entityId);
                     break;
                 case shared::InputType::FireWeapon:
-                    auto missile = entities::fireWeapon(entity, elapsedTime);
-                    m_newEntityHandler(missile);
-                    break;
+                {
+                    auto entityInput = entity->getComponent<components::Input>();
+                    if (entityInput->getLimitTime()[components::Input::Type::FireWeapon].count() <= 0)
+                    {
+                        auto missile = entities::fireWeapon(entity, elapsedTime);
+                        m_newEntityHandler(missile);
+                        entityInput->resetLimit(components::Input::Type::FireWeapon);
+                    }
+                }
+                break;
             }
         }
     }

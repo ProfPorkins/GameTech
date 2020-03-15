@@ -204,24 +204,30 @@ std::shared_ptr<entities::Entity> GameModel::createEntity(const shared::Entity& 
             math::Vector2f(pbEntity.momentum().momentum().x(), pbEntity.momentum().momentum().y())));
     }
 
+    //
+    // This is on the client side and no rate limiting of input is being done here, for now.
+    // Therefore, the time on each input is set to 0.  However, if network traffic is desired to
+    // be reduced, transmitting that information and putting the rate limit here can help.  But
+    // remember, the server must still verify how often an input may be accepted, don't trust the
+    // client.
     if (pbEntity.has_input())
     {
-        std::vector<components::Input::Type> inputs;
+        std::vector<std::pair<components::Input::Type, std::chrono::microseconds>> inputs;
         for (auto input : pbEntity.input().type())
         {
             switch (input)
             {
                 case shared::InputType::Thrust:
-                    inputs.push_back(components::Input::Type::Thrust);
+                    inputs.push_back(std::pair(components::Input::Type::Thrust, std::chrono::microseconds(0)));
                     break;
                 case shared::InputType::RotateLeft:
-                    inputs.push_back(components::Input::Type::RotateLeft);
+                    inputs.push_back(std::pair(components::Input::Type::RotateLeft, std::chrono::microseconds(0)));
                     break;
                 case shared::InputType::RotateRight:
-                    inputs.push_back(components::Input::Type::RotateRight);
+                    inputs.push_back(std::pair(components::Input::Type::RotateRight, std::chrono::microseconds(0)));
                     break;
                 case shared::InputType::FireWeapon:
-                    inputs.push_back(components::Input::Type::FireWeapon);
+                    inputs.push_back(std::pair(components::Input::Type::FireWeapon, std::chrono::microseconds(0)));
                     break;
             }
         }
