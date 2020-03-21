@@ -56,22 +56,22 @@ An authoritative model or simulation of the game is necessary to provide a consi
 The following techniques are discussed, along with code samples in both JavaScript and C++.
 
 * Entity Component System
-  * JavaScript - ECS
-  * C++ - ECS
+  * [JavaScript](https://github.com/ProfPorkins/GameTech/tree/master/JavaScript/SnakeGame-ECS)
+  * [C++](https://github.com/ProfPorkins/GameTech/tree/master/C%2B%2B/MultiPlayer/Step%200%20-%20ECS)
 * Basic Multiplayer Networking
   * [JavaScript](https://github.com/ProfPorkins/GameTech/tree/master/JavaScript/MultiPlayer/Step%201%20-%20Basic/)
-  * [C++](https://github.com/ProfPorkins/GameTech/tree/master/C++/MultiPlayer/Step%201%20-%20Basic/)
+  * [C++](https://github.com/ProfPorkins/GameTech/tree/master/C%2B%2B/MultiPlayer/Step%201%20-%20Basic/)
 * Client Prediction & Server Reconciliation
-  * JavaScript
-  * C++
+  * [JavaScript](https://github.com/ProfPorkins/GameTech/tree/master/JavaScript/MultiPlayer/Step%202%20-%20Client%20Prediction)
+  * [C++](https://github.com/ProfPorkins/GameTech/tree/master/C%2B%2B/MultiPlayer/Step%202%20-%20Client%20Prediction)
 * Entity Interpolation
-  * JavaScript
-  * C++
+  * [JavaScript](https://github.com/ProfPorkins/GameTech/tree/master/JavaScript/MultiPlayer/Step%203%20-%20Entity%20Interpolation)
+  * [C++](https://github.com/ProfPorkins/GameTech/tree/master/C%2B%2B/MultiPlayer/Step%203%20-%20Entity%20Interpolation)
 * Entity Prediction
-  * JavaScript
-  * C++
+  * [JavaScript](https://github.com/ProfPorkins/GameTech/tree/master/JavaScript/MultiPlayer/Step%204%20-%20Entity%20Prediction)
+  * [C++](https://github.com/ProfPorkins/GameTech/tree/master/C%2B%2B/MultiPlayer/Step%204%20-%20Entity%20Prediction)
 * Weapons Example
-  * JavaScript
-  * C++
+  * [JavaScript](https://github.com/ProfPorkins/GameTech/tree/master/JavaScript/MultiPlayer/Step%205%20-%20Weapons)
+  * [C++](https://github.com/ProfPorkins/GameTech/tree/master/C%2B%2B/MultiPlayer/Step%205%20-%20Weapons)
 
 The ECS example for JavaScript is unrelated to the topic of networking, while the C++ example provides the code foundation for the networking examples.
