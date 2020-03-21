@@ -1,4 +1,4 @@
-# Multiplayer - Basic
+# Multiplayer - Basic Networking
 The sample must be run as a server: `node server.js`
 With the server running, connect to: `http://localhost:3000`
 
