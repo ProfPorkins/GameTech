@@ -59,8 +59,8 @@ The following techniques are discussed, along with code samples in both JavaScri
   * JavaScript - ECS
   * C++ - ECS
 * Basic Multiplayer Networking
-  * [JavaScript](/../../JavaScript/MultiPlayer/Step%201%20-%20Basic/)
-  * [C++](https://github.com/ProfPorkins/GameTech/C++/MultiPlayer/Step%201%20-%20Basic/)
+  * [JavaScript](https://github.com/ProfPorkins/GameTech/tree/JavaScript/MultiPlayer/Step%201%20-%20Basic/)
+  * [C++](https://github.com/ProfPorkins/GameTech/tree/C++/MultiPlayer/Step%201%20-%20Basic/)
 * Client Prediction & Server Reconciliation
   * JavaScript
   * C++
