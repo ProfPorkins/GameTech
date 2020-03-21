@@ -1,5 +1,6 @@
 # Multiplayer - Update Rate
-The sample must be run as a server: `node server.js`
+
+The sample must be run as a server: `node server.js`\
 With the server running, connect to: `http://localhost:3000`
 
 This sample builds on the previous one by showing how to have the server-side game simulation update rate be different from the rate at which game state updates are sent to connected clients.

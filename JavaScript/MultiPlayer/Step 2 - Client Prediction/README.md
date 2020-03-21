@@ -1,5 +1,6 @@
 # Multiplayer - Client Prediction and Server Reconciliation
-The sample must be run as a server: `node server.js`
+
+The sample must be run as a server: `node server.js`\
 With the server running, connect to: `http://localhost:3000`
 
 This sample demonstrates the improvements in networked multiplayer possible using the concepts of Client Prediction and Server Reconciliation.
