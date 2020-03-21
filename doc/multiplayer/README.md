@@ -22,7 +22,7 @@ The following terminology is useful to understand before working through the oth
   * Rate of data transfer over a given connection.  Often measured in bits-per-second (bps) or bytes-per-second (Bps)
 * **Latency**
   * Time it takes to send and receive a packet between two networked devices (computers)
-* **(latency) Jitter**
+* **Jitter (in latency)**
   * Variation in latency.  The connection between two devices has variation in latency during a session.  For example, the latency might range between 15 and 30 milliseconds, spiking to over 200 milliseconds depending upon network conditions.
 * **Connectionless**
   * Sending of messages without a prior arrangement or communication channel.  May result in loss of data.  e.g., UDP
@@ -59,8 +59,8 @@ The following techniques are discussed, along with code samples in both JavaScri
   * JavaScript - ECS
   * C++ - ECS
 * Basic Multiplayer Networking
-  * [JavaScript](../JavaScript/MultiPlayer/Step 1 - Basic)
-  * [C++](../C++/MultiPlayer/Step 1 - Basic)
+  * [JavaScript](../JavaScript/MultiPlayer/Step%201%20-%20Basic)
+  * [C++](../C++/MultiPlayer/Step%201%20-%20Basic)
 * Client Prediction & Server Reconciliation
   * JavaScript
   * C++
