@@ -49,7 +49,7 @@ There is a time cost for computers to communicate over a network.  For example a
 
 The image below is a UML sequence diagram that shows the state and messages that happen between a client and server in a networked game.
 
-![Basic Networking - Sequence](https://github.com/ProfPorkins/GameTech/tree/master/doc/multiplayer/images/Basic%20Network%20-%20Sequence.png)
+![Basic Networking - Sequence](https://github.com/ProfPorkins/GameTech/blob/master/doc/multiplayer/images/Basic%20Network%20-%20Sequence.png)
 
 At the start of the diagram they both believe player 'p1' is located at position (10, 10).  At this time the player gives an input to move the player forward.  During the update of the client-side game model a network message is sent to the server indicating a move-forward input request occurred.  After receiving the message, the server updates its game model, and now has 'p1' at position (10, 11); the client still believes 'p1' is at position (10, 10).  After the server game model is updated, the updated game state is sent to the client.  During the update of the client game model, the updated game state from the server is incorporated and the client now believes player 'p1' is at position (10, 11).
 
