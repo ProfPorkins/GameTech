@@ -1,0 +1,21 @@
+@startuml Basic Network - Sequence
+
+participant Client
+participant Server
+
+note over Client: p1 (10, 10)
+/ note over Server: p1 (10, 10)
+
+note over Client: Update Game Model
+
+Client -> Server: input: move-forward
+note over Server: Update Game Model
+note over Client: p1 (10, 10)
+/ note over Server: p1 (10, 11)
+Server -> Client: update: game-state
+
+note over Client: Update Game Model
+note over Client: p1(10, 11)
+/ note over Server: p1(10, 11)
+
+@enduml

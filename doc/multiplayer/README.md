@@ -47,13 +47,23 @@ Two major issues are discussed in the documentation and code samples, latency (l
 
 There is a time cost for computers to communicate over a network.  For example a 'ping' from my computer to www.mit.edu shows a range of 26 to 30 ms.  There are multiple sources involved in this cost.  One is that the speed of light, while unbelievably fast in human terms, is a real constraint.  Between any two computers sharing a multiplayer network connection, there are any number of networking devices in between, hubs, routers, bridges, and who knows what else.  Each of these devices have buffers to temporarily hold incoming/outgoing data, along with time spent processing the data as it flows through.  Combining these and other sources of latency is large enough for players to notice if nothing is done to mitigate.
 
-The image below is a UML sequence diagram that shows the state and messages that happen between a client and server in a networked game.
+Two UML diagrams show the source of latency and the source of that latency throughout.  The left image is a sequence diagram which shows the states, events, and messages that occur in a simple networked game.  The right image is a timing diagram which details the timing of the whole system, offering insight into how each component in the system contributes to latency.
 
 Sequence Diagram | Timing Diagram
 -----------------|---------------
 ![Basic Networking - Sequence](https://github.com/ProfPorkins/GameTech/blob/master/doc/multiplayer/images/Basic%20Network%20-%20Sequence.png) | ![Basic Networking - Timing](https://github.com/ProfPorkins/GameTech/blob/master/doc/multiplayer/images/Basic%20Network%20-%20Timing.png)
 
-At the start of the diagram they both believe player 'p1' is located at position (10, 10).  At this time the player gives an input to move the player forward.  During the update of the client-side game model a network message is sent to the server indicating a move-forward input request occurred.  After receiving the message, the server updates its game model, and now has 'p1' at position (10, 11); the client still believes 'p1' is at position (10, 10).  After the server game model is updated, the updated game state is sent to the client.  During the update of the client game model, the updated game state from the server is incorporated and the client now believes player 'p1' is at position (10, 11).
+Considering the sequence diagram: at the start both the client and server believe player 'p1' is located at position (10, 10).  The player gives an input to move the player forward.  During the update of the client-side game model a network message is sent to the server indicating a move-forward input request occurred.  After receiving the message, the server updates its game model, and now has 'p1' at position (10, 11); the client still believes 'p1' is at position (10, 10).  After the server game model is updated, the updated game state is sent to the client.  During the update of the client game model, the updated game state from the server is incorporated and the client now believes player 'p1' is at position (10, 11).
+
+Considering the timing diagram (timing in milliseconds): The client is doing a full game loop every 10 ms (running at 100 frames per second), while the server is doing a full game loop every 20 ms (50 times per second).
+
+1. Just prior to time 0 the player made an input to move forward.
+1. During the first update a message is sent from the client to the server indicating this input.  The message is sent at time 10 and takes 12 ms to get to the server, arriving at time 22, too late to be incorporated into the second update which began at time 20.
+1. During the third server update, beginning at time 40, the input message is processed, with the server game state now having player 'p1' at position (10, 11) at time 60.
+1. At the end of the third update, a message is sent from the server to the client with the updated game state, taking 12 ms to travel, arriving at time 72, too late to be incorporated into the update that started at time 70.
+1. The client update begging at time 80 incorporates the updated game state from the server and after it is complete, the client believes player 'p1' is at position (10, 11) right before time 90.
+
+Looking at this diagram, we can see the player indicated movement forward at time 0 with that movement finally being reflected on their screen at time 90, almost a tenth of a second later.
 
 ### Trust - Authority
 
