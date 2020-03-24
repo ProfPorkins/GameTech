@@ -15,7 +15,7 @@ note over Client: p1 (0, 0)
 Server -> Client: update: game-state
 
 note over Client: Update Game Model
-note over Client: p1(0, 1)
-/ note over Server: p1(0, 1)
+note over Client: p1 (0, 1)
+/ note over Server: p1 (0, 1)
 
 @enduml
