@@ -47,4 +47,4 @@ The 'Update Clients' stage sends the updated state of the server-side model to t
 ## Implementation Details
 
 * [JavaScript](https://github.com/ProfPorkins/GameTech/tree/master/JavaScript/Multiplayer/Step%201%20-%20Basic)
-* [C++](https://github.com/ProfPorkins/GameTech/tree/master/C%2B%2B/Multiplayer/Step%201%20-%20Basic)
+* [C++](https://github.com/ProfPorkins/GameTech/tree/master/C%2B%2B/MultiPlayer/Step%201%20-%20Basic)
