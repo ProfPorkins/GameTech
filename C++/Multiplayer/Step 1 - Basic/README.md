@@ -2,7 +2,7 @@
 
 Build instructions for the C++ examples are located here (yet to be written).
 
-Read the documentation description the techniques and overview at this [link](https://github.com/ProfPorkins/GameTech/blob/master/doc/multiplayer/Multiplayer-Step-1.md), then come back to this document and read the specifics regarding the C++ implementation here.
+Read the documentation description the techniques and overview at this [link](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/Multiplayer-Step-1.md), then come back to this document and read the specifics regarding the C++ implementation here.
 
 ## Client Implementation
 
