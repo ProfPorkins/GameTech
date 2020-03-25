@@ -1,8 +1,0 @@
-syntax = "proto3";
-
-package shared;
-
-message MovementComponent {
-    float moveRate = 1;
-    float rotateRate = 2;
-}

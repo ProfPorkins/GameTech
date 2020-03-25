@@ -1,7 +1,0 @@
-syntax = "proto3";
-
-package shared;
-
-message LifetimeComponent {
-    uint32 howLong = 1;
-}

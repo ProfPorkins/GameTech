@@ -1,7 +1,0 @@
-syntax = "proto3";
-
-package shared;
-
-message AppearanceComponent {
-    string texture = 1;
-}

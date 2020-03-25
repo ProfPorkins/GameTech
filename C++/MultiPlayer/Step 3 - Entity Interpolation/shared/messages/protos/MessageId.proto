@@ -1,7 +1,0 @@
-syntax = "proto3";
-
-package shared;
-
-message MessageId {
-    uint32 id = 1;  // 32bits allows for 1000 messages per second for 1100 hours
-}
