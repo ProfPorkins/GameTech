@@ -1,0 +1,41 @@
+body {
+    width: 100%;
+    height: 100%;
+    margin: 0px;
+    border: 0;
+    overflow: hidden; /* Disable scrollbars */
+    display: block; /* No floating content on sides */
+    background-color: black;
+}
+
+#canvas-main {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+/*
+  Embedded font syntax taken from: http://www.paulirish.com/2009/bulletproof-font-face-implementation-syntax/
+  I am unable to get any syntax other than the one below to work on all browsers.  This
+  could be due to that this code creates fonts on-the-fly rather than using these
+  font-faces as styles?
+*/
+@font-face {    /* One for IE */
+    font-family: 'KenVector Future';
+    src: url('/assets/fonts/kenvector_future.eot');
+}
+@font-face {    /* One for the rest */
+    font-family: 'KenVector Future';
+    src: url(//:) format('no404'),
+         url('/assets/fonts/kenvector_future.ttf') format('truetype');
+}
+
+@font-face {    /* One for IE */
+    font-family: 'KenVector Future Thin';
+    src: url('/assets/fonts/kenvector_future_thin.eot');
+}
+@font-face {    /* One for the rest */
+    font-family: 'KenVector Future Thin';
+    src: url(//:) format('no404'),
+         url('/assets/fonts/kenvector_future_thin.ttf') format('truetype');
+}

@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+import public "Vector2f.proto";
+
+package shared;
+
+message SizeComponent {
+    Vector2f size = 1;
+}

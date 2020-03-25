@@ -1,0 +1,7 @@
+syntax = "proto3";
+
+package shared;
+
+message ClientId {
+    uint64 id = 1;
+}

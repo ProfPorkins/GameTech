@@ -1,0 +1,14 @@
+@startuml Step 1 - Sequence
+
+participant Client
+participant Server
+
+note over Client: Collect Inputs
+Client -> Server: inputs
+note over Server: Update Game Model
+Server -> Client: game-state
+note over Client: Update Game Model
+note over Client: Render Game Model
+
+
+@enduml

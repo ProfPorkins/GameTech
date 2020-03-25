@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+import public "AnimatedAppearanceComponent.proto";
+import public "AppearanceComponent.proto";
+import public "InputComponent.proto";
+import public "LifetimeComponent.proto";
+import public "MessageId.proto";
+import public "MomentumComponent.proto";
+import public "MovementComponent.proto";
+import public "PositionComponent.proto";
+import public "SizeComponent.proto";
+
+package shared;
+
+message Entity {
+    MessageId messageId = 1;
+    uint32 id = 2;
+    AnimatedAppearanceComponent animatedAppearance = 3;
+    AppearanceComponent appearance = 4;
+    PositionComponent position = 5;
+    SizeComponent size = 6;
+    LifetimeComponent lifetime = 7;
+    MomentumComponent momentum = 8;
+    MovementComponent movement = 9;
+    InputComponent input = 10;
+    uint32 updateWindow = 11;    // time in milliseconds
+}

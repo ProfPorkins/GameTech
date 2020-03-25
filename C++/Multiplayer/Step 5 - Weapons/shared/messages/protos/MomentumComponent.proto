@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+import public "Vector2f.proto";
+
+package shared;
+
+message MomentumComponent {
+    Vector2f momentum = 1;
+}

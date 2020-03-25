@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package shared;
+
+message AnimatedAppearanceComponent {
+    string texture = 1;
+    repeated uint32 spriteTime = 2;
+}

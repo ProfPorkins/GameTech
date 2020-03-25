@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package shared;
+
+enum InputType {
+    Thrust = 0;
+    RotateLeft = 1;
+    RotateRight = 2;
+    FireWeapon = 3;
+}
+
+message InputPair {
+    InputType type = 1;
+    uint32 elapsedTime = 2;
+}
+
+message Input {
+    uint32 entityId = 1;
+    repeated InputPair input = 2;
+}

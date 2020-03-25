@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+import public "Vector2f.proto";
+
+package shared;
+
+message MovementComponent {
+    float thrustRate = 1;
+    float rotateRate = 2;
+    Vector2f momentum = 3;
+}

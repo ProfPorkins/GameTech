@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+import public "AppearanceComponent.proto";
+import public "InputComponent.proto";
+import public "MessageId.proto";
+import public "MovementComponent.proto";
+import public "PositionComponent.proto";
+import public "SizeComponent.proto";
+
+package shared;
+
+message Entity {
+    MessageId messageId = 1;
+    uint32 id = 2;
+    AppearanceComponent appearance = 3;
+    PositionComponent position = 4;
+    SizeComponent size = 5;
+    MovementComponent movement = 6;
+    InputComponent input = 7;
+}
