@@ -4,7 +4,7 @@ The code for this example demonstrates basic networking for a multiplayer game. 
 
 Sequence Diagram |
 -----------------|
-![Step 1 - Sequence](https://github.com/ProfPorkins/GameTech/blob/master/doc/multiplayer/images/Step%201%20-%20Sequence.png) |
+![Step 1 - Sequence](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Step%201%20-%20Sequence.png) |
 
 ## Client Model
 
@@ -46,5 +46,5 @@ The 'Update Clients' stage sends the updated state of the server-side model to t
 
 ## Implementation Details
 
-* [JavaScript](https://github.com/ProfPorkins/GameTech/tree/master/JavaScript/MultiPlayer/Step%201%20-%20Basic)
-* [C++](https://github.com/ProfPorkins/GameTech/tree/master/C%2B%2B/MultiPlayer/Step%201%20-%20Basic)
+* [JavaScript](https://github.com/ProfPorkins/GameTech/tree/master/JavaScript/Multiplayer/Step%201%20-%20Basic)
+* [C++](https://github.com/ProfPorkins/GameTech/tree/master/C%2B%2B/Multiplayer/Step%201%20-%20Basic)
