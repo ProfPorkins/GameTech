@@ -25,14 +25,14 @@ Because of the client prediction, the player sees a response to the input at tim
 
 All is well and good in the world with client prediction, right?  Consider the following sequence diagram.
 
-Sequence Diagram |
------------------|
-![Client Prediction - Sequence](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Client%20Prediction%20Bad%20-%20Sequence.png) |
+Sequence Diagram | Timing Diagram
+-----------------|---------------
+![Client Prediction - Sequence](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Client%20Prediction%20Bad%20-%20Sequence.png) |  ![Basic Networking - Timing](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Client%20Prediction%20Bad%20-%20Timing.png)
 
-Same as before, the player gives an input to move forward, client predicts and server simulates.  Unlike previously, the player gives another input to move forward, before the server has responded with an updated game state.  The client also predicts this input, moving p1 to position (0, 2).  Importantly, before the server receives the second input, it has simulated the previous input and sends an updated state back to the client.  Upon receiving this update, the client moves p1 back to position (0, 1).  That's bad enough, then the server sends another game state update, with the second input simulated, which results in the client jumping p1 back to position (0, 2).  Ugh!
+The start is the same as before.  The player gives an input to move forward, client predicts and server simulates.  This time, however, the player gives another input to move forward, before the server has responded with an updated game state.  The client also predicts this input, moving p1 to position (0, 2).  Importantly, before the server receives the second input, it has simulated the previous input and sends an updated state back to the client.  Upon receiving this update, the client moves p1 back to position (0, 1).  If that's not bad enough, the server then sends another update, with the second input simulated, which results in the client jumping p1 back to position (0, 2), Ugh!
 
-As this diagram illustrates, due to the time and delays in network communication, differing client and server model simulation rates, when a client receives an updated game state from the server, that game state may not include inputs already predicted by the client.
+As these diagrams illustrate, due to the time involved network communication, differing client and server model simulation rates, when a client receives an updated game state from the server, that game state may not include inputs already predicted by the client.  Naive processing of updated game states at the client result in a jerking back-and-forth movement.
 
-The solution to this problem is know as _server reconciliation_.  Some coordination is needed between the client and server.  When the client sends an input message to the server, it assigns an id to that message, and remembers the input associated with the id.  When the server responds with an updated game state, it includes the id of the last input it has processed; alternatively a list of all input ids it has processed (if unreliable communications).
+The (a) solution to this problem is know as _server reconciliation_.  Some coordination is needed between the client and server.  When the client sends an input message to the server, it assigns an id to that message, and remembers the input associated with the id.  When the server responds with an updated game state, it includes the id of the last input it has processed; alternatively a list of all input ids it has processed (if unreliable communications).
 
 ...more to come...

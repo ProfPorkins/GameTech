@@ -1,0 +1,40 @@
+@startuml Client Prediction Bad - Timing
+
+concise "Client" as Client
+concise "Server" as Server
+
+@Client
+0 is update
++10 is update
+Client -> Server@+12 : move-forward
++10 is update
++10 is update
+Client ->Server@+12 : move-forward
++10 is update
++10 is update
++10 is update
++10 is update
++10 is update
++10 is update
++10 is update
++10 is update
+Client@0 <-> @20 : p1 (0, 0)
+Client@20 <-> @40 : p1 (0, 1)
+Client@40 <-> @80 : p1 (0, 2)
+Client@80 <-> @100 : p1 (0, 1)
+Client@100 <-> @120 : p1 (0, 2)
+
+@Server
+0 is update
++20 is update
++20 is update
++20 is update
+Server -> Client@+12 : update
++20 is update
+Server -> Client@+12 : update
++20 is update
+Server@0 <-> @60 : p1 (0, 0)
+Server@60 <-> @80 : p1 (0, 1)
+Server@80 <-> @120 : p1 (0, 2)
+
+@enduml
