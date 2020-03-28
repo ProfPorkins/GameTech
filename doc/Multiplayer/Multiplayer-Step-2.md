@@ -17,7 +17,7 @@ Let's look at the improvement in responsivness at the client by comparing the ba
 Networking Model | Timing Diagram
 -----------------|---------------
 Basic Networking | ![Basic Networking - Timing](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Basic%20Network%20-%20Timing.png)
-Client Prediction | Basic Networking | ![Client Prediction - Timing](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Client%20Prediction-1%20-%20Timing.png)
+Client Prediction | ![Client Prediction - Timing](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Client%20Prediction-1%20-%20Timing.png)
 
 ## Server Reconciliation
 
