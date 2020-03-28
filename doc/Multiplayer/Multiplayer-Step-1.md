@@ -1,6 +1,6 @@
 # Basic Networking
 
-The code for this example demonstrates basic networking for a multiplayer game.  This is a client collecting inputs, sending those inputs to the server, the server processing the inputs, and then sending an updated game state back to the client, which the client then incorporates into its model, and then renders.  The UML sequence diagram below details the steps:
+These examples demonstrate basic networking for a multiplayer game.  This is a client collecting inputs, sending those inputs to the server, the server processing the inputs, and then sending an updated game state back to the client, which the client then incorporates into its model, and then renders.  The UML sequence diagram below details the steps:
 
 Sequence Diagram |
 -----------------|
