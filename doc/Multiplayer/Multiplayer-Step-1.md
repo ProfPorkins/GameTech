@@ -4,7 +4,7 @@ These examples demonstrate basic networking for a multiplayer game.  This is a c
 
 Sequence Diagram |
 -----------------|
-![Step 1 - Sequence](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Step%201%20-%20Sequence.png) |
+![Basic Networking - Sequence](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Step%201%20-%20Sequence.png) |
 
 ## Client Model
 

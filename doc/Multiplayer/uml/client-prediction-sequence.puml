@@ -1,4 +1,4 @@
-@startuml Basic Network - Sequence
+@startuml Client Prediction-1 - Sequence
 
 participant Client
 participant Server
@@ -9,10 +9,10 @@ note over Client: p1 (0, 0)
 note over Client: Update Game Model
 
 Client -> Server: input: move-forward
-note over Client: UpdateGameModel
-/note over Server: Update Game Model
+note over Client: Update Game Model\nPredict move-forward
+/ note over Server: Update Game Model
 
-note over Client: p1 (0, 0)
+note over Client: p1 (0, 1)
 / note over Server: p1 (0, 1)
 Server -> Client: update: game-state
 
