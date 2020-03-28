@@ -1,4 +1,4 @@
-@startuml Client Prediction-1 - Timing
+@startuml Client Prediction - Timing
 
 concise "Client" as Client
 concise "Server" as Server

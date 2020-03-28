@@ -1,4 +1,4 @@
-@startuml Client Prediction - Sequence
+@startuml Client Prediction Bad - Sequence
 
 participant Client
 participant Server
@@ -14,11 +14,23 @@ note over Client: Update Game Model\nPredict move-forward
 
 note over Client: p1 (0, 1)
 / note over Server: p1 (0, 1)
+
+Client -> Server: input: move-forward
+note over Client: Update Game Model\nPredict move-forward
+
+note over Client: p1 (0, 2)
+
 Server -> Client: update: game-state
 
 note over Client: Update Game Model
-/ note over Server: Update Game Model
+/ note over Server: Update Game Model\nSimulate move-forward
+note over Client #SkyBlue: p1 jumps back
 note over Client: p1 (0, 1)
-/ note over Server: p1 (0, 1)
+/ note over Server: p1 (0, 2)
+
+Server -> Client: update: game-state
+note over Client: Update Game Model
+note over Client #SkyBlue: p1 jumps forward
+note over Client: p1 (0, 2)
 
 @enduml
