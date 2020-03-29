@@ -6,8 +6,8 @@
 #include "components/Position.hpp"
 #include "entities/Entity.hpp"
 
-#include <SFML/Window/Keyboard.hpp>
 #include <SFML/Window/Event.hpp>
+#include <SFML/Window/Keyboard.hpp>
 #include <chrono>
 #include <functional>
 #include <initializer_list>

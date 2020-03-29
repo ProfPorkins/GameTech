@@ -116,10 +116,11 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/assets/playerShip1_red.png ${CMAKE_CU
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
-add_subdirectory(ThirdParty/SFML-2.5.1)
-include_directories(ThirdParty/SFML-2.5.1/include)
-add_dependencies(Multiplayer-Step0-ECS sfml-main sfml-graphics sfml-audio sfml-system sfml-window sfml-network)
-target_link_libraries(Multiplayer-Step0-ECS sfml-main sfml-graphics sfml-audio sfml-system sfml-window sfml-network)
+add_subdirectory(ThirdParty/SFML)
+include_directories(ThirdParty/SFML/include)
+
+add_dependencies(Multiplayer-Step0-ECS sfml-graphics sfml-audio sfml-system sfml-window sfml-network)
+target_link_libraries(Multiplayer-Step0-ECS sfml-graphics sfml-audio sfml-system sfml-window sfml-network)
 
 #
 # ------------------------ Add CTTI ------------------------
@@ -161,10 +162,6 @@ if (CLANG_FORMAT)
         -style=file
         ${CODE_FILES_PATHS}
     )
-    #
-    # This makes the clang-format target a dependency of the main Multiplayer-Step0-ECS project
-    #
-    # add_dependencies(Multiplayer-Step0-ECS ClangFormat)
 else()
     message("Unable to find clang-format")
 endif()

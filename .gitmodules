@@ -38,3 +38,11 @@
 	path = C++/Multiplayer/Step 1 - Basic/ThirdParty/ctti
 	url = https://github.com/Manu343726/ctti.git
 	branch = master
+[submodule "C++/Multiplayer/Step 0 - ECS/ThirdParty/SFML"]
+	path = C++/Multiplayer/Step 0 - ECS/ThirdParty/SFML
+	url = https://github.com/SFML/SFML.git
+	branch = 2.5.x
+[submodule "C++/Multiplayer/Step 0 - ECS/ThirdParty/ctti"]
+	path = C++/Multiplayer/Step 0 - ECS/ThirdParty/ctti
+	url = https://github.com/Manu343726/ctti.git
+	branch = master

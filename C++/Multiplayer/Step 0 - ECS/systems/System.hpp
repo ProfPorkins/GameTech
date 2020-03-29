@@ -3,7 +3,10 @@
 #include "entities/Entity.hpp"
 
 #include <chrono>
+#pragma warning(push) // Disable some compiler warnings that come from ctti
+#pragma warning(disable : 4245)
 #include <ctti/type_id.hpp>
+#pragma warning(pop)
 #include <initializer_list>
 #include <unordered_set>
 
