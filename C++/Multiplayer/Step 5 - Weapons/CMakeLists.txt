@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(Multiplayer-Step4-EntityPrediction)
+project(Multiplayer-Step5-Weapons)
 
 #
 # ------------------------ Google Protocol Buffers ------------------------
@@ -34,7 +34,7 @@ include_directories(ThirdParty/ctti/include)
 add_subdirectory(shared)
 # This gets the /build/shared folders that include the generated files visible to the project
 target_include_directories(Shared PUBLIC ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/shared)
-add_dependencies(Shared sfml-main sfml-graphics sfml-audio sfml-system sfml-window sfml-network)
+add_dependencies(Shared sfml-graphics sfml-audio sfml-system sfml-window sfml-network)
 
 #
 # ------------------------ Add the Server Project ------------------------
@@ -43,7 +43,7 @@ add_subdirectory(server)
 target_include_directories(Server PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/shared)
 # This gets the /build/shared folders that include the generated files visible to the project
 target_include_directories(Server PUBLIC ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/shared)
-add_dependencies(Server Shared protobuf::libprotobuf sfml-main sfml-graphics sfml-audio sfml-system sfml-window sfml-network)
+add_dependencies(Server Shared protobuf::libprotobuf sfml-graphics sfml-audio sfml-system sfml-window sfml-network)
 
 #
 # ------------------------ Add the Client Project ------------------------
@@ -52,7 +52,7 @@ add_subdirectory(client)
 target_include_directories(Client PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/shared)
 # This gets the /build/shared folders that include the generated files visible to the project
 target_include_directories(Client PUBLIC ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/shared)
-add_dependencies(Client Shared Server protobuf::libprotobuf sfml-main sfml-graphics sfml-audio sfml-system sfml-window sfml-network)
+add_dependencies(Client Shared Server protobuf::libprotobuf sfml-graphics sfml-audio sfml-system sfml-window sfml-network)
 
 #
 # ------------------------ Clang Format ------------------------
