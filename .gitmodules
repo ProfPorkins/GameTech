@@ -1,0 +1,4 @@
+[submodule "C++/Multiplayer/Step 5 - Weapons/ThirdParty/SFML"]
+	path = C++/Multiplayer/Step 5 - Weapons/ThirdParty/SFML
+	url = https://github.com/SFML/SFML.git
+	branch = 2.5.x

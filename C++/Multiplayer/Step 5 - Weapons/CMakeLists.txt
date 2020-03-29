@@ -18,8 +18,8 @@ include_directories(${Protobuf_INCLUDE_DIRS})
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
-add_subdirectory(ThirdParty/SFML-2.5.1)
-include_directories(ThirdParty/SFML-2.5.1/include)
+add_subdirectory(ThirdParty/SFML)
+include_directories(ThirdParty/SFML/include)
 
 #
 # ------------------------ Add CTTI ------------------------
