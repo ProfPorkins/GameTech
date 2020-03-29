@@ -23,8 +23,7 @@ namespace systems
     class System
     {
       public:
-        System() :
-            System({})
+        System()
         {
         }
 
