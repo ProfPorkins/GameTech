@@ -12,6 +12,7 @@
 #include "messages/UpdateEntity.hpp"
 #include "messages/Utility.hpp"
 
+#include <cmath>
 #include <cstdint>
 #include <functional>
 #include <limits>
@@ -181,7 +182,7 @@ void GameModel::handleJoin(std::uint64_t clientId)
     //         it to the newly joined client
 
     // Generate a player, add to server simulation, and send to the client
-    auto player = entities::createPlayer("playerShip1_Blue.png", sf::Vector2f(0.0f, 0.0f), 0.05f, 0.0002f, 180.0f / 1000);
+    auto player = entities::createPlayer("playerShip1_blue.png", sf::Vector2f(0.0f, 0.0f), 0.05f, 0.0002f, 180.0f / 1000);
     addEntity(player);
     m_clientToEntityId[clientId] = player->getId();
 
@@ -198,7 +199,7 @@ void GameModel::handleJoin(std::uint64_t clientId)
 
     // We change the appearance for a player ship entity for all other clients to a different
     // texture.
-    player->getComponent<components::Appearance>()->set("playerShip1_Red.png");
+    player->getComponent<components::Appearance>()->set("playerShip1_red.png");
     pbEntity.mutable_appearance()->set_texture(player->getComponent<components::Appearance>()->get());
 
     //

@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <initializer_list>
 #include <unordered_set>
+#include <vector>
 
 // --------------------------------------------------------------
 //
