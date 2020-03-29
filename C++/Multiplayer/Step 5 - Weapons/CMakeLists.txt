@@ -93,10 +93,6 @@ if (CLANG_FORMAT)
         -style=file
         ${CODE_FILES_PATHS}
     )
-    #
-    # This makes the clang-format target a dependency of the main Multiplayer-Step0-ECS project
-    #
-    # add_dependencies(Multiplayer-Step0-ECS ClangFormat)
 else()
     message("Unable to find clang-format")
 endif()

@@ -95,4 +95,4 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 endif()
 
 
-target_link_libraries(Server Shared sfml-main sfml-graphics sfml-audio sfml-system sfml-window sfml-network ${SOCKET_LIBRARY})
+target_link_libraries(Server Shared sfml-system sfml-network ${SOCKET_LIBRARY})
