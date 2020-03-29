@@ -10,6 +10,7 @@
 #include "components/Size.hpp"
 #include "components/Weapon.hpp"
 
+#include <cmath>
 #include <memory>
 
 // --------------------------------------------------------------
