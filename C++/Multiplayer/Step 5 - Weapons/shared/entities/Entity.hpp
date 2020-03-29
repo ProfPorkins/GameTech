@@ -4,7 +4,10 @@
 
 #include <atomic>
 #include <cstdint>
+#pragma warning(push) // Disable some compiler warnings that come from ctti
+#pragma warning(disable : 4245)
 #include <ctti/type_id.hpp>
+#pragma warning(pop)
 #include <memory>
 #include <unordered_map>
 #include <unordered_set>
