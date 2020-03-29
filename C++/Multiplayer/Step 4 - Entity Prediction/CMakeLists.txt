@@ -18,8 +18,8 @@ include_directories(${Protobuf_INCLUDE_DIRS})
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
-add_subdirectory(ThirdParty/SFML-2.5.1)
-include_directories(ThirdParty/SFML-2.5.1/include)
+add_subdirectory(ThirdParty/SFML)
+include_directories(ThirdParty/SFML/include)
 
 #
 # ------------------------ Add CTTI ------------------------
@@ -34,7 +34,7 @@ include_directories(ThirdParty/ctti/include)
 add_subdirectory(shared)
 # This gets the /build/shared folders that include the generated files visible to the project
 target_include_directories(Shared PUBLIC ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/shared)
-add_dependencies(Shared sfml-main sfml-graphics sfml-audio sfml-system sfml-window sfml-network)
+add_dependencies(Shared sfml-system sfml-network)
 
 #
 # ------------------------ Add the Server Project ------------------------
@@ -43,7 +43,7 @@ add_subdirectory(server)
 target_include_directories(Server PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/shared)
 # This gets the /build/shared folders that include the generated files visible to the project
 target_include_directories(Server PUBLIC ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/shared)
-add_dependencies(Server Shared protobuf::libprotobuf sfml-main sfml-graphics sfml-audio sfml-system sfml-window sfml-network)
+add_dependencies(Server Shared protobuf::libprotobuf sfml-system sfml-network)
 
 #
 # ------------------------ Add the Client Project ------------------------
@@ -52,7 +52,7 @@ add_subdirectory(client)
 target_include_directories(Client PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/shared)
 # This gets the /build/shared folders that include the generated files visible to the project
 target_include_directories(Client PUBLIC ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/shared)
-add_dependencies(Client Shared Server protobuf::libprotobuf sfml-main sfml-graphics sfml-audio sfml-system sfml-window sfml-network)
+add_dependencies(Client Shared Server protobuf::libprotobuf sfml-graphics sfml-audio sfml-system sfml-window sfml-network)
 
 #
 # ------------------------ Clang Format ------------------------
@@ -93,10 +93,6 @@ if (CLANG_FORMAT)
         -style=file
         ${CODE_FILES_PATHS}
     )
-    #
-    # This makes the clang-format target a dependency of the main Multiplayer-Step0-ECS project
-    #
-    # add_dependencies(Multiplayer-Step0-ECS ClangFormat)
 else()
     message("Unable to find clang-format")
 endif()

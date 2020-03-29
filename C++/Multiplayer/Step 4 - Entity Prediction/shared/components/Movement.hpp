@@ -27,7 +27,7 @@ namespace components
         const math::Vector2f getMomentum() const { return m_momentum; }
         void setMomentum(math::Vector2f momentum) { m_momentum = momentum; }
 
-        void resetIntraMovementTime() { m_intraMovementTime = {0}; }
+        void resetIntraMovementTime() { m_intraMovementTime = std::chrono::microseconds(0); }
         auto getIntraMovementTime() { return m_intraMovementTime; }
         void updateIntraMovementTime(std::chrono::microseconds howMuch) { m_intraMovementTime += howMuch; }
 
