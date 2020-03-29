@@ -12,7 +12,7 @@
 #ifdef _MSC_VER
 #include <winsock2.h>
 #else
-#include <sys/socket.h>
+#include <arpa/inet.h>
 #endif
 
 // -----------------------------------------------------------------
