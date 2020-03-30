@@ -20,16 +20,17 @@ set(CLIENT_COMPONENTS_HEADERS
     components/Sprite.hpp
     )
 set(CLIENT_COMPONENTS_SOURCES
-    components/AnimatedSprite.cpp
     )
 
 set(CLIENT_SYSTEMS_HEADERS
+    systems/Animation.hpp
     systems/KeyboardInput.hpp
     systems/Momentum.hpp
     systems/Network.hpp
     systems/Renderer.hpp
     )
 set(CLIENT_SYSTEMS_SOURCES
+    systems/Animation.cpp
     systems/KeyboardInput.cpp
     systems/Momentum.cpp
     systems/Network.cpp

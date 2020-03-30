@@ -49,7 +49,6 @@ namespace systems
             else if (entity->hasComponent<components::AnimatedSprite>())
             {
                 auto sprite = entity->getComponent<components::AnimatedSprite>();
-                sprite->update(elapsedTime);
                 sprite->get()->setPosition({position->get().x, position->get().y});
                 sprite->get()->setRotation(position->getOrientation());
 

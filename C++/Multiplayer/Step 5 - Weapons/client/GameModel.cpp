@@ -53,6 +53,10 @@ bool GameModel::initialize(math::Vector2f viewSize)
     m_systemLifetime = std::make_unique<systems::Lifetime>(std::bind(&GameModel::handleRemoveEntity, this, std::placeholders::_1));
 
     //
+    // Initialize the animation system.
+    m_systemAnimation = std::make_unique<systems::Animation>();
+
+    //
     // Initialize the renderer system.
     m_systemRender = std::make_unique<systems::Renderer>();
 
@@ -102,6 +106,7 @@ void GameModel::update(const std::chrono::microseconds elapsedTime, const std::c
     m_systemKeyboardInput->update(elapsedTime, now);
     m_systemMomentum->update(elapsedTime, now);
     m_systemLifetime->update(elapsedTime, now);
+    m_systemAnimation->update(elapsedTime, now);
 
     //
     // Rendering must always be done last
@@ -267,6 +272,7 @@ void GameModel::addEntity(std::shared_ptr<entities::Entity> entity)
     m_entities[entity->getId()] = entity;
     m_systemKeyboardInput->addEntity(entity);
     m_systemRender->addEntity(entity);
+    m_systemAnimation->addEntity(entity);
     m_systemNetwork->addEntity(entity);
     m_systemMomentum->addEntity(entity);
     m_systemLifetime->addEntity(entity);
@@ -284,9 +290,10 @@ void GameModel::removeEntity(entities::Entity::IdType entityId)
     //
     // Let each of the systems know to remove the entity
     m_systemKeyboardInput->removeEntity(entityId);
+    m_systemRender->removeEntity(entityId);
+    m_systemAnimation->removeEntity(entityId);
     m_systemNetwork->removeEntity(entityId);
     m_systemMomentum->removeEntity(entityId);
-    m_systemRender->removeEntity(entityId);
     m_systemLifetime->removeEntity(entityId);
 }
 

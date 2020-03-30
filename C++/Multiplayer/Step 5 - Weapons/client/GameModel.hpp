@@ -11,6 +11,7 @@
 #include "components/Position.hpp"
 #include "entities/Entity.hpp"
 #include "misc/math.hpp"
+#include "systems/Animation.hpp"
 #include "systems/KeyboardInput.hpp"
 #include "systems/Lifetime.hpp"
 #include "systems/Momentum.hpp"
@@ -46,6 +47,7 @@ class GameModel
     std::unique_ptr<systems::Lifetime> m_systemLifetime;
     std::unique_ptr<systems::Momentum> m_systemMomentum;
     std::unique_ptr<systems::Network> m_systemNetwork;
+    std::unique_ptr<systems::Animation> m_systemAnimation;
     std::unique_ptr<systems::Renderer> m_systemRender;
 
     std::shared_ptr<entities::Entity> createEntity(const shared::Entity& pbEntity);
