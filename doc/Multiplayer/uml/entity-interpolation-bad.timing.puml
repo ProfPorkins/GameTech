@@ -1,4 +1,4 @@
-@startuml Entity Interpolation - Timing
+@startuml Entity Interpolation Bad - Timing
 
 concise "Client A" as ClientA
 concise "Server" as Server
