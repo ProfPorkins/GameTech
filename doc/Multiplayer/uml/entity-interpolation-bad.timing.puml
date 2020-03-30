@@ -1,4 +1,4 @@
-@startuml Server Reconciliation - Timing
+@startuml Entity Interpolation - Timing
 
 concise "Client A" as ClientA
 concise "Server" as Server
