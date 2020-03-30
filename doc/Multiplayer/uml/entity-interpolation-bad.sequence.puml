@@ -1,0 +1,48 @@
+@startuml Entity Interpolation Bad - Sequence
+
+participant "Client A" as ClientA
+participant Server
+participant "Client B" as ClientB
+
+note over ClientA: p1 (0, 0)
+/ note over Server: p1 (0, 0)
+/ note over ClientB: p1 (0, 0)
+
+note over ClientA: Update Game Model
+
+ClientA -> Server: input: move-forward (id: 1)
+note over ClientA: Update Game Model\nPredict move-forward
+/ note over Server: Update Game Model\nSimulate move-forward
+/ note over ClientB: Update Game Model
+
+note over ClientA #SkyBlue: p1 (0, 1)
+/ note over Server #SkyBlue: p1 (0, 1)
+/ note over ClientB: p1 (0, 10
+
+ClientA -> Server: input: move-forward (id: 2)
+note over ClientA: Update Game Model\nPredict move-forward
+/ note over ClientB: Update Game Model
+
+note over ClientA: p1 (0, 2)
+/ note over ClientB: p1 (0, 0)
+
+Server -> ClientA: update: game-state (ack id: 1)
+Server -> ClientB: update: game-state
+
+note over ClientA: Update Game Model\n  **Replay msg id 2**
+/ note over Server: Update Game Model\nSimulate move-forward
+/ note over ClientB: Update Game Model
+
+note over ClientA: p1 (0, 2)
+/ note over Server: p1 (0, 2)
+/ note over ClientB #SkyBlue: p1 (0, 1)
+
+Server -> ClientA: update: game-state (ack id: 2)
+Server -> ClientB: update: game-state
+
+note over ClientA: Update Game Model
+/ note over ClientB: Update Game Model
+note over ClientA: p1 (0, 2)
+/ note over ClientB: p1 (0, 2)
+
+@enduml

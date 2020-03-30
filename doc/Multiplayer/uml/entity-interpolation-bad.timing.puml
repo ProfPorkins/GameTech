@@ -1,0 +1,60 @@
+@startuml Server Reconciliation - Timing
+
+concise "Client A" as ClientA
+concise "Server" as Server
+concise "Client B" as ClientB
+
+@ClientA
+0 is update
++10 is update
+ClientA -> Server@+12 : move-forward
++10 is update
++10 is update
+ClientA ->Server@+12 : move-forward
++10 is update
++10 is update
++10 is update
++10 is update
++10 is update
++10 is update
++10 is update
++10 is update
+ClientA@0 <-> @20 : p1 (0, 0)
+ClientA@20 <-> @40 : p1 (0, 1)
+ClientA@40 <-> @80 : p1 (0, 2)
+ClientA@80 <-> @100 : p1 (0, 2)
+ClientA@100 <-> @120 : p1 (0, 2)
+
+@Server
+0 is update
++20 is update
++20 is update
++20 is update
+Server -> ClientA@+12 : update
+Server -> ClientB@+12 : update
++20 is update
+Server -> ClientA@+12 : update
+Server -> ClientB@+12 : update
++20 is update
+Server@0 <-> @40 : p1 (0, 0)
+Server@40 <-> @60 : p1 (0, 1)
+Server@60 <-> @120 : p1 (0, 2)
+
+@ClientB
+0 is update
++10 is update
++10 is update
++10 is update
++10 is update
++10 is update
++10 is update
++10 is update
++10 is update
++10 is update
++10 is update
++10 is update
+ClientB@0 <-> @80 : p1 (0, 0)
+ClientB@80 <-> @100 : p1 (0, 1)
+ClientB@100 <-> @120 : p1 (0, 2)
+
+@enduml
