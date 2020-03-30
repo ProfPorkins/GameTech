@@ -15,7 +15,7 @@ namespace systems
     class Animation : public System
     {
       public:
-          Animation() :
+        Animation() :
             System({ctti::unnamed_type_id<components::AnimatedSprite>()})
         {
         }
