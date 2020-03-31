@@ -1,5 +1,12 @@
 # Client Prediction & Server Reconciliation
 
+## Implementation Examples
+
+* [JavaScript](https://github.com/ProfPorkins/GameTech/tree/master/JavaScript/Multiplayer/Step%202%20-%20Client%20Prediction)
+* [C++](https://github.com/ProfPorkins/GameTech/tree/master/C%2B%2B/Multiplayer/Step%202%20-%20Client%20Prediction)
+
+## Introduction
+
 These examples build upon the basic networking examples by adding in the concepts of [client prediction](https://en.wikipedia.org/wiki/Client-side_prediction) and server reconciliation.  The effect of enhancing the game with these techniques is that of a responsive and smooth game-play experience for a player providing inputs.
 
 ## Client Prediction

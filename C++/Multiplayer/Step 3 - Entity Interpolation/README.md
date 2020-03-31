@@ -1,7 +1,6 @@
 # Multiplayer - Entity Interpolation
 
-The sample must be run as a server: `node server.js`\
-With the server running, connect to: `http://localhost:3000`
+Build instructions for the C++ examples are located here (yet to be written).
 
 This sample demonstrates the improvements in networked multiplayer possible using the concepts of Client Prediction, Server Reconciliation, and Entity Interpolation.
 

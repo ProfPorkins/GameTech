@@ -1,5 +1,12 @@
 # Basic Networking
 
+## Implementation Examples
+
+* [JavaScript](https://github.com/ProfPorkins/GameTech/tree/master/JavaScript/Multiplayer/Step%201%20-%20Basic)
+* [C++](https://github.com/ProfPorkins/GameTech/tree/master/C%2B%2B/Multiplayer/Step%201%20-%20Basic)
+
+## Introduction
+
 These examples demonstrate basic networking for a multiplayer game.  This is a client collecting inputs, sending those inputs to the server, the server processing the inputs, and then sending an updated game state back to the client, which the client then incorporates into its model, and then renders.  The UML sequence diagram below details the steps:
 
 Sequence Diagram |
@@ -43,8 +50,3 @@ Inputs at the server are the network messages sent from clients which contain th
 Similar to the client, the 'Update Model' stage has nothing to do.  It is stubbed in because it is needed in future steps.
 
 The 'Update Clients' stage sends the updated state of the server-side model to the connected clients.
-
-## Implementation Details
-
-* [JavaScript](https://github.com/ProfPorkins/GameTech/tree/master/JavaScript/Multiplayer/Step%201%20-%20Basic)
-* [C++](https://github.com/ProfPorkins/GameTech/tree/master/C%2B%2B/Multiplayer/Step%201%20-%20Basic)
