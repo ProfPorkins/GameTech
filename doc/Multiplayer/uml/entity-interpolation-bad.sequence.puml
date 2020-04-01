@@ -17,7 +17,7 @@ note over ClientA: Update Game Model\nPredict move-forward
 
 note over ClientA #SkyBlue: p1 (0, 1)
 / note over Server #SkyBlue: p1 (0, 1)
-/ note over ClientB: p1 (0, 1)
+/ note over ClientB: p1 (0, 0)
 
 ClientA -> Server: input: move-forward (id: 2)
 note over ClientA: Update Game Model\nPredict move-forward
