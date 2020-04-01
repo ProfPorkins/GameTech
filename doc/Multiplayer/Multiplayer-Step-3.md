@@ -23,7 +23,7 @@ The (a) solution to this, and trust me, you aren't going to like it, is to _furt
 
 Sequence Diagram | Timing Diagram
 -----------------|---------------
-![Entity Interpolation Animation - Sequence] |  ![Entity Interpolation Animation - Timing](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Entity%20Interpolation%20Animation%20-%20Timing.png)
+![...coming soon...] |  ![Entity Interpolation Animation - Timing](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Entity%20Interpolation%20Animation%20-%20Timing.png)
 
 In the timing diagram above I've tried to show the order of events and generally what happens.  Don't worry about the specific timing (millisecond) numbers along the bottom, it is the relative order among the two clients and server that is important.  In the description below the numbers are used for reference, but realize, the actual timing is almost certainly something else.  Detailing what takes place:
 
