@@ -23,7 +23,7 @@ The (a) solution to this, and trust me, you aren't going to like it, is to _furt
 
 Sequence Diagram | Timing Diagram
 -----------------|---------------
-![...coming soon...] |  ![Entity Interpolation Animation - Timing](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Entity%20Interpolation%20Animation%20-%20Timing.png)
+![Entity Interpolation Animation - Timing](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Entity%20Interpolation%20Animation%20-%20Sequence.png) |  ![Entity Interpolation Animation - Timing](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Entity%20Interpolation%20Animation%20-%20Timing.png)
 
 In the timing diagram above I've tried to show the order of events and generally what happens.  Don't worry about the specific timing (millisecond) numbers along the bottom, it is the relative order among the two clients and server that is important.  In the description below the numbers are used for reference, but realize, the actual timing is almost certainly something else.  Detailing what takes place:
 
@@ -42,7 +42,9 @@ In the timing diagram above I've tried to show the order of events and generally
 
 I know, it seems crazy to wait so long to begin the animation of the player from Client A at Client B.  A couple of notes on this:
 
-* When a client is receiving updates from the server 20 times per second 20 Hz), for many games and many players, it is hardly noticeable, if at all.
+* When a client is receiving updates from the server 20 times per second (20 Hz), for many games and many players, it is hardly noticeable, if at all.
 * Animation of the player from Client A at Client B _could_ begin at time 50, if the nature of the animation and its timing is known.  For example, a weapon reload animation has a fixed time to take place once it starts; that could start immediately upon notification.
-* The next step in this series, Entity Prediction, enhances the networking model by having Client B predict where the player from Client A will be based on momentum at the time of receiving the update at time 50.  This allows Client B to begin animating the movement earlier.
+* The next step in this series, Entity Prediction, enhances the networking model by having Client B predict where the player from Client A will be, based on momentum known at the time of receiving the update.  This allows Client B to begin animating the movement earlier.
 * The techniques presented in this series are meant as a starting point for understanding how to write networked multiplayer games, not the end point.  There are a lot of approaches to dealing with the issues in (networked) multiplayer games and further (more advanced) techniques to use.  It also depends upon the specific game and its needs.
+
+With all of the above said and the caveats noted, with the addition of this technique, all player controlled ships have smooth animation throughout; and it is pretty good.
