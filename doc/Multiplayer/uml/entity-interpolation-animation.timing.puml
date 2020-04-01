@@ -1,0 +1,52 @@
+@startuml Entity Interpolation Animation - Timing
+
+concise "Client A" as ClientA
+concise "Server" as Server
+concise "Client B" as ClientB
+
+@0
+ClientA is idle
+ClientB is idle
+Server is processing
+
+@10
+ClientA -> Server@+10 : move-forward
+ClientA is animating
+' 20 to animate
+
+@30
+ClientA is animating
+' 20 to animate
+ClientA ->Server@+10 : move-forward
+
+@40
+Server -> ClientA@+10 : update
+Server -> ClientB@+10 : update
+
+@50
+ClientA is idle
+
+@60
+Server -> ClientA@+10 : update
+Server -> ClientB@+10 : update
+
+@70
+ClientB is animating
+' 20 to animate
+
+@90
+ClientB is animating
+
+ClientA@0 <-> @10 : p1 (0, 0)
+ClientA@10 <-> @30 : p1 (0, 1)
+ClientA@30 <-> @50 : p1 (0, 2)
+ClientA@50 <-> @100 : p1 (0, 2)
+
+Server@0 <-> @20 : p1 (0, 0)
+Server@20 <-> @40 : p1 (0, 1)
+Server@40 <-> @100 : p1 (0, 2)
+
+ClientB@0 <-> @70 : p1 (0, 0)
+ClientB@70 <-> @100 : p1 (0, 1)
+
+@enduml

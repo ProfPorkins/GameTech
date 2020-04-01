@@ -9,6 +9,7 @@ note over ClientA: p1 (0, 0)
 / note over ClientB: p1 (0, 0)
 
 note over ClientA: Update Game Model
+/ note over ClientB: Update Game Model
 
 ClientA -> Server: input: move-forward (id: 1)
 note over ClientA: Update Game Model\nPredict move-forward
