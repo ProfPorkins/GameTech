@@ -47,6 +47,6 @@ Server@20 <-> @40 : p1 (0, 1)
 Server@40 <-> @100 : p1 (0, 2)
 
 ClientB@0 <-> @70 : p1 (0, 0)
-ClientB@70 <-> @100 : p1 (0, 1)
+ClientB@70 <-> @90 : p1 (0, 1)
 
 @enduml
