@@ -20,6 +20,7 @@ viola, they are installed and ready to use
 The next step is to clone and build the multiplayer examples.  The following steps can be used to do this.
 
 1. Clone the Game Techniques repository.  You can either so this using a command line or a tool with a GUI.  I personally use GitExtensions, but do most things from the command line inside of it.  The repository is located at: https://github.com/protocolbuffers/protobuf.git
+1. Using initialize the submodules: `git submodule update --init --recursive`
 1. Run the CMake GUI
    1. For the **Where is the source code** field navigate to the example you want to build.  For example **Step 1 - Basic**
    1. For the **Where to build the binaries** use the same pathname from above, but add a `/build` folder to it.
