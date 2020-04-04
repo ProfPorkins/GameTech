@@ -30,7 +30,7 @@ namespace systems
         // Render each of the entities
         for (auto&& [id, entity] : m_entities)
         {
-            (void)id;   // unused
+            (void)id; // unused
             //
             // I know having these if statements isn't great for performance, but for this demo
             // code (for now), I'm okay with it.

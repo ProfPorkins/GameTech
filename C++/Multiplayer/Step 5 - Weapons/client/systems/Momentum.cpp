@@ -41,6 +41,7 @@ namespace systems
     {
         for (auto&& [id, entity] : m_entities)
         {
+            (void)id; // unused
             bool floating = true;
             auto floatingTime = elapsedTime;
             if (entity->hasComponent<components::Goal>())

@@ -27,6 +27,7 @@ namespace systems
         KeyToType map;
         for (auto& [input, time] : entity->getComponent<components::Input>()->getInputs())
         {
+            (void)time; // unused
             map.m_keyToType[m_typeToKeyMap[input]] = input;
         }
         // Add after creating the map, to ensure the copy into the m_keyToFunctionMap is correctly made
@@ -57,6 +58,7 @@ namespace systems
             std::vector<components::Input::Type> inputs;
             for (auto&& [key, keyEvent] : m_keysPressed)
             {
+                (void)keyEvent; // unused
                 if (m_keyToFunctionMap[id].m_keyToType.find(key) != m_keyToFunctionMap[id].m_keyToType.end())
                 {
                     auto type = m_keyToFunctionMap[id].m_keyToType[key];

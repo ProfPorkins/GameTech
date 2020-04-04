@@ -52,6 +52,7 @@ namespace components
         {
             for (auto& [type, time] : m_limitTime)
             {
+                (void)type;
                 time = std::max(time - howLong, std::chrono::microseconds(0));
             }
         }

@@ -51,6 +51,7 @@ namespace systems
             if (entry != m_commandMap.end())
             {
                 auto& [type, handler] = *entry;
+                (void)type; // unused
                 handler(clientId, elapsedTime, message);
             }
         }
@@ -61,6 +62,7 @@ namespace systems
         // to do this, but have decided to not do that for now.
         for (auto& [id, entity] : m_entities)
         {
+            (void)id; // unused
             if (entity->hasComponent<components::Input>())
             {
                 entity->getComponent<components::Input>()->updateLimits(elapsedTime);
@@ -146,6 +148,8 @@ namespace systems
                     }
                 }
                 break;
+                default: // Just here to prevent a warning
+                    break;
             }
         }
     }
@@ -171,6 +175,7 @@ namespace systems
         // is to update the client with everything everytime.
         for (auto& [entityId, entity] : m_entities)
         {
+            (void)entityId; // unused
             auto message = std::make_shared<messages::UpdateEntity>(entity, elapsedTime);
             MessageQueueServer::instance().broadcastMessageWithLastId(message);
         }

@@ -21,8 +21,8 @@ namespace components
         {
         }
 
-        const float getThrustRate() const { return m_thrustRate; }
-        const float getRotateRate() const { return m_rotateRate; }
+        float getThrustRate() const { return m_thrustRate; }
+        float getRotateRate() const { return m_rotateRate; }
 
       private:
         float m_thrustRate; // unit distance per millisecond

@@ -78,6 +78,7 @@ namespace systems
             if (entry != m_commandMap.end())
             {
                 auto& [type, handler] = *entry;
+                (void)type; // unused
                 handler(elapsedTime, now, message);
             }
             if (message->getMessageId().has_value())
@@ -131,7 +132,7 @@ namespace systems
     // to join the game.
     //
     // --------------------------------------------------------------
-    void Network::handleConnectAck(std::shared_ptr<messages::ConnectAck> message)
+    void Network::handleConnectAck([[maybe_unused]] std::shared_ptr<messages::ConnectAck> message)
     {
         //
         // Now, send a Join message back to the server so we can get into the game!
