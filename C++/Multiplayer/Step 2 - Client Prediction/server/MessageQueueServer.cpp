@@ -9,10 +9,10 @@
 #include <limits>
 
 // For htonl and ntohl
-#ifdef _MSC_VER
-#include <winsock2.h>
+#if defined(_MSC_VER)
+    #include <winsock2.h>
 #else
-#include <arpa/inet.h>
+    #include <arpa/inet.h>
 #endif
 
 // -----------------------------------------------------------------

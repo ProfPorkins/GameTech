@@ -2,10 +2,14 @@
 
 //
 // Disable some compiler warnings that come from google protocol buffers
-#pragma warning(push)
-#pragma warning(disable : 4127)
+#if defined(_MSC_VER)
+    #pragma warning(push)
+    #pragma warning(disable : 4127)
+#endif
 #include "Input.pb.h"
-#pragma warning(pop)
+#if defined(_MSC_VER)
+    #pragma warning(pop)
+#endif
 
 #include "Message.hpp"
 #include "MessageTypes.hpp"
