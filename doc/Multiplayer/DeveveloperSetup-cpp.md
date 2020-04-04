@@ -62,7 +62,6 @@ The following development tools must be installed:
 * The following may need to be installed: `sudo apt install ...`
   * libx11-dev
   * xorg-dev
-  * opengl
   * libgl1-mesa-dev
   * libopenal-dev
   * libvorbis-dev
@@ -71,9 +70,9 @@ The following development tools must be installed:
 
 The multiplayer examples use Google's Protocol Buffers (version 3) for serialization/deserialization of data for network transport.  This link, [Protocol Buffers](https://github.com/protocolbuffers/protobuf/blob/master/src/README.md), provides instructions for installation.  I recommend the following steps:
 
-1. Install the necessary tools: `sudo apt-get install autoconf automake libtool curl make g++ unzip`
-1. Create a protobuf subdirectory in a location of your choosing.
+1. Install the necessary tools: `sudo apt install autoconf automake libtool curl make g++ unzip`
 1. Clone the git repository: `git clone https://github.com/protocolbuffers/protobuf.git`
+1. Navigate into the `protobuf` folder
 1. Initialize the submodules: `git submodule update --init --recursive`
 1. Run autogen.sh: `./autogen.sh`
 1. Configure, build and install
@@ -86,9 +85,11 @@ The multiplayer examples use Google's Protocol Buffers (version 3) for serializa
 The next step is to clone and build the multiplayer examples.  The following steps can be used to do this.
 
 1. Clone the Game Techniques repository: `git clone https://github.com/ProfPorkins/GameTech.git`
+1. Navigate into the `GameTech` folder
 1. Initialize the submodules: `git submodule update --init --recursive`
 1. Choose which example you want to build and navigate into that folder.  For example:
    1. `cd C++`
+   1. `cd Multiplayer`
    1. `cd "Step 1 - Basic"`
 1. Once in the example folder, create a sub-folder named 'build': `mkdir build`
 1. Navigate into this folder: `cd build`
