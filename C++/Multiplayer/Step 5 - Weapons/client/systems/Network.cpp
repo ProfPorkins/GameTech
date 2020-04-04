@@ -30,30 +30,23 @@ namespace systems
         //
         // We know how to privately handle these messages
         registerHandler(messages::Type::ConnectAck,
-                        [this](std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now, std::shared_ptr<messages::Message> message) {
-                            (void)elapsedTime;
-                            (void)now;
+                        [this]([[maybe_unused]] std::chrono::microseconds elapsedTime, [[maybe_unused]] const std::chrono::system_clock::time_point now, std::shared_ptr<messages::Message> message) {
                             // Not completely in love with having to do a static_pointer_cast, but living with it for now
                             handleConnectAck(std::static_pointer_cast<messages::ConnectAck>(message));
                         });
 
         registerHandler(messages::Type::NewEntity,
-                        [this](std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now, std::shared_ptr<messages::Message> message) {
-                            (void)elapsedTime; // unused parameter
-                            (void)now;
+                        [this]([[maybe_unused]] std::chrono::microseconds elapsedTime, [[maybe_unused]] const std::chrono::system_clock::time_point now, std::shared_ptr<messages::Message> message) {
                             m_newEntityHandler(std::static_pointer_cast<messages::NewEntity>(message)->getPBEntity());
                         });
 
         registerHandler(messages::Type::UpdateEntity,
-                        [this](std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now, std::shared_ptr<messages::Message> message) {
-                            (void)elapsedTime; // unused parameter
+                        [this]([[maybe_unused]] std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now, std::shared_ptr<messages::Message> message) {
                             handleUpdateEntity(std::static_pointer_cast<messages::UpdateEntity>(message), now);
                         });
 
         registerHandler(messages::Type::RemoveEntity,
-                        [this](std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now, std::shared_ptr<messages::Message> message) {
-                            (void)elapsedTime; // unused parameter
-                            (void)now;
+                        [this]([[maybe_unused]] std::chrono::microseconds elapsedTime, [[maybe_unused]] const std::chrono::system_clock::time_point now, std::shared_ptr<messages::Message> message) {
                             auto entityId = std::static_pointer_cast<messages::RemoveEntity>(message)->getPBEntity().id();
                             m_removeEntityHandler(entityId);
                         });
@@ -76,7 +69,6 @@ namespace systems
     // --------------------------------------------------------------
     void Network::update(std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now, std::queue<std::shared_ptr<messages::Message>> messages)
     {
-        (void)now;
         m_updatedEntities.clear();
         while (!messages.empty())
         {

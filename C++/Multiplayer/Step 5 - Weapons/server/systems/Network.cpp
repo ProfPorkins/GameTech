@@ -24,18 +24,14 @@ namespace systems
         //
         // Register our own join handler
         registerHandler(messages::Type::Join,
-                        [this](std::uint64_t clientId, std::chrono::microseconds elapsedTime, std::shared_ptr<messages::Message> message) {
-                            (void)elapsedTime; // unused parameter
-                            (void)message;     // unused parameter
+                        [this](std::uint64_t clientId, [[maybe_unused]] std::chrono::microseconds elapsedTime, [[maybe_unused]] std::shared_ptr<messages::Message> message) {
                             m_joinHandler(clientId);
                         });
 
         //
         // Register our own input handler
         registerHandler(messages::Type::Input,
-                        [this](std::uint64_t clientId, std::chrono::microseconds elapsedTime, std::shared_ptr<messages::Message> message) {
-                            (void)clientId;    // unused parameter
-                            (void)elapsedTime; // unused parameter
+                        [this]([[maybe_unused]] std::uint64_t clientId, std::chrono::microseconds elapsedTime, std::shared_ptr<messages::Message> message) {
                             handleInput(std::static_pointer_cast<messages::Input>(message), elapsedTime);
                         });
     }
@@ -45,9 +41,8 @@ namespace systems
     // Process all outstanding messages since the last update.
     //
     // --------------------------------------------------------------
-    void Network::update(std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now, std::queue<std::tuple<std::uint64_t, std::shared_ptr<messages::Message>>> messages)
+    void Network::update(std::chrono::microseconds elapsedTime, [[maybe_unused]] const std::chrono::system_clock::time_point now, std::queue<std::tuple<std::uint64_t, std::shared_ptr<messages::Message>>> messages)
     {
-        (void)now;
         while (!messages.empty())
         {
             auto [clientId, message] = messages.front();

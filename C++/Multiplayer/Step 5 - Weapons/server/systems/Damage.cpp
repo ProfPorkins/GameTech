@@ -31,10 +31,8 @@ namespace systems
     // that have health.
     //
     // --------------------------------------------------------------
-    void Damage::update(std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now)
+    void Damage::update([[maybe_unused]] std::chrono::microseconds elapsedTime, [[maybe_unused]] const std::chrono::system_clock::time_point now)
     {
-        (void)now;
-        (void)elapsedTime;
         for (auto&& weaponId : m_entitiesDamage)
         {
             auto weapon = m_entities[weaponId];

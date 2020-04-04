@@ -39,11 +39,8 @@ namespace systems
         virtual bool addEntity(std::shared_ptr<entities::Entity> entity);
         virtual void removeEntity(entities::Entity::IdType entityId);
 
-        // The (void)elapsedTime is a technique to silence an unused parameter warning
-        virtual void update(std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now)
+        virtual void update([[maybe_unused]] std::chrono::microseconds elapsedTime, [[maybe_unused]] const std::chrono::system_clock::time_point now)
         {
-            (void)elapsedTime;
-            (void)now;
         }
 
       protected:

@@ -9,10 +9,8 @@ namespace systems
     // notify the game model.
     //
     // --------------------------------------------------------------
-    void Lifetime::update(std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now)
+    void Lifetime::update(std::chrono::microseconds elapsedTime, [[maybe_unused]] const std::chrono::system_clock::time_point now)
     {
-        (void)now;
-
         for (auto&& [id, entity] : m_entities)
         {
             auto lifetime = entity->getComponent<components::Lifetime>();

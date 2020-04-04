@@ -4,6 +4,7 @@
 #include "entities/Entity.hpp"
 
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <tuple>
 
 namespace systems
 {
@@ -16,11 +17,8 @@ namespace systems
     // I'll eventually find a better home for it.
     //
     // --------------------------------------------------------------
-    void Renderer::update(std::chrono::microseconds elapsedTime, const std::chrono::system_clock::time_point now, std::shared_ptr<sf::RenderTarget> renderTarget)
+    void Renderer::update([[maybe_unused]] std::chrono::microseconds elapsedTime, [[maybe_unused]] const std::chrono::system_clock::time_point now, std::shared_ptr<sf::RenderTarget> renderTarget)
     {
-        (void)elapsedTime; // Ignore the compiler warning
-        (void)now;
-
         // Draw the blue background
         sf::RectangleShape square({1.0f, 1.0f});
         square.setFillColor(sf::Color::Blue);
@@ -32,6 +30,7 @@ namespace systems
         // Render each of the entities
         for (auto&& [id, entity] : m_entities)
         {
+            (void)id;   // unused
             //
             // I know having these if statements isn't great for performance, but for this demo
             // code (for now), I'm okay with it.
