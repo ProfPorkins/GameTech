@@ -23,7 +23,6 @@
 bool GameModel::initialize(math::Vector2f viewSize)
 {
     m_viewSize = viewSize;
-    ;
     //
     // Initialize the network system, including registering handlers for
     // messages the game model has responsibility.
