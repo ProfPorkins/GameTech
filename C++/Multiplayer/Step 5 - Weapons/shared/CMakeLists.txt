@@ -89,7 +89,7 @@ set(SHARED_MISC_SOURCES
 # Generate the Protobuf source files
 #
 if (PROTOBUF_FOUND)
-	message(STATUS "Google Protocol Buffers: " ${PROTOBUF_INCLUDE_DIRS})
+    message(STATUS "Google Protocol Buffers: " ${PROTOBUF_INCLUDE_DIRS})
 
     protobuf_generate_cpp(PROTOBUF_SOURCES PROTOBUF_HEADERS ${PROTOBUF_FILES})
 endif()

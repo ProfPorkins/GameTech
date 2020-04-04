@@ -28,7 +28,7 @@ namespace components
         auto get() { return m_sprites[m_currentSprite]; }
         auto getCurrentSpriteTime() { return m_spriteTime[m_currentSprite]; };
         auto getElapsedTime() { return m_elapsedTime; }
-        void incrementSprite() { m_currentSprite = (m_currentSprite + 1) % m_currentSprite + static_cast<std::uint8_t>(m_sprites.size()); }
+        void incrementSprite() { m_currentSprite = (m_currentSprite + 1) % static_cast<std::uint8_t>(m_sprites.size()); }
 
       private:
         std::vector<std::shared_ptr<sf::Sprite>> m_sprites;

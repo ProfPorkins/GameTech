@@ -9,23 +9,35 @@ The following development tools must be installed:
 * Visual Studio 2019
 * git
 * CMake
+* vcpkg
+  * Follow the instructions at: https://github.com/Microsoft/vcpkg
+  * Edit the `vcpkg.targets` file located at `/vcpkg/scripts/buildsystems/msbuild`
+  * Search for `x64-windows`
+  * Change it to `x64-windows-static`.  This may mess other things up, but this is the only way I could get Google Protocol Buffers to statically link; you **definitely** don't want to link with the dll version.
 
 The multiplayer examples use Google's Protocol Buffers (version 3) for serialization/deserialization of data for network transport.  This link, [Protocol Buffers](https://github.com/protocolbuffers/protobuf/blob/master/src/README.md), provides instructions for installation.  I recommend the following steps:
 
-1. (todo) do something first
-1. (todo) do something else second
+1. Ensure you have cloned and built the vcpkg project as noted above
+   * You may have to set an exclusion for the vcpkg folder in order for the build to complete
+1. Open a PowerShell terminal
+1. Build and install the protobuf code: `vcpkg install protobuf protobuf:x64-windows-static`
 
 viola, they are installed and ready to use
 
+<!--- using vcpkg & CMake reference: https://developerpaul123.github.io/c++/cmake/using-vcpkg-on-windows/ --->
 The next step is to clone and build the multiplayer examples.  The following steps can be used to do this.
 
 1. Clone the Game Techniques repository.  You can either so this using a command line or a tool with a GUI.  I personally use GitExtensions, but do most things from the command line inside of it.  The repository is located at: https://github.com/ProfPorkins/GameTech.git
-1. Using initialize the submodules: `git submodule update --init --recursive`
+1. Initialize the submodules: `git submodule update --init --recursive`
 1. Run the CMake GUI
    1. For the **Where is the source code** field navigate to the example you want to build.  For example **Step 1 - Basic**
    1. For the **Where to build the binaries** use the same pathname from above, but add a `/build` folder to it.
    1. Press the **Configure** button.
-   1. Press it again...because they decided that is a good idea.
+   1. Select the **Specify toolchain file for cross-compiling** radio button.
+   1. In the next dialog, specify the location of the vcpkg CMake build scripts.  For example, on my computer the path is: `C:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake`
+   1. Select the drop-down on the `VCPKG` key in the page above the **Configure** button.
+   1. For the `VCPKG_TARGET_TRIPLET` change the value to `x64-windows-static`
+   1. Press **Configure** again.
    1. Press the **Generate** button.
 1. Navigate to the `/build` folder
 1. Double-click on the `Multiplayer-Step1-Basic.sln` file.  Alternatively start Visual Studio and open this solution file.
@@ -39,7 +51,7 @@ If you want to run the `Client.exe` directly from the Debug or Release folders, 
 
 ## Linux
 
-I am working on an Ubuntu installation.  Therefore these instructions are based on that platform.  Other Linux distributions may require different steps, especially those not Debian based and without the apt package manager.
+I am working on an Ubuntu distribution.  Therefore these instructions are based on that platform.  Other Linux distributions may require different steps, especially those not Debian based and without the apt package manager.
 
 The following development tools must be installed:
 
