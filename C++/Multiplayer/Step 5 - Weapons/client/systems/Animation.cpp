@@ -11,6 +11,7 @@ namespace systems
     {
         for (auto&& [id, entity] : m_entities)
         {
+            (void)id; // unused
             auto sprite = entity->getComponent<components::AnimatedSprite>();
             sprite->updateElapsedTime(elapsedTime);
             //

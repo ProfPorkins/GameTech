@@ -40,6 +40,7 @@ namespace messages
         {
             for (auto& [input, time] : entity->getComponent<components::Input>()->getInputs())
             {
+                (void)time; // unused
                 switch (input)
                 {
                     case components::Input::Type::Thrust:

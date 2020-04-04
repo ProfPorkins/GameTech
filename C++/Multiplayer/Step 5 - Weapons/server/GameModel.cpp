@@ -172,6 +172,7 @@ void GameModel::reportAllEntities(std::uint64_t clientId)
 {
     for (auto& [entityId, entity] : m_entities)
     {
+        (void)entityId; // unused
         auto pbEntity = messages::createReportablePBEntity(entity);
         auto entityMessage = std::make_shared<messages::NewEntity>(pbEntity);
         MessageQueueServer::instance().sendMessage(clientId, entityMessage);

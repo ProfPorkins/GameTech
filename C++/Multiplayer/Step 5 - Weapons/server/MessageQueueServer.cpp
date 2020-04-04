@@ -98,6 +98,7 @@ void MessageQueueServer::broadcastMessage(std::shared_ptr<messages::Message> mes
 
     for (auto& [clientId, socket] : m_sockets)
     {
+        (void)socket; // unused
         sendMessage(clientId, message);
     }
 }
@@ -114,6 +115,7 @@ void MessageQueueServer::broadcastMessageWithLastId(std::shared_ptr<messages::Me
 
     for (auto& [clientId, socket] : m_sockets)
     {
+        (void)socket; // unused
         sendMessageWithLastId(clientId, message);
     }
 }
