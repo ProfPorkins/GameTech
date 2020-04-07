@@ -73,7 +73,27 @@ Demo.components.SpaceShipRemote = function(spec) {
     that.update = function(elapsedTime) {
         // Protect against divide by 0 before the first update from the server has been given
         if (spec.goal.updateWindow === 0) return;
-        //if (spec.goal.updatedTime >= spec.goal.updateWindow) return;
+        if (spec.goal.updatedTime < spec.goal.updateWindow) {
+            spec.goal.updatedTime += elapsedTime;
+
+            let updateFraction = elapsedTime / spec.goal.updateWindow;
+            //
+            // Only interpolate turning
+            spec.state.direction -= (spec.start.direction - spec.goal.direction) * updateFraction;
+        }
+
+        //
+        // Predict position from momentum
+        spec.state.center.x += (spec.state.momentum.x * elapsedTime);
+        spec.state.center.y += (spec.state.momentum.y * elapsedTime);
+    };
+    //
+    // This version interplolates to the last location provided by the server
+    // as a way to ensure the remote players are in the right spot at some point.
+    //
+    /* that.update = function(elapsedTime) {
+        // Protect against divide by 0 before the first update from the server has been given
+        if (spec.goal.updateWindow === 0) return;
         if (spec.goal.updatedTime < spec.goal.updateWindow) {
             spec.goal.updatedTime += elapsedTime;
 
@@ -89,7 +109,7 @@ Demo.components.SpaceShipRemote = function(spec) {
             spec.state.center.x += (spec.state.momentum.x * elapsedTime);
             spec.state.center.y += (spec.state.momentum.y * elapsedTime);
         }
-    };
+    }; */
 
     return that;
 };

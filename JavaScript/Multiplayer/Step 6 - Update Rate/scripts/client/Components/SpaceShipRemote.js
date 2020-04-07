@@ -73,22 +73,19 @@ Demo.components.SpaceShipRemote = function(spec) {
     that.update = function(elapsedTime) {
         // Protect against divide by 0 before the first update from the server has been given
         if (spec.goal.updateWindow === 0) return;
-        //if (spec.goal.updatedTime >= spec.goal.updateWindow) return;
         if (spec.goal.updatedTime < spec.goal.updateWindow) {
             spec.goal.updatedTime += elapsedTime;
 
             let updateFraction = elapsedTime / spec.goal.updateWindow;
             //
-            // Turn first, then move.
+            // Only interpolate turning
             spec.state.direction -= (spec.start.direction - spec.goal.direction) * updateFraction;
-
-            spec.state.center.x -= (spec.start.center.x - spec.goal.center.x) * updateFraction;
-            spec.state.center.y -= (spec.start.center.y - spec.goal.center.y) * updateFraction;
-        } else {
-            // Ship is only floating along, need to update is position
-            spec.state.center.x += (spec.state.momentum.x * elapsedTime);
-            spec.state.center.y += (spec.state.momentum.y * elapsedTime);
         }
+
+        //
+        // Predict position from momentum
+        spec.state.center.x += (spec.state.momentum.x * elapsedTime);
+        spec.state.center.y += (spec.state.momentum.y * elapsedTime);
     };
 
     return that;
