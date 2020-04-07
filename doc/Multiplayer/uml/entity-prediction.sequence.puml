@@ -1,0 +1,45 @@
+@startuml Entity Prediction - Sequence
+
+participant "Client A" as ClientA
+participant Server
+participant "Client B" as ClientB
+
+note over ClientA: p1 (0, 0)
+/ note over Server: p1 (0, 0)
+/ note over ClientB: p1 (0, 0)
+
+ClientA -> Server: input: thrust (id: 1)
+note over ClientA: Animate from momentum
+/ note over Server: Update Game Model\n      Apply thrust\nSimulate from momentum
+
+note over ClientA: p1 (0, 1)
+/ note over Server: p1 (0, 2)
+
+note over ClientA: Animate from momentum
+note over ClientA: p1 (0, 2)
+
+Server -> ClientA: update: game-state (ack id: 1)
+Server -> ClientB: update: game-state
+
+note over ClientA: Animate from momentum
+/ note over Server: Update Game Model\n      Apply thrust\nSimulate from momentum
+/note over ClientB: Animate from momentum
+
+note over ClientA: p1 (0, 3)
+/ note over Server: p1 (0, 4)
+/ note over ClientB: p1 (0, 1)
+
+note over ClientA: Animate from momentum
+/ note over ClientB: Animate from momentum
+note over ClientA: p1 (0, 4)
+/ note over ClientB: p1 (0, 2)
+
+Server -> ClientA: update: game-state
+Server -> ClientB: update: game-state
+
+note over ClientA: Animate from momentum
+/ note over ClientB: Animate from momentum
+note over ClientA: p1 (0, 5)
+/ note over ClientB: p1 (0, 3)
+
+@enduml
