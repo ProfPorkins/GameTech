@@ -1,6 +1,6 @@
 # Multiplayer - Client Prediction & Server Reconciliation
 
-Build instructions for the C++ examples are located here (yet to be written).
+Build instructions for the C++ examples are located here: [link](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/Developer-Setup-cpp.md)
 
 This sample demonstrates the improvements in networked multiplayer possible using the concepts of Client Prediction and Server Reconciliation.
 
