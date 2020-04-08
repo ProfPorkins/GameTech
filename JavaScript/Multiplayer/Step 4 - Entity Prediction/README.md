@@ -3,7 +3,9 @@
 The sample must be run as a server: `node server.js`\
 With the server running, connect to: `http://localhost:3000`
 
-This sample build on the previous one by adding the concept of Entity Prediction.
+This sample demonstrates the improvements in networked multiplayer possible using the concept of Entity Prediction.
+
+Read the documentation description the techniques and overview at this [link](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/Multiplayer-Step-4.md), then come back to this document and read the specifics regarding the JavaScript implementation here.
 
 ## Content Acknowledgements
 
@@ -11,3 +13,4 @@ This sample build on the previous one by adding the concept of Entity Prediction
   * Source: http://www.kenney.nl
 * Use of *playerShip1_red.png* under Creative Commons License
   * Source: http://www.kenney.nl
+  
