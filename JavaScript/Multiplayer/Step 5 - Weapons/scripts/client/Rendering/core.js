@@ -226,7 +226,7 @@ Demo.renderer.core = (function() {
             radius * world.size,
             0, 2 * Math.PI);
         context.closePath();
-        context.fillSTyle = style;
+        context.fillStyle = style;
         context.fill();
     }
 
