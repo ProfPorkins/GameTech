@@ -1,0 +1,29 @@
+@startuml Weapon Firing - Sequence
+
+participant "Client A" as ClientA
+participant Server
+participant "Client B" as ClientB
+
+note over ClientA: p1 (0, 0)\np2 (0, 4)
+/ note over Server: p1 (0, 0)\np2 (0, 4)
+/ note over ClientB: p1 (0, 0)\np2 (0, 4)
+
+ClientA -> Server: input: fire-weapon
+
+note over Server: Update Game Model\n Accept fire-weapon
+
+Server -> ClientA: update: game-state\n(projectile info)
+Server -> ClientB: update: game-state\n(projectile info)
+
+note over ClientA: Start local projectile tracking\n Animate weapon projectile
+/ note over ClientB: Start local projectile tracking\n Animate weapon projectile
+
+note over Server: Update Game Model\n   Projectile hits p2
+
+Server -> ClientA: update: game-state\n(p2 damage info)
+Server -> ClientB: update: game-state\n(p2 damage info)
+
+note over ClientA: **      **Animate p2 Explosion\nRemove projectile from tracking
+/ note over ClientB: **      **Animate p2 Explosion\nRemove projectile from tracking
+
+@enduml

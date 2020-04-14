@@ -67,7 +67,9 @@ Looking at this diagram, we can see the player indicated movement forward at tim
 
 ### Trust - Authority
 
-An authoritative model or simulation of the game is necessary to provide a consistent game-play environment for all players.  It is also necessary to have any hope of of dealing with those who prefer to compromise game-play through cheats, hacks, or other means.  The samples presented in this repository only deal with the subject of an authoritative model to ensure a consistent game-play environment for all players.  The topic of dealing with cheats, hacks, and other sources of compromised game-play is not addressed.
+An authoritative model or simulation of the game is necessary to provide a consistent game-play environment for all players.  The server accepts inputs from clients and that is about it.  The server validates inputs for reasonableness and then processes them as part of the authoritative server game simulation.  The server sends updated game states to clients participating in the game and uses those updates to present (render) the game to the player.
+
+Having the server a as the authoritative source for the game simulation is also necessary to have any hope of of dealing with those who prefer to compromise game-play through cheats, hacks, or other means.  The samples presented in this repository only deal with the subject of an authoritative model to ensure a consistent game-play environment for all players.  The topic of dealing with cheats, hacks, and other sources of compromised game-play is not addressed.
 
 ## Techniques
 

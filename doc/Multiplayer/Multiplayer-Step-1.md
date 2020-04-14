@@ -15,11 +15,11 @@ Sequence Diagram |
 
 ## Client Model
 
-The client model is simple only tracking the position and orientation of each player in the game.  As network messages come in from the server with updated states, the player states are updated.
+The client model is simple only tracking the position and orientation of each player in the game.  The client collects movement input from the player and sends those to the server.  As network messages come in from the server with updated states, the player states are updated.
 
 ## Server Model
 
-The server model is the authoritative state of the game.  All information about the players in the game are known and updated based on inputs from the connected clients.
+The server model is the authoritative state of the game.  All information about the players in the game are known and updated based on inputs from the connected clients.  The server accepts inputs from the client(s), and updates the game simulation based on those updates.
 
 ## Game Loops
 
