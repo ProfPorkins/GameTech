@@ -3,7 +3,9 @@
 The sample must be run as a server: `node server.js`\
 With the server running, connect to: `http://localhost:3000`
 
-This sample builds on the previous one by adding a weapon, a missle that can be fired from the spaceships.
+This sample builds on the previous one by adding a weapon, a projectile that can be fired from the spaceships.
+
+Read the documentation description the techniques and overview at this [link](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/Multiplayer-Step-5.md), then come back to this document and read the specifics regarding the JavaScript implementation here.
 
 ## Content Acknowledgements
 
