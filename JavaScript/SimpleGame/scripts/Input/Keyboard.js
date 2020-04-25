@@ -136,7 +136,7 @@ Demo.input.Keyboard = function() {
 
     // ------------------------------------------------------------------
     //
-    // Called when the 'keyrelease' event is fired from the browser.  When
+    // Called when the 'keyup' event is fired from the browser.  When
     // a key is released, we want to remove it from the set of keys currently
     // indicated as down.
     //
