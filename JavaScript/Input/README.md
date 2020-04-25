@@ -28,11 +28,11 @@ Try pressing all three down keyboard commands while also clicking and moving the
 
 ## Code Review
 
-The browser provide an <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener" target="_blank">addEventListener</a> API to enable code to register for input <a href="https://developer.mozilla.org/en-US/docs/Web/Events" target="blank">events</a>.  Depending on the specific needs of the game, this API can be called from the browser window, a specific browser document, or event an element within a document.  For all of the code samples in this repository <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener" target="blank">addEventListener</a> is called from the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window" target="blank">window</a> object.
+The browser provide an <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener" target="_blank">addEventListener</a> API to enable code to register for input <a href="https://developer.mozilla.org/en-US/docs/Web/Events" target="_blank">events</a>.  Depending on the specific needs of the game, this API can be called from the browser window, a specific browser document, or event an element within a document.  For all of the code samples in this repository <a href="https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener" target="_blank">addEventListener</a> is called from the <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window" target="_blank">window</a> object.
 
-For keyboard input, the specific events of interest are <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/keydown_event" target="blank">keydown</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/keyup_event" target="blank">keyup</a>.
+For keyboard input, the specific events of interest are <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/keydown_event" target="_blank">keydown</a> and <a href="https://developer.mozilla.org/en-US/docs/Web/API/Document/keyup_event" target="_blank">keyup</a>.
 
-For mouse input, the specific events of interest are <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/mousedown_event" target="blank">mousedown</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/mouseup_event" target="blank">mouseup</a>, and <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/mousemove_event" target="blank">mousemove</a>.
+For mouse input, the specific events of interest are <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/mousedown_event" target="_blank">mousedown</a>, <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/mouseup_event" target="_blank">mouseup</a>, and <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/mousemove_event" target="_blank">mousemove</a>.
 
 ### Keyboard Input
 
