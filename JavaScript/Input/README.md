@@ -88,7 +88,13 @@ The first bit of code checks to see if there is an entry in the `handlers` objec
 
 It is usually necessary to terminate receiving input notifications, or unregistering a handler.  The `registerHandler` function returns a unique id when a handler is registered.  The code registering the handler needs to keep track of that id for later use when it is necessary to unregister.
 
-The `unregisterHandler` function accepts the `id` and `key` to unregister.  Technically, only the `id` should be necessary, but to improve performance the `key` is required.  Without the `key` either the code would have to perform a linear search through all handlers, or increase the code complexity to have another key/value object indexed on `id` used to locate the handler.  Realistically, not very many input handlers are registered and any particular time and the rate at which they are registered and unregistered is extremely low, making a linear search not a terrible thing to have to do; but I chose not to do that regardless.
+The `unregisterHandler` function accepts the `key` and `id` to unregister.  Technically, only the `id` should be necessary, but to improve performance the `key` is required.  Without the `key` either the code would have to perform a linear search through all handlers, or increase the code complexity to have another key/value object indexed on `id` used to locate the handler.  Realistically, not very many input handlers are registered and any particular time and the rate at which they are registered and unregistered is extremely low, making a linear search not a terrible thing to have to do; but I chose not to do that regardless.
+
+Client code to unregister a handler would look like...
+
+```javascript
+    myKeyboard.unregisterHandler('a', handlerId);
+```
 
 #### Input Signaling
 
