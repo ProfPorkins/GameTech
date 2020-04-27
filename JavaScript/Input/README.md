@@ -113,3 +113,17 @@ The `Keyboard` object exposes an `update` function that is expected to be called
         * Mark the event has having been signaled
 
 ### Mouse Input
+
+The code for the mouse input is fundamentally similar to the keyboard code.  However, there is one item unique to mouse input handling I want to review, this is the concept of _capture_.
+
+When using a mouse you often want to click and drag, maybe to draw something, or to move an item from one place to another.  For example, the user first clicks, and keeps the button down, then moves the mouse, then releases the button.  When the user clicks, we _capture_ the mouse and listen (and do something) to the move events that occur until the user releases the button.  If the user has not clicked the button, we don't want to receive all the move events.  Only when the mouse is _captured_ do we want to know about the move events.
+
+The `registerHandler` function for the `Mouse` object starts out like this...
+
+```javascript
+    that.registerHandler = function(handler, type, requireCapture) {
+```
+
+The third parameter, `requireCapture` is set to true if the mouse must be _captured_ in order for the event to be signaled.  The value of the parameter is recorded with the event, and then tested during the `update` function when looking to invoke handlers.
+
+Note, it only makes sense for capture to be tested on mouse move events.  There is no meaning to signal a mouse click only if the mouse is captured.  The mouse can't have been captured unless a click had already occurred.  Similarly, it doesn't have any meaning to signal a mouse button release event only if the mouse is captured.  By definition, if a mouse release occurs, the mouse is captured.
