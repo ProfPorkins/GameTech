@@ -53,11 +53,57 @@ The next part of the `Keyboard` object to consider is the `registerHandler` func
 * **repeat** True is repeated events should be signaled while the key is pressed, False for one event per `keydown` event.
 * **rate** How often (in milliseconds) should repeated events be signaled while the key is pressed.
 
+It is used like this...
+
+```javascript
+    let myKeyboard = input.Keyboard();
+    let handlerId = myKeyboard.registerHandler(function() {
+                ...handler logic goes here...
+            },
+            'a', true, 250
+        );
+```
+
 When an input event handler is registered, an entry in the `handlers` object is created, with the `key` as the key to the entry.  The value for the entry includes the unique identifier for that handler, the key, whether or not it repeats, how often it repeats (if it repeats), how long since the event was last signaled (`elapsedTime`), and the function to invoke when signaling.  `elapsedTime` is how long it has been since that event was signaled.  It is initially set to time-frame for how often to repeat the event, so that the first time the key is pressed, the event is signaled.
+
+The code inside the `Keyboard` object to register the handler is this...
+
+```javascript
+    if (!handlers.hasOwnProperty(key)) {
+        handlers[key] = [];
+    }
+    handlers[key].push({
+        id: nextHandlerId,
+        key: key,
+        repeat: repeat,
+        rate: rate,
+        elapsedTime: rate,
+        handler: handler
+    });
+```
+
+The first bit of code checks to see if there is an entry in the `handlers` object.  If not, an entry is created, with the value being an array.  The reason for an array is to allow multiple handlers to be invoked from a single keyboard input.
 
 #### Unregistering from Input Events
 
+It is usually necessary to terminate receiving input notifications, or unregistering a handler.  The `registerHandler` function returns a unique id when a handler is registered.  The code registering the handler needs to keep track of that id for later use when it is necessary to unregister.
+
+The `unregisterHandler` function accepts the `id` and `key` to unregister.  Technically, only the `id` should be necessary, but to improve performance the `key` is required.  Without the `key` either the code would have to perform a linear search through all handlers, or increase the code complexity to have another key/value object indexed on `id` used to locate the handler.  Realistically, not very many input handlers are registered and any particular time and the rate at which they are registered and unregistered is extremely low, making a linear search not a terrible thing to have to do; but I chose not to do that regardless.
 
 #### Input Signaling
+
+The `Keyboard` object exposes an `update` function that is expected to be called during the input processing stage of the game loop.  It is during this function handlers are invoked.  The logic for this function is as follows...
+
+* Iterate through all the `keys` that are recorded.
+  * If there are any registered handlers for they `key`
+    * Iterate through the array of registered handlers
+      * Update the elapsed time for the handler
+      * If the handler should signal repeated events
+        * If enough time has accumulated since the event was last signaled
+          * Invoke the handler's function
+          * Update the elapsed time by subtracting off the rate at which to repeat
+      * Else if single event and it hasn't been signaled before
+        * Invoke the handler's function
+        * Mark the event has having been signaled
 
 ### Mouse Input
