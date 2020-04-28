@@ -13,7 +13,7 @@ let ResponsiveCanvas = (function() {
     function reportLayout() {
         console.log('height: ' + canvas.clientHeight);
         console.log('width: ' + canvas.clientWidth);
-        console.log('orientation: ' + window.orientation);
+        console.log('orientation: ' + window.screen.orientation.angle);
     }
 
     //------------------------------------------------------------------
@@ -34,26 +34,16 @@ let ResponsiveCanvas = (function() {
     // Toggles the full-screen mode.  If not in full-screen, it enters
     // full-screen.  If in full screen, it exits full-screen.
     //
+    // Reference: https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API
+    //
     //------------------------------------------------------------------
-    function toggleFullScreen(element) {
-        let fullScreenElement = document.fullscreenElement ||
-                                document.webkitFullscreenElement ||
-                                document.mozFullScreenElement ||
-                                document.msFullscreenElement;
-
-        element.requestFullScreen = element.requestFullScreen ||
-                                    element.webkitRequestFullscreen ||
-                                    element.mozRequestFullScreen ||
-                                    element.msRequestFullscreen;
-        document.exitFullscreen =    document.exitFullscreen ||
-                                    document.webkitExitFullscreen ||
-                                    document.mozCancelFullScreen ||
-                                    document.msExitFullscreen;
-
-        if (!fullScreenElement && element.requestFullScreen) {
-            element.requestFullScreen();
-        } else if (fullScreenElement) {
-            document.exitFullscreen();
+    function toggleFullScreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
         }
     }
 
@@ -83,7 +73,7 @@ let ResponsiveCanvas = (function() {
     //
     // Draw a rectangle vertically and horizontally centered in the canvas.
     // Depending upon the layout of the screen, we choose to make the size
-    // relative to the width or height.  Intesteringly, this choice isn't made
+    // relative to the width or height.  Interestingly, this choice isn't made
     // based on orientation because a desktop browser may have a shape different
     // from the screen orientation.
     //
@@ -178,16 +168,13 @@ let ResponsiveCanvas = (function() {
         window.addEventListener('orientationchange', function() {
             resizeCanvas();
         }, false);
-        window.addEventListener('deviceorientation', function() {
-            resizeCanvas();
-        }, false);
 
         //
         // Force the canvas to resize to the window first time in, otherwise
         // the canvas is a default we don't want.
         resizeCanvas();
         //
-        // Get the gameloop started
+        // Get the game loop started
         requestAnimationFrame(gameLoop);
     }
 
