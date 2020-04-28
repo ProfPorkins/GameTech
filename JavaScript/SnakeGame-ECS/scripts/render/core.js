@@ -63,26 +63,16 @@ Demo.graphics.core = (function() {
     // Toggles the full-screen mode.  If not in full-screen, it enters
     // full-screen.  If in full screen, it exits full-screen.
     //
+    // Reference: https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API
+    //
     //------------------------------------------------------------------
-    function toggleFullScreen(element) {
-        let fullScreenElement = document.fullscreenElement ||
-                                document.webkitFullscreenElement ||
-                                document.mozFullScreenElement ||
-                                document.msFullscreenElement;
-
-        element.requestFullScreen = element.requestFullScreen ||
-                                    element.webkitRequestFullscreen ||
-                                    element.mozRequestFullScreen ||
-                                    element.msRequestFullscreen;
-        document.exitFullscreen =    document.exitFullscreen ||
-                                    document.webkitExitFullscreen ||
-                                    document.mozCancelFullScreen ||
-                                    document.msExitFullscreen;
-
-        if (!fullScreenElement && element.requestFullScreen) {
-            element.requestFullScreen();
-        } else if (fullScreenElement) {
-            document.exitFullscreen();
+    function toggleFullScreen() {
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+        } else {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
         }
     }
 
@@ -110,9 +100,6 @@ Demo.graphics.core = (function() {
             resizeCanvas();
         }, false);
         window.addEventListener('orientationchange', function() {
-            resizeCanvas();
-        }, false);
-        window.addEventListener('deviceorientation', function() {
             resizeCanvas();
         }, false);
 
