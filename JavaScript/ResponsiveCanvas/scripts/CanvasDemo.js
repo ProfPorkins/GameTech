@@ -71,14 +71,14 @@ let ResponsiveCanvas = (function() {
 
     //------------------------------------------------------------------
     //
-    // Draw a rectangle vertically and horizontally centered in the canvas.
+    // Draw a square vertically and horizontally centered in the canvas.
     // Depending upon the layout of the screen, we choose to make the size
     // relative to the width or height.  Interestingly, this choice isn't made
     // based on orientation because a desktop browser may have a shape different
     // from the screen orientation.
     //
     //------------------------------------------------------------------
-    function drawRectangle() {
+    function drawSquare() {
         let smallestSize;
         let squareSize;
         let cornerTop;
@@ -101,8 +101,8 @@ let ResponsiveCanvas = (function() {
         } else {
             smallestSize = canvas.height;
             squareSize = smallestSize * 0.6;
-            cornerTop = Math.floor(canvas.height * 0.2);
             cornerLeft = (canvas.width - squareSize) / 2;
+            cornerTop = Math.floor(canvas.height * 0.2);
         }
 
         //
@@ -135,7 +135,7 @@ let ResponsiveCanvas = (function() {
     function render() {
         clearCanvas();
         drawCanvasBorder();
-        drawRectangle();
+        drawSquare();
     }
 
     //------------------------------------------------------------------
@@ -165,9 +165,7 @@ let ResponsiveCanvas = (function() {
         context = canvas.getContext('2d');
 
         window.addEventListener('resize', resizeCanvas, false);
-        window.addEventListener('orientationchange', function() {
-            resizeCanvas();
-        }, false);
+        window.addEventListener('orientationchange', resizeCanvas, false);
 
         //
         // Force the canvas to resize to the window first time in, otherwise
