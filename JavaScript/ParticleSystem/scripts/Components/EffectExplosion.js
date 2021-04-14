@@ -1,6 +1,6 @@
 //------------------------------------------------------------------
 //
-// Creates an explostion effect that emits all particles at creation time.
+// Creates an explosion effect that emits all particles at creation time.
 // The spec is defined as:
 // {
 //        center: { x: , y: },

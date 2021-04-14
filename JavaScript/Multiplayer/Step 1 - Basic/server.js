@@ -28,8 +28,8 @@ function handleRequest(request, response) {
     let file = lookup.substring(1, lookup.length);
 
     console.log(`request: ${request.url}`);
-    fs.exists(file, function(exists) {
-        if (exists) {
+    fs.access(file, fs.constants.R_OK, function(error) {
+        if (!error) {
             console.log(`Trying to send: ${lookup}`);
             fs.readFile(file, function(err, data) {
                 let headers = { 'Content-type': mimeTypes[path.extname(lookup)] };
