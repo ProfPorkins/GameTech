@@ -5,7 +5,7 @@
         "start": "node server.js"
     },
     "dependencies": {
-        "socket.io": "4.0.*",
+        "socket.io": "2.4.*",
         "present": "1.0.0"
     }
 }
