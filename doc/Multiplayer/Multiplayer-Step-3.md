@@ -9,11 +9,11 @@
 
 These examples build upon the client prediction examples by adding in the concept of _entity interpolation_.  The effect of enhancing the game with this technique is that of smooth updates of remotely connected clients.
 
-In [Step 2](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/Multiplayer-Step-2.md) the problem of stuttered or jerky motion of the local player controlled ship was solved.  However, nothing has been done about other remotely connected players in the game.  Let's look at another couple of diagrams to understand the problem.
+In [Step 2](https://github.com/ProfPorkins/GameTech/blob/trunk/doc/Multiplayer/Multiplayer-Step-2.md) the problem of stuttered or jerky motion of the local player controlled ship was solved.  However, nothing has been done about other remotely connected players in the game.  Let's look at another couple of diagrams to understand the problem.
 
 Sequence Diagram | Timing Diagram
 -----------------|---------------
-![Entity Interpolation - Sequence](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Entity%20Interpolation%20Bad%20-%20Sequence.png) |  ![Entity Interpolation - Timing](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Entity%20Interpolation%20Bad%20-%20Timing.png)
+![Entity Interpolation - Sequence](https://github.com/ProfPorkins/GameTech/blob/trunk/doc/Multiplayer/images/Entity%20Interpolation%20Bad%20-%20Sequence.png) |  ![Entity Interpolation - Timing](https://github.com/ProfPorkins/GameTech/blob/trunk/doc/Multiplayer/images/Entity%20Interpolation%20Bad%20-%20Timing.png)
 
 With entity prediction we have made the movement of the player's controlled ship smooth and responsive, but are left with a stuttering or jerking movement for all other ships in the environment.  Entity prediction allows the player's ship to smoothly move from one position to another over time, but remote player controlled ships jump from one location to another.
 
@@ -23,7 +23,7 @@ The (a) solution to this, and trust me, you aren't going to like it, is to _furt
 
 Sequence Diagram | Timing Diagram
 -----------------|---------------
-![Entity Interpolation Animation - Timing](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Entity%20Interpolation%20Animation%20-%20Sequence.png) |  ![Entity Interpolation Animation - Timing](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Entity%20Interpolation%20Animation%20-%20Timing.png)
+![Entity Interpolation Animation - Timing](https://github.com/ProfPorkins/GameTech/blob/trunk/doc/Multiplayer/images/Entity%20Interpolation%20Animation%20-%20Sequence.png) |  ![Entity Interpolation Animation - Timing](https://github.com/ProfPorkins/GameTech/blob/trunk/doc/Multiplayer/images/Entity%20Interpolation%20Animation%20-%20Timing.png)
 
 In the timing diagram above I've tried to show the order of events and generally what happens.  Don't worry about the specific timing (millisecond) numbers along the bottom, it is the relative order among the two clients and server that is important.  In the description below the numbers are used for reference, but realize, the actual timing is almost certainly something else.  Detailing what takes place:
 

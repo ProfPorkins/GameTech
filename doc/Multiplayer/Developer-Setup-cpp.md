@@ -15,7 +15,7 @@ The following development tools must be installed:
   * Search for `x64-windows`
   * Change it to `x64-windows-static`.  This may mess other things up, but this is the only way I could get Google Protocol Buffers to statically link; you **definitely** don't want to link with the dll version.
 
-The multiplayer examples use Google's Protocol Buffers (version 3) for serialization/deserialization of data for network transport.  This link, [Protocol Buffers](https://github.com/protocolbuffers/protobuf/blob/master/src/README.md), provides instructions for installation.  I recommend the following steps:
+The multiplayer examples use Google's Protocol Buffers (version 3) for serialization/deserialization of data for network transport.  This link, [Protocol Buffers](https://github.com/protocolbuffers/protobuf/blob/trunk/src/README.md), provides instructions for installation.  I recommend the following steps:
 
 1. Ensure you have cloned and built the vcpkg project as noted above
    * You may have to set an exclusion for the vcpkg folder in order for the build to complete
@@ -68,7 +68,7 @@ The following development tools must be installed:
   * libflac-dev
   * libudev-dev
 
-The multiplayer examples use Google's Protocol Buffers (version 3) for serialization/deserialization of data for network transport.  This link, [Protocol Buffers](https://github.com/protocolbuffers/protobuf/blob/master/src/README.md), provides instructions for installation.  I recommend the following steps:
+The multiplayer examples use Google's Protocol Buffers (version 3) for serialization/deserialization of data for network transport.  This link, [Protocol Buffers](https://github.com/protocolbuffers/protobuf/blob/trunk/src/README.md), provides instructions for installation.  I recommend the following steps:
 
 1. Install the necessary tools: `sudo apt install autoconf automake libtool curl make g++ unzip`
 1. Clone the git repository: `git clone https://github.com/protocolbuffers/protobuf.git`

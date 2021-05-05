@@ -6,7 +6,7 @@ When I was originally working on these demos and the simple game, I was interrup
 There are a bunch more sample game techniques (JavaScript & C++) I'll be working on now, and plan to eventually get a new "simple game" added to this repository.
 
 ---
-![Simple Game Demo](https://github.com/ProfPorkins/GameTech/blob/master/JavaScript/SimpleGame/SimpleGame.png "")
+![Simple Game Demo](https://github.com/ProfPorkins/GameTech/blob/trunk/JavaScript/SimpleGame/SimpleGame.png "")
 ---
 
 In order to use this sample, an image from the NASA Hubble Space Telescope site must be downloaded and prepared.  Use the following instructions to prepare the image:

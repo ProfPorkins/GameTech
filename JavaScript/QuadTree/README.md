@@ -2,7 +2,7 @@
 The sample can be run by opening `index.html` in a browser.
 
 ---
-![Frustum Culling Sample](https://github.com/ProfPorkins/GameTech/blob/master/JavaScript/QuadTree/QuadTree.png "")
+![Frustum Culling Sample](https://github.com/ProfPorkins/GameTech/blob/trunk/JavaScript/QuadTree/QuadTree.png "")
 ---
 
 A few notes about the demo...

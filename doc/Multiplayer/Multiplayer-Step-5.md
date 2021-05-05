@@ -18,7 +18,7 @@ Let's take a look at the sequence of events that occur during the firing and tra
 
 Sequence Diagram |
 -----------------|
-![Weapon Firing - Sequence](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Weapon%20Firing%20-%20Sequence.png) |
+![Weapon Firing - Sequence](https://github.com/ProfPorkins/GameTech/blob/trunk/doc/Multiplayer/images/Weapon%20Firing%20-%20Sequence.png) |
 
 Stepping through this diagram we see the following key elements...
 

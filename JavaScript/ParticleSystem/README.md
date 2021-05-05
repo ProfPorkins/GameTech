@@ -4,7 +4,7 @@ With the server running, connect to: `http://localhost:3000`
 
 ---
 
-![Particle System Sample](https://github.com/ProfPorkins/GameTech/blob/master/JavaScript/ParticleSystem/ParticleSystem.png "")
+![Particle System Sample](https://github.com/ProfPorkins/GameTech/blob/trunk/JavaScript/ParticleSystem/ParticleSystem.png "")
 
 ---
 

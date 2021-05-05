@@ -2,7 +2,7 @@
 This sample demonstrates rendering of a background image using a tile-based approach.
 
 ---
-![Tile Rendering Sample](https://github.com/ProfPorkins/GameTech/blob/master/JavaScript/TileRendering/Tile-Rendering.png "")
+![Tile Rendering Sample](https://github.com/ProfPorkins/GameTech/blob/trunk/JavaScript/TileRendering/Tile-Rendering.png "")
 ---
 
 In order to use this sample, an image from the NASA Hubble Space Telescope site must be downloaded and prepared.  Use the following instructions to prepare the image:

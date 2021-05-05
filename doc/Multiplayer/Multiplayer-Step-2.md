@@ -15,7 +15,7 @@ A client can trust itself, even if the server can't.  Therefore, a client can sh
 
 Sequence Diagram |
 -----------------|
-![Client Prediction - Sequence](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Client%20Prediction%20-%20Sequence.png) |
+![Client Prediction - Sequence](https://github.com/ProfPorkins/GameTech/blob/trunk/doc/Multiplayer/images/Client%20Prediction%20-%20Sequence.png) |
 
 Same as before, the player gives an input to move forward.  During the update of the client-side game model a network message is sent to the server indicating a move-forward input request.  This time, however, at the same time the server-side model is updating and incorporating the input request, the client-side model is _predicting_ the input being processed and acknowledged by the server. Then, when the server send an updated game state to the client, the client prediction is confirmed.
 
@@ -23,8 +23,8 @@ Let's look at the improvement in responsiveness at the client by comparing the b
 
 Model | Timing Diagram
 -----------------|---------------
-Basic Networking | ![Basic Networking - Timing](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Basic%20Network%20-%20Timing.png)
-Client Prediction | ![Client Prediction - Timing](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Client%20Prediction%20-%20Timing.png)
+Basic Networking | ![Basic Networking - Timing](https://github.com/ProfPorkins/GameTech/blob/trunk/doc/Multiplayer/images/Basic%20Network%20-%20Timing.png)
+Client Prediction | ![Client Prediction - Timing](https://github.com/ProfPorkins/GameTech/blob/trunk/doc/Multiplayer/images/Client%20Prediction%20-%20Timing.png)
 
 Because of the client prediction, the player sees a response to the input at time 20 versus at time 90 without, a difference of 70 ms.  That is a big deal!
 
@@ -34,7 +34,7 @@ All is well and good in the world with client prediction, right?  Consider the f
 
 Sequence Diagram | Timing Diagram
 -----------------|---------------
-![Client Prediction - Sequence](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Client%20Prediction%20Bad%20-%20Sequence.png) |  ![Client Prediction - Timing](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Client%20Prediction%20Bad%20-%20Timing.png)
+![Client Prediction - Sequence](https://github.com/ProfPorkins/GameTech/blob/trunk/doc/Multiplayer/images/Client%20Prediction%20Bad%20-%20Sequence.png) |  ![Client Prediction - Timing](https://github.com/ProfPorkins/GameTech/blob/trunk/doc/Multiplayer/images/Client%20Prediction%20Bad%20-%20Timing.png)
 
 The start is the same as before.  The player gives an input to move forward, client predicts and server simulates.  This time, however, the player gives another input to move forward, before the server has responded with an updated game state.  The client also predicts this input, moving p1 to position (0, 2).  Importantly, before the server receives the second input, it has simulated the previous input and sends an updated state back to the client.  Upon receiving this update, the client moves p1 back to position (0, 1).  If that's not bad enough, the server then sends another update, with the second input simulated, which results in the client jumping p1 back to position (0, 2), Ugh!
 
@@ -46,7 +46,7 @@ The two diagrams below show the change in how the client works, along with the e
 
 Sequence Diagram | Timing Diagram
 -----------------|---------------
-![Server Reconciliation - Sequence](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Server%20Reconciliation%20-%20Sequence.png) |  ![Server Reconciliation - Timing](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Server%20Reconciliation%20-%20Timing.png)
+![Server Reconciliation - Sequence](https://github.com/ProfPorkins/GameTech/blob/trunk/doc/Multiplayer/images/Server%20Reconciliation%20-%20Sequence.png) |  ![Server Reconciliation - Timing](https://github.com/ProfPorkins/GameTech/blob/trunk/doc/Multiplayer/images/Server%20Reconciliation%20-%20Timing.png)
 
 * When the client sends an input, it assigns an id and includes that with the message.
 * When the server responds with an updated game state, it acknowledges the last input message id it has processed as part of that game state.

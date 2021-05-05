@@ -2,7 +2,7 @@
 The sample can be run by opening `index.html` in a browser.
 
 ---
-![Frustum Culling Sample](https://github.com/ProfPorkins/GameTech/blob/master/JavaScript/QuadTreeFrustum/QuadTree-FrustumCulling.png "")
+![Frustum Culling Sample](https://github.com/ProfPorkins/GameTech/blob/trunk/JavaScript/QuadTreeFrustum/QuadTree-FrustumCulling.png "")
 ---
 
 To see the primary benefit of the frustum culling, do the following...

@@ -3,7 +3,7 @@ The sample must be run as a server: `node server.js`
 With the server running, connect to: `http://localhost:3000`
 
 ---
-![Animated Sprite Sheet Sample](https://github.com/ProfPorkins/GameTech/blob/master/JavaScript/Spritesheet/AnimatedSprite.png "")
+![Animated Sprite Sheet Sample](https://github.com/ProfPorkins/GameTech/blob/trunk/JavaScript/Spritesheet/AnimatedSprite.png "")
 ---
 
 The demo can be controlled by the following...

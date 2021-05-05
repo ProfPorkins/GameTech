@@ -1,8 +1,8 @@
 # Multiplayer - Basic Networking
 
-Build instructions for the C++ examples are located here: [link](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/Developer-Setup-cpp.md)
+Build instructions for the C++ examples are located here: [link](https://github.com/ProfPorkins/GameTech/blob/trunk/doc/Multiplayer/Developer-Setup-cpp.md)
 
-Read the documentation description the techniques and overview at this [link](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/Multiplayer-Step-1.md), then come back to this document and read the specifics regarding the C++ implementation here.
+Read the documentation description the techniques and overview at this [link](https://github.com/ProfPorkins/GameTech/blob/trunk/doc/Multiplayer/Multiplayer-Step-1.md), then come back to this document and read the specifics regarding the C++ implementation here.
 
 ## Client Implementation
 

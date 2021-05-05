@@ -51,7 +51,7 @@ Two UML diagrams show the source of latency and the source of that latency throu
 
 Sequence Diagram | Timing Diagram
 -----------------|---------------
-![Basic Networking - Sequence](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Basic%20Network%20-%20Sequence.png) | ![Basic Networking - Timing](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Basic%20Network%20-%20Timing.png)
+![Basic Networking - Sequence](https://github.com/ProfPorkins/GameTech/blob/trunk/doc/Multiplayer/images/Basic%20Network%20-%20Sequence.png) | ![Basic Networking - Timing](https://github.com/ProfPorkins/GameTech/blob/trunk/doc/Multiplayer/images/Basic%20Network%20-%20Timing.png)
 
 Considering the sequence diagram: at the start both the client and server believe player 'p1' is located at position (0, 0).  The player gives an input to move the player forward.  During the update of the client-side game model a network message is sent to the server indicating a move-forward input request.  After receiving the message, the server updates its game model, and now has 'p1' at position (0, 1); the client still believes 'p1' is at position (0, 0).  After the server game model is updated, the updated game state is sent to the client.  During the update of the client game model, the updated game state from the server is incorporated and the client now believes player 'p1' is at position (0, 1).
 

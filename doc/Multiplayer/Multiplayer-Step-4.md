@@ -13,7 +13,7 @@ A space ship has momentum and continues to move regardless of input from a playe
 
 Sequence Diagram |
 -----------------|
-![Entity Interpolation - Sequence](https://github.com/ProfPorkins/GameTech/blob/master/doc/Multiplayer/images/Entity%20Prediction%20-%20Sequence.png) |
+![Entity Interpolation - Sequence](https://github.com/ProfPorkins/GameTech/blob/trunk/doc/Multiplayer/images/Entity%20Prediction%20-%20Sequence.png) |
 
 Stepping through this diagram we see the following key elements...
 
