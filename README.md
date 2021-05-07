@@ -2,9 +2,7 @@
 
 This repository contains a collection of game programming techniques and samples, hence the name _*GameTech*_.  Throughout my life I've benefitted from documentation and code others have made publicly available, this is a small way for me to hopefully do the same for others.
 
-## Update - 4/14/2019
-
-The past couple of years I was distracted by working on a several years long side-project.  That project is now complete, I have now returned to working on code examples.
+## Status (Updated - 5/7/2021)
 
 In late December of 2019 I have returned to working on these code samples.  Initially began by making some code updates to the existing samples first.  The first update was a small revision changing from the use of `var` to `let`.  Another was is a conversion from using tabs to spaces (I finally caved in!).  Others were larger in scope like the change in how keyboard input is handled, due to deprecation of `keyCode` on the keyboard event.  I also made some updates to the particle system that allow for changing particle size and color over time.
 

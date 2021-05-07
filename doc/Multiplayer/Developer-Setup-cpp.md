@@ -1,6 +1,6 @@
 # C++ Developer Setup & Compiling Instructions
 
-This page describes how to setup the development environment you need to compile and run the C++ multiplayer examples.  Instructions for both Windows and Linux are provided.  Familiarity with C++ development on either Windows or Linux.
+This page describes how to setup the development environment you need to compile and run the C++ multiplayer examples.  Instructions for both Windows and Linux are provided.  Familiarity with C++ development on either Windows or Linux is expected.
 
 ## Windows
 
@@ -27,7 +27,7 @@ viola, they are installed and ready to use
 <!--- using vcpkg & CMake reference: https://developerpaul123.github.io/c++/cmake/using-vcpkg-on-windows/ --->
 The next step is to clone and build the multiplayer examples.  The following steps can be used to do this.
 
-1. Clone the Game Techniques repository.  You can either so this using a command line or a tool with a GUI.  I personally use GitExtensions, but do most things from the command line inside of it.  The repository is located at: https://github.com/ProfPorkins/GameTech.git
+1. Clone the Game Techniques repository.  This can be done using a command line or a tool with a GUI.  I personally use GitExtensions, but do most things from the command line inside of it.  The repository is located at: https://github.com/ProfPorkins/GameTech.git
 1. Initialize the submodules: `git submodule update --init --recursive`
 1. Run the CMake GUI
    1. For the **Where is the source code** field navigate to the example you want to build.  For example **Step 1 - Basic**
@@ -43,11 +43,11 @@ The next step is to clone and build the multiplayer examples.  The following ste
 1. Double-click on the `Multiplayer-Step1-Basic.sln` file.  Alternatively start Visual Studio and open this solution file.
 1. Open the context menu (usually right-mouse click) over **Client** and set it as the startup project.
 1. Build the solution.
-1. Inside the `build/Debug` folder, run `Server.exe`
+1. Inside the `/build/Debug` folder, run `Server.exe`
 1. From within Visual Studio, run the **Client** project.
 1. Enjoy!
 
-If you want to run the `Client.exe` directly from the Debug or Release folders, copy the `client/assets` folder to the `/build/Debug` folder.  Then run the `Client.exe` program.
+If you want to run the `Client.exe` directly from the Debug or Release folders, copy the `/client/assets` folder to the `/build/Debug` folder.  Then run the `Client.exe` program.
 
 ## Linux
 
@@ -95,7 +95,7 @@ The next step is to clone and build the multiplayer examples.  The following ste
 1. Navigate into this folder: `cd build`
 1. Use CMake to create the makefiles: `cmake ..`
 1. Once CMake has completed, use make to build the example: `make`
-1. Copy the `client/assets` folder to the `/build` folder.  _I know, I need to update the CMake code to do this_
+1. Copy the `/client/assets` folder to the `/build` folder.  _I know, I need to update the CMake code to do this_
 1. Start the Server executable: `./Server`
 1. Start the Client executable (in a different terminal): `./Client`
 1. Enjoy!
