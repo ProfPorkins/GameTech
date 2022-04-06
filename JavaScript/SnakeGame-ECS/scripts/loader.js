@@ -153,9 +153,9 @@ Demo.loader = (function() {
                     }
                     asset.onload = function() {
                         window.URL.revokeObjectURL(asset.src);
+                        if (onSuccess) { onSuccess(asset); }
                     };
                     asset.src = window.URL.createObjectURL(xhr.response);
-                    if (onSuccess) { onSuccess(asset); }
                 } else {
                     if (onError) { onError('Failed to retrieve: ' + source); }
                 }
