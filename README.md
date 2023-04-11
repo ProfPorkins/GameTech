@@ -28,7 +28,7 @@ These examples make no attempt to parallelize the update and render stages, even
 
 ### Entity-Component-System (ECS) Caveat
 
-The C++ multiplayer examples are designed and implemented using the ECS architectural pattern.  This pattern changes the game loop in how it is implemented, but fundamentally the same steps are there.  In ECS there is _only_ and update stage.  During the update all systems are updated.  Two of those systems are _input_ and _render_.  When you look at the C++ examples, the update implementation looks like the following...
+The C++ multiplayer examples are designed and implemented using the ECS architectural pattern.  This pattern changes the game loop in how it is implemented, but fundamentally the same steps are there.  In ECS there is _only_ an update stage.  During the update all systems are updated.  Two of those systems are _input_ and _render_.  When you look at the C++ examples, the update implementation looks like the following...
 
     systemNetwork.update();
     systemInput.update();
