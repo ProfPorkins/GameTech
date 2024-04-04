@@ -203,7 +203,7 @@ void GameModel::handleJoin(std::uint64_t clientId)
     pbEntity.mutable_appearance()->set_texture(player->getComponent<components::Appearance>()->get());
 
     //
-    // Remove components not needed by them to preapre it for sending to
+    // Remove components not needed by them to prepare it for sending to
     // all other connected clients
     pbEntity.release_input();
     pbEntity.release_movement();
